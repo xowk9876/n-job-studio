@@ -1,0 +1,171 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #0f1c35;
+  --foreground: #f0f4ff;
+  --card: rgba(255, 255, 255, 0.09);
+  --card-foreground: #f0f4ff;
+  --popover: #0f172a;
+  --popover-foreground: #f0f4ff;
+  --primary: oklch(0.511 0.262 276.966);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: rgba(255, 255, 255, 0.09);
+  --secondary-foreground: rgba(255, 255, 255, 0.9);
+  --muted: rgba(255, 255, 255, 0.07);
+  --muted-foreground: rgba(255, 255, 255, 0.5);
+  --accent: rgba(255, 255, 255, 0.11);
+  --accent-foreground: rgba(255, 255, 255, 0.9);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: rgba(255, 255, 255, 0.16);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: rgba(255, 255, 255, 0.25);
+  --radius: 0.75rem;
+  --sidebar: rgba(10, 15, 30, 0.9);
+  --sidebar-foreground: #f0f4ff;
+  --sidebar-primary: oklch(0.511 0.262 276.966);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: rgba(255, 255, 255, 0.09);
+  --sidebar-accent-foreground: rgba(255, 255, 255, 0.9);
+  --sidebar-border: rgba(255, 255, 255, 0.16);
+  --sidebar-ring: rgba(255, 255, 255, 0.25);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply text-foreground antialiased;
+    background-color: #0f1c35;
+    background-image:
+      /* 화이트 스포트라이트 — 상단 중앙에서 내리쬐는 빛 */
+      radial-gradient(ellipse 55% 38% at 50% -5%,  rgba(255, 255, 255, 0.11) 0%, transparent 70%),
+      /* 에메랄드 메시 오브 — 좌상 */
+      radial-gradient(ellipse 80% 60% at 10% 12%,  rgba(16,  185, 129, 0.20) 0%, transparent 60%),
+      /* 사이언 메시 오브  — 우상 */
+      radial-gradient(ellipse 60% 50% at 90%  6%,  rgba(6,   182, 212, 0.16) 0%, transparent 55%),
+      /* 바이올렛 메시 오브 — 하단 */
+      radial-gradient(ellipse 70% 55% at 50% 108%, rgba(139,  92, 246, 0.13) 0%, transparent 60%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  /* ── Dark form controls ── */
+  select option {
+    background-color: #0f172a;
+    color: #f0f4ff;
+  }
+  input[type="date"],
+  input[type="number"] {
+    color-scheme: dark;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    opacity: 0.4;
+  }
+}
+
+/* ──────────────────────────────────────────────────────
+   화이트 콜라보레이션 공유 유틸리티
+   glass-card  : 입력 패널 / 정보 카드 공통 스타일
+   glass-input : input / textarea 공통 스타일
+   glass-select: select 공통 스타일
+────────────────────────────────────────────────────── */
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    /* 상단 화이트 하이라이트 라인 — 핵심 화이트 콜라보 효과 */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 8px 32px rgba(0, 0, 0, 0.28);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.20),
+      0 12px 40px rgba(255, 255, 255, 0.06),
+      0 8px 32px rgba(0, 0, 0, 0.28);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.11);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: white;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .glass-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.40);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.09);
+  }
+
+  .glass-select {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: white;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .glass-select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.40);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.09);
+  }
+}
