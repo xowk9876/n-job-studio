@@ -66,16 +66,16 @@ export default function JeonsePage() {
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">현재 전세 보증금</label>
               <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
-                value={jeonsDeposit} defaultValue={300_000_000}
+                value={jeonsDeposit} defaultValue={300_000_000} unitMultiplier={10000}
                 onChange={(n) => set({ jeonsDeposit: n })} />
-              <p className="text-xs text-white/40 mt-1">{formatManwon(jeonsDeposit)}</p>
+              <p className="text-xs text-white/40 mt-1">= {formatManwon(jeonsDeposit)}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">목표 월세 보증금</label>
               <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold"
-                value={wolseDeposit} defaultValue={50_000_000}
+                value={wolseDeposit} defaultValue={50_000_000} unitMultiplier={10000}
                 onChange={(n) => set({ wolseDeposit: n })} />
-              <p className="text-xs text-white/40 mt-1">{formatManwon(wolseDeposit)}</p>
+              <p className="text-xs text-white/40 mt-1">= {formatManwon(wolseDeposit)}</p>
             </div>
           </>
         ) : (
@@ -83,16 +83,16 @@ export default function JeonsePage() {
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">현재 월세</label>
               <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
-                value={currentWolse} defaultValue={700_000}
+                value={currentWolse} defaultValue={700_000} unitMultiplier={10000}
                 onChange={(n) => set({ currentWolse: n })} />
-              <p className="text-xs text-white/40 mt-1">{formatKRW(currentWolse)}</p>
+              <p className="text-xs text-white/40 mt-1">= {formatKRW(currentWolse)}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">현재 월세 보증금</label>
               <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold"
-                value={currentWolseDeposit} defaultValue={50_000_000}
+                value={currentWolseDeposit} defaultValue={50_000_000} unitMultiplier={10000}
                 onChange={(n) => set({ currentWolseDeposit: n })} />
-              <p className="text-xs text-white/40 mt-1">{formatManwon(currentWolseDeposit)}</p>
+              <p className="text-xs text-white/40 mt-1">= {formatManwon(currentWolseDeposit)}</p>
             </div>
           </>
         )}

@@ -56,14 +56,15 @@ export default function SalaryPage() {
           <label className="block text-sm font-semibold text-white/80 mb-2">연봉 (세전)</label>
           <div className="relative">
             <NumericInput
-              className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-10"
+              className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-14"
               value={annualSalary}
               defaultValue={48_000_000}
+              unitMultiplier={10000}
               onChange={(n) => set({ annualSalary: n })}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">만원</span>
           </div>
-          <p className="text-xs text-white/40 mt-1">{formatKRW(annualSalary)}</p>
+          <p className="text-xs text-white/40 mt-1">= {formatKRW(annualSalary)}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

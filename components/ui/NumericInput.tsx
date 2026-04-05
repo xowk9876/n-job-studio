@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef, InputHTMLAttributes } from 'react'
 
 interface NumericInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 'type'> {
-  value: number
-  onChange: (n: number) => void
-  defaultValue?: number
+  value: number           // 스토어값 (항상 "원" 단위)
+  onChange: (n: number) => void  // 스토어에 저장 (항상 "원" 단위)
+  defaultValue?: number   // 복원값 (원 단위)
+  unitMultiplier?: number // 10000 = 만원 입력, 1 = 원 입력 (기본값 1)
   allowDecimal?: boolean
   className?: string
 }
@@ -14,17 +15,20 @@ export default function NumericInput({
   value,
   onChange,
   defaultValue = 0,
+  unitMultiplier = 1,
   allowDecimal = false,
   className = '',
   ...rest
 }: NumericInputProps) {
-  const [localStr, setLocalStr] = useState(String(value))
+  // 표시값 = 원 단위 ÷ unitMultiplier
+  const toDisplay = (raw: number) => String(raw / unitMultiplier)
   const prevExternal = useRef(value)
+  const [localStr, setLocalStr] = useState(toDisplay(value))
 
-  // 외부 값(스토어 rehydration 등)이 바뀌면 로컬 문자열 동기화
+  // 외부 값 변경 시 동기화 (스토어 rehydration 등)
   useEffect(() => {
     if (value !== prevExternal.current) {
-      setLocalStr(String(value))
+      setLocalStr(toDisplay(value))
       prevExternal.current = value
     }
   }, [value])
@@ -32,11 +36,9 @@ export default function NumericInput({
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const raw = e.target.value
 
-    // 허용 문자 필터링: 정수는 숫자만, 소수는 숫자+점 1개
     let filtered: string
     if (allowDecimal) {
       filtered = raw.replace(/[^0-9.]/g, '')
-      // 소수점 2개 이상 방지
       const parts = filtered.split('.')
       if (parts.length > 2) filtered = parts[0] + '.' + parts.slice(1).join('')
     } else {
@@ -47,15 +49,16 @@ export default function NumericInput({
 
     const num = parseFloat(filtered)
     if (filtered !== '' && !isNaN(num)) {
-      prevExternal.current = num
-      onChange(num)
+      const storeVal = Math.round(num * unitMultiplier)
+      prevExternal.current = storeVal
+      onChange(storeVal)
     }
   }
 
   function handleBlur() {
     const num = parseFloat(localStr)
     if (localStr === '' || isNaN(num)) {
-      setLocalStr(String(defaultValue))
+      setLocalStr(toDisplay(defaultValue))
       prevExternal.current = defaultValue
       onChange(defaultValue)
     }

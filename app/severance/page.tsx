@@ -42,14 +42,15 @@ export default function SeverancePage() {
           </label>
           <div className="relative">
             <NumericInput
-              className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-10"
+              className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-14"
               value={avgMonthly3}
               defaultValue={3_000_000}
+              unitMultiplier={10000}
               onChange={(n) => set({ avgMonthly3: n })}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">만원</span>
           </div>
-          <p className="text-xs text-white/40 mt-1">{formatKRW(avgMonthly3)}</p>
+          <p className="text-xs text-white/40 mt-1">= {formatKRW(avgMonthly3)}</p>
         </div>
 
         <div>
@@ -58,12 +59,13 @@ export default function SeverancePage() {
           </label>
           <div className="relative">
             <NumericInput
-              className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10"
+              className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14"
               value={annualBonus}
               defaultValue={0}
+              unitMultiplier={10000}
               onChange={(n) => set({ annualBonus: n })}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">만원</span>
           </div>
         </div>
 

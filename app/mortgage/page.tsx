@@ -52,9 +52,10 @@ export default function MortgagePage() {
             className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
             value={principal}
             defaultValue={300_000_000}
+            unitMultiplier={10000}
             onChange={(n) => set({ principal: n })}
           />
-          <p className="text-xs text-white/40 mt-1">{formatKRW(principal)} ({formatManwon(principal)})</p>
+          <p className="text-xs text-white/40 mt-1">= {formatKRW(principal)} ({formatManwon(principal)})</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
