@@ -28,20 +28,23 @@ export const metadata: Metadata = {
   verification: {
     google: 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY',
   },
+  // AdSense 계정 연결 메타태그 (크롤러 인식용)
+  other: {
+    'google-adsense-account': 'ca-pub-2765055385218528',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <head>
+      <body className={inter.className}>
+        {/* Google AdSense */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2765055385218528"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-      </head>
-      <body className={inter.className}>
         <Header />
         <main className="max-w-6xl mx-auto px-4 py-8 min-h-screen">
           {children}
