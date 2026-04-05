@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const BASE = 'https://moneyfit-calc.vercel.app'
+const BASE = 'https://n-job-studio.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
