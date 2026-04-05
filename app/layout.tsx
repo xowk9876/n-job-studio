@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     description: '2026년 최신 기준 한국 재테크 계산기 모음. 무료 · 광고 없음 · 실시간 계산.',
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
