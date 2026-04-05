@@ -146,7 +146,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-white/60">
           <div>
             <h3 className="font-semibold text-white mb-2">2026년 최신 기준 자동 적용</h3>
-            <p>국민연금 4.5%, 건강보험 3.545%, 장기요양보험 12.95% 등 2026년 최신 4대보험료율과 근로소득세 간이세액표를 자동으로 반영합니다.</p>
+            <p>국민연금 4.75%, 건강보험 3.595%, 장기요양보험 13.14% 등 2026년 최신 4대보험료율과 근로소득세 간이세액표를 자동으로 반영합니다.</p>
           </div>
           <div>
             <h3 className="font-semibold text-white mb-2">서버 없이 완전 무료</h3>
