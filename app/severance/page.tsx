@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useSeveranceStore } from '@/store'
 import { calcSeverance } from '@/lib/severance'
 import { Briefcase, AlertCircle, CheckCircle2 } from 'lucide-react'
+import NumericInput from '@/components/ui/NumericInput'
 
 function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -40,12 +41,11 @@ export default function SeverancePage() {
             최근 3개월 평균 월급 <span className="text-xs font-normal text-white/40">(세전, 상여 제외)</span>
           </label>
           <div className="relative">
-            <input
-              type="number"
+            <NumericInput
               className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-10"
               value={avgMonthly3}
-              step={100_000}
-              onChange={(e) => set({ avgMonthly3: Number(e.target.value) })}
+              defaultValue={3_000_000}
+              onChange={(n) => set({ avgMonthly3: n })}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
           </div>
@@ -57,13 +57,11 @@ export default function SeverancePage() {
             직전 1년 연간 상여금 <span className="text-xs font-normal text-white/40">(없으면 0)</span>
           </label>
           <div className="relative">
-            <input
-              type="number"
+            <NumericInput
               className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10"
               value={annualBonus}
-              step={100_000}
-              min={0}
-              onChange={(e) => set({ annualBonus: Number(e.target.value) })}
+              defaultValue={0}
+              onChange={(n) => set({ annualBonus: n })}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
           </div>

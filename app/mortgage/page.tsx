@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useMortgageStore } from '@/store'
 import { calcMortgage, RepaymentType } from '@/lib/mortgage'
 import { Home, ChevronDown, ChevronUp } from 'lucide-react'
+import NumericInput from '@/components/ui/NumericInput'
 
 function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 function formatManwon(n: number) {
@@ -47,12 +48,11 @@ export default function MortgagePage() {
       <div className="glass-card rounded-2xl p-6 flex flex-col gap-5">
         <div>
           <label className="block text-sm font-semibold text-white/80 mb-2">대출금액</label>
-          <input
-            type="number"
+          <NumericInput
             className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
             value={principal}
-            step={10_000_000}
-            onChange={(e) => set({ principal: Number(e.target.value) })}
+            defaultValue={300_000_000}
+            onChange={(n) => set({ principal: n })}
           />
           <p className="text-xs text-white/40 mt-1">{formatKRW(principal)} ({formatManwon(principal)})</p>
         </div>
@@ -60,12 +60,12 @@ export default function MortgagePage() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-white/80 mb-2">연이율 (%)</label>
-            <input
-              type="number"
+            <NumericInput
               className="glass-input w-full rounded-xl px-4 py-3 font-bold"
               value={annualRate}
-              min={0.1} max={20} step={0.1}
-              onChange={(e) => set({ annualRate: Number(e.target.value) })}
+              defaultValue={3.5}
+              allowDecimal
+              onChange={(n) => set({ annualRate: n })}
             />
           </div>
           <div>

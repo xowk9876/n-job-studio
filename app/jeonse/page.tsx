@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useJeonseStore } from '@/store'
 import { calcJeonse, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
 import { Building2, ArrowLeftRight, Info } from 'lucide-react'
+import NumericInput from '@/components/ui/NumericInput'
 
 function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 function formatManwon(n: number) {
@@ -64,16 +65,16 @@ export default function JeonsePage() {
           <>
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">현재 전세 보증금</label>
-              <input type="number" className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
-                value={jeonsDeposit} step={10_000_000}
-                onChange={(e) => set({ jeonsDeposit: Number(e.target.value) })} />
+              <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
+                value={jeonsDeposit} defaultValue={300_000_000}
+                onChange={(n) => set({ jeonsDeposit: n })} />
               <p className="text-xs text-white/40 mt-1">{formatManwon(jeonsDeposit)}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">목표 월세 보증금</label>
-              <input type="number" className="glass-input w-full rounded-xl px-4 py-3 font-bold"
-                value={wolseDeposit} step={10_000_000}
-                onChange={(e) => set({ wolseDeposit: Number(e.target.value) })} />
+              <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold"
+                value={wolseDeposit} defaultValue={50_000_000}
+                onChange={(n) => set({ wolseDeposit: n })} />
               <p className="text-xs text-white/40 mt-1">{formatManwon(wolseDeposit)}</p>
             </div>
           </>
@@ -81,16 +82,16 @@ export default function JeonsePage() {
           <>
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">현재 월세</label>
-              <input type="number" className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
-                value={currentWolse} step={50_000}
-                onChange={(e) => set({ currentWolse: Number(e.target.value) })} />
+              <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold"
+                value={currentWolse} defaultValue={700_000}
+                onChange={(n) => set({ currentWolse: n })} />
               <p className="text-xs text-white/40 mt-1">{formatKRW(currentWolse)}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-white/80 mb-2">현재 월세 보증금</label>
-              <input type="number" className="glass-input w-full rounded-xl px-4 py-3 font-bold"
-                value={currentWolseDeposit} step={10_000_000}
-                onChange={(e) => set({ currentWolseDeposit: Number(e.target.value) })} />
+              <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold"
+                value={currentWolseDeposit} defaultValue={50_000_000}
+                onChange={(n) => set({ currentWolseDeposit: n })} />
               <p className="text-xs text-white/40 mt-1">{formatManwon(currentWolseDeposit)}</p>
             </div>
           </>
@@ -103,12 +104,12 @@ export default function JeonsePage() {
               법정 상한 {DEFAULT_CONVERSION_RATE}% (기준금리 2.5%+2%)
             </span>
           </label>
-          <input
-            type="number"
+          <NumericInput
             className="glass-input w-full rounded-xl px-4 py-3 font-bold"
             value={conversionRate}
-            min={1} max={15} step={0.1}
-            onChange={(e) => set({ conversionRate: Number(e.target.value) })}
+            defaultValue={4.5}
+            allowDecimal
+            onChange={(n) => set({ conversionRate: n })}
           />
         </div>
       </div>

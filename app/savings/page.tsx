@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useSavingsStore } from '@/store'
 import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import { PiggyBank } from 'lucide-react'
+import NumericInput from '@/components/ui/NumericInput'
 
 function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -60,12 +61,11 @@ export default function SavingsPage() {
             {type === 'savings' ? '월 납입액' : '예치 원금'}
           </label>
           <div className="relative">
-            <input
-              type="number"
+            <NumericInput
               className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-10"
               value={amount}
-              step={100_000}
-              onChange={(e) => set({ amount: Number(e.target.value) })}
+              defaultValue={1_000_000}
+              onChange={(n) => set({ amount: n })}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
           </div>
@@ -75,12 +75,12 @@ export default function SavingsPage() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-white/80 mb-2">연이율 (%)</label>
-            <input
-              type="number"
+            <NumericInput
               className="glass-input w-full rounded-xl px-4 py-3 font-bold"
               value={annualRate}
-              min={0.1} max={20} step={0.1}
-              onChange={(e) => set({ annualRate: Number(e.target.value) })}
+              defaultValue={3.5}
+              allowDecimal
+              onChange={(n) => set({ annualRate: n })}
             />
           </div>
           <div>

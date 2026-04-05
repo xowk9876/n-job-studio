@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useSalaryStore } from '@/store'
 import { calcSalary } from '@/lib/salary'
 import { Wallet, Info } from 'lucide-react'
+import NumericInput from '@/components/ui/NumericInput'
 
 function formatKRW(n: number) {
   return n.toLocaleString('ko-KR') + '원'
@@ -54,14 +55,11 @@ export default function SalaryPage() {
         <div>
           <label className="block text-sm font-semibold text-white/80 mb-2">연봉 (세전)</label>
           <div className="relative">
-            <input
-              type="number"
+            <NumericInput
               className="glass-input w-full rounded-xl px-4 py-3 text-lg font-bold pr-10"
               value={annualSalary}
-              min={1_000_000}
-              max={1_000_000_000}
-              step={1_000_000}
-              onChange={(e) => set({ annualSalary: Number(e.target.value) })}
+              defaultValue={48_000_000}
+              onChange={(n) => set({ annualSalary: n })}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/40 pointer-events-none">원</span>
           </div>
