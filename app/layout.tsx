@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://n-job-studio.vercel.app'),
   title: {
     default: '머니핏 계산기 — 연봉·대출·퇴직금·적금·전월세',
     template: '%s | 머니핏 계산기',
