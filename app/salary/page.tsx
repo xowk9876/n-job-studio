@@ -39,14 +39,14 @@ export default function SalaryPage() {
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
-      {/* 헤더 */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-          <Wallet className="w-5 h-5 text-white" />
+      {/* 헤더 — Figma 스타일 정렬 */}
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0">
+          <Wallet className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">연봉 실수령액 계산기</h1>
-          <p className="text-sm text-white/60">2026년 최신 4대보험·소득세 기준</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">연봉 실수령액 계산기</h1>
+          <p className="text-sm text-white/55 mt-0.5">2026년 최신 4대보험·소득세 기준</p>
         </div>
       </div>
 
@@ -98,10 +98,10 @@ export default function SalaryPage() {
       {/* 결과 카드 */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-xl shadow-blue-500/30 ring-1 ring-white/20 ring-inset">
         <p className="text-sm font-medium opacity-80 mb-1">월 실수령액</p>
-        <p className="text-5xl font-extrabold tracking-tight">{formatKRW(result.monthlyNet)}</p>
-        <div className="flex gap-4 mt-4 text-sm opacity-80">
-          <span>세전 월급 {formatKRW(result.monthlyGross)}</span>
-          <span>연간 실수령 {formatKRW(result.annualNet)}</span>
+        <p className="text-5xl font-extrabold tracking-tight result-value">{formatKRW(result.monthlyNet)}</p>
+        <div className="flex flex-wrap gap-4 mt-4 text-sm opacity-80">
+          <span>세전 월급 <span className="num font-semibold">{formatKRW(result.monthlyGross)}</span></span>
+          <span>연간 실수령 <span className="num font-semibold">{formatKRW(result.annualNet)}</span></span>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ export default function SalaryPage() {
             <div key={label} className="flex items-center gap-3">
               <div className={`w-2 h-2 rounded-full ${color} shrink-0`} />
               <span className="text-sm text-white/70 flex-1">{label}</span>
-              <span className="text-sm font-semibold text-white">{formatKRW(value)}</span>
+              <span className="text-sm font-semibold text-white num">{formatKRW(value)}</span>
             </div>
           ))}
           <div className="pt-3 border-t border-white/15 flex justify-between items-center">

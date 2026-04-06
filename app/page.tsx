@@ -74,9 +74,9 @@ export default function HomePage() {
         <div className="inline-flex items-center gap-2 bg-white/10 text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20 mb-4">
           2026년 최신 세율 자동 적용
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 tracking-tight">
           한국 재테크<br />
-          <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+          <span className="gradient-text">
             스마트 계산기
           </span>
         </h1>
@@ -99,11 +99,12 @@ export default function HomePage() {
 
       {/* 계산기 카드 그리드 */}
       <section>
-        <h2 className="text-xl font-bold text-white mb-6 text-center">계산기 선택</h2>
+        <h2 className="text-2xl font-bold text-white mb-2 text-center tracking-tight">계산기 선택</h2>
+        <p className="text-center text-white/45 text-sm mb-6">원하는 계산기를 클릭하세요</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {calculators.map(({ href, icon: Icon, title, desc, example, color, glow, keywords }) => (
             <Link key={href} href={href} className="group block">
-            <div className="h-full glass-card rounded-2xl p-6 transition-all duration-200 hover:-translate-y-1"
+            <div className="h-full glass-card rounded-2xl p-6"
               style={{ cursor: 'pointer' }}>
                 {/* 아이콘 */}
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg ${glow} mb-4`}>

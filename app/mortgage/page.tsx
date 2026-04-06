@@ -34,13 +34,13 @@ export default function MortgagePage() {
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
-          <Home className="w-5 h-5 text-white" />
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 shrink-0">
+          <Home className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">주택담보대출 이자 계산기</h1>
-          <p className="text-sm text-white/60">원리금균등·원금균등·만기일시 3가지 방식 비교</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">주택담보대출 이자 계산기</h1>
+          <p className="text-sm text-white/55 mt-0.5">원리금균등·원금균등·만기일시 3가지 방식 비교</p>
         </div>
       </div>
 
@@ -109,11 +109,11 @@ export default function MortgagePage() {
         <p className="text-sm opacity-80 mb-1">
           {type === 'equal-payment' ? '월 납입액' : type === 'equal-principal' ? '첫 달 납입액' : '월 이자 (만기 전)'}
         </p>
-        <p className="text-5xl font-extrabold tracking-tight">{formatKRW(result.monthlyPayment)}</p>
+        <p className="text-5xl font-extrabold tracking-tight result-value">{formatKRW(result.monthlyPayment)}</p>
         <div className="grid grid-cols-3 gap-4 mt-4 text-center">
-          <div><p className="text-xs opacity-70">총 납입액</p><p className="font-bold">{formatManwon(result.totalPayment)}</p></div>
-          <div><p className="text-xs opacity-70">총 이자</p><p className="font-bold">{formatManwon(result.totalInterest)}</p></div>
-          <div><p className="text-xs opacity-70">이자 비율</p><p className="font-bold">{result.interestRatio.toFixed(1)}%</p></div>
+          <div><p className="text-xs opacity-70">총 납입액</p><p className="font-bold num">{formatManwon(result.totalPayment)}</p></div>
+          <div><p className="text-xs opacity-70">총 이자</p><p className="font-bold num">{formatManwon(result.totalInterest)}</p></div>
+          <div><p className="text-xs opacity-70">이자 비율</p><p className="font-bold num">{result.interestRatio.toFixed(1)}%</p></div>
         </div>
       </div>
 

@@ -24,13 +24,13 @@ export default function SeverancePage() {
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
-          <Briefcase className="w-5 h-5 text-white" />
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0">
+          <Briefcase className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">퇴직금 계산기</h1>
-          <p className="text-sm text-white/60">근로기준법 기준 — 세전 퇴직금 자동 계산</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">퇴직금 계산기</h1>
+          <p className="text-sm text-white/55 mt-0.5">근로기준법 기준 — 세전 퇴직금 자동 계산</p>
         </div>
       </div>
 
@@ -106,11 +106,11 @@ export default function SeverancePage() {
             <CheckCircle2 className="w-4 h-4 opacity-80" />
             <p className="text-sm opacity-80">세전 퇴직금 (예상)</p>
           </div>
-          <p className="text-5xl font-extrabold tracking-tight">{formatKRW(result.severancePay)}</p>
+          <p className="text-5xl font-extrabold tracking-tight result-value">{formatKRW(result.severancePay)}</p>
           <div className="grid grid-cols-3 gap-4 mt-4 text-center">
             <div><p className="text-xs opacity-70">재직 기간</p><p className="font-bold">{workYearsLabel}</p></div>
-            <div><p className="text-xs opacity-70">총 재직일수</p><p className="font-bold">{result.workDays.toLocaleString()}일</p></div>
-            <div><p className="text-xs opacity-70">1일 평균임금</p><p className="font-bold">{formatKRW(result.dailyWage)}</p></div>
+            <div><p className="text-xs opacity-70">총 재직일수</p><p className="font-bold num">{result.workDays.toLocaleString()}일</p></div>
+            <div><p className="text-xs opacity-70">1일 평균임금</p><p className="font-bold num">{formatKRW(result.dailyWage)}</p></div>
           </div>
         </div>
       )}

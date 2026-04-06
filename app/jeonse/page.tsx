@@ -28,13 +28,13 @@ export default function JeonsePage() {
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-pink-500/30">
-          <Building2 className="w-5 h-5 text-white" />
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-pink-500/30 shrink-0">
+          <Building2 className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">전세↔월세 전환 계산기</h1>
-          <p className="text-sm text-white/60">전월세 전환율 기준 — 손익분기 자동 분석</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">전세↔월세 전환 계산기</h1>
+          <p className="text-sm text-white/55 mt-0.5">전월세 전환율 기준 — 손익분기 자동 분석</p>
         </div>
       </div>
 
@@ -119,13 +119,13 @@ export default function JeonsePage() {
         {isToWolse ? (
           <>
             <p className="text-sm opacity-80 mb-1">전환 후 월세</p>
-            <p className="text-5xl font-extrabold tracking-tight">{formatKRW(result.monthlyRent ?? 0)}</p>
+            <p className="text-5xl font-extrabold tracking-tight result-value">{formatKRW(result.monthlyRent ?? 0)}</p>
             <p className="text-sm opacity-70 mt-2">연간 주거비 {formatManwon(result.annualCost)}</p>
           </>
         ) : (
           <>
             <p className="text-sm opacity-80 mb-1">필요 전세 보증금</p>
-            <p className="text-5xl font-extrabold tracking-tight">{formatManwon(result.jeonseDeposit ?? 0)}</p>
+            <p className="text-5xl font-extrabold tracking-tight result-value">{formatManwon(result.jeonseDeposit ?? 0)}</p>
             <p className="text-sm opacity-70 mt-2">현재 연간 월세 {formatManwon(result.annualCost)}</p>
           </>
         )}

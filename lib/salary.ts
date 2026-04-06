@@ -21,13 +21,15 @@ const TAX_BRACKETS = [
   { limit: Infinity,      rate: 0.45,  deduction: 65_940_000 },
 ]
 
-// 근로소득공제
+// 근로소득공제 (소득세법 §47 — 공제한도 2,000만원)
 function earnedIncomeDeduction(salary: number): number {
-  if (salary <= 5_000_000)   return salary * 0.70
-  if (salary <= 15_000_000)  return 3_500_000 + (salary - 5_000_000) * 0.40
-  if (salary <= 45_000_000)  return 7_500_000 + (salary - 15_000_000) * 0.15
-  if (salary <= 100_000_000) return 12_000_000 + (salary - 45_000_000) * 0.05
-  return 14_750_000 + (salary - 100_000_000) * 0.02
+  let deduction: number
+  if (salary <= 5_000_000)        deduction = salary * 0.70
+  else if (salary <= 15_000_000)  deduction = 3_500_000 + (salary - 5_000_000) * 0.40
+  else if (salary <= 45_000_000)  deduction = 7_500_000 + (salary - 15_000_000) * 0.15
+  else if (salary <= 100_000_000) deduction = 12_000_000 + (salary - 45_000_000) * 0.05
+  else                            deduction = 14_750_000 + (salary - 100_000_000) * 0.02
+  return Math.min(deduction, 20_000_000) // 법정 한도 2,000만원
 }
 
 // 근로소득세 계산 (연간)
@@ -79,8 +81,9 @@ export function calcSalary(input: SalaryInput): SalaryResult {
     annualSalary - earnedDeduction - personalDeduction - childDeduction
   )
 
-  // 근로소득세 (월)
-  const annualIncomeTax = calcIncomeTax(taxableIncome)
+  // 근로소득세 (월) — 표준세액공제 13만원 적용 (소득세법 §59의4⑩, 모든 근로자 자동 적용)
+  const STANDARD_TAX_CREDIT = 130_000
+  const annualIncomeTax = Math.max(0, calcIncomeTax(taxableIncome) - STANDARD_TAX_CREDIT)
   const incomeTax = Math.round(annualIncomeTax / 12)
   const localTax = Math.round(incomeTax * 0.10)
 

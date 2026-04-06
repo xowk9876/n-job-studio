@@ -22,13 +22,13 @@ export default function SavingsPage() {
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
-          <PiggyBank className="w-5 h-5 text-white" />
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30 shrink-0">
+          <PiggyBank className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">적금/예금 이자 계산기</h1>
-          <p className="text-sm text-white/60">이자소득세 15.4% 차감 후 세후 수익 자동 계산</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">적금/예금 이자 계산기</h1>
+          <p className="text-sm text-white/55 mt-0.5">이자소득세 15.4% 차감 후 세후 수익 자동 계산</p>
         </div>
       </div>
 
@@ -123,15 +123,15 @@ export default function SavingsPage() {
       {/* 결과 */}
       <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl shadow-amber-500/30 ring-1 ring-white/20 ring-inset">
         <p className="text-sm opacity-80 mb-1">만기 수령액 (세후)</p>
-        <p className="text-5xl font-extrabold tracking-tight">{formatKRW(result.maturityAmount)}</p>
+        <p className="text-5xl font-extrabold tracking-tight result-value">{formatKRW(result.maturityAmount)}</p>
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div className="bg-white/10 rounded-xl p-3">
             <p className="text-xs opacity-70">납입 원금</p>
-            <p className="font-bold">{formatKRW(result.principal)}</p>
+            <p className="font-bold num">{formatKRW(result.principal)}</p>
           </div>
           <div className="bg-white/10 rounded-xl p-3">
             <p className="text-xs opacity-70">세후 이자</p>
-            <p className="font-bold">+{formatKRW(result.netInterest)}</p>
+            <p className="font-bold num">+{formatKRW(result.netInterest)}</p>
           </div>
         </div>
       </div>
