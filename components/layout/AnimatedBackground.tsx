@@ -45,22 +45,22 @@ const orbs = [
   },
 ]
 
-/* ── 왼쪽 아이콘 (left: 1~6%) ── */
+/* ── 왼쪽 아이콘 — left/top 모두 다르게 흩뿌리기 ── */
 const leftIcons = [
-  { Icon: TrendingUp,       top: '10%', color: '#60a5fa', size: 44, duration: 14, delay: 0   },
-  { Icon: BarChart2,        top: '28%', color: '#34d399', size: 38, duration: 18, delay: 1.5 },
-  { Icon: PieChart,         top: '47%', color: '#a78bfa', size: 40, duration: 16, delay: 3   },
-  { Icon: Calculator,       top: '66%', color: '#f59e0b', size: 36, duration: 20, delay: 0.5 },
-  { Icon: Percent,          top: '83%', color: '#34d399', size: 34, duration: 13, delay: 2   },
+  { Icon: TrendingUp,       top:  '8%', left:  '1%', color: '#60a5fa', size: 44, duration: 14, delay: 0   },
+  { Icon: BarChart2,        top: '22%', left:  '7%', color: '#34d399', size: 38, duration: 18, delay: 1.5 },
+  { Icon: PieChart,         top: '40%', left:  '2%', color: '#a78bfa', size: 40, duration: 16, delay: 3   },
+  { Icon: Calculator,       top: '60%', left:  '9%', color: '#f59e0b', size: 36, duration: 20, delay: 0.5 },
+  { Icon: Percent,          top: '80%', left:  '3%', color: '#34d399', size: 34, duration: 13, delay: 2   },
 ]
 
-/* ── 오른쪽 아이콘 (right: 1~6%) ── */
+/* ── 오른쪽 아이콘 — right/top 모두 다르게 흩뿌리기 ── */
 const rightIcons = [
-  { Icon: Banknote,         top: '10%', color: '#f59e0b', size: 44, duration: 17, delay: 1   },
-  { Icon: TrendingDown,     top: '28%', color: '#f87171', size: 40, duration: 15, delay: 2.5 },
-  { Icon: CandlestickChart, top: '47%', color: '#60a5fa', size: 42, duration: 19, delay: 0   },
-  { Icon: DollarSign,       top: '66%', color: '#34d399', size: 38, duration: 12, delay: 3.5 },
-  { Icon: Landmark,         top: '83%', color: '#a78bfa', size: 36, duration: 16, delay: 1   },
+  { Icon: Banknote,         top:  '6%', right:  '2%', color: '#f59e0b', size: 44, duration: 17, delay: 1   },
+  { Icon: TrendingDown,     top: '25%', right:  '8%', color: '#f87171', size: 40, duration: 15, delay: 2.5 },
+  { Icon: CandlestickChart, top: '44%', right:  '1%', color: '#60a5fa', size: 42, duration: 19, delay: 0   },
+  { Icon: DollarSign,       top: '63%', right:  '7%', color: '#34d399', size: 38, duration: 12, delay: 3.5 },
+  { Icon: Landmark,         top: '82%', right:  '3%', color: '#a78bfa', size: 36, duration: 16, delay: 1   },
 ]
 
 export default function AnimatedBackground() {
@@ -98,7 +98,7 @@ export default function AnimatedBackground() {
       ))}
 
       {/* ── 왼쪽 플로팅 아이콘 ── */}
-      {leftIcons.map(({ Icon, top, color, size, duration, delay }, i) => (
+      {leftIcons.map(({ Icon, top, left, color, size, duration, delay }, i) => (
         <motion.div
           key={`left-${i}`}
           animate={{ y: [-10, 10, -10] }}
@@ -106,11 +106,11 @@ export default function AnimatedBackground() {
           style={{
             position: 'absolute',
             top,
-            left: '2.5%',
+            left,
             color,
-            opacity: 0.18,
+            opacity: 0.22,
             willChange: 'transform',
-            filter: `drop-shadow(0 0 8px ${color}66)`,
+            filter: `drop-shadow(0 0 8px ${color}88)`,
           }}
         >
           <Icon width={size} height={size} strokeWidth={1.2} />
@@ -118,7 +118,7 @@ export default function AnimatedBackground() {
       ))}
 
       {/* ── 오른쪽 플로팅 아이콘 ── */}
-      {rightIcons.map(({ Icon, top, color, size, duration, delay }, i) => (
+      {rightIcons.map(({ Icon, top, right, color, size, duration, delay }, i) => (
         <motion.div
           key={`right-${i}`}
           animate={{ y: [-10, 10, -10] }}
@@ -126,11 +126,11 @@ export default function AnimatedBackground() {
           style={{
             position: 'absolute',
             top,
-            right: '2.5%',
+            right,
             color,
-            opacity: 0.18,
+            opacity: 0.22,
             willChange: 'transform',
-            filter: `drop-shadow(0 0 8px ${color}66)`,
+            filter: `drop-shadow(0 0 8px ${color}88)`,
           }}
         >
           <Icon width={size} height={size} strokeWidth={1.2} />
