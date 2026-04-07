@@ -4,6 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import AnimatedBackground from '@/components/layout/AnimatedBackground'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body className={inter.className}>
+        <AnimatedBackground />
         {/* Google AdSense */}
         <Script
           async
@@ -46,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="afterInteractive"
         />
         <Header />
-        <main className="max-w-6xl mx-auto px-4 py-8 min-h-screen">
+        <main className="relative z-10 max-w-6xl mx-auto px-4 py-8 min-h-screen">
           {children}
         </main>
         <Footer />
