@@ -43,6 +43,22 @@
 }
 
 :root {
+  /* ── 브랜드 프라이빗 디자인 토큰 ── */
+  --brand-primary: #60a5fa;
+  --brand-secondary: #34d399;
+  --brand-accent: #a78bfa;
+  --brand-gradient: linear-gradient(135deg, #60a5fa 0%, #34d399 50%, #a78bfa 100%);
+  --brand-glass-bg: rgba(255, 255, 255, 0.08);
+  --brand-glass-border: rgba(255, 255, 255, 0.16);
+  --brand-glass-blur: 20px;
+  --brand-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.20);
+  --brand-shadow-md: 0 8px 32px rgba(0, 0, 0, 0.28);
+  --brand-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.35);
+  --brand-shadow-glow: 0 0 20px rgba(96, 165, 250, 0.25);
+  --brand-transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --brand-radius: 1rem;
+
+  /* ── 기존 테마 변수 ── */
   --background: #0f1c35;
   --foreground: #f0f4ff;
   --card: rgba(255, 255, 255, 0.09);
