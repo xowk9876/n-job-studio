@@ -14,7 +14,7 @@ import {
   Banknote,
 } from 'lucide-react'
 
-/* ── 그라데이션 오브 설정 ── */
+/* ── 그라데이션 오브 ── */
 const orbs = [
   {
     color: 'rgba(96, 165, 250, 0.18)',
@@ -45,18 +45,22 @@ const orbs = [
   },
 ]
 
-/* ── 플로팅 아이콘 설정 ── */
-const floatingIcons = [
-  { Icon: TrendingUp,       size: 52, top: '8%',  left: '6%',  duration: 14, delay: 0    },
-  { Icon: BarChart2,        size: 44, top: '18%', left: '82%', duration: 18, delay: 2    },
-  { Icon: PieChart,         size: 38, top: '55%', left: '4%',  duration: 16, delay: 4    },
-  { Icon: TrendingDown,     size: 48, top: '72%', left: '75%', duration: 20, delay: 1    },
-  { Icon: DollarSign,       size: 56, top: '33%', left: '50%', duration: 13, delay: 3    },
-  { Icon: Calculator,       size: 36, top: '80%', left: '20%', duration: 17, delay: 5    },
-  { Icon: Percent,          size: 42, top: '12%', left: '38%', duration: 22, delay: 2.5  },
-  { Icon: Landmark,         size: 50, top: '62%', left: '88%', duration: 15, delay: 6    },
-  { Icon: CandlestickChart, size: 40, top: '45%', left: '15%', duration: 19, delay: 1.5  },
-  { Icon: Banknote,         size: 46, top: '90%', left: '58%', duration: 12, delay: 3.5  },
+/* ── 왼쪽 아이콘 (left: 1~6%) ── */
+const leftIcons = [
+  { Icon: TrendingUp,       top: '10%', color: '#60a5fa', size: 44, duration: 14, delay: 0   },
+  { Icon: BarChart2,        top: '28%', color: '#34d399', size: 38, duration: 18, delay: 1.5 },
+  { Icon: PieChart,         top: '47%', color: '#a78bfa', size: 40, duration: 16, delay: 3   },
+  { Icon: Calculator,       top: '66%', color: '#f59e0b', size: 36, duration: 20, delay: 0.5 },
+  { Icon: Percent,          top: '83%', color: '#34d399', size: 34, duration: 13, delay: 2   },
+]
+
+/* ── 오른쪽 아이콘 (right: 1~6%) ── */
+const rightIcons = [
+  { Icon: Banknote,         top: '10%', color: '#f59e0b', size: 44, duration: 17, delay: 1   },
+  { Icon: TrendingDown,     top: '28%', color: '#f87171', size: 40, duration: 15, delay: 2.5 },
+  { Icon: CandlestickChart, top: '47%', color: '#60a5fa', size: 42, duration: 19, delay: 0   },
+  { Icon: DollarSign,       top: '66%', color: '#34d399', size: 38, duration: 12, delay: 3.5 },
+  { Icon: Landmark,         top: '83%', color: '#a78bfa', size: 36, duration: 16, delay: 1   },
 ]
 
 export default function AnimatedBackground() {
@@ -93,24 +97,40 @@ export default function AnimatedBackground() {
         />
       ))}
 
-      {/* ── 플로팅 금융 아이콘 ── */}
-      {floatingIcons.map(({ Icon, size, top, left, duration, delay }, i) => (
+      {/* ── 왼쪽 플로팅 아이콘 ── */}
+      {leftIcons.map(({ Icon, top, color, size, duration, delay }, i) => (
         <motion.div
-          key={`icon-${i}`}
-          animate={{ y: [-12, 12, -12] }}
-          transition={{
-            duration,
-            delay,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          key={`left-${i}`}
+          animate={{ y: [-10, 10, -10] }}
+          transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
             top,
-            left,
-            opacity: 0.055,
-            color: 'white',
+            left: '2.5%',
+            color,
+            opacity: 0.18,
             willChange: 'transform',
+            filter: `drop-shadow(0 0 8px ${color}66)`,
+          }}
+        >
+          <Icon width={size} height={size} strokeWidth={1.2} />
+        </motion.div>
+      ))}
+
+      {/* ── 오른쪽 플로팅 아이콘 ── */}
+      {rightIcons.map(({ Icon, top, color, size, duration, delay }, i) => (
+        <motion.div
+          key={`right-${i}`}
+          animate={{ y: [-10, 10, -10] }}
+          transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            position: 'absolute',
+            top,
+            right: '2.5%',
+            color,
+            opacity: 0.18,
+            willChange: 'transform',
+            filter: `drop-shadow(0 0 8px ${color}66)`,
           }}
         >
           <Icon width={size} height={size} strokeWidth={1.2} />
