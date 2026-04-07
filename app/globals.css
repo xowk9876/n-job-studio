@@ -59,7 +59,7 @@
   --brand-radius: 1rem;
 
   /* ── 기존 테마 변수 ── */
-  --background: #0f1c35;
+  --background: #0a0f1e;
   --foreground: #f0f4ff;
   --card: rgba(255, 255, 255, 0.09);
   --card-foreground: #f0f4ff;
@@ -95,7 +95,14 @@
 
   body {
     @apply text-foreground antialiased;
-    background-color: #0f1c35;
+    background-color: #0a0f1e;
+    /* Dot Grid — Linear/Vercel 스타일 */
+    background-image: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.09) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
     min-height: 100vh;
   }
 
