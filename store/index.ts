@@ -6,6 +6,11 @@ interface SalaryStore {
   annualSalary: number
   dependents: number
   children: number
+  overtimeHours: number
+  nightHours: number
+  holidayHours: number
+  mealAllowance: number
+  transportAllowance: number
   set: (v: Partial<Omit<SalaryStore, 'set'>>) => void
 }
 export const useSalaryStore = create<SalaryStore>()(
@@ -14,6 +19,11 @@ export const useSalaryStore = create<SalaryStore>()(
       annualSalary: 40_000_000,
       dependents: 1,
       children: 0,
+      overtimeHours: 0,
+      nightHours: 0,
+      holidayHours: 0,
+      mealAllowance: 200_000,
+      transportAllowance: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
     { name: 'mf-salary' }
