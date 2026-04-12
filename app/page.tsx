@@ -159,6 +159,56 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 2026 변경사항 섹션 */}
+      <section className="glass-card rounded-2xl p-8">
+        <h2 className="text-xl font-bold text-white mb-2">2026년 주요 변경사항</h2>
+        <p className="text-sm text-white/50 mb-5">직장인이라면 꼭 알아야 할 2026년 최신 세율·보험료 변경 내용입니다.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          {[
+            { label: '최저임금', value: '10,030원/시간', sub: '월 환산 약 2,096,270원 (209시간)' },
+            { label: '국민연금', value: '4.75% (근로자)', sub: '총 9.5% — 2026년 0.25%p 인상' },
+            { label: '건강보험', value: '3.595% (근로자)', sub: '총 7.19% — 2026년 기준' },
+            { label: '장기요양', value: '0.4591%', sub: '건강보험료의 12.95% 적용' },
+            { label: '고용보험', value: '0.9% (근로자)', sub: '실업급여 적용 요율' },
+            { label: '전월세 전환율', value: '법정 상한 4.5%', sub: '기준금리 2.5% + 2%' },
+          ].map(({ label, value, sub }) => (
+            <div key={label} className="bg-white/5 rounded-xl px-4 py-3 border border-white/10">
+              <div className="flex justify-between items-start gap-2">
+                <span className="text-white/60 text-xs">{label}</span>
+                <span className="font-bold text-white text-sm shrink-0">{value}</span>
+              </div>
+              <p className="text-xs text-white/35 mt-1">{sub}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 자주 묻는 질문 */}
+      <section className="glass-card rounded-2xl p-8">
+        <h2 className="text-xl font-bold text-white mb-5">자주 묻는 질문</h2>
+        <div className="flex flex-col gap-2">
+          {[
+            { q: '연봉 5,000만원이면 실수령액이 얼마인가요?', a: '2026년 기준 부양가족 1명(본인) 기준, 월 실수령액은 약 355만~360만원 수준입니다. 4대보험(국민연금·건강보험·고용보험)과 근로소득세, 지방소득세를 공제한 금액입니다. 정확한 금액은 연봉 실수령액 계산기에서 확인하세요.' },
+            { q: '주담대 3억원 30년 원리금균등 월 납입금은?', a: '연 3.5% 고정금리 기준 월 납입금은 약 134만 7,000원입니다. 30년간 총 납입액은 약 4억 8,500만원으로 총 이자만 약 1억 8,500만원에 달합니다. 금리에 따라 크게 달라지므로 계산기를 통해 시뮬레이션해보세요.' },
+            { q: '5년 근무 후 퇴직금은 얼마나 받나요?', a: '월 급여 350만원 기준 5년(1,825일) 근무 시 퇴직금은 약 1,750만원입니다. 퇴직금 = 1일 평균임금 × 30일 × (재직일수 ÷ 365) 공식으로 계산합니다. 상여금과 각종 수당도 평균임금에 포함됩니다.' },
+            { q: '전세 3억원을 월세로 전환하면 월세가 얼마인가요?', a: '보증금 5,000만원 유지 시, 법정 전환율 4.5% 기준으로 월세는 약 93만 7,500원입니다. 공식: (3억-5천만) × 4.5% ÷ 12 = 937,500원. 집주인은 법정 상한(기준금리+2%)을 초과하는 전환율을 요구할 수 없습니다.' },
+          ].map(({ q, a }, i) => (
+            <details key={i} className="group rounded-xl border border-white/10 overflow-hidden">
+              <summary className="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer text-sm font-semibold text-white/85 hover:bg-white/5 transition-colors list-none select-none">
+                <span className="flex items-center gap-2">
+                  <span className="text-blue-400 shrink-0">Q.</span>
+                  {q}
+                </span>
+                <span className="text-white/40 text-xs shrink-0 group-open:rotate-45 transition-transform duration-200">＋</span>
+              </summary>
+              <div className="px-5 pb-4 pt-2 text-sm text-white/60 leading-relaxed border-t border-white/10">
+                <span className="text-emerald-400 font-semibold mr-1">A.</span>{a}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

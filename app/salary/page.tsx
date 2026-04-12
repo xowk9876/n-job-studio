@@ -5,6 +5,7 @@ import { useSalaryStore } from '@/store'
 import { calcSalary, MIN_HOURLY_WAGE_2026 } from '@/lib/salary'
 import { Wallet, Info, ChevronDown, Clock, Moon, CalendarCheck, AlertTriangle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
+import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
 
 function formatKRW(n: number) {
   return n.toLocaleString('ko-KR') + '원'
@@ -360,32 +361,38 @@ export default function SalaryPage() {
         광고 영역
       </div>
 
-      {/* SEO 텍스트 */}
-      <div className="glass-card rounded-2xl p-6 text-sm text-white/60">
-        <h2 className="font-bold text-white mb-3">연봉 실수령액 계산 방법 (2026년)</h2>
-        <p className="mb-2">연봉 실수령액은 세전 월급에서 4대보험(국민연금·건강보험·장기요양보험·고용보험)과 근로소득세·지방소득세를 공제한 금액입니다. 연장·야간·휴일근로수당과 식대·차량유지비 비과세 항목을 정확히 반영합니다.</p>
-        <ul className="list-disc list-inside space-y-1 text-white/40">
-          <li>국민연금: 월 과세급여의 4.75% (월 상한 302,575원)</li>
-          <li>건강보험: 월 과세급여의 3.595% (2026 인상, 총 7.19%)</li>
-          <li>장기요양보험: 건강보험료의 13.14% (2026 인상)</li>
-          <li>고용보험: 월 과세급여의 0.9%</li>
-          <li>연장수당: 통상시급 × 1.5 × 연장시간 (근로기준법 §56①)</li>
-          <li>야간수당: 통상시급 × 0.5 가산 (22:00~06:00, §56③)</li>
-          <li>휴일수당: 통상시급 × 1.5 (8h 이내) / 2.0 (8h 초과, §56②)</li>
-          <li>식대 비과세: 월 20만원 한도 (소득세법 시행령 §12)</li>
-          <li>차량유지비 비과세: 월 20만원 한도</li>
-          <li>2026년 최저임금: 시급 10,320원 (월 2,156,880원)</li>
-        </ul>
-      </div>
+      {/* ═══ 계산 예시 ═══ */}
+      <ExamplesSection title="연봉별 실수령액 예시 (2026년, 부양가족 1인 기준)" items={[
+        { label: '신입 · 연봉 3,600만원', input: '월 기본급 300만원 · 식대 20만원 포함', result: '월 실수령 약 2,648,000원', note: '4대보험 + 소득세 공제 후' },
+        { label: '대리 · 연봉 5,000만원', input: '월 기본급 416만원 · 식대 20만원 포함', result: '월 실수령 약 3,586,000원', note: '4대보험 + 소득세 공제 후' },
+        { label: '과장 · 연봉 8,000만원', input: '월 기본급 666만원 · 식대 20만원 포함', result: '월 실수령 약 5,539,000원', note: '4대보험 + 소득세 공제 후' },
+      ]} />
 
-      {/* 관련 계산기 */}
-      <div className="flex flex-wrap gap-2">
-        {relatedLinks.map(({ href, label }) => (
-          <a key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">
-            → {label}
-          </a>
-        ))}
-      </div>
+      {/* ═══ FAQ ═══ */}
+      <FAQSection items={[
+        { q: '연봉과 월급의 차이는 무엇인가요?', a: '연봉은 1년 치 세전 총액이고, 월급은 연봉을 12로 나눈 세전 금액입니다. 실수령액은 여기서 4대보험과 소득세를 공제한 금액입니다.' },
+        { q: '4대보험이란 무엇이고 왜 공제되나요?', a: '국민연금(4.75%), 건강보험(3.595%), 장기요양보험(건강보험료×13.14%), 고용보험(0.9%)으로 구성됩니다. 근로자와 사업주가 절반씩 부담하며 노후·의료·실업 보장을 위해 의무적으로 납부합니다.' },
+        { q: '야간·연장수당에도 세금이 붙나요?', a: '네, 수당도 과세소득입니다. 다만 통상임금의 50%(야간 가산), 150%(연장), 150~200%(휴일) 가산율로 계산된 금액 전체가 과세됩니다. 식대·차량유지비와 달리 비과세 항목이 아닙니다.' },
+        { q: '식대 비과세는 어떻게 적용되나요?', a: '2023년 1월부터 월 20만원까지 비과세입니다. 즉 월급여에 식대가 포함돼 있다면 20만원까지는 4대보험·소득세 과세 대상에서 제외되어 실질적으로 세금이 절감됩니다.' },
+        { q: '부양가족이 많을수록 세금이 줄어드나요?', a: '맞습니다. 부양가족 1명당 연 150만원 기본공제가 적용되어 과세표준이 낮아지고, 20세 미만 자녀에게는 자녀세액공제(1명 15만원, 2명 35만원)도 추가됩니다.' },
+        { q: '2026년 최저임금은 얼마인가요?', a: '2026년 최저임금은 시급 10,320원이며, 월 환산 시 209시간 기준 2,156,880원입니다. 연봉으로는 약 2,588만원 수준입니다.' },
+        { q: '연봉 협상 시 세전과 세후 중 어떻게 비교해야 하나요?', a: '항상 세전 연봉 기준으로 비교하되, 식대·교통비 등 비과세 항목이 포함됐는지 확인해야 합니다. 같은 연봉이라도 비과세 비중이 높으면 실수령액이 더 많아질 수 있습니다.' },
+      ]} />
+
+      {/* ═══ 절세 팁 ═══ */}
+      <TipsSection title="직장인 절세 실용 팁" items={[
+        { title: '비과세 항목 최대 활용', desc: '식대(월 20만원), 차량유지비(월 20만원), 출산·보육 수당(월 20만원) 등 비과세 항목을 급여 구조에 포함시키면 실수령액이 늘어납니다. 인사팀에 비과세 급여 구조를 요청해보세요.' },
+        { title: '연금저축·IRP로 소득공제', desc: '연금저축(연 600만원 한도)과 IRP(연 900만원 한도)에 납입하면 세액공제(13.2% 또는 16.5%)를 받을 수 있어 연말정산 시 환급이 가능합니다.' },
+        { title: '부양가족 공제 꼼꼼히 확인', desc: '60세 이상 부모님, 배우자, 20세 미만 자녀뿐만 아니라 형제자매(20세 이하 또는 60세 이상, 소득 100만원 이하)도 기본공제 대상이 될 수 있습니다.' },
+      ]} />
+
+      {/* ═══ 관련 계산기 ═══ */}
+      <RelatedLinks links={[
+        { href: '/mortgage', label: '대출 이자 계산기' },
+        { href: '/severance', label: '퇴직금 계산기' },
+        { href: '/savings', label: '적금 이자 계산기' },
+        { href: '/jeonse', label: '전월세 전환 계산기' },
+      ]} />
     </div>
   )
 }

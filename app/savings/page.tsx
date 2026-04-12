@@ -5,6 +5,7 @@ import { useSavingsStore } from '@/store'
 import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import { PiggyBank } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
+import { FAQSection, ExamplesSection, TipsSection } from '@/components/ui/PageContent'
 
 function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -159,6 +160,28 @@ export default function SavingsPage() {
 
       {/* 광고 슬롯 */}
       <div id="adsense-savings" className="w-full min-h-[90px] glass-card rounded-xl flex items-center justify-center text-xs text-white/30">광고 영역</div>
+
+      {/* 계산 예시 */}
+      <ExamplesSection title="적금/예금 계산 예시" items={[
+        { label: '월 30만 · 연 3.5% · 12개월 (적금)', input: '납입 원금 360만원', result: '세후 약 3,665,000원', note: '이자소득세 15.4% 차감 후' },
+        { label: '1,000만 · 연 3.8% · 12개월 (예금)', input: '예치 원금 1,000만원', result: '세후 약 10,321,000원', note: '세후 이자 약 321,600원' },
+        { label: '월 50만 · 연 4.0% · 24개월 (적금)', input: '납입 원금 1,200만원', result: '세후 약 1,248,000원 이자', note: '복리 기준' },
+      ]} />
+
+      {/* FAQ */}
+      <FAQSection items={[
+        { q: '단리와 복리의 차이는 무엇인가요?', a: '단리는 원금에만 이자가 붙는 방식이고, 복리는 발생한 이자에도 다시 이자가 붙는 방식입니다. 기간이 길수록 복리의 효과가 훨씬 커집니다. 1,000만원을 연 4%로 10년 운용 시 단리 400만원, 복리 약 480만원의 차이가 납니다.' },
+        { q: '이자소득세 15.4%는 어떻게 계산되나요?', a: '이자소득세는 소득세 14% + 지방소득세 1.4% = 총 15.4%입니다. 만기 이자에서 자동으로 차감된 후 지급됩니다. 예를 들어 세전 이자 100만원이라면 세후 실제 수령액은 846,000원입니다.' },
+        { q: '적금 vs 예금 어느 쪽이 유리한가요?', a: '목돈이 있다면 예금(일시 예치)이 이자를 더 많이 받습니다. 매달 납입하는 적금은 첫 달 입금액만 12개월 전체 이자를 받고, 마지막 달 납입액은 1개월치 이자만 받기 때문에 실효 이율이 명목 이율의 절반 수준입니다.' },
+        { q: '비과세 상품으로 세금을 줄일 수 있나요?', a: '네, ISA 계좌(개인종합자산관리계좌)를 활용하면 200만원(서민형 400만원)까지 비과세 혜택이 있습니다. 농어촌특별세 1.4%만 부과되는 세금우대 상품도 있습니다. 단, 조건과 한도가 있으므로 가입 전 확인이 필요합니다.' },
+        { q: '파킹통장과 정기적금 중 어느 것이 나은가요?', a: '파킹통장은 자유롭게 입출금이 가능하고 일 단위 이자를 받아 유동성이 높습니다. 정기적금은 만기까지 유지해야 하지만 이율이 더 높습니다. 6개월 이내에 써야 할 돈은 파킹통장, 1년 이상 묶어둘 수 있는 돈은 적금이 유리합니다.' },
+      ]} />
+
+      <TipsSection title="이자 극대화 팁" items={[
+        { title: 'ISA 계좌 활용으로 비과세 혜택', desc: '개인종합자산관리계좌(ISA)에 예금·적금을 편입하면 연간 200만원까지 이자·배당에 비과세 혜택이 주어집니다. 서민형·농어민형은 400만원까지 가능합니다.' },
+        { title: '금리 높은 인터넷은행 활용', desc: '카카오뱅크, 케이뱅크, 토스뱅크 등 인터넷은행은 시중은행보다 0.3~0.5%p 높은 이율을 제공하는 경우가 많습니다. 특히 신규 가입자 우대 이벤트를 적극 활용하세요.' },
+        { title: '만기 자동 재예치 주의', desc: '만기 후 자동 재예치되면 당시 금리(보통 더 낮은 금리)로 새로 계약됩니다. 만기 알림을 설정하고 만기 직후 금리를 직접 비교해 가장 유리한 상품으로 갈아타세요.' },
+      ]} />
 
       <div className="flex flex-wrap gap-2">
         {[{href:'/salary',label:'연봉 실수령액'},{href:'/mortgage',label:'대출 이자'},{href:'/jeonse',label:'전월세 전환'}].map(({href,label})=>(

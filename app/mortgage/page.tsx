@@ -5,6 +5,7 @@ import { useMortgageStore } from '@/store'
 import { calcMortgage, RepaymentType } from '@/lib/mortgage'
 import { Home, ChevronDown, ChevronUp } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
+import { FAQSection, ExamplesSection, TipsSection } from '@/components/ui/PageContent'
 
 function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 function formatManwon(n: number) {
@@ -154,6 +155,29 @@ export default function MortgagePage() {
           </div>
         )}
       </div>
+
+      {/* 계산 예시 */}
+      <ExamplesSection title="주담대 계산 예시" items={[
+        { label: '3억 · 3.5% · 30년 (원리금균등)', input: '월 납입액', result: '약 1,347,000원', note: '총 이자 약 1억 8,492만원' },
+        { label: '5억 · 4.0% · 20년 (원리금균등)', input: '월 납입액', result: '약 3,032,000원', note: '총 이자 약 2억 2,768만원' },
+        { label: '2억 · 3.0% · 10년 (원금균등)', input: '첫달 납입액', result: '약 2,167,000원', note: '총 이자 약 3,025만원' },
+      ]} />
+
+      {/* FAQ */}
+      <FAQSection items={[
+        { q: '원리금균등과 원금균등 상환의 차이는?', a: '원리금균등은 매달 동일한 금액을 납부하는 방식이라 가계 계획이 쉽습니다. 원금균등은 매달 동일한 원금을 갚아서 초반엔 납입액이 많지만 총 이자 부담이 적습니다. 총 이자는 원금균등이 더 유리합니다.' },
+        { q: 'DSR·LTV·DTI가 뭔가요?', a: 'LTV(담보인정비율)는 집값 대비 대출 가능 금액(예: 70%면 3억 집에 최대 2.1억 대출 가능). DTI는 연 소득 대비 연간 원리금 상환액 비율. DSR은 모든 대출 원리금을 합산한 상환 비율로 2023년부터 40% 규제가 적용됩니다.' },
+        { q: '금리 0.5% 차이가 실제로 얼마나 큰가요?', a: '3억 30년 대출 기준, 금리가 3.5%에서 4.0%로 0.5%p 오르면 월 납입액은 약 8만원 증가하고 총 이자는 약 2,900만원 더 많아집니다. 장기 대출일수록 금리 차이의 영향이 매우 큽니다.' },
+        { q: '중도상환수수료는 언제 발생하나요?', a: '대출 실행 후 일정 기간(보통 1~3년) 내에 조기 상환할 경우 중도상환수수료가 발생합니다. 통상 잔여 원금의 1~2% 수준이며, 기간이 지남에 따라 점감됩니다. 상환 전 반드시 은행에 수수료를 확인하세요.' },
+        { q: '변동금리 vs 고정금리 어떻게 선택하나요?', a: '금리 상승기에는 고정금리가 유리하고, 금리 하락기에는 변동금리가 유리합니다. 향후 금리 방향을 예측하기 어렵다면 안정적인 고정금리를 선택하는 것이 리스크 관리에 좋습니다. 혼합형(5년 고정+변동)도 고려해보세요.' },
+        { q: '3억 대출 시 연간 이자만 얼마나 되나요?', a: '연 3.5% 기준 3억 대출의 첫해 이자는 약 1,050만원(월 87.5만원)입니다. 원리금균등 방식이라면 매달 약 134.7만원을 납부하며, 그 중 초반에는 이자 비중이 높고 후반으로 갈수록 원금 비중이 높아집니다.' },
+      ]} />
+
+      <TipsSection title="주담대 절약 팁" items={[
+        { title: '금리 비교 필수 — 0.1%도 수천만원 차이', desc: '시중은행, 인터넷은행(카카오뱅크, 케이뱅크), 신용협동조합 금리를 반드시 비교하세요. 같은 조건이라도 은행별로 0.3~1%p 차이가 나는 경우가 많습니다.' },
+        { title: '우대금리 조건 챙기기', desc: '급여 이체, 카드 사용, 자동이체 등 거래 실적에 따라 우대금리를 받을 수 있습니다. 영업점 방문 시 적용 가능한 우대금리 항목을 꼭 확인하세요.' },
+        { title: '거치 기간 최소화', desc: '이자만 내는 거치 기간을 길게 잡으면 총 이자 부담이 크게 늘어납니다. 가능하다면 거치 기간 없이 바로 원금 상환을 시작하는 것이 장기적으로 유리합니다.' },
+      ]} />
 
       <div className="flex flex-wrap gap-2">
         {[{href:'/salary',label:'연봉 실수령액'},{href:'/severance',label:'퇴직금'},{href:'/jeonse',label:'전월세'}].map(({href,label})=>(
