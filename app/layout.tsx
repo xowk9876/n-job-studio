@@ -25,6 +25,13 @@ export const metadata: Metadata = {
     title: '머니핏 계산기 — 연봉·대출·퇴직금·적금·전월세',
     description: '2026년 최신 기준 한국 재테크 계산기 모음. 무료 · 광고 없음 · 실시간 계산.',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   robots: { index: true, follow: true },
   verification: {
     google: 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY',
