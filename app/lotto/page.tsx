@@ -4,6 +4,34 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, RotateCcw, Trophy, TrendingUp, Info, Zap, Coins, ChevronRight } from 'lucide-react'
 
+// ==========================
+// 실시간 동행복권 회차 계산
+// ==========================
+// 로또 1회차: 2002년 12월 7일 (토요일)
+// 이후 매주 토요일 추첨
+function getCurrentLottoRound(): { round: number; nextDrawDate: Date } {
+  const firstDraw = new Date('2002-12-07')
+  const now = new Date()
+
+  // 현재 시점 기준 지난 토요일 찾기
+  const lastSaturday = new Date(now)
+  const dayOfWeek = lastSaturday.getDay() // 0=일, 6=토
+  const daysSinceLastSaturday = (dayOfWeek + 1) % 7
+  lastSaturday.setDate(lastSaturday.getDate() - daysSinceLastSaturday)
+  lastSaturday.setHours(0, 0, 0, 0)
+
+  // 다음 추첨일 = 이번 토요일 (지난 토요일 + 7일), 만약 지금이 토요일이고 추첨 전이면 = 이번 토요일
+  const nextDraw = new Date(lastSaturday)
+  nextDraw.setDate(nextDraw.getDate() + 7)
+
+  // 1회차 ~ 현재까지의 주 차이 계산
+  const diffMs = lastSaturday.getTime() - firstDraw.getTime()
+  const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000))
+  const currentRound = diffWeeks + 1
+
+  return { round: currentRound, nextDrawDate: nextDraw }
+}
+
 // 로또 당첨 확률 및 금액 (동행복권 공식)
 const PRIZE_INFO = [
   { rank: 1, match: '6개 번호 일치', prob: '1 / 8,145,060', amount: '약 20억원', color: '#fbbf24', glow: 'shadow-amber-500/50' },
@@ -54,6 +82,9 @@ export default function LottoPage() {
     }, spinDuration)
   }, [isSpinning, hasGenerated, numbers])
 
+  const { round, nextDrawDate } = getCurrentLottoRound()
+  const nextDrawStr = `${nextDrawDate.getMonth() + 1}월 ${nextDrawDate.getDate()}일 (${['일','월','화','수','목','금','토'][nextDrawDate.getDay()]}) 추첨`
+
   // 번호 분석
   const stats = (() => {
     if (numbers.length === 0) return null
@@ -78,7 +109,7 @@ export default function LottoPage() {
           className="inline-flex items-center gap-2 bg-white/10 text-white text-xs font-semibold px-4 py-2 rounded-full border border-white/20 mb-5"
         >
           <Sparkles className="w-4 h-4 text-amber-400" />
-          1,149회차 동행복권 기준
+          {round}회차 동행복권 기준 — {nextDrawStr}
         </motion.div>
 
         <motion.h1
