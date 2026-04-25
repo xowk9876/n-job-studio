@@ -216,4 +216,21 @@
   .nav-link::after {
     content: none;
   }
+
+  /* ─── 보안: 드래그/선택 방지 ─── */
+  body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* 입력 필드는 선택 가능하도록 예외 */
+  input, textarea, select {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
 }
