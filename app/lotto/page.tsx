@@ -1,16 +1,16 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, RotateCcw, Trophy, TrendingUp, Info, Zap, Coins } from 'lucide-react'
+import { Sparkles, RotateCcw, Trophy, TrendingUp, Info, Zap, Coins, ChevronRight } from 'lucide-react'
 
 // 로또 당첨 확률 및 금액 (동행복권 공식)
 const PRIZE_INFO = [
-  { rank: 1, match: '6개 번호', prob: '1 / 8,145,060', amount: '약 20억원', color: '#fbbf24', shadow: 'shadow-amber-500/50' },
-  { rank: 2, match: '5개 + 보너스', prob: '1 / 1,357,510', amount: '약 5,000만원', color: '#94a3b8', shadow: 'shadow-slate-400/50' },
-  { rank: 3, match: '5개 번호', prob: '1 / 35,724', amount: '약 140만원', color: '#f97316', shadow: 'shadow-orange-500/50' },
-  { rank: 4, match: '4개 번호', prob: '1 / 733', amount: '50,000원', color: '#3b82f6', shadow: 'shadow-blue-500/50' },
-  { rank: 5, match: '3개 번호', prob: '1 / 45', amount: '5,000원', color: '#10b981', shadow: 'shadow-emerald-500/50' },
+  { rank: 1, match: '6개 번호 일치', prob: '1 / 8,145,060', amount: '약 20억원', color: '#fbbf24', glow: 'shadow-amber-500/50' },
+  { rank: 2, match: '5개 + 보너스볼', prob: '1 / 1,357,510', amount: '약 5,000만원', color: '#94a3b8', glow: 'shadow-slate-400/50' },
+  { rank: 3, match: '5개 번호 일치', prob: '1 / 35,724', amount: '약 140만원', color: '#f97316', glow: 'shadow-orange-500/50' },
+  { rank: 4, match: '4개 번호 일치', prob: '1 / 733', amount: '50,000원', color: '#3b82f6', glow: 'shadow-blue-500/50' },
+  { rank: 5, match: '3개 번호 일치', prob: '1 / 45', amount: '5,000원', color: '#10b981', glow: 'shadow-emerald-500/50' },
 ]
 
 // 번호별 실제 로또 공 색상
@@ -28,57 +28,48 @@ function generateNumbers(): number[] {
   return Array.from(set).sort((a, b) => a - b)
 }
 
-// 당첨금 시뮬레이션 (랜덤)
-function simulatePrize(): string {
-  const rand = Math.random()
-  if (rand < 1 / 8_145_060) return '🎉 1등 당첨! 약 20억원'
-  if (rand < 1 / 1_357_510) return '✨ 2등 당첨! 약 5,000만원'
-  if (rand < 1 / 35_724) return '💰 3등 당첨! 약 140만원'
-  if (rand < 1 / 733) return '🎯 4등 당첨! 5만원'
-  if (rand < 1 / 45) return '⭐ 5등 당첨! 5천원'
-  return '아쉽지만 꽝... 다시 도전!'
-}
-
 export default function LottoPage() {
   const [mounted, setMounted] = useState(false)
   const [numbers, setNumbers] = useState<number[]>([])
   const [isSpinning, setIsSpinning] = useState(false)
-  const [showPrize, setShowPrize] = useState(false)
-  const [prizeResult, setPrizeResult] = useState('')
+  const [hasGenerated, setHasGenerated] = useState(false)
   const [history, setHistory] = useState<number[][]>([])
 
-  useEffect(() => { setMounted(true); setNumbers(generateNumbers()) }, [])
+  useEffect(() => { setMounted(true) }, [])
 
   const handleGenerate = useCallback(() => {
     if (isSpinning) return
     setIsSpinning(true)
-    setShowPrize(false)
 
     // 스핀 애니메이션 후 결과
+    const spinDuration = hasGenerated ? 800 : 1500
     setTimeout(() => {
       const newNums = generateNumbers()
-      setHistory(prev => [numbers, ...prev].slice(0, 5))
+      if (hasGenerated) {
+        setHistory(prev => [numbers, ...prev].slice(0, 5))
+      }
       setNumbers(newNums)
       setIsSpinning(false)
-      setPrizeResult(simulatePrize())
-      setShowPrize(true)
-    }, 1200)
-  }, [isSpinning, numbers])
+      setHasGenerated(true)
+    }, spinDuration)
+  }, [isSpinning, hasGenerated, numbers])
 
-  const stats = useMemo(() => {
+  // 번호 분석
+  const stats = (() => {
+    if (numbers.length === 0) return null
     const sum = numbers.reduce((a, b) => a + b, 0)
     const odd = numbers.filter(n => n % 2 === 1).length
     const even = 6 - odd
     const high = numbers.filter(n => n > 23).length
     const low = 6 - high
     return { sum, odd, even, high, low }
-  }, [numbers])
+  })()
 
   if (!mounted) return null
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-8">
-      {/* ===== 히어로 랜딩 섹션 ===== */}
+      {/* ===== 히어로 랜딩 ===== */}
       <div className="text-center pt-6 pb-2">
         <motion.div
           initial={{ scale: 0 }}
@@ -87,7 +78,7 @@ export default function LottoPage() {
           className="inline-flex items-center gap-2 bg-white/10 text-white text-xs font-semibold px-4 py-2 rounded-full border border-white/20 mb-5"
         >
           <Sparkles className="w-4 h-4 text-amber-400" />
-          행운의 번호를 생성해보세요
+          1,149회차 동행복권 기준
         </motion.div>
 
         <motion.h1
@@ -96,8 +87,10 @@ export default function LottoPage() {
           transition={{ delay: 0.1 }}
           className="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight"
         >
+          이번 주 로또
+          <br />
           <span className="bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
-            로또 번호 생성기
+            행운의 번호
           </span>
         </motion.h1>
         <motion.p
@@ -106,60 +99,86 @@ export default function LottoPage() {
           transition={{ delay: 0.2 }}
           className="text-white/55 text-base max-w-md mx-auto"
         >
-          무작위 번호를 생성하고 당첨금 시뮬레이션으로 행운을 만나보세요
+          완전 무작위로 생성된 {numbers.length > 0 ? '6개 번호' : '번호를 확인해보세요'}
         </motion.p>
       </div>
 
-      {/* ===== 메인 번호 생성 카드 ===== */}
+      {/* ===== 번호 생성 카드 ===== */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
         className="relative rounded-3xl overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, rgba(236,72,153,0.25) 0%, rgba(147,51,234,0.15) 50%, rgba(59,130,246,0.1) 100%)',
+          background: 'linear-gradient(135deg, rgba(236,72,153,0.2) 0%, rgba(147,51,234,0.12) 50%, rgba(59,130,246,0.08) 100%)',
           border: '1px solid rgba(255,255,255,0.12)',
         }}
       >
-        {/* 빛나는 효과 */}
+        {/* 상단 빛 효과 */}
         <div className="absolute inset-0 opacity-30 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle at 50% 0%, rgba(251,191,36,0.4) 0%, transparent 60%)',
-          }}
+          style={{ background: 'radial-gradient(circle at 50% 0%, rgba(251,191,36,0.35) 0%, transparent 60%)' }}
         />
 
         <div className="relative p-8 md:p-10">
-          {/* 번호 공들 */}
-          <div className="flex justify-center gap-3 mb-8">
+          {/* 번호 공 — 미생성 시 플레이스홀더 */}
+          <div className="flex justify-center gap-3 mb-8 min-h-[64px]">
             <AnimatePresence mode="popLayout">
-              {(isSpinning ? Array.from({ length: 6 }, (_, i) => 1 + i * 7) : numbers).map((num, i) => {
-                const color = getBallColor(num)
-                return (
+              {!hasGenerated ? (
+                // 초기 상태: 빈 공 플레이스홀더
+                Array.from({ length: 6 }).map((_, i) => (
                   <motion.div
-                    key={`${num}-${isSpinning ? 'spin' : 'real'}-${i}`}
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{
-                      scale: 1,
-                      rotate: 0,
-                      y: isSpinning ? [0, -8, 0] : 0,
-                    }}
-                    exit={{ scale: 0, rotate: 180 }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 300,
-                      damping: 20,
-                      delay: i * 0.08,
-                      y: { repeat: isSpinning ? Infinity : 0, duration: 0.4 },
-                    }}
-                    className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${color.bg} ${color.text} ${color.glow} shadow-lg flex items-center justify-center text-xl md:text-2xl font-extrabold cursor-default select-none`}
-                    style={{
-                      textShadow: num <= 20 ? 'none' : '0 1px 2px rgba(0,0,0,0.3)',
-                    }}
+                    key={`placeholder-${i}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/5 border-2 border-dashed border-white/20 flex items-center justify-center"
                   >
-                    {isSpinning ? '?' : num}
+                    <span className="text-white/20 text-lg font-bold">?</span>
                   </motion.div>
-                )
-              })}
+                ))
+              ) : isSpinning ? (
+                // 스핀 중: 색상만 있는 공
+                Array.from({ length: 6 }).map((_, i) => (
+                  <motion.div
+                    key={`spin-${i}`}
+                    animate={{
+                      y: [0, -12, 0],
+                      rotate: [0, 10, -10, 0],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 0.5,
+                      delay: i * 0.05,
+                    }}
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/15 flex items-center justify-center text-lg font-bold text-white/50 shadow-lg"
+                  >
+                    ...
+                  </motion.div>
+                ))
+              ) : (
+                // 결과: 실제 번호
+                numbers.map((num, i) => {
+                  const color = getBallColor(num)
+                  return (
+                    <motion.div
+                      key={num}
+                      initial={{ scale: 0, rotate: -180, y: 20 }}
+                      animate={{ scale: 1, rotate: 0, y: 0 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 15,
+                        delay: i * 0.1,
+                      }}
+                      className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${color.bg} ${color.text} ${color.glow} shadow-xl flex items-center justify-center text-xl md:text-2xl font-extrabold select-none`}
+                      style={{
+                        textShadow: num <= 20 && num > 10 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none',
+                      }}
+                    >
+                      {num}
+                    </motion.div>
+                  )
+                })
+              )}
             </AnimatePresence>
           </div>
 
@@ -169,52 +188,42 @@ export default function LottoPage() {
             whileTap={{ scale: 0.97 }}
             onClick={handleGenerate}
             disabled={isSpinning}
-            className={`w-full py-4.5 rounded-2xl font-bold text-base flex items-center justify-center gap-2 transition-all ${
+            className={`w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 transition-all ${
               isSpinning
                 ? 'bg-white/10 text-white/50 cursor-not-allowed'
-                : 'bg-white/20 hover:bg-white/30 text-white shadow-lg shadow-white/10'
+                : 'bg-white text-slate-900 hover:bg-white/90 shadow-lg shadow-white/10'
             }`}
           >
             <RotateCcw className={`w-5 h-5 ${isSpinning ? 'animate-spin' : ''}`} />
-            {isSpinning ? '번호 생성 중...' : '행운의 번호 뽑기'}
+            {hasGenerated ? '다시 뽑기' : '행운의 번호 뽑기'}
           </motion.button>
 
-          {/* 결과 메시지 */}
-          <AnimatePresence>
-            {showPrize && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                className="mt-5 text-center"
-              >
-                <div className="inline-block px-5 py-3 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-300 font-bold text-lg">
-                  {prizeResult}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
           {/* 번호 분석 */}
-          <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-xs text-white/50 mb-1">번호 합계</p>
-              <p className="text-2xl font-extrabold text-white">{stats.sum}</p>
-            </div>
-            <div>
-              <p className="text-xs text-white/50 mb-1">홀짝</p>
-              <p className="text-2xl font-extrabold text-white">{stats.odd}:{stats.even}</p>
-            </div>
-            <div>
-              <p className="text-xs text-white/50 mb-1">고저</p>
-              <p className="text-2xl font-extrabold text-white">{stats.low}:{stats.high}</p>
-            </div>
-          </div>
+          {stats && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4 text-center"
+            >
+              <div>
+                <p className="text-xs text-white/50 mb-1">번호 합계</p>
+                <p className="text-2xl font-extrabold text-white">{stats.sum}</p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 mb-1">홀짝</p>
+                <p className="text-2xl font-extrabold text-white">{stats.odd}:{stats.even}</p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 mb-1">고저</p>
+                <p className="text-2xl font-extrabold text-white">{stats.low}:{stats.high}</p>
+              </div>
+            </motion.div>
+          )}
         </div>
       </motion.div>
 
-      {/* ===== 당첨 확률 카드 ===== */}
+      {/* ===== 당첨 확률 ===== */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -222,39 +231,37 @@ export default function LottoPage() {
         className="glass-card rounded-2xl p-6"
       >
         <h2 className="font-bold text-white mb-5 flex items-center gap-2 text-lg">
-          <Trophy className="w-5 h-5 text-amber-400" /> 당첨 확률 & 예상금액
+          <Trophy className="w-5 h-5 text-amber-400" /> 당첨 등위 안내
         </h2>
         <div className="flex flex-col gap-3">
           {PRIZE_INFO.map((prize, i) => (
             <motion.div
               key={prize.rank}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -15 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/8 transition-colors group"
+              transition={{ delay: i * 0.08 }}
+              className="flex items-center gap-3 p-3 rounded-xl bg-white/5 transition-colors group"
             >
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-extrabold text-sm shrink-0 shadow-lg transition-transform group-hover:scale-110"
-                style={{ backgroundColor: prize.color, boxShadow: `0 4px 20px ${prize.color}40` }}
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-extrabold text-sm shrink-0 transition-transform group-hover:scale-110"
+                style={{ backgroundColor: prize.color, boxShadow: `0 4px 16px ${prize.color}50` }}
               >
                 {prize.rank}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center mb-0.5">
-                  <span className="text-sm font-semibold text-white">{prize.match}</span>
-                </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-white/40">{prize.prob}</span>
+                  <span className="text-sm font-semibold text-white">{prize.match}</span>
                   <span className="text-xs font-bold text-amber-300">{prize.amount}</span>
                 </div>
+                <div className="text-xs text-white/40 mt-0.5">당첨 확률: {prize.prob}</div>
               </div>
             </motion.div>
           ))}
         </div>
       </motion.div>
 
-      {/* ===== 번호 히스토리 ===== */}
+      {/* ===== 히스토리 ===== */}
       {history.length > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -262,7 +269,7 @@ export default function LottoPage() {
           className="glass-card rounded-2xl p-6"
         >
           <h2 className="font-bold text-white mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-blue-400" /> 최근 생성 번호
+            <TrendingUp className="w-4 h-4 text-blue-400" /> 최근 뽑은 번호
           </h2>
           <div className="flex flex-col gap-3">
             {history.map((nums, idx) => (
@@ -284,7 +291,7 @@ export default function LottoPage() {
         </motion.div>
       )}
 
-      {/* ===== 건전한 게임 안내 ===== */}
+      {/* ===== 유의사항 ===== */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -292,13 +299,13 @@ export default function LottoPage() {
         className="glass-card rounded-2xl p-6"
       >
         <h2 className="font-bold text-white mb-3 flex items-center gap-2">
-          <Info className="w-4 h-4 text-white/40" /> 유의사항
+          <Info className="w-4 h-4 text-white/40" /> 알아두세요
         </h2>
         <ul className="text-sm text-white/55 space-y-2 list-disc list-inside">
-          <li>로또는 완전 무작위 추첨입니다. 이 생성기는 단순 랜덤 번호를 제공할 뿐, 당첨을 보장하지 않습니다.</li>
-          <li>당첨금 시뮬레이션은 재미용이며 실제 당첨 결과와 무관합니다.</li>
+          <li>이 생성기는 완전 무작위(랜덤)로 번호를 생성합니다. 당첨을 보장하지 않습니다.</li>
+          <li>동행복권의 실제 추첨과는 무관하며, 생성된 번호는 참고용입니다.</li>
           <li>건전한 게임문화를 위해 1인당 주 1회(5,000원) 이내로 구매하시기 바랍니다.</li>
-          <li>미성년자는 복권을 구매할 수 없습니다.</li>
+          <li>로또 구매는 성인(만 19세 이상)만 가능합니다.</li>
         </ul>
       </motion.div>
 
@@ -307,9 +314,9 @@ export default function LottoPage() {
         {[
           { href: '/salary', label: '연봉 실수령액', icon: Zap },
           { href: '/savings', label: '적금 이자', icon: Coins },
-          { href: '/mortgage', label: '대출 이자', icon: TrendingUp },
+          { href: '/mortgage', label: '대출 이자', icon: ChevronRight },
         ].map(({ href, label, icon: Icon }) => (
-          <a key={href} href={href} className="text-sm px-4 py-2 rounded-xl glass-card text-white/60 hover:text-white transition-colors flex items-center gap-1.5">
+          <a key={href} href={href} className="text-sm px-4 py-2.5 rounded-xl glass-card text-white/60 hover:text-white transition-colors flex items-center gap-1.5">
             <Icon className="w-3.5 h-3.5" /> {label}
           </a>
         ))}
