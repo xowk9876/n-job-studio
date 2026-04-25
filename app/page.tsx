@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Wallet, Home, Briefcase, PiggyBank, Building2, ArrowRight, TrendingUp, Users, Star } from 'lucide-react'
+import { Wallet, Home, Briefcase, PiggyBank, Building2, ArrowRight, TrendingUp, Users, Star, Ticket } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: '머니핏 계산기 — 연봉·대출·퇴직금·적금·전월세 무료 계산',
@@ -57,6 +57,16 @@ const calculators = [
     color: 'from-pink-500 to-rose-500',
     glow: 'shadow-pink-500/30',
     keywords: ['전월세 전환율', '전세→월세', '월세→전세'],
+  },
+  {
+    href: '/lotto',
+    icon: Ticket,
+    title: '로또 번호 생성기',
+    desc: '무작위 번호 생성 + 당첨 확률 및 역대 통계 분석',
+    example: '랜덤 6개 번호 + 1등 확률 1/8,145,060',
+    color: 'from-rose-500 to-pink-600',
+    glow: 'shadow-rose-500/30',
+    keywords: ['로또 번호 생성', '당첨 확률', '로또 통계'],
   },
 ]
 
@@ -166,10 +176,10 @@ export default function HomePage() {
         <p className="text-sm text-white/50 mb-5">직장인이라면 꼭 알아야 할 2026년 최신 세율·보험료 변경 내용입니다.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           {[
-            { label: '최저임금', value: '10,030원/시간', sub: '월 환산 약 2,096,270원 (209시간)' },
+            { label: '최저임금', value: '10,320원/시간', sub: '월 환산 약 2,156,880원 (209시간)' },
             { label: '국민연금', value: '4.75% (근로자)', sub: '총 9.5% — 2026년 0.25%p 인상' },
             { label: '건강보험', value: '3.595% (근로자)', sub: '총 7.19% — 2026년 기준' },
-            { label: '장기요양', value: '0.4591%', sub: '건강보험료의 12.95% 적용' },
+            { label: '장기요양', value: '0.465%', sub: '건강보험료의 12.95% 적용' },
             { label: '고용보험', value: '0.9% (근로자)', sub: '실업급여 적용 요율' },
             { label: '전월세 전환율', value: '법정 상한 4.5%', sub: '기준금리 2.5% + 2%' },
           ].map(({ label, value, sub }) => (
