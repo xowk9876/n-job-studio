@@ -188,7 +188,7 @@ export default function SalaryPage() {
             <div>
               <div className="flex justify-between mb-2">
                 <label className="text-sm font-semibold text-white/80 flex items-center gap-1.5">
-                  <CalendarCheck className="w-3.5 h-3.5 text-emerald-400" /> 휴일근로 <span className="text-xs text-white/40 font-normal">(8h 이내 1.5배 / 초과 2배)</span>
+                  <CalendarCheck className="w-3.5 h-3.5 text-emerald-400" /> 휴일근로 <span className="text-xs text-white/40 font-normal">(8시간 이내 1.5배 / 초과 2배)</span>
                 </label>
                 <span className="text-sm text-emerald-400 num">{holidayHours}시간 = {formatKRW(result.holidayPay)}</span>
               </div>
@@ -291,14 +291,14 @@ export default function SalaryPage() {
             {result.overtimePay > 0 && (
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
-                <span className="text-sm text-white/70 flex-1">연장수당 ({overtimeHours}h × {formatKRW(result.hourlyWage)} × 1.5)</span>
+                <span className="text-sm text-white/70 flex-1">연장수당 ({overtimeHours}시간 × {formatKRW(result.hourlyWage)} × 1.5)</span>
                 <span className="text-sm font-semibold text-white num">{formatKRW(result.overtimePay)}</span>
               </div>
             )}
             {result.nightPay > 0 && (
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-violet-400 shrink-0" />
-                <span className="text-sm text-white/70 flex-1">야간 가산 ({nightHours}h × {formatKRW(result.hourlyWage)} × 0.5)</span>
+                <span className="text-sm text-white/70 flex-1">야간 가산 ({nightHours}시간 × {formatKRW(result.hourlyWage)} × 0.5)</span>
                 <span className="text-sm font-semibold text-white num">{formatKRW(result.nightPay)}</span>
               </div>
             )}
