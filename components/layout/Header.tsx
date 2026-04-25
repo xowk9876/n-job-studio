@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/severance', label: '퇴직금 계산기' },
   { href: '/savings',   label: '적금 계산기' },
   { href: '/jeonse',    label: '전월세 계산기' },
+  { href: '/lotto',     label: '로또 생성기' },
 ]
 
 export default function Header() {

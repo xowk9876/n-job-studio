@@ -7,7 +7,7 @@
 const PENSION_RATE = 0.0475         // 국민연금 4.75% (2026 인상, 총 9.5%)
 const PENSION_MONTHLY_CAP = 302_575 // 국민연금 월 상한액 (기준소득월액 637만원 × 4.75%)
 const HEALTH_RATE = 0.03595         // 건강보험 3.595% (2026 인상, 총 7.19%)
-const CARE_RATE = 0.1314            // 장기요양보험 (건강보험료 × 13.14%, 2026)
+const CARE_RATE = 0.1295            // 장기요양보험 (건강보험료 × 12.95%, 2026)
 const EMPLOYMENT_RATE = 0.009       // 고용보험 0.9%
 
 // 수당 관련 상수
