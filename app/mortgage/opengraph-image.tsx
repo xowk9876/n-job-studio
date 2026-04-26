@@ -1,25 +1,16 @@
 import { ImageResponse } from 'next/og'
-
 export const runtime = 'edge'
 export const alt = '주택담보대출 이자 계산기'
 export const size = { width: 1200, height: 630 }
-
 export default function Image() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: 1200, height: 630,
-          background: 'linear-gradient(135deg, #0f1c35 0%, #1a3a5c 50%, #0f2b4d 100%)',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          gap: 32, fontFamily: 'sans-serif',
-          position: 'relative', overflow: 'hidden',
-        }}
-      >
+      <div style={{ width: 1200, height: 630, background: 'linear-gradient(135deg, #0f1c35 0%, #1a3a5c 50%, #0f2b4d 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 32, fontFamily: 'sans-serif', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -200, right: -200, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)' }} />
         <div style={{ position: 'absolute', bottom: -150, left: -150, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(52,211,153,0.15) 0%, transparent 70%)' }} />
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, boxShadow: '0 8px 32px rgba(16,185,129,0.4)' }}>🏠</div>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, boxShadow: '0 8px 32px rgba(16,185,129,0.4)' }}>
+          🏠
+        </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, zIndex: 1 }}>
           <span style={{ fontSize: 64, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1.1, textAlign: 'center' }}>주택담보대출 이자 계산기</span>
           <span style={{ fontSize: 28, color: 'rgba(255,255,255,0.65)', fontWeight: 500, textAlign: 'center' }}>원리금균등·원금균등·만기일시 총 이자 비교</span>

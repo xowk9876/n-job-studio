@@ -1,9 +1,7 @@
 import { ImageResponse } from 'next/og'
-
 export const runtime = 'edge'
 export const alt = '로또 번호 생성기'
 export const size = { width: 1200, height: 630 }
-
 export default function Image() {
   return new ImageResponse(
     (
