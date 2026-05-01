@@ -226,11 +226,35 @@
     -webkit-touch-callout: none;
   }
 
-  /* 입력 필드는 선택 가능하도록 예외 */
-  input, textarea, select {
+  /* 입력 필드 + 계산 결과값은 선택/복사 가능 (UX 필수) */
+  input, textarea, select,
+  .num, .result-value,
+  [data-copyable] {
     -webkit-user-select: text;
     -moz-user-select: text;
     -ms-user-select: text;
     user-select: text;
+  }
+
+  /* ─── A11y: 키보드 포커스 링 ─── */
+  :focus-visible {
+    outline: 2px solid rgba(96, 165, 250, 0.7);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* ─── 모션 민감성 사용자 배려 ─── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ─── 부드러운 스크롤 ─── */
+  html {
+    scroll-behavior: smooth;
   }
 }

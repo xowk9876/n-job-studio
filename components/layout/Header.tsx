@@ -52,7 +52,7 @@ export default function Header() {
                 className={`nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? 'text-blue-300 bg-blue-500/15 active'
-                    : 'text-white/55 hover:text-white hover:bg-white/08'
+                    : 'text-white/55 hover:text-white hover:bg-white/10'
                 }`}
               >
                 {label}

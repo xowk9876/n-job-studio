@@ -11,12 +11,6 @@ function formatKRW(n: number) {
   return n.toLocaleString('ko-KR') + '원'
 }
 
-const relatedLinks = [
-  { href: '/mortgage', label: '대출 이자 계산기' },
-  { href: '/severance', label: '퇴직금 계산기' },
-  { href: '/savings', label: '적금 이자 계산기' },
-]
-
 export default function SalaryPage() {
   const store = useSalaryStore()
   const {
@@ -48,7 +42,7 @@ export default function SalaryPage() {
   const deductions = [
     { label: '국민연금 (4.75%)', value: result.pension, color: 'bg-blue-400' },
     { label: '건강보험 (3.595%)', value: result.health, color: 'bg-emerald-400' },
-    { label: '장기요양 (건강보험×12.95%)', value: result.care, color: 'bg-teal-400' },
+    { label: '장기요양 (건강보험×13.14%)', value: result.care, color: 'bg-teal-400' },
     { label: '고용보험 (0.9%)', value: result.employment, color: 'bg-cyan-400' },
     { label: '근로소득세', value: result.incomeTax, color: 'bg-violet-400' },
     { label: '지방소득세 (소득세×10%)', value: result.localTax, color: 'bg-pink-400' },
@@ -356,10 +350,7 @@ export default function SalaryPage() {
         </div>
       </div>
 
-      {/* 광고 슬롯 */}
-      <div id="adsense-salary" className="w-full min-h-[90px] glass-card rounded-xl flex items-center justify-center text-xs text-white/30">
-        광고 영역
-      </div>
+      {/* 광고: Google 자동광고(Auto Ads)로 자동 배치 */}
 
       {/* ═══ 계산 예시 ═══ */}
       <ExamplesSection title="연봉별 실수령액 예시 (2026년, 부양가족 1인 기준)" items={[
@@ -371,10 +362,10 @@ export default function SalaryPage() {
       {/* ═══ FAQ ═══ */}
       <FAQSection items={[
         { q: '연봉과 월급의 차이는 무엇인가요?', a: '연봉은 1년 치 세전 총액이고, 월급은 연봉을 12로 나눈 세전 금액입니다. 실수령액은 여기서 4대보험과 소득세를 공제한 금액입니다.' },
-        { q: '4대보험이란 무엇이고 왜 공제되나요?', a: '국민연금(4.75%), 건강보험(3.595%), 장기요양보험(건강보험료×12.95%), 고용보험(0.9%)으로 구성됩니다. 근로자와 사업주가 절반씩 부담하며 노후·의료·실업 보장을 위해 의무적으로 납부합니다.' },
+        { q: '4대보험이란 무엇이고 왜 공제되나요?', a: '국민연금(4.75%), 건강보험(3.595%), 장기요양보험(건강보험료×13.14%), 고용보험(0.9%)으로 구성됩니다. 근로자와 사업주가 절반씩 부담하며 노후·의료·실업 보장을 위해 의무적으로 납부합니다.' },
         { q: '야간·연장수당에도 세금이 붙나요?', a: '네, 수당도 과세소득입니다. 다만 통상임금의 50%(야간 가산), 150%(연장), 150~200%(휴일) 가산율로 계산된 금액 전체가 과세됩니다. 식대·차량유지비와 달리 비과세 항목이 아닙니다.' },
         { q: '식대 비과세는 어떻게 적용되나요?', a: '2023년 1월부터 월 20만원까지 비과세입니다. 즉 월급여에 식대가 포함돼 있다면 20만원까지는 4대보험·소득세 과세 대상에서 제외되어 실질적으로 세금이 절감됩니다.' },
-        { q: '부양가족이 많을수록 세금이 줄어드나요?', a: '맞습니다. 부양가족 1명당 연 150만원 기본공제가 적용되어 과세표준이 낮아지고, 20세 미만 자녀에게는 자녀세액공제(1명 15만원, 2명 35만원)도 추가됩니다.' },
+        { q: '부양가족이 많을수록 세금이 줄어드나요?', a: '맞습니다. 부양가족 1명당 연 150만원 기본공제가 적용되어 과세표준이 낮아지고, 20세 미만 자녀에게는 자녀세액공제(1명 25만원, 2명 55만원, 3명 이상부터 1명당 40만원 추가)도 적용됩니다(2026년 개정 기준).' },
         { q: '2026년 최저임금은 얼마인가요?', a: '2026년 최저임금은 시급 10,320원이며, 월 환산 시 209시간 기준 2,156,880원입니다. 연봉으로는 약 2,588만원 수준입니다.' },
         { q: '연봉 협상 시 세전과 세후 중 어떻게 비교해야 하나요?', a: '항상 세전 연봉 기준으로 비교하되, 식대·교통비 등 비과세 항목이 포함됐는지 확인해야 합니다. 같은 연봉이라도 비과세 비중이 높으면 실수령액이 더 많아질 수 있습니다.' },
       ]} />

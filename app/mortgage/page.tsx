@@ -118,8 +118,7 @@ export default function MortgagePage() {
         </div>
       </div>
 
-      {/* 광고 슬롯 */}
-      <div id="adsense-mortgage" className="w-full min-h-[90px] glass-card rounded-xl flex items-center justify-center text-xs text-white/30">광고 영역</div>
+      {/* 광고: Google 자동광고(Auto Ads)로 자동 배치 */}
 
       {/* 상환 스케줄 */}
       <div className="glass-card rounded-2xl overflow-hidden">

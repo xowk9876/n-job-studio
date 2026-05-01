@@ -116,8 +116,7 @@ export default function SeverancePage() {
         </div>
       )}
 
-      {/* 광고 슬롯 */}
-      <div id="adsense-severance" className="w-full min-h-[90px] glass-card rounded-xl flex items-center justify-center text-xs text-white/30">광고 영역</div>
+      {/* 광고: Google 자동광고(Auto Ads)로 자동 배치 */}
 
       {/* 계산 방법 */}
       <div className="glass-card rounded-2xl p-6 text-sm text-white/60">

@@ -11,18 +11,6 @@ const links = [
 export default function Footer() {
   return (
     <footer className="border-t border-white/10 mt-16">
-      {/* AdSense 슬롯 (광고 삽입 위치) */}
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <div
-          id="adsense-footer"
-          className="w-full min-h-[90px] bg-white/5 rounded-xl flex items-center justify-center text-xs text-white/30 border border-dashed border-white/10"
-          aria-label="광고 영역"
-        >
-          {/* Google AdSense 코드 삽입 위치 */}
-          광고 영역
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
           <div>

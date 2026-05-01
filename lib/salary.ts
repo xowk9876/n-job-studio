@@ -7,7 +7,7 @@
 const PENSION_RATE = 0.0475         // 국민연금 4.75% (2026 인상, 총 9.5%)
 const PENSION_MONTHLY_CAP = 302_575 // 국민연금 월 상한액 (기준소득월액 637만원 × 4.75%)
 const HEALTH_RATE = 0.03595         // 건강보험 3.595% (2026 인상, 총 7.19%)
-const CARE_RATE = 0.1295            // 장기요양보험 (건강보험료 × 12.95%, 2026)
+const CARE_RATE = 0.1314            // 장기요양보험 (건강보험료 × 13.14%, 2026 확정 고시)
 const EMPLOYMENT_RATE = 0.009       // 고용보험 0.9%
 
 // 수당 관련 상수
@@ -81,12 +81,13 @@ function earnedIncomeTaxCredit(grossTax: number, annualGross: number): number {
   return Math.min(credit, limit)
 }
 
-// ═══ 자녀세액공제 (소득세법 §59의2) ═══
+// ═══ 자녀세액공제 (소득세법 §59의2, 2026 개정 — 8세 이상 자녀 기준) ═══
+// 첫째 25만원, 둘째 30만원, 셋째 이상 1인당 40만원
 function childTaxCredit(childCount: number): number {
   if (childCount <= 0) return 0
-  if (childCount === 1) return 150_000
-  if (childCount === 2) return 350_000
-  return 350_000 + (childCount - 2) * 300_000
+  if (childCount === 1) return 250_000
+  if (childCount === 2) return 550_000          // 25 + 30
+  return 550_000 + (childCount - 2) * 400_000   // + 셋째부터 40만원씩
 }
 
 // ═══ 인터페이스 ═══
