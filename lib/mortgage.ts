@@ -33,6 +33,11 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
   const totalMonths = years * 12
   const schedule: MonthlySchedule[] = []
 
+  // 입력 가드: 대출금·기간이 0 이하이면 빈 결과 반환 (NaN/Infinity 방지)
+  if (principal <= 0 || totalMonths <= 0) {
+    return { monthlyPayment: 0, totalPayment: 0, totalInterest: 0, interestRatio: 0, schedule }
+  }
+
   if (type === 'bullet') {
     // 만기일시상환
     const monthlyInterest = Math.round(principal * monthlyRate)

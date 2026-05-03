@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useMortgageStore } from '@/store'
 import { calcMortgage, RepaymentType } from '@/lib/mortgage'
 import { Home, ChevronDown, ChevronUp } from 'lucide-react'
@@ -180,7 +181,7 @@ export default function MortgagePage() {
 
       <div className="flex flex-wrap gap-2">
         {[{href:'/salary',label:'연봉 실수령액'},{href:'/severance',label:'퇴직금'},{href:'/jeonse',label:'전월세'}].map(({href,label})=>(
-          <a key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">→ {label} 계산기</a>
+          <Link key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">→ {label} 계산기</Link>
         ))}
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useSavingsStore } from '@/store'
 import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import { PiggyBank } from 'lucide-react'
@@ -184,7 +185,7 @@ export default function SavingsPage() {
 
       <div className="flex flex-wrap gap-2">
         {[{href:'/salary',label:'연봉 실수령액'},{href:'/mortgage',label:'대출 이자'},{href:'/jeonse',label:'전월세 전환'}].map(({href,label})=>(
-          <a key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">→ {label} 계산기</a>
+          <Link key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">→ {label} 계산기</Link>
         ))}
       </div>
     </div>

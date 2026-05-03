@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, RotateCcw, Trophy, Info, Zap, Coins, ChevronRight, Copy, Check, Clock } from 'lucide-react'
 
@@ -132,6 +133,17 @@ export default function LottoPage() {
 
   const info = useMemo(() => getLottoInfo(), [tick])
 
+  const stats = useMemo(() => {
+    if (games.length === 0) return null
+    const all = games.flat()
+    const odd = all.filter(n => n % 2 === 1).length
+    const even = all.length - odd
+    const high = all.filter(n => n > 22).length
+    const low = all.length - high
+    const avgSum = Math.round(games.reduce((s, g) => s + g.reduce((a, b) => a + b, 0), 0) / games.length)
+    return { odd, even, high, low, avgSum }
+  }, [games])
+
   const handleGenerate = useCallback(() => {
     if (isSpinning) return
     setIsSpinning(true)
@@ -194,7 +206,7 @@ export default function LottoPage() {
           <Clock className="w-4 h-4" aria-hidden />
           <span data-copyable>{countdown}</span>
           <span className="text-white/30 mx-1">·</span>
-          <span className="text-white/40">판매마감 {info.salesCloseAt.getHours()}:00</span>
+          <span className="text-white/40">판매마감 {info.salesCloseAt.getHours()}:{String(info.salesCloseAt.getMinutes()).padStart(2, '0')}</span>
         </motion.div>
       </div>
 
@@ -341,37 +353,25 @@ export default function LottoPage() {
           </motion.button>
 
           {/* 통계 (전체 게임 합산) */}
-          {hasGenerated && !isSpinning && (
+          {hasGenerated && !isSpinning && stats && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4 text-center"
             >
-              {(() => {
-                const all = games.flat()
-                const odd = all.filter(n => n % 2 === 1).length
-                const even = all.length - odd
-                const high = all.filter(n => n > 22).length
-                const low = all.length - high
-                const avgSum = Math.round(games.reduce((s, g) => s + g.reduce((a, b) => a + b, 0), 0) / games.length)
-                return (
-                  <>
-                    <div>
-                      <p className="text-xs text-white/50 mb-1">평균 합계</p>
-                      <p className="text-xl md:text-2xl font-extrabold text-white tabular-nums" data-copyable>{avgSum}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/50 mb-1">홀짝 (홀:짝)</p>
-                      <p className="text-xl md:text-2xl font-extrabold text-white tabular-nums">{odd}:{even}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/50 mb-1">고저 (≤22:≥23)</p>
-                      <p className="text-xl md:text-2xl font-extrabold text-white tabular-nums">{low}:{high}</p>
-                    </div>
-                  </>
-                )
-              })()}
+              <div>
+                <p className="text-xs text-white/50 mb-1">평균 합계</p>
+                <p className="text-xl md:text-2xl font-extrabold text-white tabular-nums" data-copyable>{stats.avgSum}</p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 mb-1">홀짝 (홀:짝)</p>
+                <p className="text-xl md:text-2xl font-extrabold text-white tabular-nums">{stats.odd}:{stats.even}</p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 mb-1">고저 (≤22:≥23)</p>
+                <p className="text-xl md:text-2xl font-extrabold text-white tabular-nums">{stats.low}:{stats.high}</p>
+              </div>
             </motion.div>
           )}
         </div>
@@ -446,13 +446,13 @@ export default function LottoPage() {
           { href: '/savings',  label: '적금 이자',     icon: Coins },
           { href: '/mortgage', label: '대출 이자',     icon: ChevronRight },
         ].map(({ href, label, icon: Icon }) => (
-          <a
+          <Link
             key={href}
             href={href}
             className="text-sm px-4 py-2.5 rounded-xl glass-card text-white/60 hover:text-white transition-colors flex items-center gap-1.5"
           >
             <Icon className="w-3.5 h-3.5" aria-hidden /> {label}
-          </a>
+          </Link>
         ))}
       </nav>
     </div>

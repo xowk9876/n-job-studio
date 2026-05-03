@@ -137,6 +137,17 @@ export function calcSalary(input: SalaryInput): SalaryResult {
     transportAllowance = 0,
   } = input
 
+  // 입력 가드: 음수·0 연봉 방어
+  if (annualSalary <= 0) {
+    return {
+      monthlyGross: 0, monthlyNet: 0, annualNet: 0, hourlyWage: 0,
+      overtimePay: 0, nightPay: 0, holidayPay: 0, totalAllowance: 0,
+      taxExempt: 0, taxableMonthly: 0,
+      pension: 0, health: 0, care: 0, employment: 0,
+      incomeTax: 0, localTax: 0, totalDeduction: 0,
+    }
+  }
+
   const monthlyBase = Math.round(annualSalary / 12)
 
   // ── 통상시급 ──

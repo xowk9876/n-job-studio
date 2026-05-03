@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useSeveranceStore } from '@/store'
 import { calcSeverance } from '@/lib/severance'
 import { Briefcase, AlertCircle, CheckCircle2 } from 'lucide-react'
@@ -12,7 +13,14 @@ function formatKRW(n: number) { return n.toLocaleString('ko-KR') + '원' }
 export default function SeverancePage() {
   const { avgMonthly3, annualBonus, startDate, endDate, set } = useSeveranceStore()
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    setMounted(true)
+    // 클라이언트 마운트 시 오늘 날짜로 보정 (SSR hydration 안정성)
+    if (endDate === '2026-01-01') {
+      set({ endDate: new Date().toISOString().split('T')[0] })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const result = useMemo(() =>
     calcSeverance({ avgMonthly3, annualBonus, startDate, endDate }),
@@ -125,7 +133,7 @@ export default function SeverancePage() {
           퇴직금 = 1일 평균임금 × 30일 × (재직일수 ÷ 365)
         </div>
         <ul className="list-disc list-inside space-y-1 text-white/40">
-          <li>1일 평균임금 = 최근 3개월 총 임금 ÷ 91일</li>
+          <li>1일 평균임금 = 최근 3개월 총 임금 ÷ 실제 일수(89~92일)</li>
           <li>연간 상여금이 있으면 3개월분(÷4)을 합산합니다</li>
           <li>1년 미만 근무 시 퇴직금 없음 (단시간근로자 제외)</li>
           <li>실제 세금(퇴직소득세)은 국세청 홈택스에서 확인하세요</li>
@@ -157,7 +165,7 @@ export default function SeverancePage() {
 
       <div className="flex flex-wrap gap-2">
         {[{href:'/salary',label:'연봉 실수령액'},{href:'/savings',label:'적금 이자'},{href:'/mortgage',label:'대출 이자'}].map(({href,label})=>(
-          <a key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">→ {label} 계산기</a>
+          <Link key={href} href={href} className="text-sm px-4 py-2 rounded-lg glass-card text-white/60 hover:text-white transition-colors">→ {label} 계산기</Link>
         ))}
       </div>
     </div>

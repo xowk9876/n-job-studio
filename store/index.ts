@@ -66,7 +66,8 @@ export const useSeveranceStore = create<SeveranceStore>()(
       avgMonthly3: 3_500_000,
       annualBonus: 0,
       startDate: '2020-01-01',
-      endDate: new Date().toISOString().split('T')[0],
+      // SSR hydration 안정성: 고정 초기값, 클라이언트 마운트 시 오늘 날짜로 덮어씀
+      endDate: '2026-01-01',
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
     { name: 'mf-severance' }

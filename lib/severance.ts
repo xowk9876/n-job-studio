@@ -30,10 +30,16 @@ export function calcSeverance(input: SeveranceInput): SeveranceResult {
     return { workDays, workYears, dailyWage: 0, severancePay: 0, isEligible: false }
   }
 
-  // 평균임금 계산 (최근 3개월 임금 / 3개월 일수)
-  // 상여금은 (연간상여금 × 3/12)을 3개월 임금에 가산
+  // 평균임금 계산 (최근 3개월 임금 / 3개월 실제 일수)
+  // 근로기준법 제2조: 퇴직 직전 3개월의 실제 역일수로 나눔 (89~92일)
   const threeMonthWage = avgMonthly3 * 3 + (annualBonus * 3 / 12)
-  const dailyWage = Math.round(threeMonthWage / 91)  // 3개월 ≈ 91일
+  const threeMonthStart = new Date(end)
+  threeMonthStart.setMonth(threeMonthStart.getMonth() - 3)
+  const threeMonthDays = Math.max(
+    1,
+    Math.round((end.getTime() - threeMonthStart.getTime()) / (1000 * 60 * 60 * 24))
+  )
+  const dailyWage = Math.round(threeMonthWage / threeMonthDays)
 
   // 퇴직금 = 1일 평균임금 × 30일 × (재직일수 / 365)
   const severancePay = Math.round(dailyWage * 30 * (workDays / 365))

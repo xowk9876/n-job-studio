@@ -89,11 +89,6 @@ function StructuredData() {
         description: '2026년 최신 기준 한국 재테크 계산기 모음',
         inLanguage: 'ko-KR',
         publisher: { '@id': `${SITE_URL}/#organization` },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/?q={search_term_string}` },
-          'query-input': 'required name=search_term_string',
-        },
       },
       {
         '@type': 'Organization',

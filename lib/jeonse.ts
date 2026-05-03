@@ -40,6 +40,17 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
   const { direction, conversionRate } = input
   const rate = conversionRate / 100
 
+  // 0 또는 음수 전환율 가드 (Division by Zero 방지)
+  if (rate <= 0) {
+    return {
+      monthlyRent: direction === 'jeonse-to-wolse' ? 0 : undefined,
+      jeonseDeposit: direction === 'wolse-to-jeonse' ? 0 : undefined,
+      annualCost: 0,
+      breakEvenRate: OPPORTUNITY_RATE,
+      suggestion: '전환율은 0%보다 커야 합니다. 법정 상한(기준금리 + 2%)을 확인해주세요.',
+    }
+  }
+
   if (direction === 'jeonse-to-wolse') {
     const jeonseDeposit = input.jeonsDeposit ?? 0
     const wolseDeposit = input.wolseDeposit ?? 0
