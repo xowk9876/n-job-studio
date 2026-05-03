@@ -49,7 +49,12 @@ export const metadata: Metadata = {
     apple: '/favicon.svg',
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  verification: { google: 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY' },
+  verification: {
+    google: 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY',
+    other: {
+      'naver-site-verification': 'c2a79ddedc551ab5b59880ec8987955d4b2240d5',
+    },
+  },
   other: {
     'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2765055385218528',
   },
