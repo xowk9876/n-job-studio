@@ -1,79 +1,107 @@
 'use client'
 
-import { useState, useEffect, useRef, InputHTMLAttributes } from 'react'
+import { forwardRef, useState, useEffect, InputHTMLAttributes } from 'react'
 
-interface NumericInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 'type'> {
-  value: number           // 스토어값 (항상 "원" 단위)
-  onChange: (n: number) => void  // 스토어에 저장 (항상 "원" 단위)
-  defaultValue?: number   // 복원값 (원 단위)
-  unitMultiplier?: number // 10000 = 만원 입력, 1 = 원 입력 (기본값 1)
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 'type'> & {
+  value: number | ''
+  onChange: (v: number) => void
+  suffix?: string
+  ariaLabel?: string
+  /** @deprecated 초기값이 있어도 내부에서 사용하지 않음 (상태는 외부 value로 제어) */
+  defaultValue?: number
+  /** @deprecated 단위 배수는 외부에서 처리 */
+  unitMultiplier?: number
+  /** 소수점 허용 (전환율 등) */
   allowDecimal?: boolean
-  className?: string
 }
 
-export default function NumericInput({
-  value,
-  onChange,
-  defaultValue = 0,
-  unitMultiplier = 1,
-  allowDecimal = false,
-  className = '',
-  ...rest
-}: NumericInputProps) {
-  // 표시값 = 원 단위 ÷ unitMultiplier
-  const toDisplay = (raw: number) => String(raw / unitMultiplier)
-  const prevExternal = useRef(value)
-  const [localStr, setLocalStr] = useState(toDisplay(value))
+/**
+ * 숫자 입력 — 3자리 콤마 자동 포맷 + tabular-nums
+ * 내부 표시값: string(콤마 포함), 외부 값: number
+ */
+const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
+  {
+    value,
+    onChange,
+    suffix,
+    ariaLabel,
+    className = '',
+    defaultValue: _dv,
+    unitMultiplier: _um,
+    allowDecimal = false,
+    ...rest
+  },
+  ref
+) {
+  // 기존 페이지들이 넘기던 glass-input 클래스를 무시하고 항상 field 스타일 적용
+  const mergedClass = `field ${suffix ? 'pr-14' : ''} ${
+    className.includes('glass-input') ? '' : className
+  }`
 
-  // 외부 값 변경 시 동기화 (스토어 rehydration 등)
-  useEffect(() => {
-    if (value !== prevExternal.current) {
-      setLocalStr(toDisplay(value))
-      prevExternal.current = value
-    }
-  }, [value])
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const raw = e.target.value
-
-    let filtered: string
+  const formatNumber = (n: number) => {
+    if (!Number.isFinite(n)) return ''
     if (allowDecimal) {
-      filtered = raw.replace(/[^0-9.]/g, '')
-      const parts = filtered.split('.')
-      if (parts.length > 2) filtered = parts[0] + '.' + parts.slice(1).join('')
-    } else {
-      filtered = raw.replace(/[^0-9]/g, '')
+      const s = n.toString()
+      const [intPart, dec] = s.split('.')
+      const withComma = parseInt(intPart || '0', 10).toLocaleString('ko-KR')
+      return dec !== undefined ? `${withComma}.${dec}` : withComma
     }
-
-    setLocalStr(filtered)
-
-    const num = parseFloat(filtered)
-    if (filtered !== '' && !isNaN(num)) {
-      const storeVal = Math.round(num * unitMultiplier)
-      prevExternal.current = storeVal
-      onChange(storeVal)
-    }
+    return Math.round(n).toLocaleString('ko-KR')
   }
 
-  function handleBlur() {
-    const num = parseFloat(localStr)
-    if (localStr === '' || isNaN(num)) {
-      setLocalStr(toDisplay(defaultValue))
-      prevExternal.current = defaultValue
-      onChange(defaultValue)
+  const [display, setDisplay] = useState<string>(
+    typeof value === 'number' && Number.isFinite(value) ? formatNumber(value) : ''
+  )
+
+  useEffect(() => {
+    const next =
+      typeof value === 'number' && Number.isFinite(value) ? formatNumber(value) : ''
+    setDisplay(prev => (prev.replace(/,/g, '') === next.replace(/,/g, '') ? prev : next))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawInput = e.target.value
+    const cleanPattern = allowDecimal ? /[^\d.]/g : /[^\d]/g
+    let raw = rawInput.replace(cleanPattern, '')
+    if (allowDecimal) {
+      // 소수점 중복 제거
+      const firstDot = raw.indexOf('.')
+      if (firstDot !== -1) {
+        raw = raw.slice(0, firstDot + 1) + raw.slice(firstDot + 1).replace(/\./g, '')
+      }
     }
+    const n = raw === '' || raw === '.' ? 0 : parseFloat(raw)
+    if (raw === '') setDisplay('')
+    else if (allowDecimal && raw.endsWith('.')) setDisplay(formatNumber(parseInt(raw, 10) || 0) + '.')
+    else setDisplay(formatNumber(n))
+    onChange(Number.isFinite(n) ? n : 0)
   }
 
   return (
-    <input
-      type="text"
-      inputMode={allowDecimal ? 'decimal' : 'numeric'}
-      pattern={allowDecimal ? '[0-9]*\\.?[0-9]*' : '[0-9]*'}
-      value={localStr}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      className={className}
-      {...rest}
-    />
+    <div className="relative">
+      <input
+        ref={ref}
+        type="text"
+        inputMode={allowDecimal ? 'decimal' : 'numeric'}
+        pattern={allowDecimal ? '[0-9.,]*' : '[0-9,]*'}
+        autoComplete="off"
+        value={display}
+        onChange={handleChange}
+        aria-label={ariaLabel}
+        className={mergedClass}
+        {...rest}
+      />
+      {suffix && (
+        <span
+          aria-hidden
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-[13px] text-[color:var(--color-sub)] pointer-events-none font-mono"
+        >
+          {suffix}
+        </span>
+      )}
+    </div>
   )
-}
+})
+
+export default NumericInput

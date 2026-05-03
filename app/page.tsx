@@ -1,222 +1,157 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Wallet, Home, Briefcase, PiggyBank, Building2, ArrowRight, TrendingUp, Users, Star, Ticket } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: '머니핏 계산기 — 연봉·대출·퇴직금·적금·전월세 무료 계산',
-  description: '2026년 최신 기준 한국 재테크 계산기. 연봉 실수령액, 주택담보대출, 퇴직금, 적금/예금, 전세월세 전환을 무료로 계산하세요.',
+  title: '머니핏 — 2026년 한국 재테크 계산기',
+  description:
+    '연봉 실수령액, 퇴직금, 대출 이자, 적금 이자, 전월세 전환까지. 2026년 최신 세율·공제를 반영한 정확한 계산기를 1초 안에.',
+  alternates: { canonical: '/' },
 }
 
-const calculators = [
+const CALCS = [
   {
     href: '/salary',
-    icon: Wallet,
-    title: '연봉 실수령액 계산기',
-    desc: '4대보험·소득세 공제 후 실제 월급 계산',
-    example: '연봉 5,000만원 → 월 실수령 약 360만원',
-    color: 'from-blue-500 to-blue-600',
-    glow: 'shadow-blue-500/30',
-    keywords: ['2026 연봉 세후', '월급 실수령', '4대보험 계산'],
-  },
-  {
-    href: '/mortgage',
-    icon: Home,
-    title: '주택담보대출 이자 계산기',
-    desc: '원리금균등·원금균등·만기일시 3가지 방식 비교',
-    example: '3억 · 3.5% · 30년 → 월 135만원',
-    color: 'from-emerald-500 to-emerald-600',
-    glow: 'shadow-emerald-500/30',
-    keywords: ['주담대 월 납입금', '이자 총액', '상환 스케줄'],
+    kicker: 'CALC·01',
+    title: '연봉 실수령액',
+    body: '2026년 간이세액표 기준. 4대 보험, 소득세, 장기요양(13.14%), 자녀공제까지.',
+    sample: '연봉 5,000만원 → 월 실수령 약 352만원',
   },
   {
     href: '/severance',
-    icon: Briefcase,
-    title: '퇴직금 계산기',
-    desc: '입사일·퇴직일·평균임금으로 퇴직금 자동 계산',
-    example: '월급 350만 · 5년 → 퇴직금 약 1,750만원',
-    color: 'from-violet-500 to-violet-600',
-    glow: 'shadow-violet-500/30',
-    keywords: ['2026 퇴직금 계산', '평균임금', '퇴직금 얼마'],
+    kicker: 'CALC·02',
+    title: '퇴직금',
+    body: '근로기준법상 평균임금 × 30일 × (재직일수 / 365). 실제 역일수로 정확히.',
+    sample: '재직 3년, 월 300만원 → 약 900만원',
+  },
+  {
+    href: '/mortgage',
+    kicker: 'CALC·03',
+    title: '대출 이자',
+    body: '원리금균등 · 원금균등 · 만기일시 전상환식 지원. 월별 상환표 포함.',
+    sample: '3억 · 30년 · 4.2% → 월 146만원',
   },
   {
     href: '/savings',
-    icon: PiggyBank,
-    title: '적금/예금 이자 계산기',
-    desc: '단리·복리, 이자소득세 15.4% 차감 후 세후 수익 계산',
-    example: '월 50만 · 연 3.5% · 12개월 → 세후 +109,200원',
-    color: 'from-amber-500 to-orange-500',
-    glow: 'shadow-amber-500/30',
-    keywords: ['적금 만기 이자', '예금 세후 이자', '이자소득세'],
+    kicker: 'CALC·04',
+    title: '적금·예금 이자',
+    body: '단리/복리, 정기적금/예금, 이자소득세 15.4% 자동 차감.',
+    sample: '월 50만원 · 3년 · 4% → 만기 1,898만원',
   },
   {
     href: '/jeonse',
-    icon: Building2,
-    title: '전세↔월세 전환 계산기',
-    desc: '전월세 전환율로 전세·월세 중 유리한 방향 비교',
-    example: '전세 3억 → 보증금 5천+월세 약 104만원',
-    color: 'from-pink-500 to-rose-500',
-    glow: 'shadow-pink-500/30',
-    keywords: ['전월세 전환율', '전세→월세', '월세→전세'],
+    kicker: 'CALC·05',
+    title: '전월세 전환',
+    body: '전세↔월세 변환, 기회비용 기반 손익 비교. 법정 전환율 상한 안내.',
+    sample: '전세 3억 · 전환율 5% → 월세 125만원',
   },
   {
     href: '/lotto',
-    icon: Ticket,
-    title: '로또 번호 생성기',
-    desc: '무작위 번호 생성 + 당첨 확률 및 역대 통계 분석',
-    example: '랜덤 6개 번호 + 1등 확률 1/8,145,060',
-    color: 'from-rose-500 to-pink-600',
-    glow: 'shadow-rose-500/30',
-    keywords: ['로또 번호 생성', '당첨 확률', '로또 통계'],
+    kicker: 'LUCK·06',
+    title: '로또 번호',
+    body: '동행복권 공식 추첨 방식을 모사. 암호학적 난수 기반 랜덤 조합.',
+    sample: '1~5게임 · 회차·판매마감 시각 안내',
   },
-]
-
-const stats = [
-  { icon: TrendingUp, label: '최신 세율 반영', value: '2026년' },
-  { icon: Users, label: '서버 비용', value: '완전 무료' },
-  { icon: Star, label: '실시간 계산', value: '즉시 결과' },
 ]
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col gap-12">
-      {/* 히어로 */}
-      <section className="text-center pt-8 pb-4">
-        <div className="inline-flex items-center gap-2 bg-white/10 text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20 mb-4">
-          2026년 최신 세율 자동 적용
-        </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 tracking-tight">
-          한국 재테크<br />
-          <span className="gradient-text">
-            스마트 계산기
-          </span>
+    <div className="max-w-5xl mx-auto px-5 md:px-8 pt-10 md:pt-16 pb-20">
+      {/* ─── Hero ─── */}
+      <section className="mb-16 md:mb-24">
+        <p className="font-mono text-[11px] tracking-[0.2em] text-[color:var(--color-warm)] mb-5">
+          EST. 2026 · 한국 재테크 계산기
+        </p>
+        <h1 className="font-display text-[40px] leading-[1.15] md:text-[64px] md:leading-[1.1] font-bold tracking-tight text-[color:var(--color-ink)]">
+          숫자 앞에서<br />
+          <span className="hl-warm">흔들리지 않는</span> 방법.
         </h1>
-        <p className="text-white/60 text-lg max-w-xl mx-auto">
-          연봉 실수령액부터 대출 이자, 퇴직금, 적금, 전월세 전환까지<br />
-          복잡한 계산을 1초 만에 해결하세요.
+        <p className="mt-6 text-[16px] md:text-[17px] text-[color:var(--color-sub)] leading-relaxed max-w-xl">
+          연봉, 퇴직금, 대출, 적금, 전월세 — 2026년 최신 세율과 공제 기준으로
+          <br className="hidden md:block" />
+          광고로 가리지 않고, 결과부터 크게 보여드립니다.
         </p>
 
-        {/* 통계 */}
-        <div className="flex flex-wrap justify-center gap-6 mt-8">
-          {stats.map(({ icon: Icon, label, value }) => (
-            <div key={label} className="flex items-center gap-2">
-              <Icon className="w-4 h-4 text-blue-400" />
-              <span className="text-sm text-white/60">{label}</span>
-              <span className="text-sm font-bold text-white">{value}</span>
+        <div className="mt-8 flex flex-wrap gap-2.5">
+          <Link href="/salary" className="inline-reset btn-primary">
+            연봉 실수령 계산 →
+          </Link>
+          <Link href="/mortgage" className="inline-reset btn-ghost">
+            대출 이자 보기
+          </Link>
+        </div>
+
+        {/* micro stats */}
+        <dl className="mt-12 grid grid-cols-3 gap-4 md:gap-10 max-w-2xl">
+          {[
+            { k: '계산기', v: '6개' },
+            { k: '데이터 기준', v: '2026년' },
+            { k: '서버 저장', v: '0건' },
+          ].map(({ k, v }) => (
+            <div key={k} className="flex flex-col gap-1">
+              <dt className="text-[11px] font-mono tracking-widest uppercase text-[color:var(--color-muted)]">{k}</dt>
+              <dd className="font-display text-[22px] md:text-[28px] font-bold text-[color:var(--color-ink)] tabular-nums">{v}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </section>
 
-      {/* 계산기 카드 그리드 */}
-      <section>
-        <h2 className="text-2xl font-bold text-white mb-2 text-center tracking-tight">계산기 선택</h2>
-        <p className="text-center text-white/45 text-sm mb-6">원하는 계산기를 클릭하세요</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {calculators.map(({ href, icon: Icon, title, desc, example, color, glow, keywords }) => (
-            <Link key={href} href={href} className="group block">
-            <div className="h-full glass-card rounded-2xl p-6"
-              style={{ cursor: 'pointer' }}>
-                {/* 아이콘 */}
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg ${glow} mb-4`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
+      {/* ─── Calculators grid ─── */}
+      <section className="mb-20">
+        <div className="flex items-baseline justify-between mb-6 rule-strong pt-4">
+          <h2 className="font-display text-[22px] md:text-[26px] font-bold">전체 계산기</h2>
+          <span className="font-mono text-[11px] tracking-widest text-[color:var(--color-muted)]">
+            06 ITEMS
+          </span>
+        </div>
 
-                {/* 제목 & 설명 */}
-                <h3 className="font-bold text-white text-lg mb-1 group-hover:text-white transition-colors">
-                  {title}
-                </h3>
-                <p className="text-sm text-white/60 mb-3">{desc}</p>
-
-                {/* 예시 */}
-                <div className="text-xs font-medium text-white/70 bg-white/5 rounded-lg px-3 py-2 mb-4 border border-white/10">
-                  예시: {example}
-                </div>
-
-                {/* 키워드 태그 */}
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {keywords.map((kw) => (
-                    <span key={kw} className="text-[10px] text-white/40 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
-                      {kw}
-                    </span>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <div className="flex items-center gap-1 text-sm font-semibold text-white/60 group-hover:text-white transition-colors">
-                  계산하기 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
+        <div className="grid md:grid-cols-2 gap-4 md:gap-5">
+          {CALCS.map(({ href, kicker, title, body, sample }) => (
+            <Link
+              key={href}
+              href={href}
+              className="inline-reset editorial-card p-6 md:p-7 group"
+            >
+              <div className="flex items-baseline justify-between mb-3">
+                <span className="font-mono text-[11px] tracking-widest text-[color:var(--color-warm)]">{kicker}</span>
+                <span
+                  aria-hidden
+                  className="text-[color:var(--color-sub)] text-lg leading-none transition-transform group-hover:translate-x-1"
+                >
+                  →
+                </span>
               </div>
+              <h3 className="font-display text-[20px] md:text-[22px] font-bold text-[color:var(--color-ink)] mb-2">
+                {title}
+              </h3>
+              <p className="text-[14px] text-[color:var(--color-sub)] leading-relaxed mb-4">
+                {body}
+              </p>
+              <p className="text-[12px] font-mono text-[color:var(--color-ink-2)] bg-[color:var(--color-paper)] rounded px-2.5 py-1.5 inline-block tabular-nums">
+                예) {sample}
+              </p>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* SEO 텍스트 섹션 */}
-      <section className="glass-card rounded-2xl p-8">
-        <h2 className="text-xl font-bold text-white mb-4">왜 머니핏 계산기를 사용해야 할까요?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-white/60">
-          <div>
-            <h3 className="font-semibold text-white mb-2">2026년 최신 기준 자동 적용</h3>
-            <p>국민연금 4.75%, 건강보험 3.595%, 장기요양보험 13.14% 등 2026년 최신 4대보험료율과 근로소득세 간이세액표를 자동으로 반영합니다.</p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-white mb-2">서버 없이 완전 무료</h3>
-            <p>모든 계산이 브라우저에서 직접 처리되어 개인정보가 서버로 전송되지 않습니다. 완전 무료이며 회원가입 없이 사용 가능합니다.</p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-white mb-2">실시간 결과 확인</h3>
-            <p>입력 필드를 조작하면 즉시 결과가 업데이트됩니다. 시뮬레이션으로 다양한 조건을 비교해보세요.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 2026 변경사항 섹션 */}
-      <section className="glass-card rounded-2xl p-8">
-        <h2 className="text-xl font-bold text-white mb-2">2026년 주요 변경사항</h2>
-        <p className="text-sm text-white/50 mb-5">직장인이라면 꼭 알아야 할 2026년 최신 세율·보험료 변경 내용입니다.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-          {[
-            { label: '최저임금', value: '10,320원/시간', sub: '월 환산 약 2,156,880원 (209시간)' },
-            { label: '국민연금', value: '4.75% (근로자)', sub: '총 9.5% — 2026년 0.25%p 인상' },
-            { label: '건강보험', value: '3.595% (근로자)', sub: '총 7.19% — 2026년 기준' },
-            { label: '장기요양', value: '0.465%', sub: '건강보험료의 12.95% 적용' },
-            { label: '고용보험', value: '0.9% (근로자)', sub: '실업급여 적용 요율' },
-            { label: '전월세 전환율', value: '법정 상한 4.5%', sub: '기준금리 2.5% + 2%' },
-          ].map(({ label, value, sub }) => (
-            <div key={label} className="bg-white/5 rounded-xl px-4 py-3 border border-white/10">
-              <div className="flex justify-between items-start gap-2">
-                <span className="text-white/60 text-xs">{label}</span>
-                <span className="font-bold text-white text-sm shrink-0">{value}</span>
-              </div>
-              <p className="text-xs text-white/35 mt-1">{sub}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 자주 묻는 질문 */}
-      <section className="glass-card rounded-2xl p-8">
-        <h2 className="text-xl font-bold text-white mb-5">자주 묻는 질문</h2>
-        <div className="flex flex-col gap-2">
-          {[
-            { q: '연봉 5,000만원이면 실수령액이 얼마인가요?', a: '2026년 기준 부양가족 1명(본인) 기준, 월 실수령액은 약 355만~360만원 수준입니다. 4대보험(국민연금·건강보험·고용보험)과 근로소득세, 지방소득세를 공제한 금액입니다. 정확한 금액은 연봉 실수령액 계산기에서 확인하세요.' },
-            { q: '주담대 3억원 30년 원리금균등 월 납입금은?', a: '연 3.5% 고정금리 기준 월 납입금은 약 134만 7,000원입니다. 30년간 총 납입액은 약 4억 8,500만원으로 총 이자만 약 1억 8,500만원에 달합니다. 금리에 따라 크게 달라지므로 계산기를 통해 시뮬레이션해보세요.' },
-            { q: '5년 근무 후 퇴직금은 얼마나 받나요?', a: '월 급여 350만원 기준 5년(1,825일) 근무 시 퇴직금은 약 1,750만원입니다. 퇴직금 = 1일 평균임금 × 30일 × (재직일수 ÷ 365) 공식으로 계산합니다. 상여금과 각종 수당도 평균임금에 포함됩니다.' },
-            { q: '전세 3억원을 월세로 전환하면 월세가 얼마인가요?', a: '보증금 5,000만원 유지 시, 법정 전환율 4.5% 기준으로 월세는 약 93만 7,500원입니다. 공식: (3억-5천만) × 4.5% ÷ 12 = 937,500원. 집주인은 법정 상한(기준금리+2%)을 초과하는 전환율을 요구할 수 없습니다.' },
-          ].map(({ q, a }, i) => (
-            <details key={i} className="group rounded-xl border border-white/10 overflow-hidden">
-              <summary className="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer text-sm font-semibold text-white/85 hover:bg-white/5 transition-colors list-none select-none">
-                <span className="flex items-center gap-2">
-                  <span className="text-blue-400 shrink-0">Q.</span>
-                  {q}
-                </span>
-                <span className="text-white/40 text-xs shrink-0 group-open:rotate-45 transition-transform duration-200">＋</span>
-              </summary>
-              <div className="px-5 pb-4 pt-2 text-sm text-white/60 leading-relaxed border-t border-white/10">
-                <span className="text-emerald-400 font-semibold mr-1">A.</span>{a}
-              </div>
-            </details>
-          ))}
+      {/* ─── Editorial note ─── */}
+      <section className="rule-strong pt-8">
+        <h2 className="font-display text-[22px] md:text-[26px] font-bold mb-4">
+          왜 직접 만들었나요?
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8 text-[15px] leading-relaxed text-[color:var(--color-ink-2)]">
+          <p>
+            시중 계산기는 <span className="hl-ink">광고와 개인정보 입력</span>이 너무 많습니다.
+            주민번호를 넣어야 하거나, 결과를 보려면 앱 설치를 강요받기도 합니다.
+            머니핏은 <strong className="text-[color:var(--color-ink)]">아무 것도 서버에 보내지 않습니다</strong> —
+            모든 계산은 브라우저 안에서 끝납니다.
+          </p>
+          <p>
+            산식은 국세청 간이세액표, 근로기준법, 금융감독원 공표 기준을 따릅니다.
+            세율이 바뀌면 <span className="font-mono text-[13px] text-[color:var(--color-warm)]">
+            /lib</span> 파일 하나만 고치면 되도록 설계했어요. 혹시 이상한 결과가 나오면
+            GitHub에 이슈를 남겨주세요. 빠르게 고칩니다.
+          </p>
         </div>
       </section>
     </div>
