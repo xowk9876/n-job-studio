@@ -6,7 +6,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       { userAgent: '*', allow: '/', disallow: ['/api/', '/_next/'] },
-      // AI 크롤러는 계산기 컨텐츠 인덱싱 허용 (마케팅 가치 ↑)
+      // 주요 검색엔진 봇 명시 허용
+      { userAgent: ['Googlebot', 'Yeti', 'Bingbot', 'DaumoaBot'], allow: '/', disallow: ['/api/', '/_next/'] },
+      // AI 크롤러도 계산기 컨텐츠 인덱싱 허용 (마케팅 가치 ↑)
       { userAgent: ['GPTBot', 'Google-Extended', 'PerplexityBot', 'ClaudeBot'], allow: '/' },
     ],
     sitemap: `${BASE}/sitemap.xml`,
