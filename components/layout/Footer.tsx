@@ -4,11 +4,11 @@ import { Instagram } from 'lucide-react'
 function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path fill="#4285f4" d="M24 23.5 4 10v26a2 2 0 0 0 2 2h6V22l12 9 12-9v16h6a2 2 0 0 0 2-2V10z" />
-      <path fill="#34a853" d="M12 38V22l12 9 12-9v16z" />
-      <path fill="#fbbc04" d="M36 38h6a2 2 0 0 0 2-2V10L36 16z" />
-      <path fill="#ea4335" d="M4 10v26a2 2 0 0 0 2 2h6V16z" />
-      <path fill="#c5221f" d="m4 10 20 13.5L44 10V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z" />
+      <path fill="#4285f4" d="M6 40h7V22l-9-7v22a3 3 0 0 0 2 3z" />
+      <path fill="#34a853" d="M35 40h7a3 3 0 0 0 3-3V15l-10 7z" />
+      <path fill="#fbbc04" d="M35 10v12l10-7V11.5A3.5 3.5 0 0 0 41.5 8h-1.3c-.6 0-1.2.2-1.7.5z" />
+      <path fill="#ea4335" d="M13 22V10l11 8 11-8v12l-11 8z" />
+      <path fill="#c5221f" d="M4 11.5V15l9 7V10L9.5 8H7.5A3.5 3.5 0 0 0 4 11.5z" />
     </svg>
   )
 }
