@@ -8,7 +8,7 @@ import PaperBackground from '@/components/layout/AnimatedBackground'
 const SITE_URL = 'https://n-job-studio.vercel.app'
 
 export const viewport: Viewport = {
-  themeColor: '#f5f1e6',
+  themeColor: '#ffffff',
   width: 'device-width',
   initialScale: 1,
 }
@@ -122,10 +122,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
         />
         <StructuredData />
       </head>

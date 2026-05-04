@@ -1,157 +1,174 @@
 import Link from 'next/link'
-import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: '머니핏 — 2026년 한국 재테크 계산기',
-  description:
-    '연봉 실수령액, 퇴직금, 대출 이자, 적금 이자, 전월세 전환까지. 2026년 최신 세율·공제를 반영한 정확한 계산기를 1초 안에.',
-  alternates: { canonical: '/' },
-}
-
-const CALCS = [
+const calculators = [
   {
     href: '/salary',
-    kicker: 'CALC·01',
-    title: '연봉 실수령액',
-    body: '2026년 간이세액표 기준. 4대 보험, 소득세, 장기요양(13.14%), 자녀공제까지.',
-    sample: '연봉 5,000만원 → 월 실수령 약 352만원',
+    label: '연봉 실수령액',
+    desc: '2026년 4대보험·소득세 자동 공제',
+    hot: true,
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="6" width="18" height="12" rx="2" />
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M7 10h.01M17 14h.01" />
+      </svg>
+    ),
   },
   {
     href: '/severance',
-    kicker: 'CALC·02',
-    title: '퇴직금',
-    body: '근로기준법상 평균임금 × 30일 × (재직일수 / 365). 실제 역일수로 정확히.',
-    sample: '재직 3년, 월 300만원 → 약 900만원',
+    label: '퇴직금',
+    desc: '근로기준법 평균임금 기준',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 7H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Z" />
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+      </svg>
+    ),
   },
   {
     href: '/mortgage',
-    kicker: 'CALC·03',
-    title: '대출 이자',
-    body: '원리금균등 · 원금균등 · 만기일시 전상환식 지원. 월별 상환표 포함.',
-    sample: '3억 · 30년 · 4.2% → 월 146만원',
+    label: '대출 이자',
+    desc: '원리금균등·원금균등·만기일시',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9.5 12 3l9 6.5" />
+        <path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9" />
+        <path d="M10 20v-5h4v5" />
+      </svg>
+    ),
   },
   {
     href: '/savings',
-    kicker: 'CALC·04',
-    title: '적금·예금 이자',
-    body: '단리/복리, 정기적금/예금, 이자소득세 15.4% 자동 차감.',
-    sample: '월 50만원 · 3년 · 4% → 만기 1,898만원',
+    label: '적금·예금',
+    desc: '단리·복리 + 이자소득세 15.4%',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 12s3-7 9-7 9 7 9 7-3 7-9 7-9-7-9-7Z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    ),
   },
   {
     href: '/jeonse',
-    kicker: 'CALC·05',
-    title: '전월세 전환',
-    body: '전세↔월세 변환, 기회비용 기반 손익 비교. 법정 전환율 상한 안내.',
-    sample: '전세 3억 · 전환율 5% → 월세 125만원',
+    label: '전월세 전환',
+    desc: '전세↔월세 법정 전환율',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 7h10M7 7l3-3M7 7l3 3" />
+        <path d="M17 17H7M17 17l-3 3M17 17l-3-3" />
+      </svg>
+    ),
   },
   {
     href: '/lotto',
-    kicker: 'LUCK·06',
-    title: '로또 번호',
-    body: '동행복권 공식 추첨 방식을 모사. 암호학적 난수 기반 랜덤 조합.',
-    sample: '1~5게임 · 회차·판매마감 시각 안내',
+    label: '로또 번호',
+    desc: '랜덤 조합 + 추첨 회차',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M8 12h.01M12 8h.01M16 12h.01M12 16h.01M10 10h.01M14 14h.01" />
+      </svg>
+    ),
   },
+]
+
+const features = [
+  { num: '2026', label: '최신 세율 반영', desc: '매년 1월 국세청·근로복지공단 고시 기준으로 자동 업데이트' },
+  { num: '0.2s', label: '결과 즉시 표시', desc: '입력하는 순간 바로 계산. 로딩·광고 팝업 없음' },
+  { num: '100%', label: '무료 + 비로그인', desc: '가입·결제·인증 없음. 북마크만 해두면 끝' },
 ]
 
 export default function HomePage() {
   return (
-    <div className="max-w-5xl mx-auto px-5 md:px-8 pt-10 md:pt-16 pb-20">
-      {/* ─── Hero ─── */}
-      <section className="mb-16 md:mb-24">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-[color:var(--color-warm)] mb-5">
-          EST. 2026 · 한국 재테크 계산기
-        </p>
-        <h1 className="font-display text-[40px] leading-[1.15] md:text-[64px] md:leading-[1.1] font-bold tracking-tight text-[color:var(--color-ink)]">
-          숫자 앞에서<br />
-          <span className="hl-warm">흔들리지 않는</span> 방법.
+    <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 md:py-20">
+      {/* Hero */}
+      <section className="text-center max-w-3xl mx-auto">
+        <span className="chip chip-brand mb-5">2026년 최신 세율 반영</span>
+        <h1 className="font-display text-[34px] md:text-[52px] leading-[1.15] font-bold tracking-tight text-[color:var(--ink)]">
+          숫자로 증명되는
+          <br />
+          <span className="text-[color:var(--brand)]">가장 정확한</span> 재테크 계산기
         </h1>
-        <p className="mt-6 text-[16px] md:text-[17px] text-[color:var(--color-sub)] leading-relaxed max-w-xl">
-          연봉, 퇴직금, 대출, 적금, 전월세 — 2026년 최신 세율과 공제 기준으로
-          <br className="hidden md:block" />
-          광고로 가리지 않고, 결과부터 크게 보여드립니다.
+        <p className="mt-5 text-[15.5px] md:text-[17px] text-[color:var(--sub)] leading-relaxed">
+          연봉 실수령액부터 전월세 전환까지.<br className="md:hidden" />
+          한국 실무 기준으로 깔끔하게, 광고 없이 결과부터.
         </p>
-
-        <div className="mt-8 flex flex-wrap gap-2.5">
-          <Link href="/salary" className="inline-reset btn-primary">
-            연봉 실수령 계산 →
-          </Link>
-          <Link href="/mortgage" className="inline-reset btn-ghost">
-            대출 이자 보기
-          </Link>
+        <div className="mt-8 flex flex-wrap justify-center gap-2.5">
+          <Link href="/salary" className="btn-primary inline-reset">연봉 실수령액 계산</Link>
+          <Link href="/mortgage" className="btn-ghost inline-reset">대출 이자 계산</Link>
         </div>
-
-        {/* micro stats */}
-        <dl className="mt-12 grid grid-cols-3 gap-4 md:gap-10 max-w-2xl">
-          {[
-            { k: '계산기', v: '6개' },
-            { k: '데이터 기준', v: '2026년' },
-            { k: '서버 저장', v: '0건' },
-          ].map(({ k, v }) => (
-            <div key={k} className="flex flex-col gap-1">
-              <dt className="text-[11px] font-mono tracking-widest uppercase text-[color:var(--color-muted)]">{k}</dt>
-              <dd className="font-display text-[22px] md:text-[28px] font-bold text-[color:var(--color-ink)] tabular-nums">{v}</dd>
-            </div>
-          ))}
-        </dl>
       </section>
 
-      {/* ─── Calculators grid ─── */}
-      <section className="mb-20">
-        <div className="flex items-baseline justify-between mb-6 rule-strong pt-4">
-          <h2 className="font-display text-[22px] md:text-[26px] font-bold">전체 계산기</h2>
-          <span className="font-mono text-[11px] tracking-widest text-[color:var(--color-muted)]">
-            06 ITEMS
-          </span>
+      {/* Calculator grid */}
+      <section className="mt-16 md:mt-24" aria-label="계산기 목록">
+        <div className="flex items-end justify-between mb-6">
+          <h2 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight">
+            6가지 계산기
+          </h2>
+          <span className="text-[13px] text-[color:var(--muted)]">모두 무료 · 비로그인</span>
         </div>
-
-        <div className="grid md:grid-cols-2 gap-4 md:gap-5">
-          {CALCS.map(({ href, kicker, title, body, sample }) => (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {calculators.map(c => (
             <Link
-              key={href}
-              href={href}
-              className="inline-reset editorial-card p-6 md:p-7 group"
+              key={c.href}
+              href={c.href}
+              className="inline-reset card card-hover p-6 group relative"
             >
-              <div className="flex items-baseline justify-between mb-3">
-                <span className="font-mono text-[11px] tracking-widest text-[color:var(--color-warm)]">{kicker}</span>
-                <span
-                  aria-hidden
-                  className="text-[color:var(--color-sub)] text-lg leading-none transition-transform group-hover:translate-x-1"
-                >
-                  →
-                </span>
+              {c.hot && (
+                <span className="absolute top-4 right-4 chip chip-brand text-[10.5px] !py-0.5 !px-2">HOT</span>
+              )}
+              <div className="w-11 h-11 rounded-xl bg-[color:var(--brand-soft)] text-[color:var(--brand)] flex items-center justify-center mb-4 group-hover:bg-[color:var(--brand)] group-hover:text-white transition-colors">
+                {c.icon}
               </div>
-              <h3 className="font-display text-[20px] md:text-[22px] font-bold text-[color:var(--color-ink)] mb-2">
-                {title}
+              <h3 className="font-display text-[18px] font-semibold text-[color:var(--ink)] mb-1">
+                {c.label}
               </h3>
-              <p className="text-[14px] text-[color:var(--color-sub)] leading-relaxed mb-4">
-                {body}
-              </p>
-              <p className="text-[12px] font-mono text-[color:var(--color-ink-2)] bg-[color:var(--color-paper)] rounded px-2.5 py-1.5 inline-block tabular-nums">
-                예) {sample}
-              </p>
+              <p className="text-[13.5px] text-[color:var(--sub)] leading-snug">{c.desc}</p>
+              <div className="mt-4 text-[13px] font-medium text-[color:var(--brand)] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                계산하러 가기
+                <span aria-hidden>→</span>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ─── Editorial note ─── */}
-      <section className="rule-strong pt-8">
-        <h2 className="font-display text-[22px] md:text-[26px] font-bold mb-4">
-          왜 직접 만들었나요?
-        </h2>
-        <div className="grid md:grid-cols-2 gap-8 text-[15px] leading-relaxed text-[color:var(--color-ink-2)]">
-          <p>
-            시중 계산기는 <span className="hl-ink">광고와 개인정보 입력</span>이 너무 많습니다.
-            주민번호를 넣어야 하거나, 결과를 보려면 앱 설치를 강요받기도 합니다.
-            머니핏은 <strong className="text-[color:var(--color-ink)]">아무 것도 서버에 보내지 않습니다</strong> —
-            모든 계산은 브라우저 안에서 끝납니다.
+      {/* Features */}
+      <section className="mt-20 md:mt-28">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-10">
+          {features.map(f => (
+            <div key={f.label} className="relative">
+              <p className="font-display text-[40px] md:text-[48px] font-bold tracking-tight leading-none text-[color:var(--brand)]">
+                {f.num}
+              </p>
+              <h3 className="mt-3 text-[16px] font-semibold text-[color:var(--ink)]">
+                {f.label}
+              </h3>
+              <p className="mt-1 text-[13.5px] text-[color:var(--sub)] leading-relaxed">
+                {f.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA banner */}
+      <section className="mt-20 md:mt-28 card p-8 md:p-12 bg-gradient-to-br from-[color:var(--brand-soft)] to-white border-[color:var(--brand-soft)]">
+        <div className="max-w-2xl">
+          <p className="chip chip-brand mb-3">지금 바로 시작</p>
+          <h2 className="font-display text-[24px] md:text-[32px] font-bold tracking-tight text-[color:var(--ink)] leading-tight">
+            연봉 계약서 받으셨나요?
+            <br className="hidden md:block" />
+            <span className="text-[color:var(--brand)]"> 실수령액부터 확인하세요.</span>
+          </h2>
+          <p className="mt-3 text-[14.5px] text-[color:var(--sub)] leading-relaxed">
+            2026년 1월 개정된 근로소득세·4대보험 요율 전부 반영. 부양가족 공제, 자녀 세액공제까지
+            직접 입력할 수 있습니다.
           </p>
-          <p>
-            산식은 국세청 간이세액표, 근로기준법, 금융감독원 공표 기준을 따릅니다.
-            세율이 바뀌면 <span className="font-mono text-[13px] text-[color:var(--color-warm)]">
-            /lib</span> 파일 하나만 고치면 되도록 설계했어요. 혹시 이상한 결과가 나오면
-            GitHub에 이슈를 남겨주세요. 빠르게 고칩니다.
-          </p>
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            <Link href="/salary" className="btn-primary inline-reset">실수령액 계산하기</Link>
+            <Link href="/severance" className="btn-ghost inline-reset">퇴직금 계산하기</Link>
+          </div>
         </div>
       </section>
     </div>
