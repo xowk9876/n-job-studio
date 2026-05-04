@@ -3,6 +3,7 @@ import Script from 'next/script'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import MobileBottomNav from '@/components/layout/MobileBottomNav'
 import PaperBackground from '@/components/layout/AnimatedBackground'
 
 const SITE_URL = 'https://n-job-studio.vercel.app'
@@ -140,6 +141,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <MobileBottomNav />
       </body>
     </html>
   )
