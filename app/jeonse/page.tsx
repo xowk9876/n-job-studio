@@ -31,7 +31,7 @@ export default function JeonsePage() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-pink-500/30 shrink-0">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-600 flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0">
           <Building2 className="w-6 h-6 text-white" />
         </div>
         <div>
@@ -48,13 +48,13 @@ export default function JeonsePage() {
             onClick={() => set({ direction: v })}
             className={`rounded-2xl p-4 border transition-all text-left flex items-center gap-3 ${
               direction === v
-                ? 'border-pink-400/60 bg-pink-500/20'
+                ? 'border-blue-400/60 bg-blue-500/15'
                 : 'border-white/20 bg-white/5 hover:border-white/35 hover:bg-white/10'
             }`}
           >
-            <ArrowLeftRight className={`w-5 h-5 shrink-0 ${direction === v ? 'text-pink-400' : 'text-white/40'}`} />
+            <ArrowLeftRight className={`w-5 h-5 shrink-0 ${direction === v ? 'text-blue-300' : 'text-white/40'}`} />
             <div>
-              <div className={`font-bold text-sm ${direction === v ? 'text-pink-300' : 'text-white/70'}`}>{label}</div>
+              <div className={`font-bold text-sm ${direction === v ? 'text-blue-200' : 'text-white/70'}`}>{label}</div>
               <div className="text-[11px] text-white/40">{desc}</div>
             </div>
           </button>
@@ -117,7 +117,7 @@ export default function JeonsePage() {
       </div>
 
       {/* 결과 */}
-      <div className="bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl p-6 text-white shadow-xl shadow-pink-500/30 ring-1 ring-white/20 ring-inset">
+      <div className="rounded-2xl p-6 text-white ring-1 ring-inset ring-white/10" style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #0f766e 100%)', boxShadow: '0 12px 40px rgba(30,58,138,0.45), 0 0 0 1px rgba(96,165,250,0.25)' }}>
         {isToWolse ? (
           <>
             <p className="text-sm opacity-80 mb-1">전환 후 월세</p>
@@ -143,7 +143,7 @@ export default function JeonsePage() {
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-white/50">손익분기 전환율</span>
-          <span className="font-bold text-pink-400">{result.breakEvenRate.toFixed(2)}%</span>
+          <span className="font-bold text-blue-300">{result.breakEvenRate.toFixed(2)}%</span>
         </div>
       </div>
 
