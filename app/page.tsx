@@ -76,15 +76,6 @@ export default function HomePage() {
           <br className="hidden sm:block" />
           가입 없이 지금 바로 계산해보세요.
         </p>
-        <div className="mf-rise mf-rise-d3 mt-7 flex flex-wrap gap-2.5 justify-center">
-          <Link href="/salary" className="btn-primary inline-reset">
-            연봉 계산 시작
-            <span aria-hidden>→</span>
-          </Link>
-          <Link href="/mortgage" className="btn-ghost inline-reset">
-            대출 이자 보기
-          </Link>
-        </div>
 
         {/* STATS */}
         <dl className="mf-rise mf-rise-d4 mt-10 md:mt-12 grid grid-cols-3 gap-2 max-w-md mx-auto">
