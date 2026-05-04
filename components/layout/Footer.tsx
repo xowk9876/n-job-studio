@@ -39,7 +39,7 @@ export default function Footer() {
             >
               M
             </span>
-            <span className="font-semibold text-white">머니핏</span>
+            <span className="font-semibold text-white">머니핏 계산기</span>
           </div>
           <p className="text-[13.5px] text-[color:var(--sub)] leading-relaxed max-w-md">
             2026년 최신 세율·공제 기준으로 정확하게.
@@ -101,7 +101,7 @@ export default function Footer() {
 
       <div className="border-t border-[color:var(--line)]">
         <div className="max-w-6xl mx-auto px-5 md:px-8 py-4 text-[11.5px] text-[color:var(--muted)]">
-          <span>© {year} 머니핏</span>
+          <span>© {year} 머니핏 계산기</span>
         </div>
       </div>
     </footer>

@@ -15,40 +15,56 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: '머니핏 계산기',
   title: {
-    default: '머니핏 — 2026년 연봉·대출·퇴직금·적금·전월세·로또 계산기',
-    template: '%s · 머니핏',
+    default: '머니핏 계산기 — 2026년 연봉·대출·퇴직금·적금·전월세·로또',
+    template: '%s | 머니핏 계산기',
   },
   description:
-    '2026년 최신 세율 기준 연봉 실수령액, 대출 이자, 퇴직금, 적금 이자, 전월세 전환, 로또 번호까지. 광고 없이 결과부터 보여주는 한국 재테크 계산기.',
+    '2026년 최신 세율·법령 기준. 연봉 실수령액, 주택담보대출 이자, 퇴직금, 적금 복리 이자, 전월세 전환, 로또 번호까지 무료로. 광고 팝업 없이 결과부터 보여주는 한국 재테크 계산기 — 머니핏 계산기.',
   keywords: [
-    '연봉 실수령액 계산기', '2026 세금 계산기', '주담대 이자 계산기', '퇴직금 계산기',
-    '적금 이자 계산기', '전월세 전환 계산기', '로또 번호 생성기', '연봉 세후 계산',
-    '장기요양보험료', '자녀세액공제',
+    '머니핏', '머니핏 계산기',
+    '연봉 실수령액 계산기', '연봉 세후 계산', '2026 연봉 계산기', '세후 월급 계산',
+    '주담대 이자 계산기', '주택담보대출 계산기', '원리금균등 계산', '원금균등 계산', 'DSR 계산',
+    '퇴직금 계산기', '근로기준법 퇴직금', '평균임금 계산',
+    '적금 이자 계산기', '예금 이자 계산기', '복리 계산기', '이자소득세 15.4%',
+    '전월세 전환 계산기', '전세 월세 전환율',
+    '로또 번호 생성기', '로또 자동 추천',
+    '2026 4대보험 요율', '건강보험료 계산', '국민연금 계산', '고용보험', '장기요양보험료', '자녀세액공제',
   ],
-  authors: [{ name: '머니핏', url: SITE_URL }],
-  creator: '머니핏',
-  publisher: '머니핏',
+  authors: [{ name: '머니핏 계산기', url: SITE_URL }],
+  creator: '머니핏 계산기',
+  publisher: '머니핏 계산기',
   alternates: { canonical: SITE_URL, languages: { 'ko-KR': SITE_URL } },
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     url: SITE_URL,
-    siteName: '머니핏',
-    title: '머니핏 — 2026년 한국 재테크 계산기',
-    description: '2026년 최신 세율로 정확하게. 연봉·대출·퇴직금·적금·전월세·로또.',
+    siteName: '머니핏 계산기',
+    title: '머니핏 계산기 — 2026년 한국 재테크 계산기',
+    description: '2026년 최신 세율·법령으로 정확하게. 연봉·대출·퇴직금·적금·전월세·로또 무료 계산.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: '머니핏 — 2026년 한국 재테크 계산기',
-    description: '2026년 최신 세율로 정확하게. 연봉·대출·퇴직금·적금·전월세·로또.',
+    title: '머니핏 계산기 — 2026년 한국 재테크 계산기',
+    description: '2026년 최신 세율·법령으로 정확하게. 연봉·대출·퇴직금·적금·전월세·로또 무료 계산.',
   },
   icons: {
     icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
     shortcut: '/favicon.svg',
     apple: '/favicon.svg',
   },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   verification: {
     google: 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY',
     other: {
@@ -58,7 +74,6 @@ export const metadata: Metadata = {
   other: {
     'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2765055385218528',
   },
-  category: 'finance',
 }
 
 function StructuredData() {
@@ -77,17 +92,31 @@ function StructuredData() {
         '@type': 'WebSite',
         '@id': `${SITE_URL}/#website`,
         url: SITE_URL,
-        name: '머니핏',
-        description: '2026년 한국 재테크 계산기',
+        name: '머니핏 계산기',
+        alternateName: ['머니핏', 'Moneyfit', 'Moneyfit Calculator'],
+        description: '2026년 최신 세율·법령 기준 한국 재테크 계산기',
         inLanguage: 'ko-KR',
         publisher: { '@id': `${SITE_URL}/#organization` },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/?q={search_term_string}` },
+          'query-input': 'required name=search_term_string',
+        },
       },
       {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
-        name: '머니핏',
+        name: '머니핏 계산기',
+        alternateName: '머니핏',
         url: SITE_URL,
         logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+        sameAs: ['https://www.instagram.com/tae_system/'],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'bhd03014@gmail.com',
+          contactType: 'customer support',
+          availableLanguage: ['Korean'],
+        },
       },
       {
         '@type': 'ItemList',

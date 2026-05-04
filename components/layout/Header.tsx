@@ -33,7 +33,7 @@ export default function Header() {
           >
             M
           </span>
-          <span className="font-semibold text-[14.5px] tracking-tight text-white">머니핏</span>
+          <span className="font-semibold text-[14.5px] tracking-tight text-white">머니핏 계산기</span>
         </Link>
       </div>
 
