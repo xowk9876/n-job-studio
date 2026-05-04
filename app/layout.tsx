@@ -8,7 +8,7 @@ import PaperBackground from '@/components/layout/AnimatedBackground'
 const SITE_URL = 'https://n-job-studio.vercel.app'
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#06070b',
   width: 'device-width',
   initialScale: 1,
 }

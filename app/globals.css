@@ -1,228 +1,357 @@
 @import "tailwindcss";
 
 /* =========================================================
-   머니핏 디자인 시스템 v3 — 클린 모던 (Toss/Linear 영감)
+   머니핏 Design System v4 — "Midnight Finance"
+   Deep black + aurora gradient mesh + fine grid + grain
+   모두 CSS 기반, 0 JS
    ========================================================= */
 
 :root {
-  /* Core palette */
-  --bg: #ffffff;
-  --bg-elev: #f7f8fa;
-  --bg-subtle: #fafbfc;
-  --line: #eef0f3;
-  --line-strong: #e1e4e8;
-  --ink: #111318;
-  --ink-2: #2d3139;
-  --sub: #60646c;
-  --muted: #9aa0a6;
-  --brand: #3182f6;        /* Toss blue */
-  --brand-strong: #1b64da;
-  --brand-soft: #e8f1ff;
-  --success: #00b763;
-  --warn: #ff9500;
-  --danger: #e5484d;
+  /* Surface */
+  --bg: #06070b;
+  --bg-2: #0a0c13;
+  --bg-3: #0f1218;
+  --bg-elev: #131722;
+  --bg-elev-2: #1a1f2e;
+  --line: rgba(255,255,255,0.06);
+  --line-strong: rgba(255,255,255,0.10);
+  --line-stronger: rgba(255,255,255,0.16);
+
+  /* Ink */
+  --ink: rgba(255,255,255,0.96);
+  --ink-2: rgba(255,255,255,0.82);
+  --sub: rgba(255,255,255,0.58);
+  --muted: rgba(255,255,255,0.38);
+  --faint: rgba(255,255,255,0.22);
+
+  /* Brand — electric aurora */
+  --brand: #6ea8ff;          /* primary */
+  --brand-strong: #4f8aff;
+  --brand-soft: rgba(110,168,255,0.14);
+  --brand-glow: rgba(110,168,255,0.45);
+
+  --accent-cyan: #5eead4;
+  --accent-violet: #a78bfa;
+  --accent-pink: #f472b6;
+
+  --success: #34d399;
+  --warn:    #fbbf24;
+  --danger:  #f87171;
 
   /* Radii / shadows */
   --r-sm: 8px;
   --r: 12px;
   --r-lg: 16px;
-  --r-xl: 20px;
-  --shadow-card: 0 1px 2px rgba(17,19,24,.04), 0 2px 6px rgba(17,19,24,.04);
-  --shadow-card-hover: 0 2px 4px rgba(17,19,24,.06), 0 6px 16px rgba(17,19,24,.08);
-  --shadow-pop: 0 4px 16px rgba(17,19,24,.08), 0 12px 32px rgba(49,130,246,.12);
+  --r-xl: 22px;
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-card-hover: 0 1px 0 rgba(255,255,255,0.08) inset, 0 2px 4px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--line-strong);
+  --shadow-pop: 0 0 0 1px var(--line-strong), 0 20px 60px rgba(0,0,0,0.6), 0 0 80px var(--brand-glow);
+
+  --font-display: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
+  --font-body:    'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', Consolas, monospace;
 }
 
-html, body {
+html { background: var(--bg); color-scheme: dark; }
+body {
   background: var(--bg);
   color: var(--ink);
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
-    'Noto Sans KR', 'Segoe UI', Roboto, system-ui, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'ss01', 'ss02', 'cv01';
+  font-feature-settings: 'ss01', 'ss02', 'cv01', 'tnum' 0;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-body { min-height: 100vh; }
+/* ---------- Animated Background Layers ---------- */
 
-/* links reset helper (외부에서 쓰던 클래스) */
+/* Layer 0: Deep base with subtle radial vignette */
+.mf-bg-base {
+  position: fixed; inset: 0; z-index: -3;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -10%, #0f1628 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 120%, #0a0a14 0%, transparent 55%),
+    var(--bg);
+  pointer-events: none;
+}
+
+/* Layer 1: Aurora gradient blobs (3 large blurred shapes floating) */
+.mf-bg-aurora {
+  position: fixed; inset: -20%; z-index: -2;
+  pointer-events: none;
+  filter: blur(90px) saturate(140%);
+  opacity: 0.55;
+  will-change: transform;
+}
+.mf-bg-aurora::before,
+.mf-bg-aurora::after,
+.mf-bg-aurora > span {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+}
+.mf-bg-aurora::before {
+  width: 55vw; height: 55vw;
+  top: -10%; left: -10%;
+  background: radial-gradient(circle, #6ea8ff 0%, transparent 70%);
+  animation: aurora-drift-a 26s ease-in-out infinite alternate;
+}
+.mf-bg-aurora::after {
+  width: 50vw; height: 50vw;
+  top: 10%; right: -15%;
+  background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+  animation: aurora-drift-b 32s ease-in-out infinite alternate;
+}
+.mf-bg-aurora > span {
+  width: 45vw; height: 45vw;
+  bottom: -20%; left: 30%;
+  background: radial-gradient(circle, #5eead4 0%, transparent 65%);
+  animation: aurora-drift-c 38s ease-in-out infinite alternate;
+  display: block;
+}
+@keyframes aurora-drift-a {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(8vw, 6vh, 0) scale(1.15); }
+  100% { transform: translate3d(-4vw, 10vh, 0) scale(0.92); }
+}
+@keyframes aurora-drift-b {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-10vw, 8vh, 0) scale(0.88); }
+  100% { transform: translate3d(6vw, -4vh, 0) scale(1.2); }
+}
+@keyframes aurora-drift-c {
+  0%   { transform: translate3d(0,0,0) scale(0.95); }
+  50%  { transform: translate3d(-6vw, -10vh, 0) scale(1.25); }
+  100% { transform: translate3d(10vw, 4vh, 0) scale(1); }
+}
+
+/* Layer 2: Fine grid */
+.mf-bg-grid {
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 40%, transparent 85%);
+}
+
+/* Layer 3: Grain noise (SVG data URL, very subtle) */
+.mf-bg-noise {
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Performance tweak for low-power devices */
+@media (prefers-reduced-motion: reduce) {
+  .mf-bg-aurora::before,
+  .mf-bg-aurora::after,
+  .mf-bg-aurora > span { animation: none; }
+}
+
+/* ---------- Typography helpers ---------- */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+  font-feature-settings: 'ss01';
+}
+.font-mono { font-family: var(--font-mono); letter-spacing: -0.01em; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #6ea8ff 0%, #a78bfa 50%, #5eead4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-gradient-warm {
+  background: linear-gradient(135deg, #f472b6 0%, #a78bfa 50%, #6ea8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Base components (dark) ---------- */
 .inline-reset { color: inherit; text-decoration: none; }
 .inline-reset:hover { color: inherit; }
 
-/* ---------- Base components ---------- */
 .btn-primary {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 12px 20px;
-  background: var(--brand);
+  position: relative;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
   color: #fff;
   border-radius: var(--r);
   font-weight: 600; font-size: 15px;
-  box-shadow: 0 1px 2px rgba(49,130,246,.18), 0 4px 12px rgba(49,130,246,.24);
-  transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+  background: linear-gradient(180deg, #7db3ff 0%, #4f8aff 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.25) inset,
+    0 0 0 1px rgba(110,168,255,0.5),
+    0 8px 24px rgba(79,138,255,0.4),
+    0 0 40px rgba(110,168,255,0.25);
+  transition: transform .14s ease, box-shadow .14s ease, filter .14s ease;
 }
-.btn-primary:hover { background: var(--brand-strong); transform: translateY(-1px); }
+.btn-primary:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 0 0 1px rgba(110,168,255,0.7), 0 12px 32px rgba(79,138,255,0.55), 0 0 60px rgba(110,168,255,0.4); }
 .btn-primary:active { transform: translateY(0); }
 
 .btn-ghost {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 12px 18px;
-  background: transparent;
-  color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px;
+  background: rgba(255,255,255,0.04);
+  color: var(--ink);
   border: 1px solid var(--line-strong);
   border-radius: var(--r);
   font-weight: 500; font-size: 15px;
-  transition: background .12s ease, border-color .12s ease;
+  backdrop-filter: blur(10px);
+  transition: background .14s ease, border-color .14s ease;
 }
-.btn-ghost:hover { background: var(--bg-elev); border-color: var(--sub); }
+.btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: var(--line-stronger); }
 
-/* clean card */
+/* clean card (glass) */
 .card {
-  background: #fff;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-card);
-  transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 .card-hover:hover {
+  transform: translateY(-3px);
   box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
-  border-color: var(--line-strong);
+  border-color: var(--line-stronger);
+}
+/* Subtle top highlight for premium feel */
+.card::before {
+  content: '';
+  position: absolute; left: 16%; right: 16%; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  pointer-events: none;
 }
 
-/* input */
+/* input field */
 .field {
   width: 100%;
   height: 52px;
   padding: 0 16px;
-  background: var(--bg-elev);
-  border: 1.5px solid transparent;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid var(--line-strong);
   border-radius: var(--r);
   color: var(--ink);
   font-size: 15px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  transition: background .12s ease, border-color .12s ease;
+  transition: background .14s ease, border-color .14s ease, box-shadow .14s ease;
 }
-.field:hover { background: #f0f2f5; }
+.field:hover { background: rgba(255,255,255,0.06); border-color: var(--line-stronger); }
 .field:focus {
   outline: none;
-  background: #fff;
+  background: rgba(255,255,255,0.06);
   border-color: var(--brand);
-  box-shadow: 0 0 0 4px var(--brand-soft);
+  box-shadow: 0 0 0 4px rgba(110,168,255,0.18);
 }
 .field::placeholder { color: var(--muted); }
 
-/* chip */
+/* chip / badge */
 .chip {
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 5px;
   padding: 4px 10px;
   border-radius: 999px;
-  background: var(--bg-elev);
-  color: var(--sub);
-  font-size: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 11.5px;
   font-weight: 500;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
 }
-.chip-brand { background: var(--brand-soft); color: var(--brand-strong); }
-
-/* section rule */
-.rule-strong { border-top: 1px solid var(--line-strong); }
+.chip-brand {
+  background: var(--brand-soft);
+  border-color: rgba(110,168,255,0.28);
+  color: var(--brand);
+}
+.chip-dot::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--brand);
+  box-shadow: 0 0 8px var(--brand-glow);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.88); }
+}
 
 /* =========================================================
-   Compat Layer — 계산기 페이지(옛 다크 글래스 클래스) 호환
-   .app-shell 하위에서만 적용
+   Compat layer — 기존 계산기 페이지 다크 글래스 클래스 유지
+   (본래 다크 테마용이므로 그대로 둬도 되지만 통일성 살짝 보정)
    ========================================================= */
-.app-shell {
-  background: var(--bg);
-  color: var(--ink);
-}
+.app-shell { background: transparent; color: var(--ink); }
 
-/* 다크 테마에서 쓰던 흰색 텍스트들을 본문 잉크로 보정 */
-.app-shell .text-white { color: var(--ink) !important; }
-.app-shell .text-white\/90 { color: var(--ink) !important; }
-.app-shell .text-white\/80 { color: var(--ink-2) !important; }
-.app-shell .text-white\/70 { color: var(--ink-2) !important; }
-.app-shell .text-white\/60 { color: var(--sub) !important; }
-.app-shell .text-white\/55 { color: var(--sub) !important; }
-.app-shell .text-white\/50 { color: var(--sub) !important; }
-.app-shell .text-white\/45 { color: var(--muted) !important; }
-.app-shell .text-white\/40 { color: var(--muted) !important; }
-.app-shell .text-white\/30 { color: var(--muted) !important; }
+/* white/* text 계열은 다크 테마에서 자연스럽게 맞음 → 그대로 유지 */
 
-/* 다크용 배경들 → 밝은 서브 배경 */
-.app-shell .bg-white\/5 { background: var(--bg-elev) !important; }
-.app-shell .bg-white\/10 { background: var(--bg-elev) !important; }
-.app-shell .bg-white\/15 { background: #f0f2f5 !important; }
-.app-shell .bg-white\/20 { background: #e8ebef !important; }
-.app-shell .bg-black\/20 { background: var(--bg-elev) !important; }
-.app-shell .bg-black\/30 { background: var(--bg-elev) !important; }
-.app-shell .bg-black\/40 { background: #f0f2f5 !important; }
-
-/* 테두리 */
-.app-shell .border-white\/5,
-.app-shell .border-white\/10,
-.app-shell .border-white\/15,
-.app-shell .border-white\/20 { border-color: var(--line) !important; }
-
-/* 글래스카드 → 클린 카드 */
 .app-shell .glass-card {
-  background: #fff !important;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%) !important;
   border: 1px solid var(--line) !important;
   border-radius: var(--r-lg) !important;
   box-shadow: var(--shadow-card) !important;
-  backdrop-filter: none !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 .app-shell .glass-card-strong {
-  background: #fff !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%) !important;
   border: 1px solid var(--line-strong) !important;
   border-radius: var(--r-lg) !important;
   box-shadow: var(--shadow-card-hover) !important;
+  backdrop-filter: blur(18px) !important;
 }
 
-/* 글래스 입력 → clean field */
 .app-shell .glass-input,
 .app-shell input[class*="glass-input"] {
   width: 100%;
   height: 52px;
   padding: 0 16px !important;
-  background: var(--bg-elev) !important;
-  border: 1.5px solid transparent !important;
+  background: rgba(255,255,255,0.04) !important;
+  border: 1.5px solid var(--line-strong) !important;
   border-radius: var(--r) !important;
   color: var(--ink) !important;
   font-size: 15px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  backdrop-filter: none !important;
+  backdrop-filter: blur(8px) !important;
 }
 .app-shell .glass-input:focus,
 .app-shell input[class*="glass-input"]:focus {
   outline: none !important;
-  background: #fff !important;
+  background: rgba(255,255,255,0.07) !important;
   border-color: var(--brand) !important;
-  box-shadow: 0 0 0 4px var(--brand-soft) !important;
+  box-shadow: 0 0 0 4px rgba(110,168,255,0.18) !important;
 }
 
-/* 옛 그라디언트 아이콘 타일은 그대로 유지 (이미 밝은 톤에도 어울림) */
-/* shadow-blue-500/30 등도 밝은 배경에서 더 예쁘게 보임 */
-
-/* =========================================================
-   Editorial card (PageContent에서 사용) → 클린 카드
-   ========================================================= */
+/* editorial-card (PageContent에서 여전히 쓸 경우) */
 .editorial-card {
-  background: #fff;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-card);
-  transition: box-shadow .18s ease, border-color .18s ease;
-}
-.editorial-card:hover {
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--line-strong);
+  backdrop-filter: blur(14px);
 }
 
-/* 색상 토큰 alias (기존 코드가 쓰던 이름들) */
+/* color alias (기존 호환) */
 :root {
   --color-bg: var(--bg);
-  --color-paper: var(--bg-elev);
-  --color-paper-2: var(--bg-subtle);
+  --color-paper: var(--bg-2);
+  --color-paper-2: var(--bg-3);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-ink: var(--ink);
@@ -233,35 +362,26 @@ body { min-height: 100vh; }
   --color-warm-strong: var(--brand-strong);
 }
 
-/* Highlight helpers */
-.hl-warm {
-  background: linear-gradient(180deg, transparent 62%, var(--brand-soft) 62%);
-  padding: 0 4px;
-  border-radius: 4px;
+/* Page entrance animation — subtle fade up */
+@keyframes mf-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.hl-ink {
-  background: #fff2cf;
-  padding: 0 4px;
-  border-radius: 4px;
-}
-
-/* Display 폰트 */
-.font-display {
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
-    'Noto Sans KR', system-ui, sans-serif;
-  letter-spacing: -0.02em;
-}
+.mf-rise { animation: mf-rise .7s cubic-bezier(.2,.7,.2,1) both; }
+.mf-rise-d1 { animation-delay: .05s; }
+.mf-rise-d2 { animation-delay: .15s; }
+.mf-rise-d3 { animation-delay: .25s; }
+.mf-rise-d4 { animation-delay: .35s; }
 
 /* selection */
-::selection { background: var(--brand-soft); color: var(--brand-strong); }
+::selection { background: var(--brand-soft); color: var(--brand); }
 
 /* scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d9dce0; border-radius: 999px; border: 2px solid #fff; }
-::-webkit-scrollbar-thumb:hover { background: #b8bcc2; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 
-/* reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
