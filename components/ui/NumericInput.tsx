@@ -33,10 +33,11 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
   },
   ref
 ) {
-  // 기존 페이지들이 넘기던 glass-input 클래스를 무시하고 항상 field 스타일 적용
-  const mergedClass = `field ${suffix ? 'pr-14' : ''} ${
-    className.includes('glass-input') ? '' : className
-  }`
+  // 호출자 className을 그대로 존중. className이 비어 있으면 기본 glass-input 스타일 적용
+  const baseClass = className.trim()
+    ? className
+    : 'glass-input w-full rounded-xl px-4 py-3 text-[15px] font-semibold'
+  const mergedClass = `${baseClass} tabular${suffix && !/\bpr-\d+/.test(baseClass) ? ' pr-14' : ''}`
 
   const formatNumber = (n: number) => {
     if (!Number.isFinite(n)) return ''

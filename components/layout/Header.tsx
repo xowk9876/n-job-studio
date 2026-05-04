@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#0b1220]/80 border-b border-[color:var(--line)]">
-      <div className="max-w-5xl mx-auto px-4 md:px-6 h-12 flex items-center justify-between">
+      <div className="max-w-3xl mx-auto px-4 md:px-6 h-12 flex items-center justify-between">
         <Link href="/" className="inline-reset flex items-center gap-2">
           <span
             aria-hidden
@@ -41,7 +41,7 @@ export default function Header() {
       <nav
         ref={scrollRef}
         aria-label="계산기 메뉴"
-        className="max-w-5xl mx-auto px-3 md:px-6 flex items-center gap-1 overflow-x-auto no-scrollbar h-11 border-t border-[color:var(--line)]"
+        className="max-w-3xl mx-auto px-3 md:px-6 flex items-center gap-1 overflow-x-auto no-scrollbar h-11 border-t border-[color:var(--line)]"
       >
         {nav.map(n => {
           const active = pathname === n.href
