@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket } from 'lucide-react'
 
 const calculators = [
   {
@@ -7,7 +8,7 @@ const calculators = [
     desc: '4대보험·근로소득세를 공제한 매월 실수령액을 확인합니다.',
     tag: '가장 많이 씀',
     color: '#60a5fa',
-    icon: '₩',
+    Icon: Wallet,
   },
   {
     href: '/severance',
@@ -15,7 +16,7 @@ const calculators = [
     desc: '근로기준법 제34조 평균임금 기준으로 정확하게 계산합니다.',
     tag: '평균임금',
     color: '#a78bfa',
-    icon: '◎',
+    Icon: Briefcase,
   },
   {
     href: '/mortgage',
@@ -23,7 +24,7 @@ const calculators = [
     desc: '원리금균등·원금균등·만기일시 3가지 상환 방식 비교.',
     tag: '3가지 방식',
     color: '#5eead4',
-    icon: '%',
+    Icon: Landmark,
   },
   {
     href: '/savings',
@@ -31,7 +32,7 @@ const calculators = [
     desc: '단리·복리 선택 + 이자소득세 15.4% 차감 후 실수령액.',
     tag: '세후 금액',
     color: '#34d399',
-    icon: '＋',
+    Icon: PiggyBank,
   },
   {
     href: '/jeonse',
@@ -39,7 +40,7 @@ const calculators = [
     desc: '전세↔월세 법정 전환율 기반 양방향 환산.',
     tag: '양방향',
     color: '#fbbf24',
-    icon: '⇄',
+    Icon: KeyRound,
   },
   {
     href: '/lotto',
@@ -47,7 +48,7 @@ const calculators = [
     desc: '1~45 중복 없는 무작위 조합 + 이번 회차 추첨 정보.',
     tag: '오락용',
     color: '#f472b6',
-    icon: '★',
+    Icon: Ticket,
   },
 ]
 
@@ -132,14 +133,14 @@ export default function HomePage() {
               />
               <div className="flex items-start justify-between mb-3.5">
                 <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-[17px] font-bold"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center"
                   style={{
                     background: `linear-gradient(135deg, ${c.color}22 0%, ${c.color}08 100%)`,
                     color: c.color,
                     border: `1px solid ${c.color}33`,
                   }}
                 >
-                  {c.icon}
+                  <c.Icon size={18} strokeWidth={1.8} />
                 </div>
                 <span
                   className="text-[10.5px] font-medium px-2 py-0.5 rounded-full"
