@@ -1,5 +1,17 @@
 import Link from 'next/link'
-import { Instagram, Mail } from 'lucide-react'
+import { Instagram } from 'lucide-react'
+
+function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <path fill="#4285f4" d="M24 23.5 4 10v26a2 2 0 0 0 2 2h6V22l12 9 12-9v16h6a2 2 0 0 0 2-2V10z" />
+      <path fill="#34a853" d="M12 38V22l12 9 12-9v16z" />
+      <path fill="#fbbc04" d="M36 38h6a2 2 0 0 0 2-2V10L36 16z" />
+      <path fill="#ea4335" d="M4 10v26a2 2 0 0 0 2 2h6V16z" />
+      <path fill="#c5221f" d="m4 10 20 13.5L44 10V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z" />
+    </svg>
+  )
+}
 
 const calc = [
   { href: '/salary', label: '연봉 실수령액' },
@@ -59,7 +71,7 @@ export default function Footer() {
               className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-[color:var(--ink-2)] border border-[color:var(--line-strong)] bg-white/[0.03] hover:text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)] hover:border-[color:var(--brand)] transition-colors"
               aria-label="이메일 문의"
             >
-              <Mail className="w-4 h-4" strokeWidth={2} />
+              <GmailIcon className="w-4 h-4" />
               <span>bhd03014@gmail.com</span>
             </a>
           </div>
