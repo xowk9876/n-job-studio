@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Instagram, Mail } from 'lucide-react'
 
 const calc = [
   { href: '/salary', label: '연봉 실수령액' },
@@ -36,6 +37,35 @@ export default function Footer() {
           <p className="text-[11.5px] text-[color:var(--muted)] mt-4">
             본 계산기는 정보 제공 목적이며, 실제 세액·이자는 정책 및 금융기관 상품에 따라 달라질 수 있습니다.
           </p>
+
+          {/* Contact · Social */}
+          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+            <a
+              href="https://www.instagram.com/tae_system/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-white transition-all hover:scale-[1.02] hover:shadow-lg"
+              style={{
+                background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                boxShadow: '0 2px 10px rgba(220,39,67,0.25)',
+              }}
+              aria-label="인스타그램 @tae_system"
+            >
+              <Instagram className="w-4 h-4" strokeWidth={2} />
+              <span>@tae_system</span>
+            </a>
+            <a
+              href="mailto:bhd03014@gmail.com"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-[color:var(--ink-2)] border border-[color:var(--line-strong)] bg-white/[0.03] hover:text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)] hover:border-[color:var(--brand)] transition-colors"
+              aria-label="이메일 문의"
+            >
+              <Mail className="w-4 h-4" strokeWidth={2} />
+              <span>bhd03014@gmail.com</span>
+            </a>
+          </div>
+          <p className="text-[11px] text-[color:var(--muted)] mt-2.5">
+            궁금한 점·제안은 인스타그램 DM 또는 이메일로 편하게 연락주세요.
+          </p>
         </div>
 
         <nav aria-label="사이트 내비게이션">
@@ -58,9 +88,8 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-[color:var(--line)]">
-        <div className="max-w-6xl mx-auto px-5 md:px-8 py-4 flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-[color:var(--muted)]">
-          <span>© {year} 머니핏 · Made in Korea</span>
-          <span className="tabular">2026 세율 반영 · v4.0 Midnight</span>
+        <div className="max-w-6xl mx-auto px-5 md:px-8 py-4 text-[11.5px] text-[color:var(--muted)]">
+          <span>© {year} 머니핏</span>
         </div>
       </div>
     </footer>

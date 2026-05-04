@@ -35,7 +35,6 @@ export default function Header() {
           </span>
           <span className="font-semibold text-[14.5px] tracking-tight text-white">머니핏</span>
         </Link>
-        <span className="text-[11px] text-[color:var(--muted)] font-mono">2026</span>
       </div>
 
       <nav
