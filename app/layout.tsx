@@ -58,6 +58,7 @@ export const metadata: Metadata = {
   other: {
     'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2765055385218528',
   },
+  category: 'finance',
 }
 
 function StructuredData() {
@@ -111,14 +112,11 @@ function StructuredData() {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2765055385218528'
   return (
     <html lang="ko">
       <head>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://tpc.googlesyndication.com" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
@@ -127,14 +125,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="app-shell">
         <PaperBackground />
-        {adsenseClient && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
         <Header />
         <main className="relative z-10 min-h-[70vh]">
           {children}

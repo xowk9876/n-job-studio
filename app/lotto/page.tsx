@@ -267,7 +267,6 @@ export default function LottoPage() {
           <Info className="w-4 h-4 text-white/40" /> 알아두세요
         </h2>
         <ul className="text-[12.5px] text-white/60 space-y-1.5 list-disc list-inside leading-relaxed">
-          <li>번호는 <code className="text-white/80">crypto.getRandomValues</code> 기반 난수로 생성됩니다.</li>
           <li>실제 추첨과 무관하며 당첨을 보장하지 않습니다.</li>
           <li>추첨: 매주 토요일 20:45 / 판매마감: 토요일 20:00</li>
           <li>로또 구매는 만 19세 이상만 가능합니다.</li>
