@@ -26,7 +26,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
   return (
     <footer className="relative mt-24 border-t border-[color:var(--line)]">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 md:grid-cols-[1fr_auto]">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 md:grid-cols-[1fr_auto_auto]">
         <div>
           <div className="flex items-center gap-2.5 mb-3">
             <span
@@ -92,6 +92,30 @@ export default function Footer() {
                   className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
                 >
                   {c.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="정보 페이지">
+          <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
+            Information
+          </p>
+          <ul className="space-y-2.5">
+            {[
+              { href: '/guide', label: '재테크 가이드' },
+              { href: '/about', label: '소개' },
+              { href: '/contact', label: '문의하기' },
+              { href: '/privacy-policy', label: '개인정보처리방침' },
+              { href: '/terms', label: '이용약관' },
+            ].map(i => (
+              <li key={i.href}>
+                <Link
+                  href={i.href}
+                  className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
+                >
+                  {i.label}
                 </Link>
               </li>
             ))}
