@@ -5,7 +5,20 @@ import { useSeveranceStore } from '@/store'
 import { calcSeverance } from '@/lib/severance'
 import { AlertCircle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
+import DatePicker from '@/components/ui/DatePicker'
 import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
+
+function toISO(d: Date | null) {
+  if (!d) return ''
+  const p = (n: number) => (n < 10 ? `0${n}` : `${n}`)
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
+function fromISO(s: string): Date | null {
+  if (!s) return null
+  const [y, m, d] = s.split('-').map(Number)
+  if (!y || !m || !d) return null
+  return new Date(y, m - 1, d)
+}
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -80,11 +93,11 @@ export default function SeverancePage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">입사일</label>
-            <input type="date" className="glass-input w-full rounded-lg" value={startDate} onChange={(e) => set({ startDate: e.target.value })} />
+            <DatePicker ariaLabel="입사일 선택" value={fromISO(startDate)} onChange={(d) => set({ startDate: toISO(d) })} />
           </div>
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">퇴직일</label>
-            <input type="date" className="glass-input w-full rounded-lg" value={endDate} onChange={(e) => set({ endDate: e.target.value })} />
+            <DatePicker ariaLabel="퇴직일 선택" value={fromISO(endDate)} onChange={(d) => set({ endDate: toISO(d) })} />
           </div>
         </div>
       </div>
