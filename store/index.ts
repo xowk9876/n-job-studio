@@ -58,6 +58,7 @@ interface SeveranceStore {
   annualBonus: number
   startDate: string
   endDate: string
+  regularHourlyWage: number  // 통상시급 (선택, 0이면 미적용)
   set: (v: Partial<Omit<SeveranceStore, 'set'>>) => void
 }
 export const useSeveranceStore = create<SeveranceStore>()(
@@ -68,6 +69,7 @@ export const useSeveranceStore = create<SeveranceStore>()(
       startDate: '2020-01-01',
       // SSR hydration 안정성: 고정 초기값, 클라이언트 마운트 시 오늘 날짜로 덮어씀
       endDate: '2026-01-01',
+      regularHourlyWage: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
     { name: 'mf-severance' }
@@ -108,6 +110,7 @@ interface JeonseStore {
   currentWolse: number
   currentWolseDeposit: number
   conversionRate: number
+  marketPrice: number  // 매매 시세 (선택, 0이면 깡통전세 분석 미표시)
   set: (v: Partial<Omit<JeonseStore, 'set'>>) => void
 }
 export const useJeonseStore = create<JeonseStore>()(
@@ -119,6 +122,7 @@ export const useJeonseStore = create<JeonseStore>()(
       currentWolse: 800_000,
       currentWolseDeposit: 50_000_000,
       conversionRate: DEFAULT_CONVERSION_RATE,
+      marketPrice: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
     { name: 'mf-jeonse' }

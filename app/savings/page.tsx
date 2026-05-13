@@ -109,6 +109,31 @@ export default function SavingsPage() {
         </div>
       </div>
 
+      {/* ISA 절세 비교 */}
+      <div className="glass-card">
+        <div className="flex items-baseline justify-between mb-3">
+          <h2 className="font-semibold text-white text-[13.5px]">일반계좌 vs ISA 절세 비교</h2>
+          <span className="text-[10.5px] text-white/40">조특법 §91의18 (최근 고시 기준)</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 text-[11.5px]">
+          <div className="rounded-lg bg-white/[0.05] p-3">
+            <div className="text-white/55 text-[10.5px] mb-1">일반계좌 (15.4%)</div>
+            <div className="font-bold text-white tabular">{won(r.isa.normalMaturity)}</div>
+            <div className="text-white/40 mt-1">세금 −{won(r.isa.normalTax)}</div>
+          </div>
+          <div className="rounded-lg bg-[color:var(--brand)]/10 border border-[color:var(--brand)]/30 p-3">
+            <div className="text-[color:var(--brand)] text-[10.5px] mb-1 font-semibold">ISA 일반형</div>
+            <div className="font-bold text-[color:var(--brand)] tabular">{won(r.isa.isaMaturity)}</div>
+            <div className="text-white/50 mt-1">세금 −{won(r.isa.isaTax)}</div>
+          </div>
+        </div>
+        <div className="mt-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 flex items-center justify-between">
+          <span className="text-[12px] text-emerald-200">ISA 절세 효과</span>
+          <span className="font-bold text-emerald-300 tabular text-[14px]">+{won(r.isa.savedAmount)}</span>
+        </div>
+        <p className="text-[10.5px] text-white/40 mt-2 leading-relaxed">일반형: 비과세 한도 200만원, 초과분 9.9% 분리과세. 서민형(총급여 5,000만 이하)은 한도 400만원. 의무가입 3년, 납입한도 연 2,000만·총 1억원.</p>
+      </div>
+
       <div className="mt-2 flex flex-col gap-8">
         <ExamplesSection title="적금 · 예금 계산 예시" items={[
           { label: '월 30만 · 연 3.5% · 12개월 (적금)', input: '납입 원금 360만원', result: '세후 약 3,665,000원', note: '이자소득세 15.4% 차감 후' },

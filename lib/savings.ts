@@ -1,8 +1,12 @@
 // ────────────────────────────────────────────────────────────────────────────
-// 적금/예금 만기 이자 계산기
+// 적금/예금 만기 이자 계산기 + ISA 절세 비교
+// 근거: 소득세법 §129 (이자소득 원천징수 14% + 지방소득세 1.4%)
+//      조세특례제한법 §91의18 (ISA 비과세 200만원 + 초과분 9.9% 분리과세)
 // ────────────────────────────────────────────────────────────────────────────
 
-const TAX_RATE = 0.154  // 이자소득세 15.4% (소득세14% + 지방소득세1.4%)
+const TAX_RATE = 0.154            // 일반 이자소득세 15.4% (소득세14% + 지방세1.4%)
+const ISA_TAX_EXEMPT_LIMIT = 2_000_000  // ISA 일반형 비과세 한도 (조특법 §91의18)
+const ISA_TAX_RATE = 0.099        // ISA 초과분 분리과세 9.9%
 
 export type SavingsType = 'deposit' | 'savings'        // 예금 / 적금
 export type InterestType = 'simple' | 'compound'       // 단리 / 복리
@@ -15,13 +19,24 @@ export interface SavingsInput {
   interestType: InterestType
 }
 
+export interface IsaComparison {
+  normalTax: number       // 일반계좌 세금
+  normalNet: number       // 일반계좌 세후 이자
+  normalMaturity: number  // 일반계좌 세후 수령액
+  isaTax: number          // ISA 세금
+  isaNet: number          // ISA 세후 이자
+  isaMaturity: number     // ISA 세후 수령액
+  savedAmount: number     // ISA 절세액 (= normalTax - isaTax)
+}
+
 export interface SavingsResult {
   principal: number       // 원금 합계
   grossInterest: number   // 세전 이자
-  taxAmount: number       // 이자소득세
-  netInterest: number     // 세후 이자
-  maturityAmount: number  // 만기 수령액 (세후)
+  taxAmount: number       // 이자소득세 (일반계좌 기준)
+  netInterest: number     // 세후 이자 (일반계좌 기준)
+  maturityAmount: number  // 만기 수령액 (일반계좌 기준)
   effectiveRate: number   // 실효 수익률 (%)
+  isa: IsaComparison      // ISA 절세 비교
 }
 
 export function calcSavings(input: SavingsInput): SavingsResult {
@@ -46,7 +61,6 @@ export function calcSavings(input: SavingsInput): SavingsResult {
     principal = amount * months
     if (interestType === 'simple') {
       // 단리 적금: 각 납입월의 이자를 합산
-      // 이자 = Σ (납입액 × 연이율 × 잔여개월/12)
       let interest = 0
       for (let m = 1; m <= months; m++) {
         interest += amount * r * ((months - m + 1) / 12)
@@ -71,5 +85,22 @@ export function calcSavings(input: SavingsInput): SavingsResult {
     ? (netInterest / principal) * (12 / months) * 100
     : 0
 
-  return { principal, grossInterest, taxAmount, netInterest, maturityAmount, effectiveRate }
+  // ── ISA 절세 비교 ──
+  // 비과세 200만원 한도 → 초과분만 9.9% 분리과세
+  const isaTaxable = Math.max(0, grossInterest - ISA_TAX_EXEMPT_LIMIT)
+  const isaTax = Math.round(isaTaxable * ISA_TAX_RATE)
+  const isaNet = grossInterest - isaTax
+  const isaMaturity = principal + isaNet
+
+  const isa: IsaComparison = {
+    normalTax: taxAmount,
+    normalNet: netInterest,
+    normalMaturity: maturityAmount,
+    isaTax,
+    isaNet,
+    isaMaturity,
+    savedAmount: taxAmount - isaTax,
+  }
+
+  return { principal, grossInterest, taxAmount, netInterest, maturityAmount, effectiveRate, isa }
 }

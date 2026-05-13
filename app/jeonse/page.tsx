@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useJeonseStore } from '@/store'
 import { calcJeonse, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
-import { Info } from 'lucide-react'
+import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
 
@@ -15,13 +15,13 @@ function manwon(n: number) {
 }
 
 export default function JeonsePage() {
-  const { direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, set } = useJeonseStore()
+  const { direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice, set } = useJeonseStore()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
   const r = useMemo(() => calcJeonse({
-    direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate,
-  }), [direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate])
+    direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice,
+  }), [direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice])
 
   if (!mounted) return null
 
@@ -117,7 +117,48 @@ export default function JeonsePage() {
           </label>
           <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={4.5} allowDecimal onChange={(n) => set({ conversionRate: n })} />
         </div>
+
+        {isToWolse && (
+          <div>
+            <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 깡통전세 위험 분석)</span></label>
+            <div className="relative">
+              <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
+            </div>
+            <p className="text-[11.5px] text-white/40 mt-1">국토부 실거래가 또는 KB 시세 입력 → 전세가율(보증금÷시세) 기준 위험도 산출</p>
+          </div>
+        )}
       </div>
+
+      {/* 깡통전세 위험도 */}
+      {r.risk && (
+        <div className={`flex items-start gap-3 px-4 py-3.5 rounded-xl border ${
+          r.risk.level === 'danger' ? 'bg-rose-500/12 border-rose-500/30' :
+          r.risk.level === 'caution' ? 'bg-amber-500/12 border-amber-500/30' :
+          'bg-emerald-500/12 border-emerald-500/30'
+        }`}>
+          {r.risk.level === 'safe' ? <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" /> : <AlertTriangle className={`w-4 h-4 shrink-0 mt-0.5 ${r.risk.level === 'danger' ? 'text-rose-400' : 'text-amber-400'}`} />}
+          <div className="flex-1">
+            <div className="flex items-baseline justify-between">
+              <p className={`font-semibold text-[13px] ${
+                r.risk.level === 'danger' ? 'text-rose-200' :
+                r.risk.level === 'caution' ? 'text-amber-200' :
+                'text-emerald-200'
+              }`}>{r.risk.label}</p>
+              <span className={`font-bold tabular text-[14px] ${
+                r.risk.level === 'danger' ? 'text-rose-300' :
+                r.risk.level === 'caution' ? 'text-amber-300' :
+                'text-emerald-300'
+              }`}>전세가율 {r.risk.ratio.toFixed(1)}%</span>
+            </div>
+            <p className={`text-[11.5px] mt-1 leading-relaxed ${
+              r.risk.level === 'danger' ? 'text-rose-300/85' :
+              r.risk.level === 'caution' ? 'text-amber-300/85' :
+              'text-emerald-300/85'
+            }`}>{r.risk.message}</p>
+          </div>
+        </div>
+      )}
 
       {/* 손익 */}
       <div className="glass-card">

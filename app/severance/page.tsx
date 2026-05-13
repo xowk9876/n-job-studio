@@ -23,7 +23,7 @@ function fromISO(s: string): Date | null {
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
 export default function SeverancePage() {
-  const { avgMonthly3, annualBonus, startDate, endDate, set } = useSeveranceStore()
+  const { avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage, set } = useSeveranceStore()
   const [mounted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(true)
@@ -34,8 +34,8 @@ export default function SeverancePage() {
   }, [])
 
   const r = useMemo(() =>
-    calcSeverance({ avgMonthly3, annualBonus, startDate, endDate }),
-    [avgMonthly3, annualBonus, startDate, endDate]
+    calcSeverance({ avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage }),
+    [avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage]
   )
 
   if (!mounted) return null
@@ -61,13 +61,19 @@ export default function SeverancePage() {
         </div>
       ) : (
         <div className="result-card">
-          <p className="result-label">세전 퇴직금 (예상)</p>
+          <p className="result-label">세전 퇴직금 (예상) {r.basis === 'regular' && <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold">통상임금 적용</span>}</p>
           <p className="result-value">{won(r.severancePay)}</p>
           <div className="grid grid-cols-3 gap-2 mt-4 text-[11.5px]">
             <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">재직 기간</div><div className="font-semibold mt-0.5">{workYearsLabel}</div></div>
             <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">재직일수</div><div className="font-semibold tabular mt-0.5">{r.workDays.toLocaleString()}일</div></div>
-            <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">1일 평균임금</div><div className="font-semibold tabular mt-0.5">{won(r.dailyWage)}</div></div>
+            <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">1일 {r.basis === 'regular' ? '통상' : '평균'}임금</div><div className="font-semibold tabular mt-0.5">{won(r.dailyWage)}</div></div>
           </div>
+          {r.regularDailyWage > 0 && (
+            <div className="mt-3 rounded-lg bg-white/[0.06] px-3 py-2 flex justify-between text-[11px]">
+              <span className="text-white/55">평균임금 1일분</span><span className="font-semibold text-white/85 tabular">{won(r.averageDailyWage)}</span>
+              <span className="text-white/55 ml-2">통상임금 1일분</span><span className="font-semibold text-white/85 tabular">{won(r.regularDailyWage)}</span>
+            </div>
+          )}
         </div>
       )}
 
@@ -88,6 +94,15 @@ export default function SeverancePage() {
             <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={annualBonus} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ annualBonus: n })} />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
           </div>
+        </div>
+
+        <div>
+          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">통상시급 <span className="text-[10.5px] font-normal text-white/40">(선택 · 근기법 §2② 비교용)</span></label>
+          <div className="relative">
+            <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10" value={regularHourlyWage} defaultValue={0} onChange={(n) => set({ regularHourlyWage: n })} />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">원</span>
+          </div>
+          <p className="text-[11.5px] text-white/40 mt-1">입력 시 평균임금 1일분과 통상임금 1일분(시급×8)을 비교하여 큰 값으로 산정</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
