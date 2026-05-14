@@ -5,7 +5,7 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.ap
 const slug = 'dsr-stress-test-2026'
 const title = '2026 스트레스 DSR 3단계 완전 정리 — 한도 축소 폭과 대응 전략'
 const description =
-  '2026년 7월부터 전면 시행되는 스트레스 DSR 3단계. 가산금리 0.75%p 적용 방식과 주담대·신용대출별 한도 축소 폭을 사례로 정리합니다.'
+  '금융위원회가 도입한 스트레스 DSR 3단계 구조와 가산금리 산정 방식, 주담대·신용대출별 한도 축소 폭을 사례로 정리합니다.'
 
 export const metadata: Metadata = {
   title: `${title} | 머니핏 계산기`,

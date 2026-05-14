@@ -26,9 +26,9 @@ function getLottoInfo(now = new Date()) {
 
 // ═══ 당첨 등위 ═══
 const PRIZE_INFO = [
-  { rank: 1, match: '6개 일치',        prob: '1 / 8,145,060', amount: '평균 약 20억원',   color: '#fbbf24' },
-  { rank: 2, match: '5개 + 보너스볼',  prob: '1 / 1,357,510', amount: '평균 약 5,000만원', color: '#94a3b8' },
-  { rank: 3, match: '5개 일치',        prob: '1 / 35,724',    amount: '평균 약 140만원',   color: '#f97316' },
+  { rank: 1, match: '6개 일치',        prob: '1 / 8,145,060', amount: '회차별 변동 (동행복권 공시)',   color: '#fbbf24' },
+  { rank: 2, match: '5개 + 보너스볼',  prob: '1 / 1,357,510', amount: '회차별 변동 (동행복권 공시)', color: '#94a3b8' },
+  { rank: 3, match: '5개 일치',        prob: '1 / 35,724',    amount: '회차별 변동 (동행복권 공시)',   color: '#f97316' },
   { rank: 4, match: '4개 일치',        prob: '1 / 733',       amount: '50,000원',          color: '#3b82f6' },
   { rank: 5, match: '3개 일치',        prob: '1 / 45',        amount: '5,000원',           color: '#10b981' },
 ]
