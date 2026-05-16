@@ -46,7 +46,7 @@ export default function AboutPage() {
           <ul className="list-disc pl-6 mt-3 space-y-2">
             <li>
               <strong className="text-white">연봉 실수령액</strong> — 소득세법 제134조 근로소득 간이세액표,
-              국민연금법 제88조(근로자 4.5%), 국민건강보험법(근로자 부담 건보료율의 50%),
+              국민연금법 제88조(근로자 4.75%), 국민건강보험법(근로자 부담 건보료율의 50%),
               노인장기요양보험법(건강보험료 대비 법정 비율), 고용보험법(근로자 0.9%). 요율은 매년 초
               보건복지부·고용노동부 고시에 따라 갱신됩니다.
             </li>
@@ -90,7 +90,7 @@ export default function AboutPage() {
         <section>
           <h2 className="font-display text-[19px] font-semibold text-white mb-3">기술 스택</h2>
           <p>
-            Next.js 14 App Router · TypeScript · Tailwind CSS · Zustand. Vercel 에지 네트워크로 배포되어
+            Next.js 16 App Router · TypeScript · Tailwind CSS · Zustand. Vercel 에지 네트워크로 배포되어
             전국 어디서나 빠르게 접속됩니다. 모든 코드는 정적 생성(SSG) 또는 클라이언트 단에서만
             실행되므로 개인 입력값은 서버로 전송되지 않습니다.
           </p>

@@ -10,6 +10,8 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
   { path: '/savings',   priority: 0.8, freq: 'monthly' },
   { path: '/jeonse',    priority: 0.8, freq: 'monthly' },
   { path: '/lotto',     priority: 0.7, freq: 'weekly'  },
+  { path: '/tax-risk',  priority: 0.85, freq: 'monthly' },
+  { path: '/ai',        priority: 0.8, freq: 'monthly' },
   // Guides
   { path: '/guide',                                    priority: 0.8, freq: 'weekly'  },
   { path: '/guide/2026-salary-tax-guide',              priority: 0.75, freq: 'monthly' },

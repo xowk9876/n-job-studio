@@ -31,7 +31,7 @@ export default function ContactPage() {
         <h1 className="font-display text-[28px] md:text-[34px] font-bold text-white tracking-tight">문의하기</h1>
         <p className="mt-4 text-[14.5px] text-[color:var(--sub)] leading-relaxed">
           계산 오류 제보, 새 계산기 제안, 제휴·광고 문의 모두 환영합니다. 아래 채널 중 편한 쪽으로
-          연락주세요. 영업일 기준 보통 24~48시간 이내에 답변드립니다.
+          연락주세요. 오류 제보는 최우선 처리, 일반 문의는 영업일 기준 3일 이내 답변을 목표로 합니다.
         </p>
       </header>
 
@@ -96,8 +96,8 @@ export default function ContactPage() {
         <section>
           <h2 className="font-display text-[18px] font-semibold text-white mb-3">응답 정책</h2>
           <p>
-            모든 문의는 확인 즉시 우선순위에 따라 처리됩니다. 오류 제보는 최우선, 제휴는 영업일 3일 이내,
-            일반 질문은 7일 이내 답변을 목표로 합니다.
+            모든 문의는 확인 즉시 우선순위에 따라 처리됩니다. 오류 제보는 최우선 처리하며,
+            제휴·일반 질문은 영업일 기준 3일 이내 답변을 목표로 합니다.
           </p>
         </section>
 

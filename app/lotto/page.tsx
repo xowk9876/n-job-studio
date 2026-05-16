@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
-import { RotateCcw, Trophy, Info, Copy, Check, Clock } from 'lucide-react'
+import { RotateCcw, Trophy, Info, Copy, Check } from 'lucide-react'
 import { FAQSection, TipsSection } from '@/components/ui/PageContent'
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══

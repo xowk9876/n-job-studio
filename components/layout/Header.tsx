@@ -11,6 +11,8 @@ const nav = [
   { href: '/savings',   label: '적금' },
   { href: '/jeonse',    label: '전월세' },
   { href: '/lotto',     label: '로또' },
+  { href: '/tax-risk',  label: '세금 리스크', accent: true },
+  { href: '/ai',        label: 'AI 생성기', accent: true },
 ]
 
 export default function Header() {
@@ -44,6 +46,7 @@ export default function Header() {
       >
         {nav.map(n => {
           const active = pathname === n.href
+          const isAccent = 'accent' in n && n.accent
           return (
             <Link
               key={n.href}
@@ -52,7 +55,9 @@ export default function Header() {
               className={`inline-reset shrink-0 px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
                 active
                   ? 'bg-[color:var(--brand-soft)] text-[color:var(--brand)] border border-[rgba(96,165,250,0.32)]'
-                  : 'text-[color:var(--sub)] hover:text-white hover:bg-white/[0.05] border border-transparent'
+                  : isAccent
+                    ? 'text-emerald-400/80 hover:text-emerald-300 hover:bg-emerald-500/[0.08] border border-emerald-500/20'
+                    : 'text-[color:var(--sub)] hover:text-white hover:bg-white/[0.05] border border-transparent'
               }`}
             >
               {n.label}

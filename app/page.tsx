@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket } from 'lucide-react'
+import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ShieldAlert, Sparkles } from 'lucide-react'
 
 const calculators = [
   {
@@ -50,10 +50,26 @@ const calculators = [
     color: '#f472b6',
     Icon: Ticket,
   },
+  {
+    href: '/tax-risk',
+    label: '세금 리스크',
+    desc: 'N잡러의 본업+부업 합산 세금과 건보료 위험도를 예측합니다.',
+    tag: 'N잡 필수',
+    color: '#fb923c',
+    Icon: ShieldAlert,
+  },
+  {
+    href: '/ai',
+    label: 'AI 글 생성기',
+    desc: 'Gemini AI가 제휴 마케팅 블로그 포스트를 자동 생성합니다.',
+    tag: 'AI 도구',
+    color: '#a78bfa',
+    Icon: Sparkles,
+  },
 ]
 
 const stats = [
-  { n: '6종', l: '전문 계산기' },
+  { n: '8종', l: '전문 도구' },
   { n: '2026', l: '최신 세율' },
   { n: '0원', l: '완전 무료' },
 ]
@@ -103,7 +119,7 @@ export default function HomePage() {
               지금 필요한 계산기
             </h2>
             <p className="mt-1 text-[12.5px] text-[color:var(--muted)]">
-              자주 쓰는 6종을 한 곳에 모았습니다.
+              계산기 6종 + AI 도구 2종을 한 곳에 모았습니다.
             </p>
           </div>
         </div>

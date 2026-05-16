@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://n-job-studio.vercel.app'),
+  metadataBase: new URL(SITE),
   title: '연봉 실수령액 계산기 — 2026년 최신 기준',
   description: '연봉에서 4대보험(국민연금·건강보험·고용보험)과 근로소득세를 공제한 실수령액을 정확히 계산합니다. 수당·비과세 항목 포함.',
   keywords: ['연봉 계산기', '연봉 실수령액', '세후 월급 계산', '4대보험 계산', '2026 연봉 세후', '월급 실수령'],
@@ -9,19 +11,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: '연봉 실수령액 계산기',
     description: '2026년 최신 기준 4대보험·소득세 공제 후 실수령액 계산',
-    url: 'https://n-job-studio.vercel.app/salary',
+    url: `${SITE}/salary`,
     siteName: '머니핏 계산기',
     locale: 'ko_KR',
     type: 'website',
-    images: [{ url: 'https://n-job-studio.vercel.app/salary/opengraph-image', width: 1200, height: 630, alt: '연봉 실수령액 계산기' }],
+    images: [{ url: `${SITE}/salary/opengraph-image`, width: 1200, height: 630, alt: '연봉 실수령액 계산기' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '연봉 실수령액 계산기',
     description: '2026년 최신 기준 4대보험·소득세 공제 후 실수령액 계산',
-    images: ['https://n-job-studio.vercel.app/salary/opengraph-image'],
+    images: [`${SITE}/salary/opengraph-image`],
   },
-  alternates: { canonical: 'https://n-job-studio.vercel.app/salary' },
+  alternates: { canonical: `${SITE}/salary` },
   robots: { index: true, follow: true },
 }
 
