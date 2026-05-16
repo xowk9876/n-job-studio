@@ -232,11 +232,11 @@ export default function LottoPage() {
         <h2 className="font-semibold text-white mb-4 text-[14px] tracking-tight">당첨 등위 안내</h2>
         <div className="flex flex-col gap-0">
           {[
-            { rank: '1등', match: '6개 번호 전부 일치', prize: '평균 20억원+', odds: '1 / 8,145,060', color: '#FFD700', bg: 'rgba(255,215,0,0.08)', border: 'rgba(255,215,0,0.2)' },
-            { rank: '2등', match: '5개 + 보너스 번호 일치', prize: '평균 6,000만원', odds: '1 / 1,357,510', color: '#C0C0C0', bg: 'rgba(192,192,192,0.06)', border: 'rgba(192,192,192,0.15)' },
-            { rank: '3등', match: '5개 번호 일치', prize: '평균 150만원', odds: '1 / 35,724', color: '#CD7F32', bg: 'rgba(205,127,50,0.06)', border: 'rgba(205,127,50,0.15)' },
-            { rank: '4등', match: '4개 번호 일치', prize: '고정 5만원', odds: '1 / 733', color: 'var(--ink-2)', bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.06)' },
-            { rank: '5등', match: '3개 번호 일치', prize: '고정 5,000원', odds: '1 / 45', color: 'var(--sub)', bg: 'rgba(255,255,255,0.02)', border: 'rgba(255,255,255,0.04)' },
+            { rank: '1등', match: '6개 번호 전부 일치', prize: '평균 20억원+', color: '#FFD700', bg: 'rgba(255,215,0,0.08)', border: 'rgba(255,215,0,0.2)' },
+            { rank: '2등', match: '5개 + 보너스 번호 일치', prize: '평균 6,000만원', color: '#C0C0C0', bg: 'rgba(192,192,192,0.06)', border: 'rgba(192,192,192,0.15)' },
+            { rank: '3등', match: '5개 번호 일치', prize: '평균 150만원', color: '#CD7F32', bg: 'rgba(205,127,50,0.06)', border: 'rgba(205,127,50,0.15)' },
+            { rank: '4등', match: '4개 번호 일치', prize: '고정 5만원', color: 'var(--ink-2)', bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.06)' },
+            { rank: '5등', match: '3개 번호 일치', prize: '고정 5,000원', color: 'var(--sub)', bg: 'rgba(255,255,255,0.02)', border: 'rgba(255,255,255,0.04)' },
           ].map((r, i) => (
             <div
               key={r.rank}
@@ -251,7 +251,6 @@ export default function LottoPage() {
               </span>
               <div className="flex-1 min-w-0">
                 <p className="text-[12.5px] text-white font-medium">{r.match}</p>
-                <p className="text-[11px] text-white/40 mt-0.5">확률 {r.odds}</p>
               </div>
               <span className="shrink-0 text-[13px] font-bold tabular" style={{ color: r.color }}>{r.prize}</span>
             </div>
