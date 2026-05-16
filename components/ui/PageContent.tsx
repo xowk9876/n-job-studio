@@ -46,20 +46,6 @@ export function FAQSection({
           </details>
         ))}
       </div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: items.map(({ q, a }) => ({
-              '@type': 'Question',
-              name: q,
-              acceptedAnswer: { '@type': 'Answer', text: a },
-            })),
-          }),
-        }}
-      />
     </section>
   )
 }

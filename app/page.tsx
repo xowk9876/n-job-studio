@@ -93,9 +93,6 @@ export default function HomePage() {
           <Link href="/salary" className="inline-reset btn-primary">
             지금 계산하기 <ArrowRight size={16} />
           </Link>
-          <Link href="/guide" className="inline-reset btn-ghost">
-            가이드 보기
-          </Link>
         </div>
 
         {/* STATS */}
@@ -223,49 +220,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* GUIDES */}
-      <section className="mt-20 md:mt-28" aria-label="재테크 가이드">
-        <div className="flex items-end justify-between mb-6">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-1.5">GUIDES</p>
-            <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
-              재테크 가이드
-            </h2>
-          </div>
-          <Link
-            href="/guide"
-            className="text-[12.5px] text-[color:var(--brand)] hover:underline inline-reset flex items-center gap-1"
-          >
-            전체 보기 <ArrowRight size={12} />
-          </Link>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { href: '/guide/2026-salary-tax-guide', title: '2026년 연봉 실수령액 완전 가이드', tag: '세금', color: '#60a5fa' },
-            { href: '/guide/dsr-stress-test-2026', title: '2026 스트레스 DSR 3단계 정리', tag: '대출', color: '#5eead4' },
-            { href: '/guide/severance-calculation-guide', title: '퇴직금 계산 공식과 실전 예시', tag: '퇴직', color: '#a78bfa' },
-            { href: '/guide/isa-vs-regular-savings', title: 'ISA vs 일반계좌 10년 시뮬레이션', tag: '투자', color: '#34d399' },
-            { href: '/guide/jeonse-safety-2026', title: '2026 전세사기 방지 체크리스트', tag: '부동산', color: '#fbbf24' },
-            { href: '/guide/lotto-tax-guide', title: '로또 당첨금 세금·수령 가이드', tag: '복권', color: '#f472b6' },
-          ].map(g => (
-            <Link key={g.href} href={g.href} className="inline-reset card card-hover p-5 group">
-              <span
-                className="inline-block text-[10px] font-semibold px-2.5 py-1 rounded-full mb-3 tracking-wide"
-                style={{
-                  color: g.color,
-                  background: `${g.color}10`,
-                  border: `1px solid ${g.color}20`,
-                }}
-              >
-                {g.tag}
-              </span>
-              <h3 className="font-display text-[14.5px] font-semibold text-white tracking-tight leading-snug group-hover:text-[color:var(--brand)] transition-colors">
-                {g.title}
-              </h3>
-            </Link>
-          ))}
-        </div>
+      {/* GUIDE LINK */}
+      <section className="mt-16 md:mt-20 text-center">
+        <Link
+          href="/guide"
+          className="inline-reset text-[13px] text-[color:var(--sub)] hover:text-[color:var(--brand)] transition-colors flex items-center justify-center gap-1.5"
+        >
+          재테크 가이드 보기 <ArrowRight size={13} />
+        </Link>
       </section>
     </div>
   )
