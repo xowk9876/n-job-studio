@@ -20,8 +20,6 @@ const calc = [
   { href: '/savings', label: '적금 이자' },
   { href: '/jeonse', label: '전월세 전환' },
   { href: '/lotto', label: '로또 번호' },
-  { href: '/tax-risk', label: '세금 리스크' },
-  { href: '/ai', label: 'AI 글 생성기' },
 ]
 
 export default function Footer() {
