@@ -227,14 +227,55 @@ export default function LottoPage() {
         실제 추첨과 무관하며 당첨을 보장하지 않습니다 · 만 19세 이상
       </p>
 
-      <div className="mt-6 flex flex-col gap-8">
+      {/* 당첨 등위 안내 */}
+      <div className="glass-card">
+        <h2 className="font-semibold text-white mb-4 text-[14px] tracking-tight">당첨 등위 안내</h2>
+        <div className="flex flex-col gap-0">
+          {[
+            { rank: '1등', match: '6개 번호 전부 일치', prize: '평균 20억원+', odds: '1 / 8,145,060', color: '#FFD700', bg: 'rgba(255,215,0,0.08)', border: 'rgba(255,215,0,0.2)' },
+            { rank: '2등', match: '5개 + 보너스 번호 일치', prize: '평균 6,000만원', odds: '1 / 1,357,510', color: '#C0C0C0', bg: 'rgba(192,192,192,0.06)', border: 'rgba(192,192,192,0.15)' },
+            { rank: '3등', match: '5개 번호 일치', prize: '평균 150만원', odds: '1 / 35,724', color: '#CD7F32', bg: 'rgba(205,127,50,0.06)', border: 'rgba(205,127,50,0.15)' },
+            { rank: '4등', match: '4개 번호 일치', prize: '고정 5만원', odds: '1 / 733', color: 'var(--ink-2)', bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.06)' },
+            { rank: '5등', match: '3개 번호 일치', prize: '고정 5,000원', odds: '1 / 45', color: 'var(--sub)', bg: 'rgba(255,255,255,0.02)', border: 'rgba(255,255,255,0.04)' },
+          ].map((r, i) => (
+            <div
+              key={r.rank}
+              className="flex items-center gap-3 py-3 px-3 rounded-lg transition-colors hover:bg-white/[0.03]"
+              style={{ borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
+            >
+              <span
+                className="shrink-0 w-10 text-center text-[13px] font-extrabold rounded-md py-1"
+                style={{ color: r.color, background: r.bg, border: `1px solid ${r.border}` }}
+              >
+                {r.rank}
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[12.5px] text-white font-medium">{r.match}</p>
+                <p className="text-[11px] text-white/40 mt-0.5">확률 {r.odds}</p>
+              </div>
+              <span className="shrink-0 text-[13px] font-bold tabular" style={{ color: r.color }}>{r.prize}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 pt-3 border-t border-white/[0.06] grid grid-cols-2 gap-2 text-[11px]">
+          <div className="rounded-lg bg-white/[0.03] px-3 py-2">
+            <span className="text-white/40">200만원 이하</span>
+            <span className="text-emerald-300 font-semibold ml-1.5">비과세</span>
+          </div>
+          <div className="rounded-lg bg-white/[0.03] px-3 py-2">
+            <span className="text-white/40">3억 초과</span>
+            <span className="text-rose-300 font-semibold ml-1.5">33% 원천징수</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-8">
         <FAQSection items={[
           { q: '로또 당첨금에 세금이 얼마나 붙나요?', a: '200만 원 이하는 비과세입니다. 200만 원 초과~3억 원 이하는 22%(소득세 20% + 지방소득세 2%), 3억 원 초과분은 33%(소득세 30% + 지방소득세 3%)가 원천징수됩니다.' },
           { q: '당첨금은 어디서 수령하나요?', a: '5만 원 이하는 일반 판매점, 5만 원 초과~200만 원 이하는 NH농협은행 지점, 200만 원 초과는 NH농협은행 본점(서울 중구)에서 수령합니다. 신분증과 당첨 복권을 지참해야 합니다.' },
           { q: '당첨금 수령 기한이 있나요?', a: '추첨일로부터 1년 이내에 수령해야 합니다. 기한 초과 시 당첨금은 복권기금으로 귀속됩니다.' },
           { q: '연금복권과 로또 세금이 다른가요?', a: '세율 구간은 동일합니다. 연금복권 1등은 매월 700만 원씩 20년간 수령하며, 매달 22%가 원천징수되어 월 약 546만 원을 실수령합니다.' },
           { q: '당첨금을 가족에게 나눠줘도 되나요?', a: '증여세가 부과됩니다. 배우자 6억 원, 성인 자녀 5,000만 원, 미성년 자녀 2,000만 원까지는 증여세 공제가 적용됩니다 (상속세 및 증여세법 기준).' },
-          { q: '로또 번호 생성 알고리즘이 안전한가요?', a: '본 생성기는 Web Crypto API(CSPRNG)와 Fisher-Yates 셔플을 사용합니다. 시스템 엔트로피 기반 암호학적 보안 난수로, 예측이 수학적으로 불가능합니다.' },
         ]} />
 
         <TipsSection title="로또 당첨 후 알아두면 좋은 것" items={[
