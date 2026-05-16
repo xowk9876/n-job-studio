@@ -33,8 +33,8 @@ const ADSENSE_DOMAINS = {
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${ADSENSE_DOMAINS.script.join(' ')}`,
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
+  "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
   `img-src 'self' data: blob: ${ADSENSE_DOMAINS.img.join(' ')}`,
   `connect-src 'self' ${ADSENSE_DOMAINS.connect.join(' ')}`,
   `frame-src ${ADSENSE_DOMAINS.frame.join(' ')}`,
@@ -44,11 +44,12 @@ const csp = [
 ].join('; ')
 
 const securityHeaders = [
-  { key: 'X-Frame-Options',        value: 'SAMEORIGIN' },
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy',        value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy',     value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
-  { key: 'Content-Security-Policy', value: csp },
+  { key: 'X-Frame-Options',          value: 'SAMEORIGIN' },
+  { key: 'X-Content-Type-Options',   value: 'nosniff' },
+  { key: 'Referrer-Policy',          value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy',       value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
+  { key: 'X-DNS-Prefetch-Control',   value: 'on' },
+  { key: 'Content-Security-Policy',  value: csp },
 ]
 
 const nextConfig: NextConfig = {
