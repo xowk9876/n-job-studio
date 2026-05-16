@@ -21,7 +21,7 @@ const guides = [
   {
     slug: 'dsr-stress-test-2026',
     title: '2026 스트레스 DSR 3단계 완전 정리',
-    desc: '가산금리 0.75%p 적용 구간과 주담대·신용대출 영향 분석.',
+    desc: '스트레스 금리 1.50%p 적용 구간과 주담대·신용대출 영향 분석.',
     tag: '대출',
     color: '#5eead4',
   },

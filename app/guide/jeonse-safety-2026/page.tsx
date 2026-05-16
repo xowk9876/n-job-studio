@@ -22,7 +22,7 @@ export default function Page() {
       description={description}
       tag="부동산"
       tagColor="#fcc73e"
-      updatedAt="2026-01-09"
+      updatedAt="2026-05-16"
       related={[
         { href: '/jeonse', label: '전월세 전환 계산기' },
         { href: '/mortgage', label: '대출 이자 계산기' },
@@ -82,7 +82,8 @@ export default function Page() {
           </li>
           <li>
             <strong>HUG 전세보증금반환보증 가입</strong> — 보증금 수도권 7억/비수도권 5억 이하, 주택가격
-            대비 보증금 비율 90% 이하 시 가입 가능. 보증료 연 0.115~0.154%.
+            대비 보증금 비율 90% 이하 시 가입 가능. 보증료 연 0.097~0.211%(위험도 차등 적용).
+            비대면 신청 시 3% 기본 할인, 사회배려계층은 최대 60% 할인.
           </li>
           <li>가입 완료 증빙(HUG 보증서 PDF)을 별도 보관.</li>
           <li>계약 만료 6개월~2개월 전 갱신 거절 의사 내용증명 발송(법 제6조의3).</li>

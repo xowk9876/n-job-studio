@@ -22,7 +22,7 @@ export default function Page() {
       description={description}
       tag="대출"
       tagColor="#5eead4"
-      updatedAt="2026-01-08"
+      updatedAt="2026-05-16"
       related={[
         { href: '/mortgage', label: '대출 이자 계산기' },
         { href: '/guide/isa-vs-regular-savings', label: 'ISA vs 일반계좌 시뮬레이션' },
@@ -47,13 +47,14 @@ export default function Page() {
           <tbody>
             <tr><td>1단계</td><td>2024.2.26</td><td>스트레스금리의 25% 적용</td></tr>
             <tr><td>2단계</td><td>2024.9.1</td><td>스트레스금리의 50% (수도권 주담대는 더 강화)</td></tr>
-            <tr><td>3단계</td><td>금융위 발표 일정</td><td>스트레스금리 100% 전면 적용</td></tr>
+            <tr><td>3단계</td><td>2025.7.1 (시행 완료)</td><td>스트레스금리 100%(1.50%p) 전 금융권 전면 적용</td></tr>
           </tbody>
         </table>
         <p>
           스트레스금리는 과거 5년 최고금리와 현재 금리 차이를 기준으로 산정하되 하한 1.5%p·상한 3.0%p로
-          설정됩니다. 실제 시행 일정·세부 가산폭은 금융위원회 공지와 각 은행 가이드라인을 반드시
-          확인해야 합니다(상품·시기·지역에 따라 달라짐).
+          설정됩니다. 2025년 7월 1일부터 3단계가 시행되어 전 금융권 모든 가계대출에 <strong>1.50%p</strong>가
+          적용됩니다. 다만 지방 주담대는 2025년 12월 말까지 0.75%p로 한시 유예되며, 이후 1.50%p가 정상
+          적용됩니다. 신용대출은 잔액 1억 원 초과분에 한해 스트레스 금리가 부과됩니다.
         </p>
       </section>
 

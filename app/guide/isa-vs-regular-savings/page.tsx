@@ -5,7 +5,7 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.ap
 const slug = 'isa-vs-regular-savings'
 const title = 'ISA vs 일반계좌 10년 시뮬레이션 — 얼마나 유리한가'
 const description =
-  'ISA 비과세 한도 200만 원과 9.9% 분리과세의 실제 절세 효과를 10년 시뮬레이션으로 비교. 중개형·신탁형·일임형 선택 기준과 만기 이전 인출 시 주의사항까지.'
+  'ISA 비과세 한도 500만 원과 9.9% 분리과세의 실제 절세 효과를 10년 시뮬레이션으로 비교. 중개형·신탁형·일임형 선택 기준과 만기 이전 인출 시 주의사항까지.'
 
 export const metadata: Metadata = {
   title: `${title} | 머니핏 계산기`,
@@ -32,7 +32,7 @@ export default function Page() {
         <h2>ISA 계좌가 뭐고 왜 유리한가</h2>
         <p>
           ISA(Individual Savings Account, 개인종합자산관리계좌)는 한 계좌 안에서 예·적금, 펀드, ETF,
-          국내주식(중개형)을 운용할 수 있고, 3년 이상 의무 가입 후 <strong>순이익 200만 원까지 비과세</strong>,
+          국내주식(중개형)을 운용할 수 있고, 3년 이상 의무 가입 후 <strong>순이익 500만 원까지 비과세</strong>,
           초과분은 <strong>9.9%</strong>로 분리과세되는 절세 상품입니다. 일반 계좌의 이자소득세 15.4%보다
           훨씬 유리합니다(조세특례제한법 제91조의18).
         </p>
@@ -50,7 +50,7 @@ export default function Page() {
             <tr><td>일임형</td><td>금융사 일임 운용</td><td>증권사</td><td>초보·귀찮음</td></tr>
           </tbody>
         </table>
-        <p>연간 납입 한도 2,000만 원, 총 1억 원까지 납입 가능합니다.</p>
+        <p>연간 납입 한도 4,000만 원, 총 2억 원까지 납입 가능합니다.</p>
       </section>
 
       <section>
@@ -69,15 +69,15 @@ export default function Page() {
           <li>세금: 4,012만 원 × 15.4% ≈ <strong>약 618만 원</strong></li>
           <li>세후 수익: 약 3,394만 원</li>
         </ul>
-        <h3>ISA 일반형(비과세 200만 원 + 초과분 9.9% 분리과세)</h3>
+        <h3>ISA 일반형(비과세 500만 원 + 초과분 9.9% 분리과세)</h3>
         <ul>
-          <li>비과세 구간: 200만 원</li>
-          <li>과세 구간: 3,812만 원 × 9.9% ≈ <strong>약 377만 원</strong></li>
-          <li>세후 수익: 약 3,635만 원</li>
+          <li>비과세 구간: 500만 원</li>
+          <li>과세 구간: 3,512만 원 × 9.9% ≈ <strong>약 348만 원</strong></li>
+          <li>세후 수익: 약 3,664만 원</li>
         </ul>
         <p>
-          이 단순 비교만으로 <strong>약 241만 원</strong>이 남습니다. 서민형(총급여 5,000만 원 이하 등)
-          가입자는 비과세 한도가 400만 원으로 늘어 절세폭이 더 커집니다. 금융소득 종합과세(연 2,000만 원
+          이 단순 비교만으로 <strong>약 270만 원</strong>이 남습니다. 서민형(총급여 5,000만 원 이하 등)
+          가입자는 비과세 한도가 1,000만 원으로 늘어 절세폭이 더 커집니다. 금융소득 종합과세(연 2,000만 원
           초과) 대상이거나 고소득 구간일수록 ISA의 분리과세 가치가 커집니다.
         </p>
       </section>
@@ -98,7 +98,7 @@ export default function Page() {
       <section>
         <h2>어떤 사람에게 유리한가</h2>
         <ul>
-          <li><strong>예·적금 중심의 안정 추구형</strong> — 이자소득 200만 원만 벌어도 연 30만 원 절세</li>
+          <li><strong>예·적금 중심의 안정 추구형</strong> — 이자소득 500만 원만 벌어도 연 77만 원 절세</li>
           <li><strong>배당 ETF 장기 보유자</strong> — 분배금 비과세로 복리 효과 극대화</li>
           <li><strong>연 금융소득 2,000만 원 근접</strong> — 종합과세 회피 효과</li>
         </ul>

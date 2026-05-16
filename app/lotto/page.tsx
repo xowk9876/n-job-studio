@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import { RotateCcw, Copy, Check } from 'lucide-react'
+import { FAQSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══
 const FIRST_DRAW = new Date('2002-12-07T20:45:00+09:00')
@@ -226,21 +227,32 @@ export default function LottoPage() {
         실제 추첨과 무관하며 당첨을 보장하지 않습니다 · 만 19세 이상
       </p>
 
-      <nav className="flex flex-wrap gap-2" aria-label="관련 계산기">
-        {[
-          { href: '/salary',   label: '연봉 실수령액' },
-          { href: '/savings',  label: '적금 이자' },
-          { href: '/mortgage', label: '대출 이자' },
-        ].map(({ href, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className="text-[12.5px] px-3 py-2 rounded-md border border-[color:var(--line-strong)] bg-white/[0.03] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)] transition-colors"
-          >
-            → {label}
-          </Link>
-        ))}
-      </nav>
+      <div className="mt-6 flex flex-col gap-8">
+        <FAQSection items={[
+          { q: '로또 당첨금에 세금이 얼마나 붙나요?', a: '200만 원 이하는 비과세입니다. 200만 원 초과~3억 원 이하는 22%(소득세 20% + 지방소득세 2%), 3억 원 초과분은 33%(소득세 30% + 지방소득세 3%)가 원천징수됩니다.' },
+          { q: '당첨금은 어디서 수령하나요?', a: '5만 원 이하는 일반 판매점, 5만 원 초과~200만 원 이하는 NH농협은행 지점, 200만 원 초과는 NH농협은행 본점(서울 중구)에서 수령합니다. 신분증과 당첨 복권을 지참해야 합니다.' },
+          { q: '당첨금 수령 기한이 있나요?', a: '추첨일로부터 1년 이내에 수령해야 합니다. 기한 초과 시 당첨금은 복권기금으로 귀속됩니다.' },
+          { q: '연금복권과 로또 세금이 다른가요?', a: '세율 구간은 동일합니다. 연금복권 1등은 매월 700만 원씩 20년간 수령하며, 매달 22%가 원천징수되어 월 약 546만 원을 실수령합니다.' },
+          { q: '당첨금을 가족에게 나눠줘도 되나요?', a: '증여세가 부과됩니다. 배우자 6억 원, 성인 자녀 5,000만 원, 미성년 자녀 2,000만 원까지는 증여세 공제가 적용됩니다 (상속세 및 증여세법 기준).' },
+          { q: '로또 번호 생성 알고리즘이 안전한가요?', a: '본 생성기는 Web Crypto API(CSPRNG)와 Fisher-Yates 셔플을 사용합니다. 시스템 엔트로피 기반 암호학적 보안 난수로, 예측이 수학적으로 불가능합니다.' },
+        ]} />
+
+        <TipsSection title="로또 당첨 후 알아두면 좋은 것" items={[
+          { title: '복권 뒷면에 즉시 서명', desc: '당첨 즉시 복권 뒷면에 서명하세요. 서명 없는 복권은 소지자에게 권리가 인정될 수 있습니다. 분실·도난 시 서명이 유일한 소유 증거입니다.' },
+          { title: '고액 당첨 시 전문가 상담 후 수령', desc: '변호사·세무사와 상담 후 수령하세요. 당첨 사실을 SNS에 공개하지 않는 것을 강력히 권장합니다. 익명 수령이 원칙입니다.' },
+          { title: '당첨금 분산 운용', desc: 'IRP·연금저축에 일부를 넣으면 추가 절세가 가능합니다. 일시 소비보다 예금·펀드 등으로 분산 운용이 장기적으로 유리합니다.' },
+          { title: '수령 기한 1년 엄수', desc: '미수령 당첨금은 추첨일 기준 1년 후 자동 소멸되어 복권기금으로 귀속됩니다. 매주 당첨 번호를 꼭 확인하세요.' },
+          { title: '과도한 구매 자제', desc: '로또는 소액 오락용입니다. 1인 1매 제한은 없지만, 당첨 확률(약 1/8,145,060)을 고려하면 적정 금액 내에서 즐기세요.' },
+        ]} />
+
+        <RelatedLinks links={[
+          { href: '/salary',    label: '연봉 실수령액' },
+          { href: '/savings',   label: '적금 이자' },
+          { href: '/mortgage',  label: '대출 이자' },
+          { href: '/severance', label: '퇴직금' },
+          { href: '/jeonse',    label: '전월세 전환' },
+        ]} />
+      </div>
 
       <style jsx>{`
         @keyframes lotto-bounce {

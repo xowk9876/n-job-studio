@@ -22,7 +22,7 @@ export default function Page() {
       description={description}
       tag="복권"
       tagColor="#f590c0"
-      updatedAt="2026-01-10"
+      updatedAt="2026-05-16"
       related={[
         { href: '/lotto', label: '로또 번호 생성기' },
         { href: '/guide/isa-vs-regular-savings', label: '당첨금 운용 — ISA 가이드' },
@@ -45,8 +45,8 @@ export default function Page() {
             <tr><th>당첨금 구간</th><th>세율(지방세 포함)</th><th>근거</th></tr>
           </thead>
           <tbody>
-            <tr><td>5만 원 이하</td><td>비과세</td><td>소득세법 제14조 제3항</td></tr>
-            <tr><td>5만 원 초과 ~ 3억 원 이하</td><td>22%</td><td>소득세 20% + 지방세 2%</td></tr>
+            <tr><td>200만 원 이하</td><td>비과세</td><td>소득세법 제14조 제3항(2023.1 개정)</td></tr>
+            <tr><td>200만 원 초과 ~ 3억 원 이하</td><td>22%</td><td>소득세 20% + 지방세 2%</td></tr>
             <tr><td>3억 원 초과분</td><td>33%</td><td>소득세 30% + 지방세 3%</td></tr>
           </tbody>
         </table>
@@ -59,13 +59,14 @@ export default function Page() {
       <section>
         <h2>1등 20억 원 당첨 시 실수령액</h2>
         <ul>
-          <li>3억 원까지: 3억 × 22% = 6,600만 원 세금</li>
+          <li>200만 원까지: 비과세</li>
+          <li>200만 원 초과 ~ 3억 원: (3억 − 200만) × 22% = 6,556만 원 세금</li>
           <li>나머지 17억 원: 17억 × 33% = 5억 6,100만 원 세금</li>
-          <li>총 세금: <strong>6억 2,700만 원</strong></li>
-          <li>실수령액: 20억 − 6억 2,700만 = <strong>약 13억 7,300만 원</strong></li>
+          <li>총 세금: <strong>약 6억 2,656만 원</strong></li>
+          <li>실수령액: 20억 − 약 6억 2,656만 = <strong>약 13억 7,344만 원</strong></li>
         </ul>
         <p>
-          1등 평균 당첨금이 약 20억 원대일 때 실제 통장에 들어오는 금액은 약 13억 7천만 원 선입니다.
+          1등 평균 당첨금이 약 20억 원대일 때 실제 통장에 들어오는 금액은 약 13억 7,300만 원 선입니다.
           분할 당첨(예: 당첨자 3명)의 경우 1인당 수령액이 줄어 세율 적용 구간이 낮아질 수 있습니다.
         </p>
       </section>

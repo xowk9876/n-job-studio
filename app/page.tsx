@@ -226,7 +226,7 @@ export default function HomePage() {
           <div>
             <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-1.5">GUIDES</p>
             <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
-              계산 전에 읽으면 좋은 글
+              재테크 실전 가이드
             </h2>
           </div>
           <Link
