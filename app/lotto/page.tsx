@@ -308,24 +308,6 @@ export default function LottoPage() {
           ))}
         </div>
 
-        {/* 세금 안내 — 3구간 전부 표시 */}
-        <div className="mt-4 pt-4 border-t border-white/[0.08]">
-          <p className="text-[11px] text-white/50 mb-2.5 font-semibold tracking-wide">기타소득 원천징수 (소득세법 §21)</p>
-          <div className="grid grid-cols-3 gap-1.5 text-[11px]">
-            <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-2 text-center">
-              <div className="text-white/55 text-[10.5px]">~200만원</div>
-              <div className="text-emerald-300 font-bold mt-0.5">비과세</div>
-            </div>
-            <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 px-2.5 py-2 text-center">
-              <div className="text-white/55 text-[10.5px]">~3억원</div>
-              <div className="text-amber-300 font-bold mt-0.5">22%</div>
-            </div>
-            <div className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-2.5 py-2 text-center">
-              <div className="text-white/55 text-[10.5px]">3억 초과</div>
-              <div className="text-rose-300 font-bold mt-0.5">33%</div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="flex flex-col gap-8">
