@@ -21,7 +21,7 @@ export default function Page() {
       title={title}
       description={description}
       tag="투자"
-      tagColor="#34d399"
+      tagColor="#3ee0a5"
       updatedAt="2026-01-07"
       related={[
         { href: '/savings', label: '적금 · 예금 계산기' },

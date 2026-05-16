@@ -29,7 +29,7 @@ export default function Header() {
           <span
             aria-hidden
             className="inline-flex items-center justify-center w-6 h-6 rounded-md text-[11px] font-bold text-white"
-            style={{ background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #6bafff 0%, #7071f3 100%)' }}
           >
             M
           </span>
@@ -51,7 +51,7 @@ export default function Header() {
               data-active={active}
               className={`inline-reset shrink-0 px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
                 active
-                  ? 'bg-[color:var(--brand-soft)] text-[color:var(--brand)] border border-[rgba(96,165,250,0.32)]'
+                  ? 'bg-[color:var(--brand-soft)] text-[color:var(--brand)] border border-[rgba(107,175,255,0.32)]'
                   : 'text-[color:var(--sub)] hover:text-white hover:bg-white/[0.05] border border-transparent'
               }`}
             >

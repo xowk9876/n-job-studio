@@ -21,7 +21,7 @@ export default function Page() {
       title={title}
       description={description}
       tag="부동산"
-      tagColor="#fbbf24"
+      tagColor="#fcc73e"
       updatedAt="2026-01-09"
       related={[
         { href: '/jeonse', label: '전월세 전환 계산기' },

@@ -7,7 +7,7 @@ const calculators = [
     label: '연봉 실수령액',
     desc: '4대보험·근로소득세를 공제한 매월 실수령액을 확인합니다.',
     tag: '가장 많이 씀',
-    color: '#60a5fa',
+    color: '#6bafff',
     gradient: 'from-blue-500/10 to-blue-600/5',
     Icon: Wallet,
   },
@@ -16,7 +16,7 @@ const calculators = [
     label: '퇴직금',
     desc: '근로기준법 제34조 평균임금 기준으로 정확하게 계산합니다.',
     tag: '평균임금',
-    color: '#a78bfa',
+    color: '#b8a4fa',
     gradient: 'from-violet-500/10 to-violet-600/5',
     Icon: Briefcase,
   },
@@ -34,7 +34,7 @@ const calculators = [
     label: '적금 · 예금',
     desc: '단리·복리 선택 + 이자소득세 15.4% 차감 후 실수령액.',
     tag: '세후 금액',
-    color: '#34d399',
+    color: '#3ee0a5',
     gradient: 'from-emerald-500/10 to-emerald-600/5',
     Icon: PiggyBank,
   },
@@ -43,7 +43,7 @@ const calculators = [
     label: '전월세 전환',
     desc: '전세↔월세 법정 전환율 기반 양방향 환산.',
     tag: '양방향',
-    color: '#fbbf24',
+    color: '#fcc73e',
     gradient: 'from-amber-500/10 to-amber-600/5',
     Icon: KeyRound,
   },
@@ -52,16 +52,16 @@ const calculators = [
     label: '로또 번호',
     desc: '1~45 중복 없는 무작위 조합 + 이번 회차 추첨 정보.',
     tag: '오락용',
-    color: '#f472b6',
+    color: '#f590c0',
     gradient: 'from-pink-500/10 to-pink-600/5',
     Icon: Ticket,
   },
 ]
 
 const stats = [
-  { n: '6종', l: '전문 계산기', accent: '#60a5fa' },
-  { n: '2026', l: '최신 세율', accent: '#818cf8' },
-  { n: '0원', l: '완전 무료', accent: '#34d399' },
+  { n: '6종', l: '전문 계산기', accent: '#6bafff' },
+  { n: '2026', l: '최신 세율', accent: '#929cf8' },
+  { n: '0원', l: '완전 무료', accent: '#3ee0a5' },
 ]
 
 export default function HomePage() {
@@ -195,17 +195,17 @@ export default function HomePage() {
               {
                 title: '정부 공식 기준',
                 desc: '국민연금 4.75%, 건강보험 3.595%, 장기요양 13.14%, 고용보험 0.9%. 2026년 고시 요율을 그대로 반영합니다.',
-                accent: '#60a5fa',
+                accent: '#6bafff',
               },
               {
                 title: '법정 공식 그대로',
                 desc: '소득세법 근로소득 간이세액표, 근로기준법 평균임금, 금융권 표준 상환 공식을 그대로 구현했습니다.',
-                accent: '#818cf8',
+                accent: '#929cf8',
               },
               {
                 title: '완전한 프라이버시',
                 desc: '가입·로그인 없습니다. 모든 계산은 브라우저 안에서만 처리되고 입력값은 서버로 전송되지 않습니다.',
-                accent: '#34d399',
+                accent: '#3ee0a5',
               },
             ].map(item => (
               <div key={item.title} className="text-[13px] text-[color:var(--sub)]">
@@ -239,12 +239,12 @@ export default function HomePage() {
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { href: '/guide/2026-salary-tax-guide', title: '2026 연봉 공제항목 총정리', tag: '세금', color: '#60a5fa' },
+            { href: '/guide/2026-salary-tax-guide', title: '2026 연봉 공제항목 총정리', tag: '세금', color: '#6bafff' },
             { href: '/guide/dsr-stress-test-2026', title: 'DSR 규제, 나는 얼마까지 빌릴 수 있나', tag: '대출', color: '#5eead4' },
-            { href: '/guide/isa-vs-regular-savings', title: 'ISA vs 일반계좌 절세 효과 비교', tag: '절세', color: '#34d399' },
-            { href: '/guide/jeonse-safety-2026', title: '전세사기 예방 필수 체크리스트', tag: '부동산', color: '#fbbf24' },
-            { href: '/guide/severance-calculation-guide', title: '퇴직금, 이렇게 계산됩니다', tag: '퇴직', color: '#a78bfa' },
-            { href: '/guide/lotto-tax-guide', title: '로또 당첨금 세금과 수령 절차', tag: '복권', color: '#f472b6' },
+            { href: '/guide/isa-vs-regular-savings', title: 'ISA vs 일반계좌 절세 효과 비교', tag: '절세', color: '#3ee0a5' },
+            { href: '/guide/jeonse-safety-2026', title: '전세사기 예방 필수 체크리스트', tag: '부동산', color: '#fcc73e' },
+            { href: '/guide/severance-calculation-guide', title: '퇴직금, 이렇게 계산됩니다', tag: '퇴직', color: '#b8a4fa' },
+            { href: '/guide/lotto-tax-guide', title: '로또 당첨금 세금과 수령 절차', tag: '복권', color: '#f590c0' },
           ].map(g => (
             <Link key={g.href} href={g.href} className="inline-reset card card-hover p-5 group">
               <span

@@ -21,7 +21,7 @@ export default function Page() {
       title={title}
       description={description}
       tag="세금"
-      tagColor="#60a5fa"
+      tagColor="#6bafff"
       updatedAt="2026-01-05"
       related={[
         { href: '/salary', label: '연봉 실수령액 계산기' },

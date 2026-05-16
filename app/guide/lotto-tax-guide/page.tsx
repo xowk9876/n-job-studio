@@ -21,7 +21,7 @@ export default function Page() {
       title={title}
       description={description}
       tag="복권"
-      tagColor="#f472b6"
+      tagColor="#f590c0"
       updatedAt="2026-01-10"
       related={[
         { href: '/lotto', label: '로또 번호 생성기' },

@@ -16,7 +16,7 @@ const guides = [
     title: '2026년 연봉 실수령액 완전 가이드',
     desc: '4대보험 요율 변경과 간이세액표 개정을 반영한 계산 공식과 실전 예시.',
     tag: '세금',
-    color: '#60a5fa',
+    color: '#6bafff',
   },
   {
     slug: 'dsr-stress-test-2026',
@@ -30,28 +30,28 @@ const guides = [
     title: '퇴직금 계산 공식과 실전 예시',
     desc: '근로기준법 제34조 평균임금과 통상임금 비교, 소급 인상 반영법.',
     tag: '퇴직',
-    color: '#a78bfa',
+    color: '#b8a4fa',
   },
   {
     slug: 'isa-vs-regular-savings',
     title: 'ISA vs 일반계좌 10년 시뮬레이션',
     desc: '비과세 200만 원 한도의 실제 절세 효과, 만기 전 인출 시 손익.',
     tag: '투자',
-    color: '#34d399',
+    color: '#3ee0a5',
   },
   {
     slug: 'jeonse-safety-2026',
     title: '2026 전세사기 방지 체크리스트',
     desc: 'HUG 보증 가입 조건, 등기부등본 읽는 법, 깡통전세 판별 기준.',
     tag: '부동산',
-    color: '#fbbf24',
+    color: '#fcc73e',
   },
   {
     slug: 'lotto-tax-guide',
     title: '로또 당첨금 세금·수령 완전 가이드',
     desc: '원천징수 구간, 기타소득 신고, 익명 수령 절차와 유의사항.',
     tag: '복권',
-    color: '#f472b6',
+    color: '#f590c0',
   },
 ]
 

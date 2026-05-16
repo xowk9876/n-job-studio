@@ -21,7 +21,7 @@ export default function Page() {
       title={title}
       description={description}
       tag="퇴직"
-      tagColor="#a78bfa"
+      tagColor="#b8a4fa"
       updatedAt="2026-01-06"
       related={[
         { href: '/severance', label: '퇴직금 계산기' },
