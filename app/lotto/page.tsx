@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
-import { RotateCcw, Trophy, Info, Copy, Check } from 'lucide-react'
+import { RotateCcw, Copy, Check } from 'lucide-react'
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══
 const FIRST_DRAW = new Date('2002-12-07T20:45:00+09:00')
@@ -21,15 +21,6 @@ function getLottoInfo(now = new Date()) {
   const round = Math.floor((nextDraw.getTime() - FIRST_DRAW.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1
   return { round, nextDraw, salesCloseAt }
 }
-
-// ═══ 당첨 등위 (동행복권 공식 기준) ═══
-const PRIZE_INFO = [
-  { rank: 1, match: '6개 일치',        prob: '1 / 8,145,060', amount: '회차별 변동 (1등 배분)', color: '#D4AF37' },
-  { rank: 2, match: '5개 + 보너스볼',  prob: '1 / 1,357,510', amount: '회차별 변동 (2등 배분)', color: '#A8A9AD' },
-  { rank: 3, match: '5개 일치',        prob: '1 / 35,724',    amount: '회차별 변동 (3등 배분)', color: '#CD7F32' },
-  { rank: 4, match: '4개 일치',        prob: '1 / 733',       amount: '50,000원 (고정)',       color: '#3b82f6' },
-  { rank: 5, match: '3개 일치',        prob: '1 / 45',        amount: '5,000원 (고정)',        color: '#10b981' },
-]
 
 // ═══ 동행복권 공식 번호 색상 (dhlottery.co.kr 기준) ═══
 const BALL_COLORS: Record<string, { bg: string; text: string; shadow: string }> = {
@@ -231,47 +222,9 @@ export default function LottoPage() {
         </button>
       </div>
 
-      {/* 당첨 등위 */}
-      <div className="glass-card">
-        <h2 className="font-semibold text-white mb-4 flex items-center gap-2 text-[15px]">
-          <Trophy className="w-4 h-4 text-amber-400" /> 당첨 등위 · 확률
-        </h2>
-        <div className="flex flex-col gap-2">
-          {PRIZE_INFO.map(p => (
-            <div key={p.rank} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.04]">
-              <div
-                className="w-8 h-8 rounded-md flex items-center justify-center text-white font-extrabold text-[13px] shrink-0"
-                style={{ backgroundColor: p.color }}
-              >
-                {p.rank}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center">
-                  <span className="text-[13px] font-semibold text-white">{p.match}</span>
-                  <span className="text-[11px] text-white/50 font-mono">{p.prob}</span>
-                </div>
-                <p className="text-[11.5px] text-amber-300/80 mt-0.5">{p.amount}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 text-[11px] text-white/35 leading-relaxed">
-          1~3등 당첨금은 총 판매액 배분. 4등 5만원·5등 5천원 고정. 3억 이하 22%, 초과분 33% 원천징수.
-        </p>
-      </div>
-
-      {/* 안내 */}
-      <div className="glass-card">
-        <h2 className="font-semibold text-white mb-2.5 flex items-center gap-2 text-[14px]">
-          <Info className="w-4 h-4 text-white/40" /> 안내사항
-        </h2>
-        <ul className="text-[12.5px] text-white/60 space-y-1.5 list-disc list-inside leading-relaxed">
-          <li>Web Crypto API(CSPRNG) 기반 암호학적 난수 생성 — 예측 불가능.</li>
-          <li>실제 추첨과 무관하며 당첨을 보장하지 않습니다.</li>
-          <li>추첨: 매주 토요일 20:45 / 판매마감: 토요일 20:00</li>
-          <li>구매 자격: 만 19세 이상 · 공식 판매처(동행복권) 이용.</li>
-        </ul>
-      </div>
+      <p className="text-[11px] text-white/30 text-center">
+        실제 추첨과 무관하며 당첨을 보장하지 않습니다 · 만 19세 이상
+      </p>
 
       <nav className="flex flex-wrap gap-2" aria-label="관련 계산기">
         {[

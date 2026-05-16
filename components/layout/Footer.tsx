@@ -68,10 +68,11 @@ export default function Footer() {
             </a>
             <a
               href="mailto:bhd03014@gmail.com"
-              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-white transition-all hover:scale-[1.02] hover:shadow-lg"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-white/90 transition-all hover:scale-[1.02] hover:shadow-lg"
               style={{
-                background: 'linear-gradient(135deg, #4285f4 0%, #ea4335 50%, #fbbc04 75%, #34a853 100%)',
-                boxShadow: '0 2px 10px rgba(66,133,244,0.25)',
+                background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                border: '1px solid rgba(234,67,53,0.25)',
+                boxShadow: '0 2px 10px rgba(15,52,96,0.3)',
               }}
               aria-label="이메일 문의"
             >
