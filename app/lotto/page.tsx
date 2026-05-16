@@ -266,43 +266,64 @@ export default function LottoPage() {
         실제 추첨과 무관하며 당첨을 보장하지 않습니다 · 만 19세 이상
       </p>
 
-      {/* 당첨 등위 안내 */}
+      {/* 당첨 등위 안내 — 동행복권 공식 공 색상 매핑 */}
       <div className="glass-card">
-        <h2 className="font-semibold text-white mb-4 text-[14px] tracking-tight">당첨 등위 안내</h2>
-        <div className="flex flex-col gap-0">
+        <div className="flex items-baseline justify-between mb-4">
+          <h2 className="font-semibold text-white text-[14px] tracking-tight">당첨 등위 안내</h2>
+          <span className="text-[10.5px] text-white/40">동행복권 공식 기준</span>
+        </div>
+        <div className="flex flex-col gap-1.5">
           {[
-            { rank: '1등', match: '6개 번호 전부 일치', prize: '평균 20억원+', color: '#FFD700', bg: 'rgba(255,215,0,0.08)', border: 'rgba(255,215,0,0.2)' },
-            { rank: '2등', match: '5개 + 보너스 번호 일치', prize: '평균 6,000만원', color: '#C0C0C0', bg: 'rgba(192,192,192,0.06)', border: 'rgba(192,192,192,0.15)' },
-            { rank: '3등', match: '5개 번호 일치', prize: '평균 150만원', color: '#CD7F32', bg: 'rgba(205,127,50,0.06)', border: 'rgba(205,127,50,0.15)' },
-            { rank: '4등', match: '4개 번호 일치', prize: '고정 5만원', color: 'var(--ink-2)', bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.06)' },
-            { rank: '5등', match: '3개 번호 일치', prize: '고정 5,000원', color: 'var(--sub)', bg: 'rgba(255,255,255,0.02)', border: 'rgba(255,255,255,0.04)' },
-          ].map((r, i) => (
+            { rank: '1등', match: '6개 번호 전부 일치', prize: '평균 20억원+', ball: BALL_COLORS.yellow, accent: '#FBC400' },
+            { rank: '2등', match: '5개 + 보너스 번호 일치', prize: '평균 6,000만원', ball: BALL_COLORS.blue,   accent: '#69C8F2' },
+            { rank: '3등', match: '5개 번호 일치',         prize: '평균 150만원',   ball: BALL_COLORS.red,    accent: '#FF7272' },
+            { rank: '4등', match: '4개 번호 일치',         prize: '고정 5만원',     ball: BALL_COLORS.gray,   accent: '#CFCFCF' },
+            { rank: '5등', match: '3개 번호 일치',         prize: '고정 5,000원',   ball: BALL_COLORS.green,  accent: '#B0D840' },
+          ].map((r) => (
             <div
               key={r.rank}
-              className="flex items-center gap-3 py-3 px-3 rounded-lg transition-colors hover:bg-white/[0.03]"
-              style={{ borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
+              className="flex items-center gap-3 py-2.5 px-3 rounded-xl transition-all"
+              style={{
+                background: `linear-gradient(90deg, ${r.ball.bg}14 0%, transparent 60%)`,
+                border: `1px solid ${r.ball.bg}22`,
+              }}
             >
-              <span
-                className="shrink-0 w-10 text-center text-[13px] font-extrabold rounded-md py-1"
-                style={{ color: r.color, background: r.bg, border: `1px solid ${r.border}` }}
+              <div
+                className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-[12px] font-extrabold"
+                style={{
+                  background: `radial-gradient(circle at 35% 35%, ${r.ball.bg}ee, ${r.ball.bg})`,
+                  color: r.ball.text,
+                  boxShadow: `0 2px 8px ${r.ball.shadow}, inset 0 1px 2px rgba(255,255,255,0.3)`,
+                }}
               >
                 {r.rank}
-              </span>
-              <div className="flex-1 min-w-0">
-                <p className="text-[12.5px] text-white font-medium">{r.match}</p>
               </div>
-              <span className="shrink-0 text-[13px] font-bold tabular" style={{ color: r.color }}>{r.prize}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[12.5px] text-white font-semibold leading-tight">{r.match}</p>
+              </div>
+              <span className="shrink-0 text-[13.5px] font-bold tabular" style={{ color: r.accent }}>
+                {r.prize}
+              </span>
             </div>
           ))}
         </div>
-        <div className="mt-3 pt-3 border-t border-white/[0.06] grid grid-cols-2 gap-2 text-[11px]">
-          <div className="rounded-lg bg-white/[0.03] px-3 py-2">
-            <span className="text-white/40">200만원 이하</span>
-            <span className="text-emerald-300 font-semibold ml-1.5">비과세</span>
-          </div>
-          <div className="rounded-lg bg-white/[0.03] px-3 py-2">
-            <span className="text-white/40">3억 초과</span>
-            <span className="text-rose-300 font-semibold ml-1.5">33% 원천징수</span>
+
+        {/* 세금 안내 — 3구간 전부 표시 */}
+        <div className="mt-4 pt-4 border-t border-white/[0.08]">
+          <p className="text-[11px] text-white/50 mb-2.5 font-semibold tracking-wide">기타소득 원천징수 (소득세법 §21)</p>
+          <div className="grid grid-cols-3 gap-1.5 text-[11px]">
+            <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-2 text-center">
+              <div className="text-white/55 text-[10.5px]">~200만원</div>
+              <div className="text-emerald-300 font-bold mt-0.5">비과세</div>
+            </div>
+            <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 px-2.5 py-2 text-center">
+              <div className="text-white/55 text-[10.5px]">~3억원</div>
+              <div className="text-amber-300 font-bold mt-0.5">22%</div>
+            </div>
+            <div className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-2.5 py-2 text-center">
+              <div className="text-white/55 text-[10.5px]">3억 초과</div>
+              <div className="text-rose-300 font-bold mt-0.5">33%</div>
+            </div>
           </div>
         </div>
       </div>
