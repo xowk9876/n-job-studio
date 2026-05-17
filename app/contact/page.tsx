@@ -84,7 +84,7 @@ export default function ContactPage() {
             </li>
             <li>
               <strong className="text-white">제휴·광고 문의</strong> — 회사명·담당자·제안 내용을 이메일로
-              보내주세요.
+              보내주세요. 광고 위치는 계산 버튼·결과 영역과 혼동되지 않는 범위에서만 검토합니다.
             </li>
             <li>
               <strong className="text-white">법률·세무 상담</strong> — 머니핏 계산기는 상담 자격이 없으므로
@@ -99,6 +99,19 @@ export default function ContactPage() {
             모든 문의는 확인 즉시 우선순위에 따라 처리됩니다. 오류 제보는 최우선 처리하며,
             제휴·일반 질문은 영업일 기준 3일 이내 답변을 목표로 합니다.
           </p>
+        </section>
+
+        <section>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">오류 제보 양식</h2>
+          <p>
+            계산 오류를 제보할 때는 아래 내용을 함께 보내주시면 재현과 수정이 빨라집니다.
+          </p>
+          <ul className="list-disc pl-6 mt-2 space-y-1.5">
+            <li>사용한 계산기 이름과 접속한 URL</li>
+            <li>입력한 금액·기간·세율·부양가족 등 주요 조건</li>
+            <li>화면에 표시된 결과값과 예상한 결과값</li>
+            <li>참고한 공식 자료 링크가 있다면 함께 첨부</li>
+          </ul>
         </section>
 
         <div className="pt-6 border-t border-[color:var(--line)] flex flex-wrap gap-4 text-[13.5px]">

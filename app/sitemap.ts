@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 
-const UPDATED = '2026-05-16'
+const UPDATED = '2026-05-17'
 
 const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[number]['changeFrequency']; modified?: string }[] = [
   { path: '',           priority: 1.0, freq: 'weekly' },

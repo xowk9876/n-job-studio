@@ -58,8 +58,8 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="list-disc pl-6 mt-2 space-y-1.5">
             <li>
-              <strong className="text-white">Google AdSense</strong> — 맞춤형 광고 제공을 위한 쿠키를
-              사용합니다. 이용자는{' '}
+              <strong className="text-white">Google AdSense</strong> — 광고 승인이 완료된 후 맞춤형 광고
+              제공 및 부정 클릭 방지를 위한 쿠키를 사용할 수 있습니다. 이용자는{' '}
               <a
                 href="https://adssettings.google.com/"
                 target="_blank"
@@ -98,6 +98,10 @@ export default function PrivacyPolicyPage() {
           <p>
             서비스는 이용자의 개인정보를 외부에 제공하지 않습니다. 다만 법령에 의거하거나 수사기관의
             적법한 요청이 있을 때에는 관련 법령 절차에 따라 제공할 수 있습니다.
+          </p>
+          <p className="mt-3">
+            계산기에 입력한 연봉, 대출금, 보증금, 저축액 등은 브라우저 안에서만 처리되며 운영자가 별도로
+            열람하거나 제3자에게 제공할 수 있는 형태로 저장하지 않습니다.
           </p>
         </section>
 

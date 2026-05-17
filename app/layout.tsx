@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     '퇴직금 계산기', '근로기준법 퇴직금', '평균임금 계산', '퇴직금 세금',
     '적금 이자 계산기', '예금 이자 계산기', '복리 계산기', '이자소득세 15.4%', 'ISA 비과세',
     '전월세 전환 계산기', '전세 월세 전환율', '법정 전환율',
-    '로또 번호 생성기', '로또 자동 추천', '로또 당첨 확률',
+    '로또 번호 생성기', '로또 자동 추천', '로또 당첨 등위',
     '2026 4대보험 요율', '건강보험료 계산', '국민연금 계산', '고용보험', '장기요양보험료', '자녀세액공제',
     '2026 세율', '소득세 계산', '재테크', '부업 계산기',
   ],
@@ -96,7 +96,7 @@ function StructuredData() {
     { name: '퇴직금 계산기',        path: '/severance', desc: '근로기준법 제34조 기준 평균임금 산출 및 퇴직금 자동 계산', category: 'FinanceApplication', keywords: '퇴직금 계산, 평균임금' },
     { name: '적금·예금 이자 계산기', path: '/savings',   desc: '단리·복리 이자소득세 15.4% 차감 후 세후 만기 수령액 계산, ISA 비과세 비교', category: 'FinanceApplication', keywords: '적금 이자, 복리 계산기, ISA' },
     { name: '전월세 전환 계산기',   path: '/jeonse',    desc: '주택임대차보호법 법정 전환율(기준금리+2%) 기반 전세↔월세 양방향 환산', category: 'FinanceApplication', keywords: '전월세 전환, 전환율 계산' },
-    { name: '로또 번호 생성기',     path: '/lotto',     desc: '1~45 무작위 번호 조합 생성 및 1~5등 당첨 확률·세금 분석', category: 'GameApplication', keywords: '로또 번호, 당첨 확률' },
+    { name: '로또 번호 생성기',     path: '/lotto',     desc: '1~45 번호 조합 생성 및 1~5등 당첨 등위·수령 절차 안내', category: 'GameApplication', keywords: '로또 번호, 로또 등위, 당첨금 수령' },
   ]
   const ld = {
     '@context': 'https://schema.org',
@@ -111,7 +111,7 @@ function StructuredData() {
         inLanguage: 'ko-KR',
         publisher: { '@id': `${SITE_URL}/#organization` },
         datePublished: '2025-12-01',
-        dateModified: '2026-05-16',
+        dateModified: '2026-05-17',
       },
       {
         '@type': 'Organization',
@@ -163,7 +163,7 @@ function StructuredData() {
         inLanguage: 'ko-KR',
         keywords: c.keywords,
         datePublished: '2025-12-01',
-        dateModified: '2026-05-16',
+        dateModified: '2026-05-17',
       })),
       {
         '@type': 'ItemList',

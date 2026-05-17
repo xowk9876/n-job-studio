@@ -220,6 +220,44 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ADSENSE TRUST */}
+      <section className="mt-10 md:mt-12" aria-label="데이터 출처와 운영 원칙">
+        <div className="card p-7 md:p-8">
+          <div className="mb-6">
+            <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-2">SOURCE · PRIVACY</p>
+            <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
+              공식 기준을 계산식으로 바꾼 도구입니다
+            </h2>
+            <p className="mt-3 text-[13.5px] text-[color:var(--sub)] leading-relaxed">
+              머니핏 계산기는 단순 링크 모음이 아니라, 공개 법령·고시·금융 기준을 직접 계산 로직으로 구현한
+              무료 도구입니다. 계산 결과와 함께 기준, 한계, 주의사항을 함께 제공해 사용자가 스스로 검증할 수 있게 합니다.
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            {[
+              {
+                title: '공식 출처 기반',
+                desc: '국세청, 보건복지부, 고용노동부, 금융위원회, 주택도시보증공사, 복권위원회 기준을 확인해 반영합니다.',
+              },
+              {
+                title: '브라우저 안에서 계산',
+                desc: '연봉, 대출금, 보증금 등 입력값은 서버로 전송하지 않습니다. 회원가입 없이 즉시 결과를 확인합니다.',
+              },
+              {
+                title: '계산 한계 명시',
+                desc: '정책 변경, 금융기관 약관, 개인별 공제 조건에 따라 실제 결과가 달라질 수 있음을 각 페이지에 안내합니다.',
+              },
+            ].map(item => (
+              <div key={item.title} className="rounded-2xl border border-[color:var(--line)] bg-white/[0.025] p-5">
+                <h3 className="font-semibold text-white text-[14px] mb-2">{item.title}</h3>
+                <p className="text-[12.5px] text-[color:var(--sub)] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* GUIDES */}
       <section className="mt-20 md:mt-28" aria-label="가이드">
         <div className="flex items-end justify-between mb-6">

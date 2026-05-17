@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useSavingsStore } from '@/store'
 import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import NumericInput from '@/components/ui/NumericInput'
-import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -156,6 +156,11 @@ export default function SavingsPage() {
           { title: '청년도약계좌 자격되면 필수', desc: '만 19~34세 + 개인소득 7,500만원 이하·가구소득 중위 180% 이하라면 월 최대 70만원 5년 납입 시 정부기여금(소득구간별 차등)과 이자소득 비과세가 결합됩니다. 병역이행기간 최대 6년 나이 연장. 자세한 자격·기여금 한도는 서민금융진흥원(kinfa.or.kr) 안내 참고.' },
           { title: '만기 알림 설정·자동재예치 금지', desc: '자동재예치는 당시 기준금리로 재계약되어 기존 대비 0.5~1.0%p 낮은 경우가 많습니다. 만기 7~14일 전 알림 설정 후 금리비교사이트(금감원 금융상품통합비교공시 finlife.fss.or.kr)에서 최상위 상품 확인 후 직접 갈아타기.' },
           { title: '세금우대·노인비과세 저축', desc: '만 65세 이상·장애인·기초생활수급자·독립유공자 등은 1인당 5,000만원 한도 비과세종합저축 가능(농어촌특별세 미부과). 근거: 조세특례제한법 제88조의2.' },
+        ]} />
+        <OfficialSourcesSection sources={[
+          '소득세법 제129조 이자소득 원천징수세율 15.4%',
+          '조세특례제한법 제91조의18 ISA 비과세·분리과세 기준',
+          '금융감독원 금융상품통합비교공시 및 예금자보호법 기준',
         ]} />
         <RelatedLinks links={[
           { href: '/salary', label: '연봉 실수령액' },

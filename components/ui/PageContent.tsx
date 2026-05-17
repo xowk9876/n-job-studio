@@ -132,6 +132,35 @@ export function TipsSection({
   )
 }
 
+export function OfficialSourcesSection({
+  sources,
+  note = '정책·법령·고시는 수시로 변경될 수 있으므로 중요한 의사결정 전에는 해당 기관의 최신 공지와 전문가 상담을 함께 확인하세요.',
+}: {
+  sources: string[]
+  note?: string
+}) {
+  return (
+    <section aria-labelledby="official-sources-heading">
+      <div id="official-sources-heading">
+        <SectionHeader num="SOURCE · 공식 근거" title="계산 기준과 데이터 출처" />
+      </div>
+      <div className="card p-6 md:p-8">
+        <ul className="grid gap-2 text-[13.5px] text-[color:var(--ink-2)]">
+          {sources.map(source => (
+            <li key={source} className="flex gap-2 leading-relaxed">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--brand)]" aria-hidden />
+              <span>{source}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 border-t border-[color:var(--line)] pt-4 text-[12.5px] leading-relaxed text-[color:var(--muted)]">
+          {note}
+        </p>
+      </div>
+    </section>
+  )
+}
+
 export function RelatedLinks({ links }: { links: { href: string; label: string }[] }) {
   return (
     <div className="flex flex-wrap gap-2" role="navigation" aria-label="관련 계산기">

@@ -6,7 +6,7 @@ import { calcSeverance } from '@/lib/severance'
 import { AlertCircle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import DatePicker from '@/components/ui/DatePicker'
-import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 
 function toISO(d: Date | null) {
   if (!d) return ''
@@ -152,6 +152,11 @@ export default function SeverancePage() {
           { title: '퇴직 시점 선택', desc: '정기상여금·성과급 지급 직후 3개월 이내에 퇴직하면 해당 금액이 평균임금 산정에 포함되어 퇴직금이 증가합니다. 반대로 무급휴직이 3개월 안에 있으면 평균임금이 낮아져 불리합니다(근로기준법 시행령 제2조로 보정).' },
           { title: '연차수당 활용', desc: '퇴직 전 3개월 이내 지급된 연차 미사용 수당은 평균임금에 포함됩니다. 남은 연차를 사용하지 않고 수당으로 지급받으면 평균임금이 상승해 퇴직금 증가.' },
           { title: 'DC형 vs DB형 이해', desc: 'DB형(확정급여형)은 퇴직 시점 평균임금 기준, DC형(확정기여형)은 회사가 매년 임금의 1/12 이상을 근로자 계좌에 납입·운용한 금액을 수령. 임금상승률이 높으면 DB형, 운용수익이 높으면 DC형이 유리합니다.' },
+        ]} />
+        <OfficialSourcesSection sources={[
+          '근로기준법 제2조·제34조 평균임금 및 퇴직금 기준',
+          '근로자퇴직급여 보장법 제4조·제8조 계속근로기간 기준',
+          '소득세법 퇴직소득세 계산 체계와 IRP 과세이연 기준',
         ]} />
         <RelatedLinks links={[
           { href: '/salary', label: '연봉 실수령액' },

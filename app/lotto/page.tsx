@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import Link from 'next/link'
 import { RotateCcw, Copy, Check } from 'lucide-react'
-import { FAQSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══
 const FIRST_DRAW = new Date('2002-12-07T20:45:00+09:00')
@@ -326,6 +325,14 @@ export default function LottoPage() {
           { title: '수령 기한 1년 엄수', desc: '미수령 당첨금은 추첨일 기준 1년 후 자동 소멸되어 복권기금으로 귀속됩니다. 매주 당첨 번호를 꼭 확인하세요.' },
           { title: '과도한 구매 자제', desc: '로또는 소액 오락용입니다. 1인 1매 제한은 없지만, 당첨 확률(약 1/8,145,060)을 고려하면 적정 금액 내에서 즐기세요.' },
         ]} />
+        <OfficialSourcesSection
+          sources={[
+            '복권 및 복권기금법과 동행복권 로또 6/45 회차·추첨 기준',
+            '소득세법상 복권 당첨금 기타소득 원천징수 기준',
+            'Web Crypto API 기반 난수와 Fisher-Yates 셔플을 사용한 브라우저 내 번호 생성',
+          ]}
+          note="로또 번호 생성기는 오락용 정보 도구이며 당첨을 보장하지 않습니다. 과도한 복권 구매를 유도하지 않으며, 생성된 번호와 실제 추첨 결과는 독립적입니다."
+        />
 
         <RelatedLinks links={[
           { href: '/salary',    label: '연봉 실수령액' },

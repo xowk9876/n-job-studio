@@ -5,7 +5,7 @@ import { useMortgageStore } from '@/store'
 import { calcMortgage, calcDsrLimit, RepaymentType } from '@/lib/mortgage'
 import { ChevronDown, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
-import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 function manwon(n: number) {
@@ -207,6 +207,11 @@ export default function MortgagePage() {
           { title: '정책 대출 적극 검토', desc: '디딤돌대출(주택구입)·버팀목 전세자금·청년주택드림 등 정책자금은 시중금리 대비 유리한 경우가 많습니다. 자격·한도·금리는 정책 변경이 잦으므로 주택도시기금 nhuf.molit.go.kr 또는 한국주택금융공사 hf.go.kr에서 최신 조건을 확인 후 우선 검토하세요.' },
           { title: '대환대출 플랫폼 활용', desc: '네이버·카카오·토스 등 대환대출 인프라로 복수은행 금리를 실시간 비교 가능. 기존대출 대비 0.3%p 이상 낮으면 수수료·부대비용 고려해 갈아타기 검토.' },
           { title: '원리금 상환액 소득의 30% 이내', desc: '월 소득 대비 원리금이 30%를 넘으면 생활자금 압박이 커집니다. DSR 40% 규제보다 보수적으로 30% 선에서 관리하면 금리 상승·소득 변동 리스크에도 안정적입니다.' },
+        ]} />
+        <OfficialSourcesSection sources={[
+          '금융위원회 스트레스 DSR 3단계 시행 자료 및 DSR 산정 기준',
+          '금융감독원 금융상품 비교공시와 금융권 표준 상환 방식',
+          '주택도시기금·한국주택금융공사 정책대출 안내',
         ]} />
         <RelatedLinks links={[
           { href: '/salary', label: '연봉 실수령액' },

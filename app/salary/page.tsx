@@ -5,7 +5,7 @@ import { useSalaryStore } from '@/store'
 import { calcSalary, MIN_HOURLY_WAGE_2026 } from '@/lib/salary'
 import { ChevronDown, AlertTriangle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
-import { FAQSection, ExamplesSection, TipsSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -199,6 +199,11 @@ export default function SalaryPage() {
           { title: '연금저축 + IRP 최대 납입', desc: '연금저축 연 600만원 + IRP 연 900만원 통합 한도(중복 포함 900만). 총급여 5,500만 이하는 16.5%, 초과는 13.2% 세액공제. 2026년 연말정산 시 최대 148만원 환급 가능. 근거: 조세특례제한법 제91조의3·4.' },
           { title: '부양가족 범위 재확인', desc: '60세 이상 부모(소득금액 100만원 이하), 20세 이하 자녀, 60세 이상·20세 이하 형제자매도 기본공제 대상. 따로 사는 부모도 실제 부양 사실을 증빙하면 공제 가능합니다.' },
           { title: '주택청약종합저축 소득공제', desc: '총급여 7,000만원 이하 무주택 세대주가 연 납입액 300만원 한도 내 40% 소득공제. 연 최대 120만원 소득공제. 근거: 조세특례제한법 제87조.' },
+        ]} />
+        <OfficialSourcesSection sources={[
+          '국세청 근로소득 간이세액표 및 소득세법 제134조',
+          '국민연금법, 국민건강보험법, 노인장기요양보험법, 고용보험료 고시',
+          '고용노동부 2026년 최저임금 고시와 근로기준법 수당 기준',
         ]} />
         <RelatedLinks links={[
           { href: '/mortgage', label: '대출 이자' },

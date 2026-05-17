@@ -13,7 +13,7 @@ export default function Image() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, zIndex: 1 }}>
           <span style={{ fontSize: 64, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1.1, textAlign: 'center' }}>로또 번호 생성기</span>
-          <span style={{ fontSize: 28, color: 'rgba(255,255,255,0.65)', fontWeight: 500, textAlign: 'center' }}>무작위 행운 번호 · 당첨 확률 분석</span>
+          <span style={{ fontSize: 28, color: 'rgba(255,255,255,0.65)', fontWeight: 500, textAlign: 'center' }}>무작위 행운 번호 · 당첨 등위 안내</span>
         </div>
         <div style={{ position: 'absolute', bottom: 40, display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #6bafff, #3ee0a5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 'bold', color: '#fff' }}>₩</span>
