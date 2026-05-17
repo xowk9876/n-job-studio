@@ -64,43 +64,73 @@ function fisherYatesPick6(): number[] {
   return pool.slice(0, 6).sort((a, b) => a - b)
 }
 
-// ═══ 역대 당첨 번호 패턴 분석 기반 필터 ═══
-// 2002~2026년 1,200회+ 당첨 데이터 통계:
-// - 6개 합계: 95% 구간 100~195 (평균 ~138)
-// - 홀짝 비율: 전부 홀수 or 전부 짝수 < 1%
-// - 번호대 분포: 5개 색상 구간 중 최소 3구간 이상 포함
-// - 연속번호: 4연번 이상 당첨 이력 극히 드묾
-// 이 필터를 통과하는 조합만 출력 → 실제 당첨권에 가까운 번호
-
-function validatePattern(nums: number[]): boolean {
+// ═══ 역대 당첨 번호 형태와 유사한 균형형 추천 점수 ═══
+// 모든 6/45 조합의 1등 확률은 동일합니다. 아래 로직은 당첨 보장이 아니라
+// 실제 당첨 조합에서 자주 보이는 합계·홀짝·구간 분포를 만족하는 번호를 고릅니다.
+function scorePattern(nums: number[], latestNumbers: number[] = []): number {
+  let score = 0
   const sum = nums.reduce((a, b) => a + b, 0)
-  if (sum < 100 || sum > 195) return false
+  if (sum >= 115 && sum <= 175) score += 28
+  else if (sum >= 100 && sum <= 195) score += 14
+  else score -= 25
 
   const oddCount = nums.filter(n => n % 2 === 1).length
-  if (oddCount === 0 || oddCount === 6) return false
+  if (oddCount === 3) score += 24
+  else if (oddCount === 2 || oddCount === 4) score += 20
+  else if (oddCount === 1 || oddCount === 5) score += 6
+  else score -= 18
 
   const zones = new Set(nums.map(n => Math.ceil(n / 10)))
-  if (zones.size < 3) return false
+  if (zones.size >= 4) score += 22
+  else if (zones.size === 3) score += 12
+  else score -= 18
 
-  const sorted = [...nums]
   let maxConsecutive = 1, curr = 1
-  for (let i = 1; i < sorted.length; i++) {
-    if (sorted[i] === sorted[i - 1] + 1) { curr++; maxConsecutive = Math.max(maxConsecutive, curr) }
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i] === nums[i - 1] + 1) { curr++; maxConsecutive = Math.max(maxConsecutive, curr) }
     else curr = 1
   }
-  if (maxConsecutive >= 4) return false
+  if (maxConsecutive <= 2) score += 12
+  else if (maxConsecutive === 3) score += 4
+  else score -= 24
 
-  return true
+  const lastDigitCounts = new Map<number, number>()
+  nums.forEach(n => lastDigitCounts.set(n % 10, (lastDigitCounts.get(n % 10) || 0) + 1))
+  const maxSameLastDigit = Math.max(...lastDigitCounts.values())
+  if (maxSameLastDigit <= 2) score += 8
+  else score -= 10
+
+  const colorZones = new Map<string, number>()
+  nums.forEach(n => {
+    const color = n <= 10 ? 'yellow' : n <= 20 ? 'blue' : n <= 30 ? 'red' : n <= 40 ? 'gray' : 'green'
+    colorZones.set(color, (colorZones.get(color) || 0) + 1)
+  })
+  const maxSameColor = Math.max(...colorZones.values())
+  if (maxSameColor <= 2) score += 10
+  else if (maxSameColor === 3) score += 3
+  else score -= 12
+
+  const latestOverlap = latestNumbers.length > 0 ? nums.filter(n => latestNumbers.includes(n)).length : 0
+  if (latestOverlap >= 1 && latestOverlap <= 2) score += 6
+  else if (latestOverlap >= 4) score -= 14
+
+  return score
 }
 
-function generateOneGame(): number[] {
-  let attempt = 0
-  while (attempt < 200) {
+function generateOneGame(latestNumbers: number[] = []): number[] {
+  let best = fisherYatesPick6()
+  let bestScore = scorePattern(best, latestNumbers)
+
+  for (let attempt = 0; attempt < 120; attempt++) {
     const nums = fisherYatesPick6()
-    if (validatePattern(nums)) return nums
-    attempt++
+    const score = scorePattern(nums, latestNumbers) + secureRandomInt(4)
+    if (score > bestScore) {
+      best = nums
+      bestScore = score
+    }
   }
-  return fisherYatesPick6()
+
+  return best
 }
 
 const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토']
@@ -183,10 +213,10 @@ export default function LottoPage() {
     setIsSpinning(true)
     setCopiedIdx(null)
     setTimeout(() => {
-      setGames(Array.from({ length: gameCount }, () => generateOneGame()))
+      setGames(Array.from({ length: gameCount }, () => generateOneGame(latestResult?.numbers)))
       setIsSpinning(false)
     }, games.length === 0 ? 900 : 500)
-  }, [isSpinning, games.length, gameCount])
+  }, [isSpinning, games.length, gameCount, latestResult])
 
   const handleCopy = useCallback(async (idx: number, nums: number[]) => {
     try {
@@ -269,38 +299,38 @@ export default function LottoPage() {
               </span>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-black/25 p-4 md:p-5">
-              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+            <div className="rounded-3xl border border-white/10 bg-black/25 px-2.5 py-4 min-[390px]:px-4 md:p-5">
+              <div className="flex flex-nowrap items-center justify-center gap-1.5 min-[390px]:gap-2 md:gap-3">
                 {latestResult.numbers.map(num => {
                   const style = getBallStyle(num)
                   return (
                     <div
                       key={num}
-                      className="h-11 w-11 md:h-[52px] md:w-[52px] rounded-full flex items-center justify-center text-[14px] md:text-[16px] font-extrabold tabular"
+                      className="h-8 w-8 min-[360px]:h-9 min-[360px]:w-9 min-[390px]:h-10 min-[390px]:w-10 md:h-[52px] md:w-[52px] shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[16px] font-extrabold tabular"
                       style={{
-                        background: `radial-gradient(circle at 35% 32%, #ffffffaa 0%, ${style.bg} 34%, ${style.bg} 100%)`,
+                        background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.42) 0%, ${style.bg} 38%, ${style.bg} 100%)`,
                         color: style.text,
-                        boxShadow: `0 8px 18px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.45)`,
+                        boxShadow: `0 5px 14px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.35)`,
                       }}
                     >
                       {num}
                     </div>
                   )
                 })}
-                <span className="mx-0.5 text-[18px] font-light text-white/30">+</span>
+                <span className="mx-0.5 shrink-0 text-[14px] md:text-[18px] font-light text-white/35">+</span>
                 {(() => {
                   const style = getBallStyle(latestResult.bonusNumber)
                   return (
                     <div
-                      className="relative h-11 w-11 md:h-[52px] md:w-[52px] rounded-full flex items-center justify-center text-[14px] md:text-[16px] font-extrabold tabular ring-2 ring-white/20"
+                      className="relative h-8 w-8 min-[360px]:h-9 min-[360px]:w-9 min-[390px]:h-10 min-[390px]:w-10 md:h-[52px] md:w-[52px] shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[16px] font-extrabold tabular ring-2 ring-white/20"
                       style={{
-                        background: `radial-gradient(circle at 35% 32%, #ffffffaa 0%, ${style.bg} 34%, ${style.bg} 100%)`,
+                        background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.42) 0%, ${style.bg} 38%, ${style.bg} 100%)`,
                         color: style.text,
-                        boxShadow: `0 8px 18px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.45)`,
+                        boxShadow: `0 5px 14px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.35)`,
                       }}
                     >
                       {latestResult.bonusNumber}
-                      <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-white/38">BONUS</span>
+                      <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[8px] md:text-[9px] font-bold text-white/38">BONUS</span>
                     </div>
                   )
                 })()}
@@ -376,17 +406,17 @@ export default function LottoPage() {
               style={{ animationDelay: `${gameIdx * 60}ms` }}
             >
               <span className="text-white/35 text-[11px] font-mono w-5 shrink-0">{String.fromCharCode(65 + gameIdx)}</span>
-              <div className="flex gap-1.5 md:gap-2 flex-1 justify-center">
+              <div className="flex flex-nowrap gap-1 md:gap-2 flex-1 justify-center">
                 {nums.map(num => {
                   const style = getBallStyle(num)
                   return (
                     <div
                       key={num}
-                      className="w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-[13px] md:text-[15px] font-extrabold tabular"
+                      className="w-8 h-8 min-[390px]:w-9 min-[390px]:h-9 md:w-11 md:h-11 shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[15px] font-extrabold tabular"
                       style={{
-                        background: `radial-gradient(circle at 35% 35%, ${style.bg}ee, ${style.bg})`,
+                        background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.38) 0%, ${style.bg} 40%, ${style.bg} 100%)`,
                         color: style.text,
-                        boxShadow: `0 2px 8px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.3)`,
+                        boxShadow: `0 3px 10px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.32)`,
                       }}
                     >
                       {num}
