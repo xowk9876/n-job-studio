@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { RotateCcw, Copy, Check } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { RotateCcw, Copy, Check, Trophy } from 'lucide-react'
 import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══
@@ -118,13 +118,31 @@ function formatCountdown(diffMs: number) {
   return `${mins}분 남음`
 }
 
+type LatestLottoResult = {
+  round: number
+  drawDate: string
+  numbers: number[]
+  bonusNumber: number
+  firstPrizeAmount: number
+  firstWinnerCount: number
+  firstAccumulatedAmount: number
+  source: string
+  fetchedAt: string
+}
+
+function formatWon(amount: number) {
+  return `${amount.toLocaleString('ko-KR')}원`
+}
+
 export default function LottoPage() {
   const [mounted, setMounted] = useState(false)
   const [gameCount, setGameCount] = useState(5)
   const [games, setGames] = useState<number[][]>([])
   const [isSpinning, setIsSpinning] = useState(false)
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
-  const [tick, setTick] = useState(0)
+  const [, setTick] = useState(0)
+  const [latestResult, setLatestResult] = useState<LatestLottoResult | null>(null)
+  const [latestStatus, setLatestStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
   useEffect(() => {
     setMounted(true)
@@ -132,7 +150,33 @@ export default function LottoPage() {
     return () => clearInterval(id)
   }, [])
 
-  const info = useMemo(() => getLottoInfo(), [tick])
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadLatestResult() {
+      try {
+        const response = await fetch('/api/lotto/latest', { cache: 'no-store' })
+        if (!response.ok) throw new Error('Failed to fetch latest lotto result')
+
+        const result = (await response.json()) as LatestLottoResult
+        if (cancelled) return
+
+        setLatestResult(result)
+        setLatestStatus('ready')
+      } catch {
+        if (cancelled) return
+        setLatestStatus('error')
+      }
+    }
+
+    loadLatestResult()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const info = getLottoInfo()
 
   const handleGenerate = useCallback(() => {
     if (isSpinning) return
@@ -166,6 +210,119 @@ export default function LottoPage() {
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">
           제 {info.round.toLocaleString()}회차 · {formatDrawDate(info.nextDraw)} · {countdown}
         </p>
+      </div>
+
+      {/* 최신 당첨번호 */}
+      <div className="glass-card relative overflow-hidden">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FBC400]/15 blur-3xl" />
+        <div className="pointer-events-none absolute -left-20 bottom-0 h-40 w-40 rounded-full bg-[#69C8F2]/10 blur-3xl" />
+
+        <div className="relative flex items-start justify-between gap-4 mb-5">
+          <div>
+            <p className="font-mono text-[10px] tracking-[0.22em] text-[#FBC400] mb-1">LATEST WINNING NUMBERS</p>
+            <h2 className="font-display text-[18px] md:text-[20px] font-bold text-white tracking-tight">
+              최신 로또 당첨번호
+            </h2>
+            <p className="text-[11.5px] text-white/45 mt-1">
+              동행복권 발표 데이터 기준 · 발표 직후 미공개 회차는 직전 회차 표시
+            </p>
+          </div>
+          <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[10.5px] font-semibold text-white/70">
+            <Trophy className="h-3.5 w-3.5 text-[#FBC400]" />
+            자동 갱신
+          </span>
+        </div>
+
+        {latestStatus === 'loading' && (
+          <div className="relative flex flex-col gap-4">
+            <div className="flex justify-center gap-2">
+              {Array.from({ length: 7 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/10 ${i === 6 ? 'ml-2 ring-1 ring-white/15' : ''}`}
+                  style={{ animation: `lotto-bounce 0.75s ease-in-out ${i * 0.06}s infinite` }}
+                />
+              ))}
+            </div>
+            <p className="text-center text-[11.5px] text-white/40">최신 회차 당첨번호를 확인하고 있습니다.</p>
+          </div>
+        )}
+
+        {latestStatus === 'error' && (
+          <div className="relative rounded-2xl border border-white/10 bg-black/20 p-4 text-center">
+            <p className="text-[13px] font-semibold text-white">당첨번호를 불러오지 못했습니다.</p>
+            <p className="mt-1 text-[11.5px] text-white/45">잠시 후 다시 접속하면 자동으로 재시도됩니다.</p>
+          </div>
+        )}
+
+        {latestStatus === 'ready' && latestResult && (
+          <div className="relative">
+            <div className="mb-4 flex items-end justify-between gap-3">
+              <div>
+                <p className="text-[12px] font-semibold text-white/50">제 {latestResult.round.toLocaleString('ko-KR')}회</p>
+                <p className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight">
+                  {latestResult.drawDate} 추첨
+                </p>
+              </div>
+              <span className="rounded-lg bg-black/25 px-2.5 py-1 text-[10.5px] text-white/45">
+                5분 단위 확인
+              </span>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-black/25 p-4 md:p-5">
+              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+                {latestResult.numbers.map(num => {
+                  const style = getBallStyle(num)
+                  return (
+                    <div
+                      key={num}
+                      className="h-11 w-11 md:h-[52px] md:w-[52px] rounded-full flex items-center justify-center text-[14px] md:text-[16px] font-extrabold tabular"
+                      style={{
+                        background: `radial-gradient(circle at 35% 32%, #ffffffaa 0%, ${style.bg} 34%, ${style.bg} 100%)`,
+                        color: style.text,
+                        boxShadow: `0 8px 18px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.45)`,
+                      }}
+                    >
+                      {num}
+                    </div>
+                  )
+                })}
+                <span className="mx-0.5 text-[18px] font-light text-white/30">+</span>
+                {(() => {
+                  const style = getBallStyle(latestResult.bonusNumber)
+                  return (
+                    <div
+                      className="relative h-11 w-11 md:h-[52px] md:w-[52px] rounded-full flex items-center justify-center text-[14px] md:text-[16px] font-extrabold tabular ring-2 ring-white/20"
+                      style={{
+                        background: `radial-gradient(circle at 35% 32%, #ffffffaa 0%, ${style.bg} 34%, ${style.bg} 100%)`,
+                        color: style.text,
+                        boxShadow: `0 8px 18px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.45)`,
+                      }}
+                    >
+                      {latestResult.bonusNumber}
+                      <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-white/38">BONUS</span>
+                    </div>
+                  )
+                })()}
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+                <p className="text-[10.5px] text-white/40">1등 당첨자</p>
+                <p className="mt-1 text-[16px] font-extrabold text-white tabular">
+                  {latestResult.firstWinnerCount.toLocaleString('ko-KR')}명
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+                <p className="text-[10.5px] text-white/40">1등 1명당 당첨금</p>
+                <p className="mt-1 text-[15px] font-extrabold text-[#FBC400] tabular">
+                  {formatWon(latestResult.firstPrizeAmount)}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 생성 카드 */}
