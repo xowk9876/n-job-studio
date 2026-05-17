@@ -299,7 +299,7 @@ export default function LottoPage() {
               </span>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-black/25 px-2.5 py-4 min-[390px]:px-4 md:p-5">
+            <div className="rounded-2xl bg-black/15 px-1.5 py-4 min-[390px]:px-3 md:rounded-3xl md:border md:border-white/10 md:bg-black/20 md:p-5">
               <div className="flex flex-nowrap items-center justify-center gap-1.5 min-[390px]:gap-2 md:gap-3">
                 {latestResult.numbers.map(num => {
                   const style = getBallStyle(num)
@@ -308,9 +308,9 @@ export default function LottoPage() {
                       key={num}
                       className="h-8 w-8 min-[360px]:h-9 min-[360px]:w-9 min-[390px]:h-10 min-[390px]:w-10 md:h-[52px] md:w-[52px] shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[16px] font-extrabold tabular"
                       style={{
-                        background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.42) 0%, ${style.bg} 38%, ${style.bg} 100%)`,
+                        backgroundColor: style.bg,
                         color: style.text,
-                        boxShadow: `0 5px 14px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.35)`,
+                        boxShadow: `0 3px 8px ${style.shadow}`,
                       }}
                     >
                       {num}
@@ -324,13 +324,13 @@ export default function LottoPage() {
                     <div
                       className="relative h-8 w-8 min-[360px]:h-9 min-[360px]:w-9 min-[390px]:h-10 min-[390px]:w-10 md:h-[52px] md:w-[52px] shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[16px] font-extrabold tabular ring-2 ring-white/20"
                       style={{
-                        background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.42) 0%, ${style.bg} 38%, ${style.bg} 100%)`,
+                        backgroundColor: style.bg,
                         color: style.text,
-                        boxShadow: `0 5px 14px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.35)`,
+                        boxShadow: `0 3px 8px ${style.shadow}`,
                       }}
                     >
                       {latestResult.bonusNumber}
-                      <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[8px] md:text-[9px] font-bold text-white/38">BONUS</span>
+                      <span className="absolute -bottom-4 left-1/2 hidden -translate-x-1/2 text-[9px] font-bold text-white/38 md:block">BONUS</span>
                     </div>
                   )
                 })()}
@@ -414,9 +414,9 @@ export default function LottoPage() {
                       key={num}
                       className="w-8 h-8 min-[390px]:w-9 min-[390px]:h-9 md:w-11 md:h-11 shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[15px] font-extrabold tabular"
                       style={{
-                        background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.38) 0%, ${style.bg} 40%, ${style.bg} 100%)`,
+                        backgroundColor: style.bg,
                         color: style.text,
-                        boxShadow: `0 3px 10px ${style.shadow}, inset 0 1px 2px rgba(255,255,255,0.32)`,
+                        boxShadow: `0 3px 8px ${style.shadow}`,
                       }}
                     >
                       {num}
