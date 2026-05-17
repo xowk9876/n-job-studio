@@ -1,14 +1,29 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: '소개 | 머니핏 계산기 — 2026년 최신 세율·공식 기반 재테크 계산기',
   description:
     '머니핏 계산기는 근로기준법·소득세법·주택임대차보호법 등 실제 법령을 기반으로 한 무료 재테크 계산기입니다. 제작 의도, 계산 근거, 데이터 업데이트 원칙을 소개합니다.',
-  alternates: { canonical: `${SITE}/about` },
+  alternates: { canonical: `${SITE_URL}/about` },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: '머니핏 계산기 소개 — 공식 기준 기반 무료 재테크 계산기',
+    description: '계산 근거, 데이터 업데이트 원칙, 개인정보 처리 방식을 투명하게 안내합니다.',
+    url: `${SITE_URL}/about`,
+    siteName: SITE_NAME,
+    locale: 'ko_KR',
+    type: 'website',
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: '머니핏 계산기 소개' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '머니핏 계산기 소개',
+    description: '공식 기준 기반 무료 재테크 계산기 운영 원칙.',
+    images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 소개' }],
+  },
 }
 
 export default function AboutPage() {

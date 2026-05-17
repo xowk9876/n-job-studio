@@ -1,14 +1,29 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: '문의하기 | 머니핏 계산기',
   description: '머니핏 계산기 운영자 연락처. 이메일 bhd03014@gmail.com · 인스타그램 @tae_system.',
-  alternates: { canonical: `${SITE}/contact` },
+  alternates: { canonical: `${SITE_URL}/contact` },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: '문의하기 | 머니핏 계산기',
+    description: '계산 오류 제보, 새 계산기 제안, 제휴 문의 연락처 안내.',
+    url: `${SITE_URL}/contact`,
+    siteName: SITE_NAME,
+    locale: 'ko_KR',
+    type: 'website',
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: '머니핏 계산기 문의하기' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '문의하기 | 머니핏 계산기',
+    description: '오류 제보와 새 계산기 제안을 받습니다.',
+    images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 문의하기' }],
+  },
 }
 
 function GmailIcon({ className = 'w-5 h-5' }: { className?: string }) {

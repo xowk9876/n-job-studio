@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
+import { buildGuideMetadata } from '@/lib/seo'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 const slug = '2026-salary-tax-guide'
 const title = '2026년 연봉 실수령액 완전 가이드 — 4대보험 요율·간이세액표 총정리'
 const description =
   '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.'
+const updatedAt = '2026-01-05'
 
-export const metadata: Metadata = {
-  title: `${title} | 머니핏 계산기`,
-  description,
-  alternates: { canonical: `${SITE}/guide/${slug}` },
-  openGraph: { title, description, url: `${SITE}/guide/${slug}`, type: 'article' },
-}
+export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '세금' })
 
 export default function Page() {
   return (
@@ -22,7 +18,7 @@ export default function Page() {
       description={description}
       tag="세금"
       tagColor="#6bafff"
-      updatedAt="2026-01-05"
+      updatedAt={updatedAt}
       related={[
         { href: '/salary', label: '연봉 실수령액 계산기' },
         { href: '/severance', label: '퇴직금 계산기' },

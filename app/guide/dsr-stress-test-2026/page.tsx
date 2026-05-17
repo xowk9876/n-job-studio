@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
+import { buildGuideMetadata } from '@/lib/seo'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 const slug = 'dsr-stress-test-2026'
 const title = '2026 스트레스 DSR 3단계 완전 정리 — 한도 축소 폭과 대응 전략'
 const description =
   '금융위원회가 도입한 스트레스 DSR 3단계 구조와 가산금리 산정 방식, 주담대·신용대출별 한도 축소 폭을 사례로 정리합니다.'
+const updatedAt = '2026-05-16'
 
-export const metadata: Metadata = {
-  title: `${title} | 머니핏 계산기`,
-  description,
-  alternates: { canonical: `${SITE}/guide/${slug}` },
-  openGraph: { title, description, url: `${SITE}/guide/${slug}`, type: 'article' },
-}
+export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '대출' })
 
 export default function Page() {
   return (
@@ -22,7 +18,7 @@ export default function Page() {
       description={description}
       tag="대출"
       tagColor="#5eead4"
-      updatedAt="2026-05-16"
+      updatedAt={updatedAt}
       related={[
         { href: '/mortgage', label: '대출 이자 계산기' },
         { href: '/guide/isa-vs-regular-savings', label: 'ISA vs 일반계좌 시뮬레이션' },

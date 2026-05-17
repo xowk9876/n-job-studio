@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
+import { buildGuideMetadata } from '@/lib/seo'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 const slug = 'severance-calculation-guide'
 const title = '퇴직금 계산 공식과 실전 예시 — 근로기준법 제34조 평균임금 완전 이해'
 const description =
   '근로기준법 제34조와 근로자퇴직급여 보장법 제8조에 따른 퇴직금 산정 공식, 평균임금과 통상임금 비교, 소급 인상·상여금 반영 방법을 실제 사례로 정리합니다.'
+const updatedAt = '2026-01-06'
 
-export const metadata: Metadata = {
-  title: `${title} | 머니핏 계산기`,
-  description,
-  alternates: { canonical: `${SITE}/guide/${slug}` },
-  openGraph: { title, description, url: `${SITE}/guide/${slug}`, type: 'article' },
-}
+export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '퇴직' })
 
 export default function Page() {
   return (
@@ -22,7 +18,7 @@ export default function Page() {
       description={description}
       tag="퇴직"
       tagColor="#b8a4fa"
-      updatedAt="2026-01-06"
+      updatedAt={updatedAt}
       related={[
         { href: '/severance', label: '퇴직금 계산기' },
         { href: '/salary', label: '연봉 실수령액 계산기' },

@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
+import { buildGuideMetadata } from '@/lib/seo'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 const slug = 'jeonse-safety-2026'
 const title = '2026 전세사기 방지 체크리스트 — 계약 전·중·후 25개 점검 포인트'
 const description =
   'HUG 전세보증금반환보증 가입 조건, 등기부등본 읽는 법, 깡통전세 판별 공식까지. 주택임대차보호법 개정 사항을 반영한 2026년판 체크리스트.'
+const updatedAt = '2026-05-16'
 
-export const metadata: Metadata = {
-  title: `${title} | 머니핏 계산기`,
-  description,
-  alternates: { canonical: `${SITE}/guide/${slug}` },
-  openGraph: { title, description, url: `${SITE}/guide/${slug}`, type: 'article' },
-}
+export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '부동산' })
 
 export default function Page() {
   return (
@@ -22,7 +18,7 @@ export default function Page() {
       description={description}
       tag="부동산"
       tagColor="#fcc73e"
-      updatedAt="2026-05-16"
+      updatedAt={updatedAt}
       related={[
         { href: '/jeonse', label: '전월세 전환 계산기' },
         { href: '/mortgage', label: '대출 이자 계산기' },

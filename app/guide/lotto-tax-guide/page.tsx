@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
+import { buildGuideMetadata } from '@/lib/seo'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 const slug = 'lotto-tax-guide'
 const title = '로또 당첨금 세금·수령 완전 가이드 — 원천징수 구간과 실수령액 계산'
 const description =
   '로또 1등 당첨 시 실제 수령액은? 소득세법상 기타소득 원천징수 22% · 33% 구간과 신고 의무, 익명 수령 절차까지 정확히 정리합니다.'
+const updatedAt = '2026-05-16'
 
-export const metadata: Metadata = {
-  title: `${title} | 머니핏 계산기`,
-  description,
-  alternates: { canonical: `${SITE}/guide/${slug}` },
-  openGraph: { title, description, url: `${SITE}/guide/${slug}`, type: 'article' },
-}
+export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '복권' })
 
 export default function Page() {
   return (
@@ -22,7 +18,7 @@ export default function Page() {
       description={description}
       tag="복권"
       tagColor="#f590c0"
-      updatedAt="2026-05-16"
+      updatedAt={updatedAt}
       related={[
         { href: '/lotto', label: '로또 번호 생성기' },
         { href: '/guide/isa-vs-regular-savings', label: '당첨금 운용 — ISA 가이드' },

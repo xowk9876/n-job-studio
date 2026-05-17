@@ -4,8 +4,7 @@ import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import PaperBackground from '@/components/layout/AnimatedBackground'
-
-const SITE_URL = 'https://n-job-studio.vercel.app'
+import { DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
 
 export const viewport: Viewport = {
   themeColor: '#06070b',
@@ -33,20 +32,20 @@ export const metadata: Metadata = {
     '2026 4대보험 요율', '건강보험료 계산', '국민연금 계산', '고용보험', '장기요양보험료', '자녀세액공제',
     '2026 세율', '소득세 계산', '재테크', '부업 계산기',
   ],
-  authors: [{ name: '머니핏 계산기', url: SITE_URL }],
-  creator: '머니핏 계산기',
-  publisher: '머니핏 계산기',
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   category: 'finance',
   alternates: { canonical: SITE_URL, languages: { 'ko-KR': SITE_URL } },
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     url: SITE_URL,
-    siteName: '머니핏 계산기',
+    siteName: SITE_NAME,
     title: '머니핏 계산기 — 2026년 한국 재테크 필수 계산기 6종',
     description: '연봉 실수령액·대출 이자·퇴직금·적금·전월세·로또 — 2026년 최신 세율 기준, 가입 없이 무료. 결과부터 바로 보여주는 계산기.',
     images: [{
-      url: `${SITE_URL}/opengraph-image`,
+      url: DEFAULT_OG_IMAGE,
       width: 1200,
       height: 630,
       alt: '머니핏 계산기 — 2026년 한국 재테크 계산기 메인 이미지',
@@ -58,7 +57,7 @@ export const metadata: Metadata = {
     title: '머니핏 계산기 — 2026년 재테크 필수 계산기 6종',
     description: '연봉·대출·퇴직금·적금·전월세·로또 — 2026년 최신 세율, 무료. 바로 결과 확인.',
     images: [{
-      url: `${SITE_URL}/opengraph-image`,
+      url: DEFAULT_OG_IMAGE,
       alt: '머니핏 계산기 소셜 미리보기 이미지',
     }],
   },
@@ -111,7 +110,7 @@ function StructuredData() {
         inLanguage: 'ko-KR',
         publisher: { '@id': `${SITE_URL}/#organization` },
         datePublished: '2025-12-01',
-        dateModified: '2026-05-17',
+        dateModified: SEO_UPDATED_AT,
       },
       {
         '@type': 'Organization',
@@ -163,7 +162,7 @@ function StructuredData() {
         inLanguage: 'ko-KR',
         keywords: c.keywords,
         datePublished: '2025-12-01',
-        dateModified: '2026-05-17',
+        dateModified: SEO_UPDATED_AT,
       })),
       {
         '@type': 'ItemList',
@@ -183,7 +182,7 @@ function StructuredData() {
     <Script
       id="json-ld"
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      dangerouslySetInnerHTML={{ __html: jsonLd(ld) }}
     />
   )
 }
@@ -197,6 +196,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://tpc.googlesyndication.com" />
+        <link rel="alternate" type="application/rss+xml" title="머니핏 재테크 실전 가이드 RSS" href={`${SITE_URL}/rss.xml`} />
         <link
           rel="preload"
           as="style"

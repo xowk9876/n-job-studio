@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
+import { buildGuideMetadata } from '@/lib/seo'
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
 const slug = 'isa-vs-regular-savings'
 const title = 'ISA vs 일반계좌 10년 시뮬레이션 — 얼마나 유리한가'
 const description =
   'ISA 비과세 한도 500만 원과 9.9% 분리과세의 실제 절세 효과를 10년 시뮬레이션으로 비교. 중개형·신탁형·일임형 선택 기준과 만기 이전 인출 시 주의사항까지.'
+const updatedAt = '2026-01-07'
 
-export const metadata: Metadata = {
-  title: `${title} | 머니핏 계산기`,
-  description,
-  alternates: { canonical: `${SITE}/guide/${slug}` },
-  openGraph: { title, description, url: `${SITE}/guide/${slug}`, type: 'article' },
-}
+export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '투자' })
 
 export default function Page() {
   return (
@@ -22,7 +18,7 @@ export default function Page() {
       description={description}
       tag="투자"
       tagColor="#3ee0a5"
-      updatedAt="2026-01-07"
+      updatedAt={updatedAt}
       related={[
         { href: '/savings', label: '적금 · 예금 계산기' },
         { href: '/guide/2026-salary-tax-guide', label: '연봉 실수령액 가이드' },

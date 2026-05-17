@@ -1,8 +1,5 @@
 import type { MetadataRoute } from 'next'
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
-
-const UPDATED = '2026-05-17'
+import { SEO_UPDATED_AT, SITE_URL, guideItems } from '@/lib/seo'
 
 const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[number]['changeFrequency']; modified?: string }[] = [
   { path: '',           priority: 1.0, freq: 'weekly' },
@@ -14,12 +11,12 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
   { path: '/lotto',     priority: 0.7, freq: 'weekly'  },
   // Guides
   { path: '/guide',                                    priority: 0.8, freq: 'weekly'  },
-  { path: '/guide/2026-salary-tax-guide',              priority: 0.75, freq: 'monthly' },
-  { path: '/guide/dsr-stress-test-2026',               priority: 0.75, freq: 'monthly' },
-  { path: '/guide/severance-calculation-guide',        priority: 0.7, freq: 'monthly' },
-  { path: '/guide/isa-vs-regular-savings',             priority: 0.7, freq: 'monthly' },
-  { path: '/guide/jeonse-safety-2026',                 priority: 0.75, freq: 'monthly' },
-  { path: '/guide/lotto-tax-guide',                    priority: 0.65, freq: 'monthly' },
+  ...guideItems.map((guide) => ({
+    path: `/guide/${guide.slug}`,
+    priority: guide.slug.includes('2026') || guide.slug.includes('dsr') || guide.slug.includes('jeonse') ? 0.75 : 0.7,
+    freq: 'monthly' as const,
+    modified: guide.updatedAt,
+  })),
   // Information
   { path: '/about',           priority: 0.6, freq: 'yearly' },
   { path: '/contact',         priority: 0.6, freq: 'yearly' },
@@ -29,8 +26,8 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map(({ path, priority, freq, modified }) => ({
-    url: `${BASE}${path}`,
-    lastModified: modified || UPDATED,
+    url: `${SITE_URL}${path}`,
+    lastModified: modified || SEO_UPDATED_AT,
     changeFrequency: freq,
     priority,
   }))

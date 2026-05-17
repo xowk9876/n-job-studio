@@ -1,14 +1,29 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: '개인정보처리방침 | 머니핏 계산기',
   description:
     '머니핏 계산기의 개인정보처리방침. 수집 항목, 쿠키, Google AdSense·Analytics 사용, 제3자 제공, 이용자 권리에 대한 안내입니다.',
-  alternates: { canonical: `${SITE}/privacy-policy` },
+  alternates: { canonical: `${SITE_URL}/privacy-policy` },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: '개인정보처리방침 | 머니핏 계산기',
+    description: '계산 입력값 처리 원칙, 개인정보 수집 여부, 광고·분석 도구 사용 안내.',
+    url: `${SITE_URL}/privacy-policy`,
+    siteName: SITE_NAME,
+    locale: 'ko_KR',
+    type: 'website',
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: '머니핏 계산기 개인정보처리방침' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '개인정보처리방침 | 머니핏 계산기',
+    description: '계산 입력값은 브라우저 안에서 처리됩니다.',
+    images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 개인정보처리방침' }],
+  },
 }
 
 export default function PrivacyPolicyPage() {

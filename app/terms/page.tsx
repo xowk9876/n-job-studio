@@ -1,14 +1,29 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: '이용약관 | 머니핏 계산기',
   description:
     '머니핏 계산기 이용약관. 서비스 성격, 면책, 지식재산권, 준거법, 분쟁 해결 절차에 대한 안내입니다.',
-  alternates: { canonical: `${SITE}/terms` },
+  alternates: { canonical: `${SITE_URL}/terms` },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: '이용약관 | 머니핏 계산기',
+    description: '서비스 성격, 면책, 지식재산권, 준거법 안내.',
+    url: `${SITE_URL}/terms`,
+    siteName: SITE_NAME,
+    locale: 'ko_KR',
+    type: 'website',
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: '머니핏 계산기 이용약관' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '이용약관 | 머니핏 계산기',
+    description: '머니핏 계산기 서비스 이용 조건 안내.',
+    images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 이용약관' }],
+  },
 }
 
 export default function TermsPage() {
