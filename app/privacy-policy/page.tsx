@@ -51,37 +51,21 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">3. 쿠키 및 제3자 서비스</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">3. 계산 입력값 처리 원칙</h2>
           <p>
-            서비스는 다음 제3자 도구를 사용하며, 해당 도구는 자체 개인정보 정책에 따라 쿠키를 통해
-            데이터를 수집할 수 있습니다.
+            머니핏 계산기는 연봉, 대출금, 보증금, 저축액처럼 민감할 수 있는 금액 정보를 다룹니다.
+            따라서 입력값은 이용자의 브라우저 안에서 계산에만 사용되며, 운영자가 별도로 확인할 수 있는
+            서버 데이터베이스에 저장하지 않습니다.
           </p>
           <ul className="list-disc pl-6 mt-2 space-y-1.5">
-            <li>
-              <strong className="text-white">Google AdSense</strong> — 광고 승인이 완료된 후 맞춤형 광고
-              제공 및 부정 클릭 방지를 위한 쿠키를 사용할 수 있습니다. 이용자는{' '}
-              <a
-                href="https://adssettings.google.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[color:var(--brand)] underline"
-              >
-                광고 설정
-              </a>
-              에서 맞춤형 광고를 비활성화할 수 있습니다.
-            </li>
-            <li>
-              <strong className="text-white">Google Analytics</strong> — 방문자 수, 페이지뷰 등 통계
-              분석을 위해 사용될 수 있습니다.
-            </li>
-            <li>
-              <strong className="text-white">Vercel Analytics</strong> — 서비스 안정성 및 성능 모니터링을
-              위해 익명화된 요청 로그가 저장될 수 있습니다.
-            </li>
+            <li>계산기 입력값은 결과 산출을 위한 임시 값으로만 사용됩니다.</li>
+            <li>회원가입, 로그인, 주민등록번호, 계좌번호 입력을 요구하지 않습니다.</li>
+            <li>페이지를 새로고침하거나 브라우저 저장 데이터를 삭제하면 입력값도 함께 초기화될 수 있습니다.</li>
+            <li>정확한 세무·법률 판단이 필요한 경우에는 공식 기관 또는 전문가 상담을 권장합니다.</li>
           </ul>
           <p className="mt-3">
-            쿠키는 브라우저 설정에서 언제든 거부하거나 삭제할 수 있으며, 이 경우 일부 기능이 제한될 수
-            있습니다.
+            서비스는 사용자가 계산 결과를 빠르게 확인할 수 있도록 설계되었으며, 입력값을 기반으로 개인을
+            식별하거나 개별 상담·영업 목적으로 활용하지 않습니다.
           </p>
         </section>
 

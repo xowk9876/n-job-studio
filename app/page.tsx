@@ -267,12 +267,6 @@ export default function HomePage() {
               재테크 실전 가이드
             </h2>
           </div>
-          <Link
-            href="/guide"
-            className="text-[12.5px] text-[color:var(--brand)] hover:underline inline-reset flex items-center gap-1"
-          >
-            전체 보기 <ArrowRight size={12} />
-          </Link>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

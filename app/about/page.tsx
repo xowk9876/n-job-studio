@@ -105,15 +105,6 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[19px] font-semibold text-white mb-3">기술 스택</h2>
-          <p>
-            Next.js 16 App Router · TypeScript · Tailwind CSS · Zustand. Vercel 에지 네트워크로 배포되어
-            전국 어디서나 빠르게 접속됩니다. 모든 코드는 정적 생성(SSG) 또는 클라이언트 단에서만
-            실행되므로 개인 입력값은 서버로 전송되지 않습니다.
-          </p>
-        </section>
-
-        <section>
           <h2 className="font-display text-[19px] font-semibold text-white mb-3">운영자 연락처</h2>
           <p>
             오류 제보·기능 제안·제휴 문의는 아래 채널로 부탁드립니다.

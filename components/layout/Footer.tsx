@@ -17,9 +17,9 @@ const calc = [
   { href: '/salary', label: '연봉 실수령액' },
   { href: '/severance', label: '퇴직금' },
   { href: '/mortgage', label: '대출 이자' },
-  { href: '/savings', label: '적금 이자' },
+  { href: '/savings', label: '적금·예금' },
   { href: '/jeonse', label: '전월세 전환' },
-  { href: '/lotto', label: '로또 번호' },
+  { href: '/lotto', label: '로또 번호 생성' },
 ]
 
 export default function Footer() {
@@ -42,12 +42,12 @@ export default function Footer() {
             <span className="font-semibold text-white">머니핏 계산기</span>
           </div>
           <p className="text-[13.5px] text-[color:var(--sub)] leading-relaxed max-w-md">
-            2026년 최신 세율·공제 기준으로 정확하게.
+            2026년 최신 세율·정책 기준으로 정확하게.
             <br />
-            광고 팝업 없이 결과부터 보여주는 한국 재테크 계산기.
+            연봉, 대출, 퇴직금, 적금, 전월세, 로또까지 바로 확인하는 무료 계산기.
           </p>
           <p className="text-[11.5px] text-[color:var(--muted)] mt-4">
-            본 계산기는 정보 제공 목적이며, 실제 세액·이자는 정책 및 금융기관 상품에 따라 달라질 수 있습니다.
+            본 서비스는 정보 제공 목적이며, 실제 세액·대출 한도·보증 조건은 기관 심사와 최신 고시에 따라 달라질 수 있습니다.
           </p>
 
           {/* Contact · Social */}
@@ -86,7 +86,7 @@ export default function Footer() {
 
         <nav aria-label="사이트 내비게이션">
           <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
-            Calculators
+            Calculators · 계산기
           </p>
           <ul className="grid grid-cols-2 gap-x-8 gap-y-2.5">
             {calc.map(c => (
@@ -104,13 +104,13 @@ export default function Footer() {
 
         <nav aria-label="정보 페이지">
           <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
-            Information
+            Information · 안내
           </p>
           <ul className="space-y-2.5">
             {[
-              { href: '/guide', label: '재테크 가이드' },
-              { href: '/about', label: '소개' },
-              { href: '/contact', label: '문의하기' },
+              { href: '/guide', label: '재테크 실전 가이드' },
+              { href: '/about', label: '머니핏 소개' },
+              { href: '/contact', label: '오류 제보·문의' },
               { href: '/privacy-policy', label: '개인정보처리방침' },
               { href: '/terms', label: '이용약관' },
             ].map(i => (
