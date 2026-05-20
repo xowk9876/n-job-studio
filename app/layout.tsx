@@ -4,7 +4,7 @@ import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import PaperBackground from '@/components/layout/AnimatedBackground'
-import { DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
+import { calculatorItems, DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
 
 export const viewport: Viewport = {
   themeColor: '#06070b',
@@ -89,14 +89,6 @@ export const metadata: Metadata = {
 }
 
 function StructuredData() {
-  const calcs = [
-    { name: '연봉 실수령액 계산기', path: '/salary',    desc: '2026년 4대보험(국민연금·건강보험·고용보험·장기요양)과 근로소득세를 공제한 실수령액 계산', category: 'FinanceApplication', keywords: '연봉 계산기, 세후 월급, 4대보험' },
-    { name: '주택담보대출 이자 계산기', path: '/mortgage', desc: '원리금균등·원금균등·만기일시 3가지 상환 방식 비교 및 월 납입금·총 이자 계산', category: 'FinanceApplication', keywords: '대출 계산기, 주담대, DSR' },
-    { name: '퇴직금 계산기',        path: '/severance', desc: '근로기준법 제34조 기준 평균임금 산출 및 퇴직금 자동 계산', category: 'FinanceApplication', keywords: '퇴직금 계산, 평균임금' },
-    { name: '적금·예금 이자 계산기', path: '/savings',   desc: '단리·복리 이자소득세 15.4% 차감 후 세후 만기 수령액 계산, ISA 비과세 비교', category: 'FinanceApplication', keywords: '적금 이자, 복리 계산기, ISA' },
-    { name: '전월세 전환 계산기',   path: '/jeonse',    desc: '주택임대차보호법 법정 전환율(기준금리+2%) 기반 전세↔월세 양방향 환산', category: 'FinanceApplication', keywords: '전월세 전환, 전환율 계산' },
-    { name: '로또 번호 생성기',     path: '/lotto',     desc: '1~45 번호 조합 생성 및 1~5등 당첨 등위·수령 절차 안내', category: 'GameApplication', keywords: '로또 번호, 로또 등위, 당첨금 수령' },
-  ]
   const ld = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -144,13 +136,13 @@ function StructuredData() {
           { '@type': 'ListItem', position: 1, name: '홈', item: SITE_URL },
         ],
       },
-      ...calcs.map((c) => ({
+      ...calculatorItems.map((c) => ({
         '@type': 'WebApplication',
         '@id': `${SITE_URL}${c.path}/#app`,
-        name: c.name,
+        name: c.shortTitle,
         url: `${SITE_URL}${c.path}`,
-        description: c.desc,
-        applicationCategory: c.category,
+        description: c.description,
+        applicationCategory: c.applicationCategory,
         operatingSystem: 'All',
         browserRequirements: 'Requires JavaScript',
         offers: {
@@ -160,19 +152,19 @@ function StructuredData() {
         },
         author: { '@id': `${SITE_URL}/#organization` },
         inLanguage: 'ko-KR',
-        keywords: c.keywords,
+        keywords: c.keywords.join(', '),
         datePublished: '2025-12-01',
         dateModified: SEO_UPDATED_AT,
       })),
       {
         '@type': 'ItemList',
         name: '재테크 계산기 목록',
-        numberOfItems: calcs.length,
-        itemListElement: calcs.map((c, i) => ({
+        numberOfItems: calculatorItems.length,
+        itemListElement: calculatorItems.map((c, i) => ({
           '@type': 'ListItem',
           position: i + 1,
-          name: c.name,
-          description: c.desc,
+          name: c.shortTitle,
+          description: c.description,
           url: `${SITE_URL}${c.path}`,
         })),
       },

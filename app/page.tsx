@@ -1,5 +1,37 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight } from 'lucide-react'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
+
+export const metadata: Metadata = {
+  title: '머니핏 계산기 — 2026년 연봉·대출·퇴직금·적금·전월세·로또 무료 계산',
+  description:
+    '2026년 최신 세율·4대보험·법령 기준으로 연봉 실수령액, 주담대 이자(DSR), 퇴직금, 적금·예금, 전월세 전환, 로또 번호까지 가입 없이 무료 계산. 브라우저에서만 처리되는 한국 재테크 계산기.',
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: '머니핏 계산기 — 2026년 한국 재테크 필수 계산기 6종',
+    description:
+      '연봉 실수령액·대출 이자·퇴직금·적금·전월세·로또 — 2026년 최신 세율 기준, 가입 없이 무료.',
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: '머니핏 계산기 메인',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '머니핏 계산기 — 2026년 재테크 필수 계산기 6종',
+    description: '연봉·대출·퇴직금·적금·전월세·로또 — 2026년 최신 세율, 무료.',
+    images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기' }],
+  },
+}
 
 const calculators = [
   {
