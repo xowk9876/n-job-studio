@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { useJeonseStore } from '@/store'
+import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcJeonse, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
 import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
@@ -16,14 +17,11 @@ function manwon(n: number) {
 
 export default function JeonsePage() {
   const { direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice, set } = useJeonseStore()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  usePersistRehydrate(useJeonseStore)
 
   const r = useMemo(() => calcJeonse({
     direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice,
   }), [direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice])
-
-  if (!mounted) return null
 
   const isToWolse = direction === 'jeonse-to-wolse'
 

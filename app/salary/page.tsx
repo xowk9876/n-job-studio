@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import { useSalaryStore } from '@/store'
+import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcSalary, MIN_HOURLY_WAGE_2026 } from '@/lib/salary'
 import { ChevronDown, AlertTriangle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
@@ -11,10 +12,9 @@ function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
 export default function SalaryPage() {
   const s = useSalaryStore()
-  const [mounted, setMounted] = useState(false)
+  usePersistRehydrate(useSalaryStore)
   const [showAllowance, setShowAllowance] = useState(false)
   const [showExempt, setShowExempt] = useState(false)
-  useEffect(() => setMounted(true), [])
 
   const r = useMemo(() => calcSalary({
     annualSalary: s.annualSalary,
@@ -26,8 +26,6 @@ export default function SalaryPage() {
     mealAllowance: s.mealAllowance,
     transportAllowance: s.transportAllowance,
   }), [s])
-
-  if (!mounted) return null
 
   const underMinWage = r.hourlyWage < MIN_HOURLY_WAGE_2026
   const hasAllowance = r.totalAllowance > 0

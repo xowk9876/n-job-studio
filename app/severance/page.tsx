@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import { useSeveranceStore } from '@/store'
+import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcSeverance } from '@/lib/severance'
 import { AlertCircle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
@@ -24,9 +25,8 @@ function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
 export default function SeverancePage() {
   const { avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage, set } = useSeveranceStore()
-  const [mounted, setMounted] = useState(false)
+  usePersistRehydrate(useSeveranceStore)
   useEffect(() => {
-    setMounted(true)
     if (endDate === '2026-01-01') {
       set({ endDate: new Date().toISOString().split('T')[0] })
     }
@@ -37,8 +37,6 @@ export default function SeverancePage() {
     calcSeverance({ avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage }),
     [avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage]
   )
-
-  if (!mounted) return null
 
   const workYearsLabel = `${Math.floor(r.workYears)}년 ${Math.floor((r.workYears % 1) * 12)}개월`
 

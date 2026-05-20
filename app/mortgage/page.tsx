@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import { useMortgageStore } from '@/store'
+import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcMortgage, calcDsrLimit, RepaymentType } from '@/lib/mortgage'
 import { ChevronDown, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
@@ -22,15 +23,13 @@ const REPAYMENT_TYPES: { value: RepaymentType; label: string; desc: string }[] =
 
 export default function MortgagePage() {
   const { principal, annualRate, years, type, set } = useMortgageStore()
-  const [mounted, setMounted] = useState(false)
+  usePersistRehydrate(useMortgageStore)
   const [showSchedule, setShowSchedule] = useState(false)
   const [showDsr, setShowDsr] = useState(false)
   const [dsrIncome, setDsrIncome] = useState(60_000_000)
   const [dsrExistingDebt, setDsrExistingDebt] = useState(0)
   const [dsrCap, setDsrCap] = useState(40)
   const [dsrStress, setDsrStress] = useState(1.5)
-  useEffect(() => setMounted(true), [])
-
   const r = useMemo(() => calcMortgage({ principal, annualRate, years, type }), [principal, annualRate, years, type])
   const dsr = useMemo(() => calcDsrLimit({
     annualIncome: dsrIncome,
@@ -40,8 +39,6 @@ export default function MortgagePage() {
     stressBps: dsrStress,
     dsrCap,
   }), [dsrIncome, dsrExistingDebt, annualRate, years, dsrStress, dsrCap])
-
-  if (!mounted) return null
 
   return (
     <div className="calc-page">

@@ -8,7 +8,7 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
   { path: '/severance', priority: 0.8, freq: 'monthly' },
   { path: '/savings',   priority: 0.8, freq: 'monthly' },
   { path: '/jeonse',    priority: 0.8, freq: 'monthly' },
-  { path: '/lotto',     priority: 0.7, freq: 'weekly'  },
+  { path: '/lotto',     priority: 0.7, freq: 'weekly', modified: SEO_UPDATED_AT },
   // Guides
   { path: '/guide',                                    priority: 0.8, freq: 'weekly'  },
   ...guideItems.map((guide) => ({

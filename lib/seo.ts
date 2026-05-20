@@ -2,6 +2,16 @@ import type { Metadata } from 'next'
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
 export const SEO_UPDATED_AT = '2026-05-20'
+
+/** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
+export const guideTagColors: Record<string, string> = {
+  세금: '#6bafff',
+  대출: '#5eead4',
+  퇴직: '#b8a4fa',
+  투자: '#3ee0a5',
+  부동산: '#fcc73e',
+  복권: '#f590c0',
+}
 export const SITE_NAME = '머니핏 계산기'
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/opengraph-image`
 
@@ -49,6 +59,8 @@ export const guideItems = [
     updatedAt: '2026-05-16',
   },
 ] as const
+
+export type GuideItem = (typeof guideItems)[number]
 
 export function jsonLd(data: unknown) {
   return JSON.stringify(data).replace(/</g, '\\u003c')

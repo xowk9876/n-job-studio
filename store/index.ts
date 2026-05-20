@@ -26,7 +26,7 @@ export const useSalaryStore = create<SalaryStore>()(
       transportAllowance: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-salary' }
+    { name: 'mf-salary', skipHydration: true }
   )
 )
 
@@ -48,7 +48,7 @@ export const useMortgageStore = create<MortgageStore>()(
       type: 'equal-payment' as RepaymentType,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-mortgage' }
+    { name: 'mf-mortgage', skipHydration: true }
   )
 )
 
@@ -72,7 +72,7 @@ export const useSeveranceStore = create<SeveranceStore>()(
       regularHourlyWage: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-severance' }
+    { name: 'mf-severance', skipHydration: true }
   )
 )
 
@@ -96,7 +96,7 @@ export const useSavingsStore = create<SavingsStore>()(
       interestType: 'simple' as InterestType,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-savings' }
+    { name: 'mf-savings', skipHydration: true }
   )
 )
 
@@ -125,6 +125,6 @@ export const useJeonseStore = create<JeonseStore>()(
       marketPrice: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-jeonse' }
+    { name: 'mf-jeonse', skipHydration: true }
   )
 )

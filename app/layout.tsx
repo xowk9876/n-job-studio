@@ -95,7 +95,7 @@ function StructuredData() {
     { name: '퇴직금 계산기',        path: '/severance', desc: '근로기준법 제34조 기준 평균임금 산출 및 퇴직금 자동 계산', category: 'FinanceApplication', keywords: '퇴직금 계산, 평균임금' },
     { name: '적금·예금 이자 계산기', path: '/savings',   desc: '단리·복리 이자소득세 15.4% 차감 후 세후 만기 수령액 계산, ISA 비과세 비교', category: 'FinanceApplication', keywords: '적금 이자, 복리 계산기, ISA' },
     { name: '전월세 전환 계산기',   path: '/jeonse',    desc: '주택임대차보호법 법정 전환율(기준금리+2%) 기반 전세↔월세 양방향 환산', category: 'FinanceApplication', keywords: '전월세 전환, 전환율 계산' },
-    { name: '로또 번호 생성기',     path: '/lotto',     desc: '1~45 번호 조합 생성 및 1~5등 당첨 등위·수령 절차 안내', category: 'GameApplication', keywords: '로또 번호, 로또 등위, 당첨금 수령' },
+    { name: '로또 번호 생성기',     path: '/lotto',     desc: '동행복권 최신 회차 당첨번호 조회, 6/45 번호 생성, 1~5등 당첨 등위·수령·세금 안내', category: 'GameApplication', keywords: '로또 번호, 로또 당첨번호, 로또 등위, 당첨금 수령' },
   ]
   const ld = {
     '@context': 'https://schema.org',

@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { useSavingsStore } from '@/store'
+import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
@@ -10,12 +11,9 @@ function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
 export default function SavingsPage() {
   const { type, amount, annualRate, months, interestType, set } = useSavingsStore()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  usePersistRehydrate(useSavingsStore)
 
   const r = useMemo(() => calcSavings({ type, amount, annualRate, months, interestType }), [type, amount, annualRate, months, interestType])
-
-  if (!mounted) return null
 
   return (
     <div className="calc-page">

@@ -165,7 +165,6 @@ function formatWon(amount: number) {
 }
 
 export default function LottoPage() {
-  const [mounted, setMounted] = useState(false)
   const [gameCount, setGameCount] = useState(5)
   const [games, setGames] = useState<number[][]>([])
   const [isSpinning, setIsSpinning] = useState(false)
@@ -175,7 +174,6 @@ export default function LottoPage() {
   const [latestStatus, setLatestStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
   useEffect(() => {
-    setMounted(true)
     const id = setInterval(() => setTick(t => t + 1), 60_000)
     return () => clearInterval(id)
   }, [])
@@ -226,8 +224,6 @@ export default function LottoPage() {
     } catch { /* noop */ }
   }, [])
 
-  if (!mounted) return null
-
   const countdown = formatCountdown(info.nextDraw.getTime() - Date.now())
   const hasGames = games.length > 0
 
@@ -237,7 +233,7 @@ export default function LottoPage() {
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">LOTTO · 6/45</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">로또 번호 생성기</h1>
-        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">
+        <p className="text-[12.5px] text-[color:var(--sub)] mt-1" suppressHydrationWarning>
           제 {info.round.toLocaleString()}회차 · {formatDrawDate(info.nextDraw)} · {countdown}
         </p>
       </div>
