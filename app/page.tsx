@@ -88,12 +88,6 @@ export default function HomePage() {
         </div>
 
         <div className="home-hero__panel">
-          <a className="home-hero__badge inline-reset" href="#calculators">
-            <span className="home-hero__dot" aria-hidden />
-            <span className="home-hero__badge-text">2026 최신 세율 반영</span>
-            <ArrowRight size={12} className="home-hero__badge-arrow" />
-          </a>
-
           <h1 className="home-hero__title font-display">
             <span className="home-hero__title-line">복잡한 금융 계산</span>
             <span className="home-hero__title-line home-hero__title-line--accent">
