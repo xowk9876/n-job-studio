@@ -95,7 +95,7 @@ export default function HomePage() {
           </a>
 
           <h1 className="home-hero__title font-display">
-            <span className="home-hero__title-line">복잡한 금융 계산,</span>
+            <span className="home-hero__title-line">복잡한 금융 계산</span>
             <span className="home-hero__title-line home-hero__title-line--accent">
               1분이면 끝
             </span>
