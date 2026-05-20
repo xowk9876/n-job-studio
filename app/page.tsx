@@ -1,5 +1,6 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight } from 'lucide-react'
+import GuideCardList from '@/components/guide/GuideCardList'
 
 const calculators = [
   {
@@ -261,43 +262,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* GUIDES */}
+      {/* GUIDES — lib/seo guideItems 와 /guide 동일 데이터 */}
       <section className="mt-20 md:mt-28" aria-label="가이드">
-        <div className="flex items-end justify-between mb-6">
+        <div className="flex items-end justify-between mb-6 gap-4">
           <div>
             <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-1.5">GUIDES</p>
             <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
               재테크 실전 가이드
             </h2>
           </div>
+          <Link
+            href="/guide"
+            className="inline-reset shrink-0 text-[12.5px] font-medium text-[color:var(--brand)] hover:underline"
+          >
+            전체 보기
+          </Link>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { href: '/guide/2026-salary-tax-guide', title: '2026 연봉 공제항목 총정리', tag: '세금', color: '#6bafff' },
-            { href: '/guide/dsr-stress-test-2026', title: 'DSR 규제, 나는 얼마까지 빌릴 수 있나', tag: '대출', color: '#5eead4' },
-            { href: '/guide/isa-vs-regular-savings', title: 'ISA vs 일반계좌 절세 효과 비교', tag: '절세', color: '#3ee0a5' },
-            { href: '/guide/jeonse-safety-2026', title: '전세사기 예방 필수 체크리스트', tag: '부동산', color: '#fcc73e' },
-            { href: '/guide/severance-calculation-guide', title: '퇴직금, 이렇게 계산됩니다', tag: '퇴직', color: '#b8a4fa' },
-            { href: '/guide/lotto-tax-guide', title: '로또 당첨금 세금과 수령 절차', tag: '복권', color: '#f590c0' },
-          ].map(g => (
-            <Link key={g.href} href={g.href} className="inline-reset card card-hover p-5 group">
-              <span
-                className="inline-block text-[10px] font-semibold px-2.5 py-1 rounded-full mb-3 tracking-wide"
-                style={{
-                  color: g.color,
-                  background: `${g.color}10`,
-                  border: `1px solid ${g.color}20`,
-                }}
-              >
-                {g.tag}
-              </span>
-              <h3 className="font-display text-[14.5px] font-semibold text-white tracking-tight leading-snug group-hover:text-[color:var(--brand)] transition-colors">
-                {g.title}
-              </h3>
-            </Link>
-          ))}
-        </div>
+        <GuideCardList variant="compact" />
       </section>
     </div>
   )

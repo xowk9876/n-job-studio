@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import Script from 'next/script'
-import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, guideItems, guideTagColors, jsonLd } from '@/lib/seo'
+import GuideCardList from '@/components/guide/GuideCardList'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, guideItems, jsonLd } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -89,32 +89,7 @@ export default function GuideIndexPage() {
           </p>
         </header>
 
-        <div className="grid gap-2.5 sm:grid-cols-2">
-          {guideItems.map((g) => {
-            const color = guideTagColors[g.tag] ?? '#6bafff'
-            return (
-              <Link key={g.slug} href={`/guide/${g.slug}`} className="card card-hover p-5 inline-reset">
-                <span
-                  className="inline-block text-[10.5px] font-medium px-2 py-0.5 rounded-full mb-3"
-                  style={{
-                    color,
-                    background: `${color}14`,
-                    border: `1px solid ${color}28`,
-                  }}
-                >
-                  {g.tag}
-                </span>
-                <h2 className="font-display text-[16px] font-semibold text-white tracking-tight mb-1.5">
-                  {g.title}
-                </h2>
-                <p className="text-[12.5px] text-[color:var(--sub)] leading-relaxed">{g.description}</p>
-                <p className="mt-2.5 text-[10.5px] text-[color:var(--muted)] font-mono">
-                  UPDATED {g.updatedAt}
-                </p>
-              </Link>
-            )
-          })}
-        </div>
+        <GuideCardList variant="full" />
       </div>
     </>
   )
