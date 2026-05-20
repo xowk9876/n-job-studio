@@ -671,12 +671,12 @@ input[type="range"]::-moz-range-thumb {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
   background-position: center top;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 35%, #000 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 35%, #000 20%, transparent 80%);
 }
 .home-hero__spotlight {
   position: absolute;
@@ -688,32 +688,32 @@ input[type="range"]::-moz-range-thumb {
   background:
     conic-gradient(from 180deg at 50% 0%,
       rgba(107, 175, 255, 0) 0deg,
-      rgba(107, 175, 255, 0.18) 90deg,
-      rgba(184, 164, 250, 0.20) 180deg,
-      rgba(107, 175, 255, 0.18) 270deg,
+      rgba(107, 175, 255, 0.08) 90deg,
+      rgba(184, 164, 250, 0.10) 180deg,
+      rgba(107, 175, 255, 0.08) 270deg,
       rgba(107, 175, 255, 0) 360deg);
-  filter: blur(50px);
-  opacity: 0.85;
+  filter: blur(60px);
+  opacity: 0.6;
 }
 .home-hero__orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(110px);
+  opacity: 0.3;
 }
 .home-hero__orb--blue {
   top: 8%;
   left: 12%;
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(107, 175, 255, 0.7) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(107, 175, 255, 0.45) 0%, transparent 70%);
 }
 .home-hero__orb--violet {
   top: 18%;
   right: 8%;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(184, 164, 250, 0.6) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(184, 164, 250, 0.4) 0%, transparent 70%);
 }
 .home-hero__orb--mint {
   bottom: 0;
@@ -721,8 +721,8 @@ input[type="range"]::-moz-range-thumb {
   width: 360px;
   height: 200px;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse, rgba(62, 224, 165, 0.28) 0%, transparent 70%);
-  opacity: 0.4;
+  background: radial-gradient(ellipse, rgba(62, 224, 165, 0.18) 0%, transparent 70%);
+  opacity: 0.22;
 }
 @media (prefers-reduced-motion: no-preference) {
   .home-hero__orb--blue   { animation: orb-float 12s ease-in-out infinite alternate; }
