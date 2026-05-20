@@ -1,286 +1,213 @@
 ﻿import Link from 'next/link'
-import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight } from 'lucide-react'
-import GuideCardList from '@/components/guide/GuideCardList'
+import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight, Shield, Scale, Lock } from 'lucide-react'
+import HomeGuideHub from '@/components/home/HomeGuideHub'
 
 const calculators = [
   {
     href: '/salary',
     label: '연봉 실수령액',
-    desc: '4대보험·근로소득세를 공제한 매월 실수령액을 확인합니다.',
-    tag: '가장 많이 씀',
+    desc: '4대보험·근로소득세 공제 후 매월 실수령액',
+    tag: '인기',
     color: '#6bafff',
-    gradient: 'from-blue-500/10 to-blue-600/5',
     Icon: Wallet,
   },
   {
     href: '/severance',
     label: '퇴직금',
-    desc: '근로기준법 제34조 평균임금 기준으로 정확하게 계산합니다.',
-    tag: '평균임금',
+    desc: '근로기준법 평균임금 기준 산출',
+    tag: '법정',
     color: '#b8a4fa',
-    gradient: 'from-violet-500/10 to-violet-600/5',
     Icon: Briefcase,
   },
   {
     href: '/mortgage',
     label: '대출 이자',
-    desc: '원리금균등·원금균등·만기일시 3가지 상환 방식 비교.',
-    tag: '3가지 방식',
+    desc: '3가지 상환 방식·DSR 비교',
+    tag: '대출',
     color: '#5eead4',
-    gradient: 'from-teal-500/10 to-teal-600/5',
     Icon: Landmark,
   },
   {
     href: '/savings',
     label: '적금 · 예금',
-    desc: '단리·복리 선택 + 이자소득세 15.4% 차감 후 실수령액.',
-    tag: '세후 금액',
+    desc: '세후 이자·ISA 비교',
+    tag: '절세',
     color: '#3ee0a5',
-    gradient: 'from-emerald-500/10 to-emerald-600/5',
     Icon: PiggyBank,
   },
   {
     href: '/jeonse',
     label: '전월세 전환',
-    desc: '전세↔월세 법정 전환율 기반 양방향 환산.',
-    tag: '양방향',
+    desc: '법정 전환율 양방향 환산',
+    tag: '부동산',
     color: '#fcc73e',
-    gradient: 'from-amber-500/10 to-amber-600/5',
     Icon: KeyRound,
   },
   {
     href: '/lotto',
     label: '로또 번호',
-    desc: '1~45 중복 없는 무작위 조합 + 이번 회차 추첨 정보.',
-    tag: '오락용',
+    desc: '번호 생성·당첨 정보',
+    tag: '오락',
     color: '#f590c0',
-    gradient: 'from-pink-500/10 to-pink-600/5',
     Icon: Ticket,
   },
 ]
 
-const stats = [
-  { n: '6종', l: '전문 계산기', accent: '#6bafff' },
-  { n: '2026', l: '최신 세율', accent: '#929cf8' },
-  { n: '0원', l: '완전 무료', accent: '#3ee0a5' },
+const trustItems = [
+  {
+    Icon: Shield,
+    title: '정부 공식 기준',
+    desc: '2026년 4대보험 요율·간이세액표·근로기준법을 반영합니다.',
+    accent: '#6bafff',
+  },
+  {
+    Icon: Scale,
+    title: '법정 공식 구현',
+    desc: '금융권 표준 상환·전월세 전환율 등 검증 가능한 공식을 사용합니다.',
+    accent: '#929cf8',
+  },
+  {
+    Icon: Lock,
+    title: '브라우저 안에서 계산',
+    desc: '가입 없이, 입력값은 서버로 전송하지 않습니다.',
+    accent: '#3ee0a5',
+  },
 ]
 
 export default function HomePage() {
   return (
-    <div className="max-w-4xl mx-auto px-5 md:px-6 py-12 md:py-20">
+    <div className="home-page">
       {/* HERO */}
-      <section className="text-center">
-        <div className="mf-rise inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="font-mono text-[11px] tracking-[0.2em] text-[color:var(--muted)]">
-            MONEYFIT · 2026
-          </span>
-        </div>
+      <section className="home-hero mf-rise">
+        <div className="home-hero__panel">
+          <div className="home-hero__badge">
+            <span className="home-hero__dot" aria-hidden />
+            <span className="home-hero__badge-text">2026 최신 세율 반영</span>
+          </div>
 
-        <h1 className="mf-rise mf-rise-d1 font-display text-[36px] sm:text-[48px] md:text-[58px] leading-[1.05] font-bold tracking-[-0.04em] text-white">
-          복잡한 세금 계산,
-          <br />
-          <span className="text-gradient">1분이면 끝납니다</span>
-        </h1>
+          <div className="home-hero__headline">
+            <p className="home-hero__eyebrow">세금 · 대출 · 적금 · 전월세</p>
+            <h1 className="home-hero__title font-display">
+              <span className="home-hero__title-line">복잡한 금융 계산,</span>
+              <span className="home-hero__title-line home-hero__title-line--accent">
+                1분이면 끝
+              </span>
+            </h1>
+          </div>
 
-        <p className="mf-rise mf-rise-d2 mt-6 text-[15px] md:text-[17px] text-[color:var(--sub)] leading-relaxed max-w-xl mx-auto">
-          2026년 최신 세율과 법정 공식 그대로. 연봉·퇴직금·대출·적금·전월세까지
-          <br className="hidden sm:block" />
-          가입 없이 지금 바로 계산해보세요.
-        </p>
+          <div className="home-hero__topics" aria-label="지원 계산 분야">
+            {['연봉', '퇴직금', '대출', '적금', '전월세', '로또'].map((topic) => (
+              <span key={topic} className="home-hero__topic">
+                {topic}
+              </span>
+            ))}
+          </div>
 
-        {/* CTA */}
-        <div className="mf-rise mf-rise-d3 mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/salary" className="inline-reset btn-primary">
-            지금 계산하기 <ArrowRight size={16} />
-          </Link>
-          <Link href="/guide" className="inline-reset btn-ghost">
-            재테크 가이드 보기
-          </Link>
-        </div>
+          <p className="home-hero__lead">
+            <span className="home-hero__lead-part">정부 고시·법정 공식 기준으로</span>
+            <span className="home-hero__lead-part">가입 없이, 브라우저에서 바로 계산하세요.</span>
+          </p>
 
-        {/* STATS */}
-        <dl className="mf-rise mf-rise-d4 mt-14 grid grid-cols-3 gap-3 max-w-lg mx-auto">
-          {stats.map(s => (
-            <div
-              key={s.l}
-              className="card-glow py-5 px-3 text-center"
-            >
-              <dt
-                className="font-display text-[22px] md:text-[26px] font-bold leading-none"
-                style={{ color: s.accent }}
-              >
-                {s.n}
-              </dt>
-              <dd className="mt-2 text-[11px] text-[color:var(--muted)] tracking-wide font-medium">
-                {s.l}
-              </dd>
+          <div className="home-hero__cta">
+            <Link href="/salary" className="inline-reset btn-primary btn-primary--lg">
+              연봉 실수령액 계산하기
+              <ArrowRight size={18} />
+            </Link>
+          </div>
+
+          <dl className="home-hero__stats">
+            <div className="home-stat">
+              <dt className="home-stat__value text-gradient">6종</dt>
+              <dd className="home-stat__label">전문 계산기</dd>
             </div>
-          ))}
-        </dl>
+            <div className="home-stat">
+              <dt className="home-stat__value" style={{ color: '#929cf8' }}>
+                2026
+              </dt>
+              <dd className="home-stat__label">최신 세율</dd>
+            </div>
+            <div className="home-stat">
+              <dt className="home-stat__value" style={{ color: '#3ee0a5' }}>
+                0원
+              </dt>
+              <dd className="home-stat__label">완전 무료</dd>
+            </div>
+          </dl>
+        </div>
       </section>
 
-      {/* CALCULATOR GRID */}
-      <section className="mt-20 md:mt-28" aria-label="계산기 목록">
-        <div className="flex items-end justify-between mb-6">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-1.5">CALCULATORS</p>
-            <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
-              지금 필요한 계산기
-            </h2>
-          </div>
-        </div>
+      {/* CALCULATORS */}
+      <section className="home-section" aria-label="계산기 목록">
+        <header className="section-header">
+          <p className="section-label">CALCULATORS</p>
+          <h2 className="section-title">지금 필요한 계산기</h2>
+        </header>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="home-calc-grid">
           {calculators.map((c, i) => (
             <Link
               key={c.href}
               href={c.href}
-              className={`inline-reset card card-hover group relative overflow-hidden p-6 mf-rise mf-rise-d${Math.min(4, Math.floor(i / 2) + 1)}`}
+              className={`home-calc-card card card-hover group mf-rise mf-rise-d${Math.min(4, Math.floor(i / 2) + 1)}`}
             >
-              {/* Glow orb */}
               <div
                 aria-hidden
-                className="absolute -top-16 -right-16 w-40 h-40 rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle, ${c.color} 0%, transparent 70%)`,
-                  filter: 'blur(40px)',
-                }}
+                className="home-calc-card__glow"
+                style={{ background: `radial-gradient(circle, ${c.color}55 0%, transparent 70%)` }}
               />
-
-              <div className="flex items-start justify-between mb-4">
+              <div className="home-calc-card__top">
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center"
+                  className="home-calc-card__icon"
                   style={{
-                    background: `linear-gradient(135deg, ${c.color}20 0%, ${c.color}08 100%)`,
                     color: c.color,
-                    border: `1px solid ${c.color}25`,
-                    boxShadow: `0 0 16px ${c.color}10`,
+                    background: `linear-gradient(135deg, ${c.color}22 0%, ${c.color}08 100%)`,
+                    border: `1px solid ${c.color}30`,
                   }}
                 >
-                  <c.Icon size={19} strokeWidth={1.7} />
+                  <c.Icon size={20} strokeWidth={1.7} />
                 </div>
                 <span
-                  className="text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-wide"
-                  style={{
-                    color: c.color,
-                    background: `${c.color}10`,
-                    border: `1px solid ${c.color}20`,
-                  }}
+                  className="home-calc-card__tag"
+                  style={{ color: c.color, background: `${c.color}12`, border: `1px solid ${c.color}25` }}
                 >
                   {c.tag}
                 </span>
               </div>
-
-              <h3 className="font-display text-[17px] font-semibold text-white mb-1.5 tracking-tight">
-                {c.label}
-              </h3>
-              <p className="text-[12.5px] text-[color:var(--sub)] leading-relaxed">
-                {c.desc}
-              </p>
-
-              <div className="mt-4 flex items-center gap-1.5 text-[12px] font-medium text-[color:var(--brand)] opacity-50 group-hover:opacity-100 transition-all duration-300 group-hover:gap-2.5">
-                바로가기
-                <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
-              </div>
+              <h3 className="home-calc-card__label">{c.label}</h3>
+              <p className="home-calc-card__desc">{c.desc}</p>
+              <span className="home-calc-card__link">
+                계산하기
+                <ArrowRight size={14} />
+              </span>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* TRUST STRIP */}
-      <section className="mt-20 md:mt-28">
-        <div className="card-glow p-8 md:p-10">
-          <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-5">
-            WHY MONEYFIT
-          </p>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                title: '정부 공식 기준',
-                desc: '국민연금 4.75%, 건강보험 3.595%, 장기요양 13.14%, 고용보험 0.9%. 2026년 고시 요율을 그대로 반영합니다.',
-                accent: '#6bafff',
-              },
-              {
-                title: '법정 공식 그대로',
-                desc: '소득세법 근로소득 간이세액표, 근로기준법 평균임금, 금융권 표준 상환 공식을 그대로 구현했습니다.',
-                accent: '#929cf8',
-              },
-              {
-                title: '완전한 프라이버시',
-                desc: '가입·로그인 없습니다. 모든 계산은 브라우저 안에서만 처리되고 입력값은 서버로 전송되지 않습니다.',
-                accent: '#3ee0a5',
-              },
-            ].map(item => (
-              <div key={item.title} className="text-[13px] text-[color:var(--sub)]">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="w-1 h-5 rounded-full" style={{ background: item.accent }} />
-                  <p className="font-semibold text-white text-[14.5px]">{item.title}</p>
-                </div>
-                <p className="leading-relaxed pl-3">{item.desc}</p>
+      {/* TRUST */}
+      <section className="home-section" aria-label="서비스 신뢰">
+        <header className="section-header">
+          <p className="section-label">WHY MONEYFIT</p>
+          <h2 className="section-title">믿고 쓰는 계산기</h2>
+        </header>
+        <div className="home-trust-grid">
+          {trustItems.map((item) => (
+            <div key={item.title} className="home-trust-card">
+              <div className="home-trust-card__icon" style={{ color: item.accent }}>
+                <item.Icon size={20} strokeWidth={1.7} />
               </div>
-            ))}
-          </div>
+              <h3 className="home-trust-card__title">{item.title}</h3>
+              <p className="home-trust-card__desc">{item.desc}</p>
+            </div>
+          ))}
         </div>
+        <p className="home-trust-note">
+          본 서비스는 정보 제공 목적이며, 실제 세액·대출 한도는 기관 심사와 최신 고시에 따라 달라질 수
+          있습니다.
+        </p>
       </section>
 
-      {/* TRUST · SOURCE */}
-      <section className="mt-10 md:mt-12" aria-label="데이터 출처와 운영 원칙">
-        <div className="card p-7 md:p-8">
-          <div className="mb-6">
-            <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-2">SOURCE · PRIVACY</p>
-            <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
-              공식 기준을 계산식으로 바꾼 도구입니다
-            </h2>
-            <p className="mt-3 text-[13.5px] text-[color:var(--sub)] leading-relaxed">
-              머니핏 계산기는 단순 링크 모음이 아니라, 공개 법령·고시·금융 기준을 직접 계산 로직으로 구현한
-              무료 도구입니다. 계산 결과와 함께 기준, 한계, 주의사항을 함께 제공해 사용자가 스스로 검증할 수 있게 합니다.
-            </p>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            {[
-              {
-                title: '공식 출처 기반',
-                desc: '국세청, 보건복지부, 고용노동부, 금융위원회, 주택도시보증공사, 복권위원회 기준을 확인해 반영합니다.',
-              },
-              {
-                title: '브라우저 안에서 계산',
-                desc: '연봉, 대출금, 보증금 등 입력값은 서버로 전송하지 않습니다. 회원가입 없이 즉시 결과를 확인합니다.',
-              },
-              {
-                title: '계산 한계 명시',
-                desc: '정책 변경, 금융기관 약관, 개인별 공제 조건에 따라 실제 결과가 달라질 수 있음을 각 페이지에 안내합니다.',
-              },
-            ].map(item => (
-              <div key={item.title} className="rounded-2xl border border-[color:var(--line)] bg-white/[0.025] p-5">
-                <h3 className="font-semibold text-white text-[14px] mb-2">{item.title}</h3>
-                <p className="text-[12.5px] text-[color:var(--sub)] leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* GUIDES — lib/seo guideItems 와 /guide 동일 데이터 */}
-      <section className="mt-20 md:mt-28" aria-label="가이드">
-        <div className="flex items-end justify-between mb-6 gap-4">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.24em] text-[color:var(--muted)] mb-1.5">GUIDES</p>
-            <h2 className="font-display text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
-              재테크 실전 가이드
-            </h2>
-          </div>
-          <Link
-            href="/guide"
-            className="inline-reset shrink-0 text-[12.5px] font-medium text-[color:var(--brand)] hover:underline"
-          >
-            전체 보기
-          </Link>
-        </div>
-
-        <GuideCardList variant="compact" />
-      </section>
+      <HomeGuideHub />
     </div>
   )
 }
