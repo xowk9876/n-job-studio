@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 머니핏 계산기
 
-## Getting Started
+2026년 최신 세율·법령 기준으로 연봉 실수령액, 퇴직금, 대출 이자, 적금·예금, 전월세 전환, 로또 번호를 계산하는 무료 재테크 웹앱입니다.
 
-First, run the development server:
+## 기술 스택
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16 (App Router)
+- React 19
+- Tailwind CSS 4
+- Zustand (계산기 입력값 localStorage persist)
+
+## 로컬 실행
+
+```powershell
+Set-Location -LiteralPath 'd:\개발\부업\머니핏 계산기'
+npm.cmd install
+npm.cmd run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 http://localhost:3000 접속
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 환경 변수
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.env.local` 예시는 `.env.example` 참고.
 
-## Learn More
+| 변수 | 설명 |
+|------|------|
+| `NEXT_PUBLIC_SITE_URL` | 사이트맵·canonical URL (미설정 시 Vercel 기본 도메인) |
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | Google AdSense 퍼블리셔 ID |
 
-To learn more about Next.js, take a look at the following resources:
+## 배포
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Vercel 프로젝트에 연결되어 있습니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```powershell
+npm.cmd run build
+npx.cmd vercel deploy --prod --yes
+```
 
-## Deploy on Vercel
+프로덕션: https://n-job-studio.vercel.app
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 라우트
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| 경로 | 설명 |
+|------|------|
+| `/salary` | 연봉 실수령액 |
+| `/severance` | 퇴직금 |
+| `/mortgage` | 대출 이자·DSR |
+| `/savings` | 적금·예금·ISA |
+| `/jeonse` | 전월세 전환 |
+| `/lotto` | 로또 번호·당첨 정보 |
+| `/guide/*` | SEO 가이드 6종 |

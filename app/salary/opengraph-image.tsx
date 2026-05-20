@@ -18,7 +18,6 @@ export default function Image() {
         <div style={{ position: 'absolute', bottom: 40, display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #6bafff, #3ee0a5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 'bold', color: '#fff' }}>₩</span>
           <span style={{ fontSize: 22, fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>머니핏 계산기</span>
-          <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.4)' }}>n-job-studio.vercel.app</span>
         </div>
       </div>
     ),

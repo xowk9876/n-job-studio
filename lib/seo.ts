@@ -2,6 +2,18 @@ import type { Metadata } from 'next'
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
 export const SEO_UPDATED_AT = '2026-05-20'
+export const SITE_NAME = '머니핏 계산기'
+
+/** OG 이미지·푸터 등에 표시할 브랜드 라벨 */
+export const OG_BRAND_LINE = SITE_NAME
+
+export const SITE_HOST = (() => {
+  try {
+    return new URL(SITE_URL).host
+  } catch {
+    return 'n-job-studio.vercel.app'
+  }
+})()
 
 /** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
 export const guideTagColors: Record<string, string> = {
@@ -12,7 +24,6 @@ export const guideTagColors: Record<string, string> = {
   부동산: '#fcc73e',
   복권: '#f590c0',
 }
-export const SITE_NAME = '머니핏 계산기'
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/opengraph-image`
 
 export const guideItems = [
@@ -64,6 +75,62 @@ export type GuideItem = (typeof guideItems)[number]
 
 export function jsonLd(data: unknown) {
   return JSON.stringify(data).replace(/</g, '\\u003c')
+}
+
+/** 계산기 페이지 공통 메타데이터 */
+export function buildCalculatorMetadata(input: {
+  path: string
+  title: string
+  description: string
+  keywords: string[]
+  ogImagePath: string
+  ogTitle?: string
+  ogDescription?: string
+  category?: string
+}): Metadata {
+  const url = `${SITE_URL}${input.path}`
+  const ogImage = `${SITE_URL}${input.ogImagePath}`
+  const ogTitle = input.ogTitle ?? input.title
+  const ogDescription = input.ogDescription ?? input.description
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: input.title,
+    description: input.description,
+    keywords: input.keywords,
+    authors: [{ name: SITE_NAME }],
+    category: input.category ?? 'finance',
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      url,
+      siteName: SITE_NAME,
+      locale: 'ko_KR',
+      type: 'website',
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${SITE_NAME} — ${ogTitle}` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: ogTitle,
+      description: ogDescription,
+      images: [{ url: ogImage, alt: ogTitle }],
+    },
+    alternates: { canonical: url },
+    robots: { index: true, follow: true },
+  }
+}
+
+export function buildBreadcrumbJsonLd(items: { name: string; path: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: item.path.startsWith('http') ? item.path : `${SITE_URL}${item.path}`,
+    })),
+  }
 }
 
 export function buildGuideMetadata(params: {

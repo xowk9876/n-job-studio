@@ -21,7 +21,7 @@ export default function Image() {
             </div>
           ))}
         </div>
-        <div style={{ position: 'absolute', bottom: 32, fontSize: 18, color: 'rgba(255,255,255,0.4)' }}>n-job-studio.vercel.app</div>
+        <div style={{ position: 'absolute', bottom: 32, fontSize: 18, color: 'rgba(255,255,255,0.4)' }}>머니핏 계산기</div>
       </div>
     ),
     { width: 1200, height: 630 }

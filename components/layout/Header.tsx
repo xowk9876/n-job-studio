@@ -11,6 +11,7 @@ const nav = [
   { href: '/savings',   label: '적금' },
   { href: '/jeonse',    label: '전월세' },
   { href: '/lotto',     label: '로또' },
+  { href: '/guide',     label: '가이드' },
 ]
 
 export default function Header() {

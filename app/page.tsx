@@ -89,9 +89,12 @@ export default function HomePage() {
         </p>
 
         {/* CTA */}
-        <div className="mf-rise mf-rise-d3 mt-8 flex justify-center gap-3">
+        <div className="mf-rise mf-rise-d3 mt-8 flex flex-wrap justify-center gap-3">
           <Link href="/salary" className="inline-reset btn-primary">
             지금 계산하기 <ArrowRight size={16} />
+          </Link>
+          <Link href="/guide" className="inline-reset btn-ghost">
+            재테크 가이드 보기
           </Link>
         </div>
 
@@ -220,7 +223,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ADSENSE TRUST */}
+      {/* TRUST · SOURCE */}
       <section className="mt-10 md:mt-12" aria-label="데이터 출처와 운영 원칙">
         <div className="card p-7 md:p-8">
           <div className="mb-6">

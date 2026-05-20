@@ -50,32 +50,24 @@ export default function Footer() {
             본 서비스는 정보 제공 목적이며, 실제 세액·대출 한도·보증 조건은 기관 심사와 최신 고시에 따라 달라질 수 있습니다.
           </p>
 
-          {/* Contact · Social */}
+          {/* Contact · Social — 플랫폼 브랜드 배경 */}
           <div className="mt-6 flex flex-wrap items-center gap-2.5">
             <a
               href="https://www.instagram.com/tae_system/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-white transition-all hover:scale-[1.02] hover:shadow-lg"
-              style={{
-                background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                boxShadow: '0 2px 10px rgba(220,39,67,0.25)',
-              }}
+              className="contact-chip contact-chip--instagram group"
               aria-label="인스타그램 @tae_system"
             >
-              <Instagram className="w-4 h-4" strokeWidth={2} />
+              <Instagram className="w-4 h-4 shrink-0" strokeWidth={2} />
               <span>@tae_system</span>
             </a>
             <a
               href="mailto:bhd03014@gmail.com"
-              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium text-[#444] transition-all hover:scale-[1.02] hover:shadow-lg"
-              style={{
-                background: '#f2f2f2',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-              }}
+              className="contact-chip contact-chip--gmail group"
               aria-label="이메일 문의"
             >
-              <GmailIcon className="w-4 h-4" />
+              <GmailIcon className="w-4 h-4 shrink-0" />
               <span>bhd03014@gmail.com</span>
             </a>
           </div>
