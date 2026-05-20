@@ -37,7 +37,12 @@ export default function DatePicker({
   const [view, setView] = useState<'day' | 'month' | 'year'>('day')
   const rootRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { if (value) setCursor(value) }, [value])
+  // 외부 value 변경 시 cursor 동기화 (렌더 중 prev 비교 — React 19 권장 패턴)
+  const [prevValue, setPrevValue] = useState<Date | null | undefined>(value)
+  if (value !== prevValue) {
+    setPrevValue(value)
+    if (value) setCursor(value)
+  }
 
   useEffect(() => {
     if (!open) return
@@ -77,11 +82,16 @@ export default function DatePicker({
     return arr
   }, [year, month])
 
-  // Year grid: 12 years per page
+  // Year grid: 12 years per page (view/year 변화 시 렌더 중 prev 비교로 동기화)
   const [yearPageStart, setYearPageStart] = useState(() => Math.floor(year / 12) * 12)
-  useEffect(() => {
-    if (view === 'year') setYearPageStart(Math.floor(year / 12) * 12)
-  }, [view, year])
+  const [prevYearKey, setPrevYearKey] = useState<string>(`${view}|${year}`)
+  const currYearKey = `${view}|${year}`
+  if (view === 'year' && currYearKey !== prevYearKey) {
+    setPrevYearKey(currYearKey)
+    setYearPageStart(Math.floor(year / 12) * 12)
+  } else if (currYearKey !== prevYearKey) {
+    setPrevYearKey(currYearKey)
+  }
 
   const shiftMonth = (delta: number) => setCursor(new Date(year, month + delta, 1))
 

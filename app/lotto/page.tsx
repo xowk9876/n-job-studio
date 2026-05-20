@@ -211,6 +211,15 @@ export default function LottoPage() {
 
   const info = getLottoInfo()
 
+  // 추첨일 카운트다운 — 클라이언트 마운트 후 매초 갱신 (render-purity 보장)
+  const [countdown, setCountdown] = useState<string>('')
+  useEffect(() => {
+    const tick = () => setCountdown(formatCountdown(info.nextDraw.getTime() - Date.now()))
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [info.nextDraw])
+
   const handleGenerate = useCallback(() => {
     if (isSpinning) return
     setIsSpinning(true)
@@ -229,7 +238,6 @@ export default function LottoPage() {
     } catch { /* noop */ }
   }, [])
 
-  const countdown = formatCountdown(info.nextDraw.getTime() - Date.now())
   const hasGames = games.length > 0
 
   return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useSeveranceStore } from '@/store'
 import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcSeverance } from '@/lib/severance'
