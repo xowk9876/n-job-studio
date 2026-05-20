@@ -955,12 +955,15 @@ input[type="range"]::-moz-range-thumb {
   font-size: 14.5px;
   font-weight: 600;
   color: #fff;
+  word-break: keep-all;
 }
 .home-trust-card__desc {
   margin-top: 0.35rem;
   font-size: 12.5px;
   color: var(--sub);
   line-height: 1.55;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .home-trust-note {
   margin-top: 1.25rem;
