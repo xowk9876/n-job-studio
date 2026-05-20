@@ -31,6 +31,11 @@ const BALL_COLORS: Record<string, { bg: string; text: string; shadow: string }> 
   green:  { bg: '#B0D840', text: '#3A4C00', shadow: 'rgba(176,216,64,0.35)' },
 }
 
+/** 모바일(320px~)에서 7개 공+보너스가 한 줄에 들어가도록 뷰포트 비례 크기 */
+const LATEST_BALL_SIZE =
+  'h-[clamp(26px,7.2vw,52px)] w-[clamp(26px,7.2vw,52px)] text-[clamp(10px,2.8vw,16px)]'
+const LATEST_BALL_ROW = 'flex flex-nowrap items-center justify-center gap-[clamp(3px,1vw,12px)] w-full max-w-full'
+
 function getBallStyle(n: number) {
   if (n <= 10) return BALL_COLORS.yellow
   if (n <= 20) return BALL_COLORS.blue
@@ -239,9 +244,11 @@ export default function LottoPage() {
       </div>
 
       {/* 최신 당첨번호 */}
-      <div className="glass-card relative overflow-hidden">
-        <div className="pointer-events-none absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FBC400]/15 blur-3xl" />
-        <div className="pointer-events-none absolute -left-20 bottom-0 h-40 w-40 rounded-full bg-[#69C8F2]/10 blur-3xl" />
+      <div className="glass-card relative">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]" aria-hidden>
+          <div className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FBC400]/15 blur-3xl" />
+          <div className="absolute -left-20 bottom-0 h-40 w-40 rounded-full bg-[#69C8F2]/10 blur-3xl" />
+        </div>
 
         <div className="relative flex items-start justify-between gap-4 mb-5">
           <div>
@@ -261,11 +268,11 @@ export default function LottoPage() {
 
         {latestStatus === 'loading' && (
           <div className="relative flex flex-col gap-4">
-            <div className="flex justify-center gap-2">
+            <div className={LATEST_BALL_ROW}>
               {Array.from({ length: 7 }).map((_, i) => (
                 <div
                   key={i}
-                  className={`h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/10 ${i === 6 ? 'ml-2 ring-1 ring-white/15' : ''}`}
+                  className={`${LATEST_BALL_SIZE} rounded-full bg-white/10 ${i === 6 ? 'ring-1 ring-white/15' : ''}`}
                   style={{ animation: `lotto-bounce 0.75s ease-in-out ${i * 0.06}s infinite` }}
                 />
               ))}
@@ -295,14 +302,14 @@ export default function LottoPage() {
               </span>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-1.5 py-4 min-[390px]:px-3 md:rounded-3xl md:p-5">
-              <div className="flex flex-nowrap items-center justify-center gap-1.5 min-[390px]:gap-2 md:gap-3 overflow-x-auto no-scrollbar max-w-full">
+            <div className="rounded-2xl border border-white/10 bg-black/20 px-2 py-4 sm:px-3 md:rounded-3xl md:p-5">
+              <div className={LATEST_BALL_ROW}>
                 {latestResult.numbers.map(num => {
                   const style = getBallStyle(num)
                   return (
                     <div
                       key={num}
-                      className="h-8 w-8 min-[360px]:h-9 min-[360px]:w-9 min-[390px]:h-10 min-[390px]:w-10 md:h-[52px] md:w-[52px] shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[16px] font-extrabold tabular"
+                      className={`${LATEST_BALL_SIZE} shrink-0 rounded-full flex items-center justify-center font-extrabold tabular`}
                       style={{
                         backgroundColor: style.bg,
                         color: style.text,
@@ -313,12 +320,12 @@ export default function LottoPage() {
                     </div>
                   )
                 })}
-                <span className="mx-0.5 shrink-0 text-[14px] md:text-[18px] font-light text-white/35">+</span>
+                <span className="shrink-0 text-[clamp(12px,3.2vw,18px)] font-light text-white/35 leading-none">+</span>
                 {(() => {
                   const style = getBallStyle(latestResult.bonusNumber)
                   return (
                     <div
-                      className="relative h-8 w-8 min-[360px]:h-9 min-[360px]:w-9 min-[390px]:h-10 min-[390px]:w-10 md:h-[52px] md:w-[52px] shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[16px] font-extrabold tabular ring-2 ring-white/20"
+                      className={`relative ${LATEST_BALL_SIZE} shrink-0 rounded-full flex items-center justify-center font-extrabold tabular ring-2 ring-white/20`}
                       style={{
                         backgroundColor: style.bg,
                         color: style.text,
