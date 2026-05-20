@@ -78,30 +78,28 @@ export default function HomePage() {
   return (
     <div className="home-page">
       {/* HERO */}
-      <section className="home-hero mf-rise">
+      <section className="home-hero mf-rise" aria-label="소개">
+        <div className="home-hero__bg" aria-hidden>
+          <div className="home-hero__grid" />
+          <div className="home-hero__spotlight" />
+          <div className="home-hero__orb home-hero__orb--blue" />
+          <div className="home-hero__orb home-hero__orb--violet" />
+          <div className="home-hero__orb home-hero__orb--mint" />
+        </div>
+
         <div className="home-hero__panel">
-          <div className="home-hero__badge">
+          <a className="home-hero__badge inline-reset" href="#calculators">
             <span className="home-hero__dot" aria-hidden />
             <span className="home-hero__badge-text">2026 최신 세율 반영</span>
-          </div>
+            <ArrowRight size={12} className="home-hero__badge-arrow" />
+          </a>
 
-          <div className="home-hero__headline">
-            <p className="home-hero__eyebrow">세금 · 대출 · 적금 · 전월세</p>
-            <h1 className="home-hero__title font-display">
-              <span className="home-hero__title-line">복잡한 금융 계산,</span>
-              <span className="home-hero__title-line home-hero__title-line--accent">
-                1분이면 끝
-              </span>
-            </h1>
-          </div>
-
-          <div className="home-hero__topics" aria-label="지원 계산 분야">
-            {['연봉', '퇴직금', '대출', '적금', '전월세', '로또'].map((topic) => (
-              <span key={topic} className="home-hero__topic">
-                {topic}
-              </span>
-            ))}
-          </div>
+          <h1 className="home-hero__title font-display">
+            <span className="home-hero__title-line">복잡한 금융 계산,</span>
+            <span className="home-hero__title-line home-hero__title-line--accent">
+              1분이면 끝
+            </span>
+          </h1>
 
           <p className="home-hero__lead">
             <span className="home-hero__lead-part">정부 고시·법정 공식 기준으로</span>
@@ -109,9 +107,12 @@ export default function HomePage() {
           </p>
 
           <div className="home-hero__cta">
-            <Link href="/salary" className="inline-reset btn-primary btn-primary--lg">
-              연봉 실수령액 계산하기
+            <Link href="/salary" className="inline-reset btn-hero-primary">
+              <span>연봉 실수령액 계산하기</span>
               <ArrowRight size={18} />
+            </Link>
+            <Link href="#calculators" className="inline-reset btn-hero-ghost">
+              전체 계산기 보기
             </Link>
           </div>
 
@@ -120,16 +121,14 @@ export default function HomePage() {
               <dt className="home-stat__value text-gradient">6종</dt>
               <dd className="home-stat__label">전문 계산기</dd>
             </div>
+            <div className="home-stat home-stat--divider" aria-hidden />
             <div className="home-stat">
-              <dt className="home-stat__value" style={{ color: '#929cf8' }}>
-                2026
-              </dt>
+              <dt className="home-stat__value" style={{ color: '#929cf8' }}>2026</dt>
               <dd className="home-stat__label">최신 세율</dd>
             </div>
+            <div className="home-stat home-stat--divider" aria-hidden />
             <div className="home-stat">
-              <dt className="home-stat__value" style={{ color: '#3ee0a5' }}>
-                0원
-              </dt>
+              <dt className="home-stat__value" style={{ color: '#3ee0a5' }}>0원</dt>
               <dd className="home-stat__label">완전 무료</dd>
             </div>
           </dl>
@@ -137,7 +136,7 @@ export default function HomePage() {
       </section>
 
       {/* CALCULATORS */}
-      <section className="home-section" aria-label="계산기 목록">
+      <section id="calculators" className="home-section" aria-label="계산기 목록">
         <header className="section-header">
           <p className="section-label">CALCULATORS</p>
           <h2 className="section-title">지금 필요한 계산기</h2>
