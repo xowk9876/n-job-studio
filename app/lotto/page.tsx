@@ -299,8 +299,8 @@ export default function LottoPage() {
               </span>
             </div>
 
-            <div className="rounded-2xl bg-black/15 px-1.5 py-4 min-[390px]:px-3 md:rounded-3xl md:border md:border-white/10 md:bg-black/20 md:p-5">
-              <div className="flex flex-nowrap items-center justify-center gap-1.5 min-[390px]:gap-2 md:gap-3">
+            <div className="rounded-2xl border border-white/10 bg-black/20 px-1.5 py-4 min-[390px]:px-3 md:rounded-3xl md:p-5">
+              <div className="flex flex-nowrap items-center justify-center gap-1.5 min-[390px]:gap-2 md:gap-3 overflow-x-auto no-scrollbar max-w-full">
                 {latestResult.numbers.map(num => {
                   const style = getBallStyle(num)
                   return (
