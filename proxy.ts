@@ -15,7 +15,7 @@ function getCanonicalHost(): string | null {
  * NEXT_PUBLIC_SITE_URL 호스트와 다른 Host로 접속 시 308 → canonical (커스텀 도메인 전환용).
  * Preview 배포(VERCEL_ENV=preview)는 리다이렉트하지 않음.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   if (process.env.VERCEL_ENV === 'preview') {
     return NextResponse.next()
   }

@@ -2,7 +2,7 @@ import type { NextConfig } from 'next'
 
 /**
  * URL 규칙: sitemap·canonical과 동일하게 trailing slash 없음.
- * 커스텀 도메인 전환 시 NEXT_PUBLIC_SITE_URL만 변경하고 middleware가 호스트 301 처리.
+ * 커스텀 도메인 전환 시 NEXT_PUBLIC_SITE_URL만 변경하고 proxy가 호스트 308 처리.
  */
 const nextConfig: NextConfig = {
   trailingSlash: false,
