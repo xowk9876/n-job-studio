@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
-import { guideItems } from '@/lib/seo'
+import { guideItems, guideTagColors } from '@/lib/seo'
 
 function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
@@ -95,29 +95,38 @@ export default function Footer() {
           </ul>
         </nav>
 
-        <nav aria-label="재테크 가이드">
+        <nav aria-label="재테크 가이드" className="min-w-0">
           <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
             Guides · 가이드
           </p>
-          <ul className="space-y-2.5 max-w-[220px]">
-            <li>
-              <Link
-                href="/guide"
-                className="inline-reset text-[13.5px] font-medium text-[color:var(--ink)] hover:text-[color:var(--brand)] transition-colors"
-              >
-                가이드 모음
-              </Link>
-            </li>
-            {guideItems.map((g) => (
-              <li key={g.slug}>
-                <Link
-                  href={`/guide/${g.slug}`}
-                  className="inline-reset text-[12.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors leading-snug"
-                >
-                  {g.title}
-                </Link>
-              </li>
-            ))}
+          <Link
+            href="/guide"
+            className="footer-guide-index inline-reset"
+          >
+            가이드 모음
+            <span className="footer-guide-index__count">{guideItems.length}</span>
+          </Link>
+          <ul className="footer-guide-list mt-3">
+            {guideItems.map((g) => {
+              const accent = guideTagColors[g.tag] ?? '#6bafff'
+              return (
+                <li key={g.slug}>
+                  <Link href={`/guide/${g.slug}`} className="footer-guide-item inline-reset group">
+                    <span
+                      className="footer-guide-item__dot"
+                      style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}55` }}
+                      aria-hidden
+                    />
+                    <span className="footer-guide-item__body">
+                      <span className="footer-guide-item__tag" style={{ color: accent }}>
+                        {g.tag}
+                      </span>
+                      <span className="footer-guide-item__title">{g.title}</span>
+                    </span>
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </nav>
 
