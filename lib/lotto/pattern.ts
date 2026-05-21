@@ -1,12 +1,17 @@
 import { fisherYatesPick6, secureRandomInt } from './random'
+import { averageFitPercent, computeNumberFits, type NumberFit } from './numberFit'
 
 export type LottoPick = {
   numbers: number[]
   /** 역대 1등 당첨 조합 통계 기반 패턴 점수 (당첨 보장 아님) */
   patternScore: number
-  /** 0~100, 패턴 적합도 UI용 */
+  /** 조합 평균 패턴 적합도 (번호별 %의 평균) */
   patternFitPercent: number
+  /** 번호마다 다른 적합도 % */
+  numberFits: NumberFit[]
 }
+
+export type { NumberFit } from './numberFit'
 
 /** 관측된 1등 조합 분포에서 자주 나오는 특성 (합계·홀짝·구간 등) */
 export function scorePattern(nums: number[], latestNumbers: number[] = []): number {
@@ -143,11 +148,13 @@ export function generateOptimizedPick(latestNumbers: number[] = []): LottoPick {
 
   const refined = refineBySwap(best, latestNumbers)
   const finalScore = scorePattern(refined, latestNumbers)
+  const numberFits = computeNumberFits(refined, latestNumbers)
 
   return {
     numbers: refined,
     patternScore: finalScore,
-    patternFitPercent: patternScoreToPercent(finalScore),
+    patternFitPercent: averageFitPercent(numberFits),
+    numberFits,
   }
 }
 
