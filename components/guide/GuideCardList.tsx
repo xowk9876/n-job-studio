@@ -35,7 +35,7 @@ function GuideCard({ guide, variant }: { guide: GuideItem; variant: GuideCardVar
     <Link
       href={href}
       className="guide-card guide-card--full inline-reset group"
-      style={{ '--guide-accent': color } as React.CSSProperties}
+      style={{ '--guide-accent': color } as CSSProperties}
     >
       <div className="guide-card__top">
         <span className="guide-card__tag">{guide.tag}</span>
