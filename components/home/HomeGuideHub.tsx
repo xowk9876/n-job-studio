@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import { guideItems } from '@/lib/seo'
 
-/** 메인 하단 — 가이드 허브 (6장 카드 그리드 대신 단일 진입점) */
+/** 메인 하단 — 가이드 허브 + 개별 가이드 내부 링크 (크롤러·색인용) */
 export default function HomeGuideHub() {
   const topics = guideItems.map((g) => g.tag).filter((t, i, a) => a.indexOf(t) === i)
 
@@ -36,6 +36,20 @@ export default function HomeGuideHub() {
           </span>
         </div>
       </Link>
+
+      <nav className="home-guide-links" aria-label="가이드 목록">
+        <ul className="home-guide-links__list">
+          {guideItems.map((g) => (
+            <li key={g.slug}>
+              <Link href={`/guide/${g.slug}`} className="home-guide-links__item inline-reset">
+                <span className="home-guide-links__tag">{g.tag}</span>
+                <span className="home-guide-links__title">{g.title}</span>
+                <ArrowRight size={14} className="home-guide-links__arrow" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </section>
   )
 }

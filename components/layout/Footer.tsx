@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
+import { guideItems } from '@/lib/seo'
 
 function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
@@ -26,7 +27,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
   return (
     <footer className="relative mt-24 border-t border-[color:var(--line)]">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 md:grid-cols-[1fr_auto_auto]">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]">
         <div>
           <div className="flex items-center gap-2.5 mb-3">
             <span
@@ -94,13 +95,38 @@ export default function Footer() {
           </ul>
         </nav>
 
+        <nav aria-label="재테크 가이드">
+          <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
+            Guides · 가이드
+          </p>
+          <ul className="space-y-2.5 max-w-[220px]">
+            <li>
+              <Link
+                href="/guide"
+                className="inline-reset text-[13.5px] font-medium text-[color:var(--ink)] hover:text-[color:var(--brand)] transition-colors"
+              >
+                가이드 모음
+              </Link>
+            </li>
+            {guideItems.map((g) => (
+              <li key={g.slug}>
+                <Link
+                  href={`/guide/${g.slug}`}
+                  className="inline-reset text-[12.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors leading-snug"
+                >
+                  {g.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <nav aria-label="정보 페이지">
           <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
             Information · 안내
           </p>
           <ul className="space-y-2.5">
             {[
-              { href: '/guide', label: '재테크 실전 가이드' },
               { href: '/about', label: '머니핏 소개' },
               { href: '/contact', label: '오류 제보·문의' },
               { href: '/privacy-policy', label: '개인정보처리방침' },

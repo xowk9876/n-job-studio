@@ -1,71 +1,15 @@
 import type { NextConfig } from 'next'
 
-// ─── Content Security Policy ───────────────────────────────────────────
-// AdSense 가 필요한 모든 엔드포인트를 화이트리스트.
-// (pagead2 = 광고 스크립트, tpc/securepubads = 광고 렌더, googleads = 클릭 트래킹,
-//  googlesyndication.com = 이미지/ads.txt)
-const ADSENSE_DOMAINS = {
-  script: [
-    'https://pagead2.googlesyndication.com',
-    'https://tpc.googlesyndication.com',
-    'https://securepubads.g.doubleclick.net',
-    'https://www.googletagservices.com',
-  ],
-  frame: [
-    'https://googleads.g.doubleclick.net',
-    'https://tpc.googlesyndication.com',
-    'https://www.google.com',
-  ],
-  img: [
-    'https://pagead2.googlesyndication.com',
-    'https://tpc.googlesyndication.com',
-    'https://googleads.g.doubleclick.net',
-    'https://www.google.com',
-    'https://www.google-analytics.com',
-  ],
-  connect: [
-    'https://pagead2.googlesyndication.com',
-    'https://googleads.g.doubleclick.net',
-    'https://www.google.com',
-  ],
-}
-
-const csp = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${ADSENSE_DOMAINS.script.join(' ')}`,
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
-  "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
-  `img-src 'self' data: blob: ${ADSENSE_DOMAINS.img.join(' ')}`,
-  `connect-src 'self' ${ADSENSE_DOMAINS.connect.join(' ')}`,
-  `frame-src ${ADSENSE_DOMAINS.frame.join(' ')}`,
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-].join('; ')
-
-const securityHeaders = [
-  { key: 'X-Frame-Options',          value: 'SAMEORIGIN' },
-  { key: 'X-Content-Type-Options',   value: 'nosniff' },
-  { key: 'Referrer-Policy',          value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy',       value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
-  { key: 'X-DNS-Prefetch-Control',   value: 'on' },
-  { key: 'Content-Security-Policy',  value: csp },
-]
-
+/**
+ * URL 규칙: sitemap·canonical과 동일하게 trailing slash 없음.
+ * 커스텀 도메인 전환 시 NEXT_PUBLIC_SITE_URL만 변경하고 middleware가 호스트 301 처리.
+ */
 const nextConfig: NextConfig = {
-  devIndicators: false,
-  reactStrictMode: true,
-  poweredByHeader: false,
-  compress: true,
-  async headers() {
-    return [
-      { source: '/(.*)', headers: securityHeaders },
-      // 정적 자산 장기 캐싱
-      {
-        source: '/:all*(svg|jpg|jpeg|png|webp|avif|ico|woff2?)',
-        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
-      },
-    ]
+  trailingSlash: false,
+  async redirects() {
+    // 예: 커스텀 도메인 확정 후 vercel.app → 주 도메인 고정 리다이렉트가 필요하면 여기에 추가
+    // { source: '/:path*', has: [{ type: 'host', value: 'n-job-studio.vercel.app' }], destination: 'https://your-domain.com/:path*', permanent: true },
+    return []
   },
 }
 

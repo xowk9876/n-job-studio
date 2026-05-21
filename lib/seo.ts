@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
-export const SEO_UPDATED_AT = '2026-05-20'
+export const SEO_UPDATED_AT = '2026-05-22'
 export const SITE_NAME = '머니핏 계산기'
 
 /** OG 이미지·푸터 등에 표시할 브랜드 라벨 */
