@@ -191,18 +191,6 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-        <div className="home-legal-strip">
-          <p className="home-trust-note">
-            본 서비스는 정보 제공 목적이며, 실제 세액·대출 한도는 기관 심사와 최신 고시에 따라 달라질 수
-            있습니다.
-          </p>
-          <nav className="home-info-links" aria-label="사이트 안내">
-            <Link href="/about" className="home-info-links__item inline-reset">머니핏 소개</Link>
-            <Link href="/contact" className="home-info-links__item inline-reset">문의하기</Link>
-            <Link href="/privacy-policy" className="home-info-links__item inline-reset">개인정보처리방침</Link>
-            <Link href="/terms" className="home-info-links__item inline-reset">이용약관</Link>
-          </nav>
-        </div>
       </section>
 
       <HomeGuideHub />

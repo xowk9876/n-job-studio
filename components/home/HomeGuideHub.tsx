@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
-import GuideCardList from '@/components/guide/GuideCardList'
 import { guideItems } from '@/lib/seo'
 
-/** 메인 하단 — 가이드 허브 + 카드형 가이드 링크 */
+/** 메인 하단 — 가이드 허브 배너만 (목록은 /guide·푸터) */
 export default function HomeGuideHub() {
   const topics = guideItems.map((g) => g.tag).filter((t, i, a) => a.indexOf(t) === i)
 
@@ -41,8 +40,6 @@ export default function HomeGuideHub() {
           </span>
         </div>
       </Link>
-
-      <GuideCardList variant="compact" className="home-guide-hub__grid" />
     </section>
   )
 }

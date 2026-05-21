@@ -1,6 +1,14 @@
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
-import { guideItems, guideTagColors } from '@/lib/seo'
+const guideLinks = [
+  { href: '/guide', label: '가이드 모음' },
+  { href: '/guide/2026-salary-tax-guide', label: '연봉·세금 가이드' },
+  { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스 가이드' },
+  { href: '/guide/severance-calculation-guide', label: '퇴직금 가이드' },
+  { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세 가이드' },
+  { href: '/guide/jeonse-safety-2026', label: '전세사기 방지' },
+  { href: '/guide/lotto-tax-guide', label: '로또 세금·수령' },
+] as const
 
 function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
@@ -95,38 +103,21 @@ export default function Footer() {
           </ul>
         </nav>
 
-        <nav aria-label="재테크 가이드" className="min-w-0">
+        <nav aria-label="재테크 가이드">
           <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
             Guides · 가이드
           </p>
-          <Link
-            href="/guide"
-            className="footer-guide-index inline-reset"
-          >
-            가이드 모음
-            <span className="footer-guide-index__count">{guideItems.length}</span>
-          </Link>
-          <ul className="footer-guide-list mt-3">
-            {guideItems.map((g) => {
-              const accent = guideTagColors[g.tag] ?? '#6bafff'
-              return (
-                <li key={g.slug}>
-                  <Link href={`/guide/${g.slug}`} className="footer-guide-item inline-reset group">
-                    <span
-                      className="footer-guide-item__dot"
-                      style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}55` }}
-                      aria-hidden
-                    />
-                    <span className="footer-guide-item__body">
-                      <span className="footer-guide-item__tag" style={{ color: accent }}>
-                        {g.tag}
-                      </span>
-                      <span className="footer-guide-item__title">{g.title}</span>
-                    </span>
-                  </Link>
-                </li>
-              )
-            })}
+          <ul className="grid grid-cols-2 gap-x-8 gap-y-2.5">
+            {guideLinks.map((g) => (
+              <li key={g.href}>
+                <Link
+                  href={g.href}
+                  className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
+                >
+                  {g.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 
