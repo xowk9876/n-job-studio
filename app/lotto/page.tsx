@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { RotateCcw, Copy, Check, Trophy, Sparkles } from 'lucide-react'
+import { RotateCcw, Copy, Check, Trophy } from 'lucide-react'
 import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 import { generateOptimizedGames, type LottoPick } from '@/lib/lotto/pattern'
-import { getMatchTier, tierLabel } from '@/lib/lotto/match'
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══
 const FIRST_DRAW = new Date('2002-12-07T20:45:00+09:00')
@@ -156,10 +155,6 @@ export default function LottoPage() {
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">로또 번호 생성기</h1>
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1" suppressHydrationWarning>
           제 {info.round.toLocaleString()}회차 · {formatDrawDate(info.nextDraw)} · {countdown}
-        </p>
-        <p className="text-[11px] text-[#FBC400]/80 mt-2 flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5 shrink-0" />
-          CSPRNG + 역대 1등 패턴 최적화(480회 탐색·스왑 정제)
         </p>
       </div>
 
@@ -324,41 +319,28 @@ export default function LottoPage() {
           )}
           {hasGames && !isSpinning && games.map((game, gameIdx) => {
             const nums = game.numbers
-            const refTier =
-              latestResult?.numbers && latestResult.bonusNumber != null
-                ? getMatchTier(nums, latestResult.numbers, latestResult.bonusNumber)
-                : 0
-            const refLabel = refTier ? tierLabel(refTier) : null
             return (
             <div
               key={gameIdx}
-              className="flex flex-col gap-1.5 mf-rise"
+              className="flex items-center gap-2 mf-rise"
               style={{ animationDelay: `${gameIdx * 60}ms` }}
             >
-              <div className="flex items-center gap-2">
               <span className="text-white/35 text-[11px] font-mono w-5 shrink-0">{String.fromCharCode(65 + gameIdx)}</span>
               <div className="flex flex-nowrap gap-1 md:gap-2 flex-1 justify-center">
                 {nums.map(num => {
                   const style = getBallStyle(num)
                   const isHit = latestResult?.numbers.includes(num)
-                  const fit = game.numberFits.find(f => f.number === num)?.fitPercent ?? 0
-                  const fitTone =
-                    fit >= 88 ? 'text-[#FBC400]' : fit >= 78 ? 'text-[#B0D840]' : 'text-white/55'
                   return (
-                    <div key={num} className="flex flex-col items-center gap-0.5 shrink-0">
-                      <div
-                        className={`w-8 h-8 min-[390px]:w-9 min-[390px]:h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[15px] font-extrabold tabular ${isHit ? 'ring-2 ring-[#FBC400]/70' : ''}`}
-                        style={{
-                          backgroundColor: style.bg,
-                          color: style.text,
-                          boxShadow: `0 3px 8px ${style.shadow}`,
-                        }}
-                      >
-                        {num}
-                      </div>
-                      <span className={`text-[8px] min-[390px]:text-[9px] font-bold tabular leading-none ${fitTone}`}>
-                        {fit}%
-                      </span>
+                    <div
+                      key={num}
+                      className={`w-8 h-8 min-[390px]:w-9 min-[390px]:h-9 md:w-11 md:h-11 shrink-0 rounded-full flex items-center justify-center text-[12px] min-[390px]:text-[13px] md:text-[15px] font-extrabold tabular ${isHit ? 'ring-2 ring-[#FBC400]/70' : ''}`}
+                      style={{
+                        backgroundColor: style.bg,
+                        color: style.text,
+                        boxShadow: `0 3px 8px ${style.shadow}`,
+                      }}
+                    >
+                      {num}
                     </div>
                   )
                 })}
@@ -370,17 +352,6 @@ export default function LottoPage() {
               >
                 {copiedIdx === gameIdx ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
               </button>
-              </div>
-              <div className="pl-7 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-md bg-[#FBC400]/15 border border-[#FBC400]/25 px-2 py-0.5 text-[10px] font-bold text-[#FBC400] tabular">
-                  조합 평균 {game.patternFitPercent}%
-                </span>
-                {refLabel && (
-                  <span className="text-[10px] text-white/40">
-                    직전 회차 대비 · {refLabel}
-                  </span>
-                )}
-              </div>
             </div>
             )
           })}
@@ -400,7 +371,7 @@ export default function LottoPage() {
       </div>
 
       <p className="text-[11px] text-white/30 text-center leading-relaxed">
-        6/45 모든 조합의 1등 확률은 동일합니다. 패턴 적합도는 역대 당첨 통계 기준이며 실제 당첨을 보장하지 않습니다 · 만 19세 이상
+        실제 추첨과 무관하며 당첨을 보장하지 않습니다 · 만 19세 이상
       </p>
 
       {/* 당첨 등위 안내 — 동행복권 공식 공 색상 매핑 */}
@@ -452,8 +423,6 @@ export default function LottoPage() {
           { q: '로또 당첨금에 세금이 얼마나 붙나요?', a: '200만 원 이하는 비과세입니다. 200만 원 초과~3억 원 이하는 22%(소득세 20% + 지방소득세 2%), 3억 원 초과분은 33%(소득세 30% + 지방소득세 3%)가 원천징수됩니다.' },
           { q: '당첨금은 어디서 수령하나요?', a: '5만 원 이하는 일반 판매점, 5만 원 초과~200만 원 이하는 NH농협은행 지점, 200만 원 초과는 NH농협은행 본점(서울 중구)에서 수령합니다. 신분증과 당첨 복권을 지참해야 합니다.' },
           { q: '당첨금 수령 기한이 있나요?', a: '추첨일로부터 1년 이내에 수령해야 합니다. 기한 초과 시 당첨금은 복권기금으로 귀속됩니다.' },
-          { q: '번호마다 %가 다른 이유는?', a: '각 번호가 조합 안에서 맡는 역할(구간·홀짝·합계 기여 등)을 점수화한 참고 지표입니다. 번호별 %가 높다고 해당 번호만 당첨되는 것은 아닙니다.' },
-          { q: '패턴 적합도 100%면 당첨되나요?', a: '아닙니다. 적합도는 역대 1등 조합 통계 기준 참고 지표이며, 1등 확률(약 1/814만)은 모든 조합이 동일합니다.' },
           { q: '연금복권과 로또 세금이 다른가요?', a: '세율 구간은 동일합니다. 연금복권 1등은 매월 700만 원씩 20년간 수령하며, 매달 22%가 원천징수되어 월 약 546만 원을 실수령합니다.' },
           { q: '당첨금을 가족에게 나눠줘도 되나요?', a: '증여세가 부과됩니다. 배우자 6억 원, 성인 자녀 5,000만 원, 미성년 자녀 2,000만 원까지는 증여세 공제가 적용됩니다 (상속세 및 증여세법 기준).' },
         ]} />
