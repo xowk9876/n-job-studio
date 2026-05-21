@@ -370,8 +370,10 @@ export default function LottoPage() {
         </button>
       </div>
 
-      <p className="text-[11px] text-white/30 text-center leading-relaxed">
-        실제 추첨과 무관하며 당첨을 보장하지 않습니다 · 만 19세 이상
+      <p className="lotto-disclaimer">
+        로또 6/45의 1등 당첨 확률은 모든 번호 조합에서 같습니다(약 1/814만).
+        생성된 번호는 참고·오락용이며, 실제 추첨 결과·당첨을 보장하지 않습니다.
+        <span className="lotto-disclaimer__age">복권 이용은 만 19세 이상입니다.</span>
       </p>
 
       {/* 당첨 등위 안내 — 동행복권 공식 공 색상 매핑 */}

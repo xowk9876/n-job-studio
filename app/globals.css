@@ -1192,3 +1192,19 @@ input[type="range"]::-moz-range-thumb {
 }
 .home-guide-hub__link:hover .home-guide-hub__arrow { color: var(--brand); }
 
+/* 로또 — 하단 안내 */
+.lotto-disclaimer {
+  margin: 0 auto;
+  max-width: 22rem;
+  font-size: 11px;
+  line-height: 1.65;
+  text-align: center;
+  color: rgba(148, 163, 184, 0.75);
+  word-break: keep-all;
+}
+.lotto-disclaimer__age {
+  display: block;
+  margin-top: 0.35rem;
+  color: rgba(148, 163, 184, 0.55);
+}
+
