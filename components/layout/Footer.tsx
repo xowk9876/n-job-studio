@@ -46,12 +46,12 @@ function FooterColumn({
       <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
         {title}
       </p>
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-1">
         {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
-              className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
+              className="inline-reset block py-0.5 text-[13px] leading-tight text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
             >
               {item.label}
             </Link>
