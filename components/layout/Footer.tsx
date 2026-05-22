@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
 const guideLinks = [
-  { href: '/guide/2026-salary-tax-guide', label: '연봉·세금 가이드' },
-  { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스' },
-  { href: '/guide/severance-calculation-guide', label: '퇴직금 가이드' },
-  { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세' },
-  { href: '/guide/jeonse-safety-2026', label: '전세사기 방지' },
-  { href: '/guide/lotto-tax-guide', label: '로또 세금·수령' },
+  { href: '/guide/2026-salary-tax-guide', label: '연봉·세금 가이드', shortLabel: '연봉·세금' },
+  { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스', shortLabel: 'DSR' },
+  { href: '/guide/severance-calculation-guide', label: '퇴직금 가이드', shortLabel: '퇴직금' },
+  { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세', shortLabel: 'ISA' },
+  { href: '/guide/jeonse-safety-2026', label: '전세사기 방지', shortLabel: '전세사기' },
+  { href: '/guide/lotto-tax-guide', label: '로또 세금·수령', shortLabel: '로또·세금' },
 ] as const
 
 function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
@@ -22,36 +22,55 @@ function GmailIcon({ className = 'w-4 h-4' }: { className?: string }) {
 }
 
 const calc = [
-  { href: '/salary', label: '연봉 실수령액' },
-  { href: '/severance', label: '퇴직금' },
-  { href: '/mortgage', label: '대출 이자' },
-  { href: '/savings', label: '적금·예금' },
-  { href: '/jeonse', label: '전월세 전환' },
-  { href: '/lotto', label: '로또 번호 생성' },
-]
+  { href: '/salary', label: '연봉 실수령액', shortLabel: '연봉·세후' },
+  { href: '/severance', label: '퇴직금', shortLabel: '퇴직금' },
+  { href: '/mortgage', label: '대출 이자', shortLabel: '대출' },
+  { href: '/savings', label: '적금·예금', shortLabel: '적금·예금' },
+  { href: '/jeonse', label: '전월세 전환', shortLabel: '전월세' },
+  { href: '/lotto', label: '로또 번호 생성', shortLabel: '로또' },
+] as const
 
-type FooterLink = { readonly href: string; readonly label: string }
+type FooterLink = {
+  readonly href: string
+  readonly label: string
+  readonly shortLabel?: string
+}
 
 function FooterColumn({
   title,
+  titleShort,
   items,
   aria,
+  className = '',
+  listClassName = '',
 }: {
   title: string
+  titleShort?: string
   aria: string
   items: readonly FooterLink[]
+  className?: string
+  listClassName?: string
 }) {
   return (
-    <nav aria-label={aria} className="site-footer__nav">
-      <p className="site-footer__nav-title">{title}</p>
-      <ul className="site-footer__nav-list">
+    <nav aria-label={aria} className={`site-footer__nav ${className}`.trim()}>
+      <p className="site-footer__nav-title">
+        <span className="site-footer__nav-title-full">{title}</span>
+        {titleShort ? (
+          <span className="site-footer__nav-title-short">{titleShort}</span>
+        ) : null}
+      </p>
+      <ul className={`site-footer__nav-list ${listClassName}`.trim()}>
         {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
               className="site-footer__nav-link inline-reset"
+              title={item.label}
             >
-              {item.label}
+              <span className="site-footer__nav-label-full">{item.label}</span>
+              {item.shortLabel ? (
+                <span className="site-footer__nav-label-short">{item.shortLabel}</span>
+              ) : null}
             </Link>
           </li>
         ))}
@@ -89,24 +108,24 @@ export default function Footer() {
           </p>
 
           {/* Contact · Social — 플랫폼 브랜드 배경 */}
-          <div className="site-footer__contacts">
+          <div className="site-footer__contacts max-[900px]:grid max-[900px]:grid-cols-2 max-[900px]:gap-2 min-[901px]:flex min-[901px]:flex-wrap min-[901px]:items-center">
             <a
               href="https://www.instagram.com/tae_system/"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-chip contact-chip--instagram group"
+              className="contact-chip contact-chip--instagram max-[900px]:flex max-[900px]:w-full max-[900px]:min-w-0 max-[900px]:justify-center max-[900px]:box-border"
               aria-label="인스타그램 @tae_system"
             >
-              <Instagram className="w-4 h-4 shrink-0" strokeWidth={2} />
-              <span>@tae_system</span>
+              <Instagram className="w-4 h-4 shrink-0 max-[900px]:w-3.5 max-[900px]:h-3.5" strokeWidth={2} />
+              <span className="max-[900px]:truncate">@tae_system</span>
             </a>
             <a
               href="mailto:bhd03014@gmail.com"
-              className="contact-chip contact-chip--gmail group"
-              aria-label="이메일 문의"
+              className="contact-chip contact-chip--gmail max-[900px]:flex max-[900px]:w-full max-[900px]:min-w-0 max-[900px]:justify-center max-[900px]:box-border"
+              aria-label="이메일 bhd03014@gmail.com"
             >
-              <GmailIcon className="w-4 h-4 shrink-0" />
-              <span>bhd03014@gmail.com</span>
+              <GmailIcon className="w-4 h-4 shrink-0 max-[900px]:w-3.5 max-[900px]:h-3.5" />
+              <span className="max-[900px]:truncate">bhd03014@gmail.com</span>
             </a>
           </div>
           <p className="site-footer__contact-note">
@@ -115,16 +134,29 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__columns">
-          <FooterColumn title="Calculators · 계산기" items={calc} aria="사이트 내비게이션" />
-          <FooterColumn title="Guides · 가이드" items={guideLinks} aria="재테크 가이드" />
           <FooterColumn
+            title="Calculators · 계산기"
+            titleShort="계산기"
+            items={calc}
+            aria="사이트 내비게이션"
+            listClassName="site-footer__nav-list--calc"
+          />
+          <FooterColumn
+            title="Guides · 가이드"
+            titleShort="가이드"
+            items={guideLinks}
+            aria="재테크 가이드"
+          />
+          <FooterColumn
+            className="site-footer__nav--info"
             title="Information · 안내"
+            titleShort="안내"
             aria="정보 페이지"
             items={[
-              { href: '/about', label: '머니핏 소개' },
-              { href: '/contact', label: '오류 제보·문의' },
-              { href: '/privacy-policy', label: '개인정보처리방침' },
-              { href: '/terms', label: '이용약관' },
+              { href: '/about', label: '머니핏 소개', shortLabel: '소개' },
+              { href: '/contact', label: '오류 제보·문의', shortLabel: '문의' },
+              { href: '/privacy-policy', label: '개인정보처리방침', shortLabel: '개인정보' },
+              { href: '/terms', label: '이용약관', shortLabel: '약관' },
             ]}
           />
         </div>
