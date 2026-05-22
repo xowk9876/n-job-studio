@@ -65,7 +65,7 @@ export function ExamplesSection({
         <SectionHeader num="CASE · 예시" title={title} />
       </div>
       <div className="grid md:grid-cols-2 gap-4">
-        {items.map(({ label, input, result, note }) => (
+        {items.slice(0, 2).map(({ label, input, result, note }) => (
           <div key={label} className="card p-5 md:p-6">
             <span className="chip chip-brand mb-3 text-[10.5px]">CASE</span>
             <h3 className="font-display text-[16.5px] font-semibold text-white mb-3 leading-snug tracking-tight">
