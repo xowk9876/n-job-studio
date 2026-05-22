@@ -17,7 +17,7 @@ export default function HomeGuideHub() {
         <p className="section-label">GUIDES</p>
         <h2 className="section-title">재테크 실전 가이드</h2>
         <p className="home-guide-hub__lead">
-          2026년 법령·세율 기준 {count}편. 계산 결과를 실무에 적용하는 방법을 정리했습니다.
+          법령·세율 기준 {count}편. 계산 결과를 실무에 적용하는 방법을 정리했습니다.
         </p>
       </header>
 
@@ -29,11 +29,7 @@ export default function HomeGuideHub() {
               <BookOpen size={20} strokeWidth={1.75} />
             </div>
             <div className="home-guide-hub__copy">
-              <div className="home-guide-hub__meta">
-                <span className="home-guide-hub__count">{count}편</span>
-                <span className="home-guide-hub__meta-dot" aria-hidden />
-                <span className="home-guide-hub__meta-note">2026 기준</span>
-              </div>
+              <p className="home-guide-hub__count">{count}편</p>
               <p className="home-guide-hub__title">가이드 모음 보기</p>
               <p className="home-guide-hub__subtitle">주제별 목록·최신 수정일 확인</p>
             </div>
