@@ -265,6 +265,150 @@ body {
     0 8px 20px rgba(234, 67, 53, 0.15);
 }
 
+/* Footer — Figma-style responsive alignment */
+.site-footer {
+  position: relative;
+  margin-top: 6rem;
+  border-top: 1px solid var(--line);
+}
+.site-footer__inner {
+  width: min(100%, 1080px);
+  margin-inline: auto;
+  padding: 3rem 1.25rem;
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  column-gap: clamp(2rem, 5vw, 4.25rem);
+  align-items: start;
+}
+.site-footer__brand {
+  min-width: 0;
+  max-width: 340px;
+}
+.site-footer__logo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.85rem;
+}
+.site-footer__desc {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--sub);
+  word-break: keep-all;
+}
+.site-footer__notice {
+  margin-top: 1rem;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--muted);
+  word-break: keep-all;
+}
+.site-footer__contacts {
+  margin-top: 1.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+.site-footer__contact-note {
+  margin-top: 0.7rem;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.site-footer__columns {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+  padding-top: 0.35rem;
+}
+.site-footer__nav {
+  min-width: 0;
+}
+.site-footer__nav-title {
+  margin-bottom: 0.9rem;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.site-footer__nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+}
+.site-footer__nav-link {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink-2);
+  word-break: keep-all;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.site-footer__nav-link:hover {
+  color: var(--brand);
+  transform: translateX(2px);
+}
+.site-footer__bottom {
+  border-top: 1px solid var(--line);
+}
+.site-footer__bottom-inner {
+  width: min(100%, 1080px);
+  margin-inline: auto;
+  padding: 0.95rem 1.25rem;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .site-footer__inner {
+    grid-template-columns: 1fr;
+    row-gap: 2.25rem;
+  }
+  .site-footer__brand {
+    max-width: 34rem;
+  }
+  .site-footer__columns {
+    column-gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-footer__inner {
+    padding-inline: 1rem;
+  }
+  .site-footer__columns {
+    column-gap: 0.75rem;
+  }
+  .site-footer__nav-title {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+  .site-footer__nav-list {
+    gap: 0.35rem;
+  }
+  .site-footer__nav-link {
+    font-size: 11.5px;
+    line-height: 1.32;
+  }
+  .site-footer__contacts .contact-chip {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Card — deep glass with gradient border on hover */
 .card {
   position: relative;

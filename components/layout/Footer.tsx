@@ -42,16 +42,14 @@ function FooterColumn({
   items: readonly FooterLink[]
 }) {
   return (
-    <nav aria-label={aria} className="min-w-0">
-      <p className="text-[10px] sm:text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.16em] sm:tracking-[0.18em] mb-3 sm:mb-4 uppercase whitespace-nowrap">
-        {title}
-      </p>
-      <ul className="flex flex-col gap-1">
+    <nav aria-label={aria} className="site-footer__nav">
+      <p className="site-footer__nav-title">{title}</p>
+      <ul className="site-footer__nav-list">
         {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
-              className="inline-reset block py-0.5 text-[12.5px] sm:text-[13px] leading-tight text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors break-keep"
+              className="site-footer__nav-link inline-reset"
             >
               {item.label}
             </Link>
@@ -65,10 +63,10 @@ function FooterColumn({
 export default function Footer() {
   const year = new Date().getFullYear()
   return (
-    <footer className="relative mt-24 border-t border-[color:var(--line)]">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 lg:gap-8 lg:grid-cols-4">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2.5 mb-3">
+    <footer className="site-footer">
+      <div className="site-footer__inner">
+        <div className="site-footer__brand">
+          <div className="site-footer__logo-row">
             <span
               aria-hidden
               className="inline-flex items-center justify-center w-6 h-6 rounded text-[10.5px] font-bold text-white"
@@ -81,17 +79,17 @@ export default function Footer() {
             </span>
             <span className="font-semibold text-white">머니핏 계산기</span>
           </div>
-          <p className="text-[13.5px] text-[color:var(--sub)] leading-relaxed max-w-md">
+          <p className="site-footer__desc">
             2026년 최신 세율·정책 기준으로 정확하게.
             <br />
             연봉, 대출, 퇴직금, 적금, 전월세, 로또까지 바로 확인하는 무료 계산기.
           </p>
-          <p className="text-[11.5px] text-[color:var(--muted)] mt-4">
+          <p className="site-footer__notice">
             본 서비스는 정보 제공 목적이며, 실제 세액·대출 한도·보증 조건은 기관 심사와 최신 고시에 따라 달라질 수 있습니다.
           </p>
 
           {/* Contact · Social — 플랫폼 브랜드 배경 */}
-          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+          <div className="site-footer__contacts">
             <a
               href="https://www.instagram.com/tae_system/"
               target="_blank"
@@ -111,12 +109,12 @@ export default function Footer() {
               <span>bhd03014@gmail.com</span>
             </a>
           </div>
-          <p className="text-[11px] text-[color:var(--muted)] mt-2.5">
+          <p className="site-footer__contact-note">
             궁금한 점·제안은 인스타그램 DM 또는 이메일로 편하게 연락주세요.
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 sm:gap-8 min-w-0 lg:contents">
+        <div className="site-footer__columns">
           <FooterColumn title="Calculators · 계산기" items={calc} aria="사이트 내비게이션" />
           <FooterColumn title="Guides · 가이드" items={guideLinks} aria="재테크 가이드" />
           <FooterColumn
@@ -132,8 +130,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-[color:var(--line)]">
-        <div className="max-w-6xl mx-auto px-5 md:px-8 py-4 text-[11.5px] text-[color:var(--muted)]">
+      <div className="site-footer__bottom">
+        <div className="site-footer__bottom-inner">
           <span>© {year} 머니핏 계산기</span>
         </div>
       </div>
