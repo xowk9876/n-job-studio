@@ -66,7 +66,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
   return (
     <footer className="relative mt-24 border-t border-[color:var(--line)]">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 lg:grid-cols-[1.6fr_3fr]">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 lg:gap-8 lg:grid-cols-4">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5 mb-3">
             <span
@@ -116,7 +116,7 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 sm:gap-8 min-w-0">
+        <div className="grid grid-cols-3 gap-6 sm:gap-8 min-w-0 lg:contents">
           <FooterColumn title="Calculators · 계산기" items={calc} aria="사이트 내비게이션" />
           <FooterColumn title="Guides · 가이드" items={guideLinks} aria="재테크 가이드" />
           <FooterColumn
