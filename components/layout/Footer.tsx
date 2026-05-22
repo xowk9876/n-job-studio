@@ -1,11 +1,10 @@
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
 const guideLinks = [
-  { href: '/guide', label: '가이드 모음' },
   { href: '/guide/2026-salary-tax-guide', label: '연봉·세금 가이드' },
-  { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스 가이드' },
+  { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스' },
   { href: '/guide/severance-calculation-guide', label: '퇴직금 가이드' },
-  { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세 가이드' },
+  { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세' },
   { href: '/guide/jeonse-safety-2026', label: '전세사기 방지' },
   { href: '/guide/lotto-tax-guide', label: '로또 세금·수령' },
 ] as const
@@ -31,12 +30,44 @@ const calc = [
   { href: '/lotto', label: '로또 번호 생성' },
 ]
 
+type FooterLink = { readonly href: string; readonly label: string }
+
+function FooterColumn({
+  title,
+  items,
+  aria,
+}: {
+  title: string
+  aria: string
+  items: readonly FooterLink[]
+}) {
+  return (
+    <nav aria-label={aria} className="min-w-0">
+      <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
+        {title}
+      </p>
+      <ul className="flex flex-col gap-2.5">
+        {items.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
 export default function Footer() {
   const year = new Date().getFullYear()
   return (
     <footer className="relative mt-24 border-t border-[color:var(--line)]">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]">
-        <div>
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_0.9fr]">
+        <div className="min-w-0">
           <div className="flex items-center gap-2.5 mb-3">
             <span
               aria-hidden
@@ -85,64 +116,18 @@ export default function Footer() {
           </p>
         </div>
 
-        <nav aria-label="사이트 내비게이션">
-          <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
-            Calculators · 계산기
-          </p>
-          <ul className="grid grid-cols-2 gap-x-8 gap-y-2.5">
-            {calc.map(c => (
-              <li key={c.href}>
-                <Link
-                  href={c.href}
-                  className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
-                >
-                  {c.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <nav aria-label="재테크 가이드">
-          <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
-            Guides · 가이드
-          </p>
-          <ul className="grid grid-cols-2 gap-x-8 gap-y-2.5">
-            {guideLinks.map((g) => (
-              <li key={g.href}>
-                <Link
-                  href={g.href}
-                  className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
-                >
-                  {g.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <nav aria-label="정보 페이지">
-          <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
-            Information · 안내
-          </p>
-          <ul className="space-y-2.5">
-            {[
-              { href: '/about', label: '머니핏 소개' },
-              { href: '/contact', label: '오류 제보·문의' },
-              { href: '/privacy-policy', label: '개인정보처리방침' },
-              { href: '/terms', label: '이용약관' },
-            ].map(i => (
-              <li key={i.href}>
-                <Link
-                  href={i.href}
-                  className="inline-reset text-[13.5px] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
-                >
-                  {i.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <FooterColumn title="Calculators · 계산기" items={calc} aria="사이트 내비게이션" />
+        <FooterColumn title="Guides · 가이드" items={guideLinks} aria="재테크 가이드" />
+        <FooterColumn
+          title="Information · 안내"
+          aria="정보 페이지"
+          items={[
+            { href: '/about', label: '머니핏 소개' },
+            { href: '/contact', label: '오류 제보·문의' },
+            { href: '/privacy-policy', label: '개인정보처리방침' },
+            { href: '/terms', label: '이용약관' },
+          ]}
+        />
       </div>
 
       <div className="border-t border-[color:var(--line)]">
