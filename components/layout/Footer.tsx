@@ -116,16 +116,16 @@ export default function Footer() {
               className="contact-chip contact-chip--instagram"
               aria-label="인스타그램 @tae_system"
             >
-              <Instagram className="w-4 h-4 shrink-0" strokeWidth={2} />
-              <span>@tae_system</span>
+              <Instagram className="contact-chip__icon" strokeWidth={2} aria-hidden />
+              <span className="contact-chip__label">@tae_system</span>
             </a>
             <a
               href="mailto:bhd03014@gmail.com"
               className="contact-chip contact-chip--gmail"
               aria-label="이메일 bhd03014@gmail.com"
             >
-              <GmailIcon className="w-4 h-4 shrink-0" />
-              <span>bhd03014@gmail.com</span>
+              <GmailIcon className="contact-chip__icon" />
+              <span className="contact-chip__label">bhd03014@gmail.com</span>
             </a>
           </div>
           <p className="site-footer__contact-note">
