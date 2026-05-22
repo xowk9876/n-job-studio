@@ -43,7 +43,7 @@ function FooterColumn({
 }) {
   return (
     <nav aria-label={aria} className="min-w-0">
-      <p className="text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.18em] mb-4 uppercase">
+      <p className="text-[10px] sm:text-[10.5px] font-semibold text-[color:var(--muted)] tracking-[0.16em] sm:tracking-[0.18em] mb-3 sm:mb-4 uppercase whitespace-nowrap">
         {title}
       </p>
       <ul className="flex flex-col gap-1">
@@ -51,7 +51,7 @@ function FooterColumn({
           <li key={item.href}>
             <Link
               href={item.href}
-              className="inline-reset block py-0.5 text-[13px] leading-tight text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors"
+              className="inline-reset block py-0.5 text-[12.5px] sm:text-[13px] leading-tight text-[color:var(--ink-2)] hover:text-[color:var(--brand)] transition-colors break-keep"
             >
               {item.label}
             </Link>
@@ -66,7 +66,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
   return (
     <footer className="relative mt-24 border-t border-[color:var(--line)]">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_0.9fr]">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-12 grid gap-10 lg:grid-cols-[1.6fr_3fr]">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5 mb-3">
             <span
@@ -116,18 +116,20 @@ export default function Footer() {
           </p>
         </div>
 
-        <FooterColumn title="Calculators · 계산기" items={calc} aria="사이트 내비게이션" />
-        <FooterColumn title="Guides · 가이드" items={guideLinks} aria="재테크 가이드" />
-        <FooterColumn
-          title="Information · 안내"
-          aria="정보 페이지"
-          items={[
-            { href: '/about', label: '머니핏 소개' },
-            { href: '/contact', label: '오류 제보·문의' },
-            { href: '/privacy-policy', label: '개인정보처리방침' },
-            { href: '/terms', label: '이용약관' },
-          ]}
-        />
+        <div className="grid grid-cols-3 gap-6 sm:gap-8 min-w-0">
+          <FooterColumn title="Calculators · 계산기" items={calc} aria="사이트 내비게이션" />
+          <FooterColumn title="Guides · 가이드" items={guideLinks} aria="재테크 가이드" />
+          <FooterColumn
+            title="Information · 안내"
+            aria="정보 페이지"
+            items={[
+              { href: '/about', label: '머니핏 소개' },
+              { href: '/contact', label: '오류 제보·문의' },
+              { href: '/privacy-policy', label: '개인정보처리방침' },
+              { href: '/terms', label: '이용약관' },
+            ]}
+          />
+        </div>
       </div>
 
       <div className="border-t border-[color:var(--line)]">
