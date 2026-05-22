@@ -2,9 +2,12 @@ import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import { guideItems } from '@/lib/seo'
 
+const topicOrder = ['세금', '대출', '퇴직', '투자', '부동산', '복권'] as const
+
 /** 메인 하단 — 가이드 허브 배너만 (목록은 /guide·푸터) */
 export default function HomeGuideHub() {
-  const topics = guideItems.map((g) => g.tag).filter((t, i, a) => a.indexOf(t) === i)
+  const availableTopics = new Set(guideItems.map((g) => g.tag))
+  const topics = topicOrder.filter((tag) => availableTopics.has(tag))
 
   return (
     <section className="home-guide-hub" aria-label="재테크 가이드">
@@ -27,7 +30,7 @@ export default function HomeGuideHub() {
             <p className="mt-1 text-[12px] text-[color:var(--sub)] leading-relaxed">
               전체 목록·최신 수정일 한눈에 확인
             </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="home-guide-hub__tags">
               {topics.map((tag) => (
                 <span key={tag} className="home-guide-hub__tag">
                   {tag}
