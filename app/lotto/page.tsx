@@ -371,7 +371,6 @@ export default function LottoPage() {
       </div>
 
       <p className="lotto-disclaimer">
-        로또 6/45의 1등 당첨 확률은 모든 번호 조합에서 같습니다(약 1/814만).
         생성된 번호는 참고·오락용이며, 실제 추첨 결과·당첨을 보장하지 않습니다.
         <span className="lotto-disclaimer__age">복권 이용은 만 19세 이상입니다.</span>
       </p>
