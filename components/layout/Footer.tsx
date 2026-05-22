@@ -108,24 +108,24 @@ export default function Footer() {
           </p>
 
           {/* Contact · Social — 플랫폼 브랜드 배경 */}
-          <div className="site-footer__contacts max-[900px]:grid max-[900px]:grid-cols-2 max-[900px]:gap-2 min-[901px]:flex min-[901px]:flex-wrap min-[901px]:items-center">
+          <div className="site-footer__contacts">
             <a
               href="https://www.instagram.com/tae_system/"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-chip contact-chip--instagram max-[900px]:flex max-[900px]:w-full max-[900px]:min-w-0 max-[900px]:justify-center max-[900px]:box-border"
+              className="contact-chip contact-chip--instagram"
               aria-label="인스타그램 @tae_system"
             >
-              <Instagram className="w-4 h-4 shrink-0 max-[900px]:w-3.5 max-[900px]:h-3.5" strokeWidth={2} />
-              <span className="max-[900px]:truncate">@tae_system</span>
+              <Instagram className="w-4 h-4 shrink-0" strokeWidth={2} />
+              <span>@tae_system</span>
             </a>
             <a
               href="mailto:bhd03014@gmail.com"
-              className="contact-chip contact-chip--gmail max-[900px]:flex max-[900px]:w-full max-[900px]:min-w-0 max-[900px]:justify-center max-[900px]:box-border"
+              className="contact-chip contact-chip--gmail"
               aria-label="이메일 bhd03014@gmail.com"
             >
-              <GmailIcon className="w-4 h-4 shrink-0 max-[900px]:w-3.5 max-[900px]:h-3.5" />
-              <span className="max-[900px]:truncate">bhd03014@gmail.com</span>
+              <GmailIcon className="w-4 h-4 shrink-0" />
+              <span>bhd03014@gmail.com</span>
             </a>
           </div>
           <p className="site-footer__contact-note">
@@ -139,7 +139,6 @@ export default function Footer() {
             titleShort="계산기"
             items={calc}
             aria="사이트 내비게이션"
-            listClassName="site-footer__nav-list--calc"
           />
           <FooterColumn
             title="Guides · 가이드"
