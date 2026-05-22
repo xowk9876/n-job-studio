@@ -291,6 +291,8 @@ body {
 .site-footer__brand {
   min-width: 0;
   max-width: 400px;
+  letter-spacing: 0;
+  font-family: var(--font-body);
 }
 .site-footer__logo-row {
   display: flex;
@@ -298,19 +300,28 @@ body {
   gap: 0.625rem;
   margin-bottom: 0.85rem;
 }
+.site-footer__brand-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: #f0f4f8;
+}
 .site-footer__desc {
-  font-size: 13px;
-  line-height: 1.6;
-  font-weight: 400;
-  color: #b8c5d6;
+  font-size: 14px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #c8d4e4;
+  letter-spacing: 0;
   word-break: keep-all;
 }
 .site-footer__notice {
   margin-top: 1rem;
-  font-size: 11px;
-  line-height: 1.55;
-  font-weight: 400;
-  color: #8b9cb3;
+  font-size: 12px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #a3b4cb;
+  letter-spacing: 0;
   word-break: keep-all;
 }
 .site-footer__contacts {
@@ -328,14 +339,15 @@ body {
 }
 .site-footer__contact-note {
   margin-top: 0.7rem;
-  font-size: 11px;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #8b9cb3;
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: #a3b4cb;
+  letter-spacing: 0;
 }
 .site-footer .contact-chip {
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 .site-footer__columns {
   min-width: 0;
@@ -493,13 +505,15 @@ body {
     font-weight: 500;
   }
   .site-footer__desc {
-    font-size: 13px;
-    color: #c5d0de;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #c8d4e4;
   }
   .site-footer__notice,
   .site-footer__contact-note {
-    font-size: 11px;
-    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+    color: #a3b4cb;
   }
   .site-footer__contacts .contact-chip {
     padding: 10px 12px;

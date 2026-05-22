@@ -96,7 +96,7 @@ export default function Footer() {
             >
               M
             </span>
-            <span className="font-semibold text-white">머니핏 계산기</span>
+            <span className="site-footer__brand-title">머니핏 계산기</span>
           </div>
           <p className="site-footer__desc">
             2026년 최신 세율·정책 기준으로 정확하게.
