@@ -2,15 +2,19 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+
+const pageTitle = '문의하기'
+const description = '머니핏 계산기 운영자 연락처. 이메일 bhd03014@gmail.com · 인스타그램 @tae_system.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '문의하기',
-  description: '머니핏 계산기 운영자 연락처. 이메일 bhd03014@gmail.com · 인스타그램 @tae_system.',
-  alternates: { canonical: `${SITE_URL}/contact` },
+  title: pageTitle,
+  description,
+  alternates: buildGoogleAlternates(`${SITE_URL}/contact`),
   robots: { index: true, follow: true },
   openGraph: {
-    title: '문의하기 | 머니핏 계산기',
+    title: formatPageTitle(pageTitle),
     description: '계산 오류 제보, 새 계산기 제안, 제휴 문의 연락처 안내.',
     url: `${SITE_URL}/contact`,
     siteName: SITE_NAME,
@@ -20,10 +24,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '문의하기 | 머니핏 계산기',
+    title: formatPageTitle(pageTitle),
     description: '오류 제보와 새 계산기 제안을 받습니다.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 문의하기' }],
   },
+  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 function GmailIcon({ className = 'w-5 h-5' }: { className?: string }) {

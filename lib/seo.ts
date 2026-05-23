@@ -1,4 +1,8 @@
 import type { Metadata } from 'next'
+import {
+  buildGoogleAlternates,
+  buildNaverMeta,
+} from '@/lib/seo-platform'
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
 export const CONTENT_UPDATED_AT = '2026-05-22' as const
@@ -77,6 +81,9 @@ export const guideItems = [
     updatedAt: CONTENT_UPDATED_AT,
   },
 ] as const
+
+export { calculatorFeedItems, guideRssBodies, calculatorRssBodies, RSS_FEED_URL, SITEMAP_URL } from '@/lib/seo-platform'
+export { GOOGLE_SITE_VERIFICATION, NAVER_SITE_VERIFICATION } from '@/lib/seo-platform'
 
 export type GuideItem = (typeof guideItems)[number]
 
@@ -237,6 +244,7 @@ export function buildCalculatorMetadata(input: {
   const ogImage = `${SITE_URL}${input.ogImagePath}`
   const ogTitle = input.ogTitle ?? input.title
   const ogDescription = input.ogDescription ?? input.description
+  const fullTitle = `${input.title} | ${SITE_NAME}`
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -260,8 +268,9 @@ export function buildCalculatorMetadata(input: {
       description: ogDescription,
       images: [{ url: ogImage, alt: ogTitle }],
     },
-    alternates: { canonical: url },
+    alternates: buildGoogleAlternates(url),
     robots: googleBotRobots,
+    other: buildNaverMeta(fullTitle, input.description),
   }
 }
 
@@ -287,6 +296,7 @@ export function buildGuideMetadata(params: {
 }): Metadata {
   const url = `${SITE_URL}/guide/${params.slug}`
   const image = `${SITE_URL}/guide/opengraph-image`
+  const fullTitle = `${params.title} | ${SITE_NAME}`
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -303,7 +313,7 @@ export function buildGuideMetadata(params: {
     authors: [{ name: SITE_NAME, url: SITE_URL }],
     publisher: SITE_NAME,
     category: 'finance',
-    alternates: { canonical: url },
+    alternates: buildGoogleAlternates(url),
     robots: googleBotRobots,
     openGraph: {
       title: params.title,
@@ -324,5 +334,6 @@ export function buildGuideMetadata(params: {
       description: params.description,
       images: [{ url: image, alt: `${SITE_NAME} ${params.title}` }],
     },
+    other: buildNaverMeta(fullTitle, params.description),
   }
 }

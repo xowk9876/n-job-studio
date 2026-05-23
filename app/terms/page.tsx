@@ -1,16 +1,20 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+
+const pageTitle = '이용약관'
+const description =
+  '머니핏 계산기 이용약관. 서비스 성격, 면책, 지식재산권, 준거법, 분쟁 해결 절차에 대한 안내입니다.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '이용약관',
-  description:
-    '머니핏 계산기 이용약관. 서비스 성격, 면책, 지식재산권, 준거법, 분쟁 해결 절차에 대한 안내입니다.',
-  alternates: { canonical: `${SITE_URL}/terms` },
+  title: pageTitle,
+  description,
+  alternates: buildGoogleAlternates(`${SITE_URL}/terms`),
   robots: { index: true, follow: true },
   openGraph: {
-    title: '이용약관 | 머니핏 계산기',
+    title: formatPageTitle(pageTitle),
     description: '서비스 성격, 면책, 지식재산권, 준거법 안내.',
     url: `${SITE_URL}/terms`,
     siteName: SITE_NAME,
@@ -20,10 +24,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '이용약관 | 머니핏 계산기',
+    title: formatPageTitle(pageTitle),
     description: '머니핏 계산기 서비스 이용 조건 안내.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 이용약관' }],
   },
+  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 export default function TermsPage() {

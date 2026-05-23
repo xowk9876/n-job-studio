@@ -3,17 +3,20 @@ import Link from 'next/link'
 import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight, Shield, Scale, Lock } from 'lucide-react'
 import HomeGuideHub from '@/components/home/HomeGuideHub'
 import { DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+
+const homeDescription =
+  '2026년 최신 세율·4대보험 요율·법령 기준으로 정확하게 계산합니다. 연봉 실수령액, 주택담보대출, 퇴직금, 적금·ISA, 전월세, 로또까지 무료.'
 
 export const metadata: Metadata = {
-  alternates: { canonical: SITE_URL },
+  alternates: buildGoogleAlternates(SITE_URL),
   openGraph: {
     url: SITE_URL,
     siteName: SITE_NAME,
     type: 'website',
     locale: 'ko_KR',
     title: '머니핏 계산기 — 2026년 한국 재테크 필수 계산기 6종',
-    description:
-      '연봉 실수령액·대출 이자·퇴직금·적금·전월세·로또 — 2026년 최신 세율 기준, 가입 없이 무료.',
+    description: homeDescription,
     images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: '머니핏 계산기 메인' }],
   },
   twitter: {
@@ -24,6 +27,7 @@ export const metadata: Metadata = {
   },
   other: {
     'article:modified_time': SEO_UPDATED_AT,
+    ...buildNaverMeta(formatPageTitle('2026년 연봉·대출·퇴직금·적금·전월세·로또 계산기'), homeDescription),
   },
 }
 

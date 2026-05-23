@@ -2,15 +2,19 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import GuideCardList from '@/components/guide/GuideCardList'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, guideItems, jsonLd } from '@/lib/seo'
+import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+
+const pageTitle = '재테크 실전 가이드'
+const description =
+  '2026년 최신 세율·법령을 반영한 연봉·대출·퇴직금·적금·전세·로또 실전 가이드. 공식 법령 조항을 근거로 작성된 독창적 콘텐츠.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '재테크 실전 가이드',
-  description:
-    '2026년 최신 세율·법령을 반영한 연봉·대출·퇴직금·적금·전세·로또 실전 가이드. 공식 법령 조항을 근거로 작성된 독창적 콘텐츠.',
+  title: pageTitle,
+  description,
   keywords: ['재테크 가이드', '2026 세금 가이드', 'DSR 가이드', '퇴직금 계산 방법', 'ISA 절세', '전세사기 예방', '로또 세금'],
-  alternates: { canonical: `${SITE_URL}/guide` },
-  robots: { index: true, follow: true },
+  alternates: buildGoogleAlternates(`${SITE_URL}/guide`),
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   openGraph: {
     title: '재테크 실전 가이드 — 2026년 최신 공식 기준',
     description: '연봉·대출·퇴직금·ISA·전월세·로또까지 공식 기준으로 정리한 머니핏 가이드 모음.',
@@ -26,6 +30,7 @@ export const metadata: Metadata = {
     description: '공식 법령·고시 기반 재테크 가이드 모음.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 재테크 실전 가이드' }],
   },
+  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 function GuideIndexStructuredData() {
