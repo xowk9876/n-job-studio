@@ -6,6 +6,10 @@ import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { getCalculatorLinks } from '@/lib/seo'
+
+const CALC_PATH = '/savings'
+const calcSeo = getCalculatorLinks(CALC_PATH)
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 
@@ -138,7 +142,7 @@ export default function SavingsPage() {
           { label: '1,000만 · 연 3.8% · 12개월 (예금)', input: '예치 원금 1,000만원', result: '세후 약 10,321,000원', note: '세후 이자 약 321,600원' },
           { label: '월 50만 · 연 4.0% · 24개월 (적금)', input: '납입 원금 1,200만원', result: '세후 이자 약 1,248,000원', note: '복리 기준' },
         ]} />
-        <FAQSection items={[
+        <FAQSection pagePath={CALC_PATH} items={[
           { q: '단리와 복리의 차이는?', a: '단리는 원금에만 이자가 붙는 계산방식이고, 복리는 발생한 이자를 원금에 더해 다음 이자 계산의 기준으로 삼습니다. 기간이 길수록 복리 효과가 극대화됩니다. 1,000만원 연 4% 10년 운용 시 단리 이자 400만원, 월복리 약 490만원(세전). 장기 적립일수록 복리 상품을 선택하세요. 근거: 금융소비자보호법 제19조 설명의무.' },
           { q: '이자소득세 15.4%는 어떻게 계산되나요?', a: '소득세법 제129조에 따라 이자소득 원천징수세율은 14%(소득세) + 1.4%(지방소득세) = 15.4%입니다. 만기 시 은행이 자동 원천징수 후 지급합니다. 세전이자 100만원 → 세후 846,000원. 금융소득(이자+배당) 연 2,000만원 초과 시 종합과세 대상으로 누진세율(6~45%) 적용.' },
           { q: '적금 vs 예금, 실수령 이자 차이는?', a: '목돈이 있다면 정기예금이 유리합니다. 정기적금은 첫 달 납입금은 12개월 전체 이자를 받지만, 마지막 달 납입금은 1개월치 이자만 받아 실효이율이 명목금리의 약 54%(12개월 기준)입니다. 예: 월 50만원 × 12개월 연 5% 적금의 세전이자는 원금 600만원 × 5% × 6.5/12 ≈ 162,500원.' },
@@ -160,12 +164,7 @@ export default function SavingsPage() {
           '조세특례제한법 제91조의18 ISA 비과세·분리과세 기준',
           '금융감독원 금융상품통합비교공시 및 예금자보호법 기준',
         ]} />
-        <RelatedLinks links={[
-          { href: '/salary', label: '연봉 실수령액' },
-          { href: '/mortgage', label: '대출 이자' },
-          { href: '/severance', label: '퇴직금' },
-          { href: '/jeonse', label: '전월세 전환' },
-        ]} />
+        <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>
   )

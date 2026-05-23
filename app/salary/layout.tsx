@@ -1,8 +1,11 @@
-import Script from 'next/script'
-import { buildBreadcrumbJsonLd, buildCalculatorMetadata, jsonLd } from '@/lib/seo'
+import CalculatorSeoScripts from '@/components/seo/CalculatorSeoScripts'
+import { buildCalculatorMetadata, getGuideLinkForCalculator } from '@/lib/seo'
+
+const PATH = '/salary'
+const guide = getGuideLinkForCalculator(PATH)
 
 export const metadata = buildCalculatorMetadata({
-  path: '/salary',
+  path: PATH,
   title: '연봉 실수령액 계산기 — 2026년 4대보험·소득세 최신 기준',
   description:
     '2026년 4대보험 요율(국민연금 근로자 4.75%, 건강보험 3.595%, 장기요양보료의 13.14%, 고용보험 0.9%)과 근로소득세 간이세액표 기준으로 연봉 실수령액을 계산합니다. 비과세 식대·자녀세액공제 반영.',
@@ -24,16 +27,21 @@ export const metadata = buildCalculatorMetadata({
 })
 
 export default function SalaryLayout({ children }: { children: React.ReactNode }) {
-  const ld = buildBreadcrumbJsonLd([
-    { name: '홈', path: '/' },
-    { name: '연봉 실수령액 계산기', path: '/salary' },
-  ])
   return (
     <>
-      <Script
-        id="salary-breadcrumb"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd(ld) }}
+      <CalculatorSeoScripts
+        id="salary-seo"
+        breadcrumb={[
+          { name: '홈', path: '/' },
+          { name: '연봉 실수령액 계산기', path: PATH },
+        ]}
+        webApp={{
+          path: PATH,
+          name: '연봉 실수령액 계산기',
+          description:
+            '2026년 4대보험과 근로소득세 간이세액표 기준 연봉 실수령액·세후 월급 계산',
+          guidePath: guide?.href,
+        }}
       />
       {children}
     </>

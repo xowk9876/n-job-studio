@@ -4,7 +4,7 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '개인정보처리방침 | 머니핏 계산기',
+  title: '개인정보처리방침',
   description:
     '머니핏 계산기의 개인정보처리방침. 수집 항목, 쿠키, Google AdSense·Analytics 사용, 제3자 제공, 이용자 권리에 대한 안내입니다.',
   alternates: { canonical: `${SITE_URL}/privacy-policy` },

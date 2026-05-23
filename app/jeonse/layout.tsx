@@ -1,8 +1,11 @@
-import Script from 'next/script'
-import { buildBreadcrumbJsonLd, buildCalculatorMetadata, jsonLd } from '@/lib/seo'
+import CalculatorSeoScripts from '@/components/seo/CalculatorSeoScripts'
+import { buildCalculatorMetadata, getGuideLinkForCalculator } from '@/lib/seo'
+
+const PATH = '/jeonse'
+const guide = getGuideLinkForCalculator(PATH)
 
 export const metadata = buildCalculatorMetadata({
-  path: '/jeonse',
+  path: PATH,
   title: '전세↔월세 전환 계산기 — 2026년 법정 전환율(기준금리+2%)',
   description:
     '전세 보증금을 월세로, 월세를 전세 보증금으로 양방향 전환합니다. 주택임대차보호법 법정 상한 전환율(기준금리+2%) 자동 적용. 손익분기 전환율 분석.',
@@ -24,16 +27,20 @@ export const metadata = buildCalculatorMetadata({
 })
 
 export default function JeonseLayout({ children }: { children: React.ReactNode }) {
-  const ld = buildBreadcrumbJsonLd([
-    { name: '홈', path: '/' },
-    { name: '전월세 전환 계산기', path: '/jeonse' },
-  ])
   return (
     <>
-      <Script
-        id="jeonse-breadcrumb"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd(ld) }}
+      <CalculatorSeoScripts
+        id="jeonse-seo"
+        breadcrumb={[
+          { name: '홈', path: '/' },
+          { name: '전월세 전환 계산기', path: PATH },
+        ]}
+        webApp={{
+          path: PATH,
+          name: '전월세 전환 계산기',
+          description: '주택임대차보호법 법정 전환율 기준 전세↔월세 양방향 환산',
+          guidePath: guide?.href,
+        }}
       />
       {children}
     </>

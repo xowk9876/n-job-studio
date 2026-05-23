@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { RotateCcw, Copy, Check, Trophy } from 'lucide-react'
 import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 import { generateOptimizedGames, type LottoPick } from '@/lib/lotto/pattern'
+import { getCalculatorLinks } from '@/lib/seo'
+
+const CALC_PATH = '/lotto'
+const calcSeo = getCalculatorLinks(CALC_PATH)
 
 // ═══ 동행복권 회차 / 추첨시간 계산 ═══
 const FIRST_DRAW = new Date('2002-12-07T20:45:00+09:00')
@@ -420,7 +424,7 @@ export default function LottoPage() {
       </div>
 
       <div className="flex flex-col gap-8">
-        <FAQSection items={[
+        <FAQSection pagePath={CALC_PATH} items={[
           { q: '로또 당첨금에 세금이 얼마나 붙나요?', a: '200만 원 이하는 비과세입니다. 200만 원 초과~3억 원 이하는 22%(소득세 20% + 지방소득세 2%), 3억 원 초과분은 33%(소득세 30% + 지방소득세 3%)가 원천징수됩니다.' },
           { q: '당첨금은 어디서 수령하나요?', a: '5만 원 이하는 일반 판매점, 5만 원 초과~200만 원 이하는 NH농협은행 지점, 200만 원 초과는 NH농협은행 본점(서울 중구)에서 수령합니다. 신분증과 당첨 복권을 지참해야 합니다.' },
           { q: '당첨금 수령 기한이 있나요?', a: '추첨일로부터 1년 이내에 수령해야 합니다. 기한 초과 시 당첨금은 복권기금으로 귀속됩니다.' },
@@ -443,13 +447,7 @@ export default function LottoPage() {
           note="로또 번호 생성기는 오락용 정보 도구이며 당첨을 보장하지 않습니다. 과도한 복권 구매를 유도하지 않으며, 생성된 번호와 실제 추첨 결과는 독립적입니다."
         />
 
-        <RelatedLinks links={[
-          { href: '/salary',    label: '연봉 실수령액' },
-          { href: '/savings',   label: '적금 이자' },
-          { href: '/mortgage',  label: '대출 이자' },
-          { href: '/severance', label: '퇴직금' },
-          { href: '/jeonse',    label: '전월세 전환' },
-        ]} />
+        <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
 
       <style jsx>{`

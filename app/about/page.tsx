@@ -4,7 +4,7 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '소개 | 머니핏 계산기 — 2026년 최신 세율·공식 기반 재테크 계산기',
+  title: '소개 — 2026년 최신 세율·공식 기반 재테크 계산기',
   description:
     '머니핏 계산기는 근로기준법·소득세법·주택임대차보호법 등 실제 법령을 기반으로 한 무료 재테크 계산기입니다. 제작 의도, 계산 근거, 데이터 업데이트 원칙을 소개합니다.',
   alternates: { canonical: `${SITE_URL}/about` },

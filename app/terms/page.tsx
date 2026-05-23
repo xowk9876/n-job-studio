@@ -4,7 +4,7 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '이용약관 | 머니핏 계산기',
+  title: '이용약관',
   description:
     '머니핏 계산기 이용약관. 서비스 성격, 면책, 지식재산권, 준거법, 분쟁 해결 절차에 대한 안내입니다.',
   alternates: { canonical: `${SITE_URL}/terms` },

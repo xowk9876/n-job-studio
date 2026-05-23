@@ -5,7 +5,7 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '문의하기 | 머니핏 계산기',
+  title: '문의하기',
   description: '머니핏 계산기 운영자 연락처. 이메일 bhd03014@gmail.com · 인스타그램 @tae_system.',
   alternates: { canonical: `${SITE_URL}/contact` },
   robots: { index: true, follow: true },

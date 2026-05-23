@@ -7,8 +7,12 @@ import { calcSalary, MIN_HOURLY_WAGE_2026 } from '@/lib/salary'
 import { ChevronDown, AlertTriangle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { getCalculatorLinks } from '@/lib/seo'
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
+
+const CALC_PATH = '/salary'
+const calcSeo = getCalculatorLinks(CALC_PATH)
 
 export default function SalaryPage() {
   const s = useSalaryStore()
@@ -183,7 +187,7 @@ export default function SalaryPage() {
           { label: '연봉 5,000만원', input: '월 416만원 · 식대 20만원', result: '약 3,586,000원', note: '4대보험 + 소득세 공제 후' },
           { label: '연봉 8,000만원', input: '월 666만원 · 식대 20만원', result: '약 5,539,000원', note: '4대보험 + 소득세 공제 후' },
         ]} />
-        <FAQSection items={[
+        <FAQSection pagePath={CALC_PATH} items={[
           { q: '2026년 4대보험 요율은 얼마인가요?', a: '국민연금 9.5%(근로자 4.75%), 건강보험 7.19%(근로자 3.595%), 장기요양보험은 건강보험료의 13.14%, 고용보험 실업급여분 1.8%(근로자 0.9%)입니다. 국민연금은 기준소득월액 상한 637만원(2025.7~2026.6) 기준 월 공제 상한 302,575원입니다. 산재보험은 전액 사업주 부담입니다. 근거: 국민연금법 제88조, 국민건강보험법 제69조, 노인장기요양보험법 제9조.' },
           { q: '식대·차량유지비 비과세 한도는?', a: '식대는 월 20만원까지(2023년 개정 소득세법 시행령 제17조의2), 자가운전보조금(차량유지비)은 월 20만원까지(본인 명의 차량 + 업무 사용 증빙 필요), 출산·보육수당은 6세 이하 자녀 양육 시 월 20만원까지 비과세입니다. 실제 지급이 아닌 명목상 항목이면 국세청이 부인할 수 있습니다.' },
           { q: '부양가족공제와 자녀세액공제는 어떻게 적용되나요?', a: '기본공제 1인당 연 150만원(본인·배우자·부양가족). 2026년부터 자녀세액공제는 첫째 25만원, 둘째 30만원, 셋째부터 1인당 40만원입니다(2024년 세법개정 반영). 70세 이상 부모는 경로우대 공제 연 100만원이 추가됩니다. 근거: 소득세법 제50조·제59조의2.' },
@@ -203,12 +207,7 @@ export default function SalaryPage() {
           '국민연금법, 국민건강보험법, 노인장기요양보험법, 고용보험료 고시',
           '고용노동부 2026년 최저임금 고시와 근로기준법 수당 기준',
         ]} />
-        <RelatedLinks links={[
-          { href: '/mortgage', label: '대출 이자' },
-          { href: '/severance', label: '퇴직금' },
-          { href: '/savings', label: '적금 이자' },
-          { href: '/jeonse', label: '전월세 전환' },
-        ]} />
+        <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>
   )

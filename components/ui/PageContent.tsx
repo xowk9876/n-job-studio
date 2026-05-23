@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { buildFaqJsonLd, jsonLd, SITE_URL } from '@/lib/seo'
 
 function SectionHeader({ num, title }: { num?: string; title: string }) {
   return (
@@ -13,16 +14,26 @@ function SectionHeader({ num, title }: { num?: string; title: string }) {
   )
 }
 
-/** FAQ — details/summary + JSON-LD */
+/** FAQ — details/summary + FAQPage JSON-LD */
 export function FAQSection({
   items,
   title = '자주 묻는 질문',
+  pagePath,
 }: {
   items: { q: string; a: string }[]
   title?: string
+  pagePath?: string
 }) {
+  const faqLd = pagePath ? buildFaqJsonLd(items, `${SITE_URL}${pagePath}`) : null
+
   return (
     <section aria-labelledby="faq-heading">
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd(faqLd) }}
+        />
+      )}
       <div id="faq-heading">
         <SectionHeader num="FAQ · 자주 묻는 질문" title={title} />
       </div>
@@ -161,18 +172,44 @@ export function OfficialSourcesSection({
   )
 }
 
-export function RelatedLinks({ links }: { links: { href: string; label: string }[] }) {
+export function RelatedLinks({
+  links,
+  guideLink,
+}: {
+  links: { href: string; label: string }[]
+  guideLink?: { href: string; label: string }
+}) {
   return (
-    <div className="flex flex-wrap gap-2" role="navigation" aria-label="관련 계산기">
-      {links.map(({ href, label }) => (
-        <Link
-          key={href}
-          href={href}
-          className="inline-reset text-[13px] px-3.5 py-2 rounded-md border border-[color:var(--line-strong)] bg-white/[0.03] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)] hover:border-[rgba(110,168,255,0.3)] transition-colors backdrop-blur"
-        >
-          → {label} 계산기
-        </Link>
-      ))}
-    </div>
+    <section className="space-y-4" aria-label="관련 링크">
+      {guideLink && (
+        <div>
+          <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-2">
+            GUIDE · 관련 가이드
+          </p>
+          <Link
+            href={guideLink.href}
+            className="inline-reset text-[13px] px-3.5 py-2 rounded-md border border-[rgba(146,156,248,0.35)] bg-[rgba(146,156,248,0.08)] text-[#c4cbff] hover:text-white hover:bg-[rgba(146,156,248,0.16)] transition-colors"
+          >
+            📘 {guideLink.label}
+          </Link>
+        </div>
+      )}
+      <div>
+        <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-2">
+          CALC · 관련 계산기
+        </p>
+        <div className="flex flex-wrap gap-2" role="navigation" aria-label="관련 계산기">
+          {links.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className="inline-reset text-[13px] px-3.5 py-2 rounded-md border border-[color:var(--line-strong)] bg-white/[0.03] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)] hover:border-[rgba(110,168,255,0.3)] transition-colors backdrop-blur"
+            >
+              → {label} 계산기
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }

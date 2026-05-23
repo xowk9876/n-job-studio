@@ -1,8 +1,11 @@
-import Script from 'next/script'
-import { buildBreadcrumbJsonLd, buildCalculatorMetadata, jsonLd } from '@/lib/seo'
+import CalculatorSeoScripts from '@/components/seo/CalculatorSeoScripts'
+import { buildCalculatorMetadata, getGuideLinkForCalculator } from '@/lib/seo'
+
+const PATH = '/severance'
+const guide = getGuideLinkForCalculator(PATH)
 
 export const metadata = buildCalculatorMetadata({
-  path: '/severance',
+  path: PATH,
   title: '퇴직금 계산기 — 2026년 근로기준법 제34조 기준',
   description:
     '입사일·퇴직일·월급·상여금을 입력하면 근로기준법 제34조에 따른 퇴직금을 정확히 계산합니다. 1일 평균임금 자동 산출, 근속 연수별 퇴직금 분석.',
@@ -23,16 +26,20 @@ export const metadata = buildCalculatorMetadata({
 })
 
 export default function SeveranceLayout({ children }: { children: React.ReactNode }) {
-  const ld = buildBreadcrumbJsonLd([
-    { name: '홈', path: '/' },
-    { name: '퇴직금 계산기', path: '/severance' },
-  ])
   return (
     <>
-      <Script
-        id="severance-breadcrumb"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd(ld) }}
+      <CalculatorSeoScripts
+        id="severance-seo"
+        breadcrumb={[
+          { name: '홈', path: '/' },
+          { name: '퇴직금 계산기', path: PATH },
+        ]}
+        webApp={{
+          path: PATH,
+          name: '퇴직금 계산기',
+          description: '근로기준법 제34조 평균임금 기준 퇴직금 자동 계산',
+          guidePath: guide?.href,
+        }}
       />
       {children}
     </>

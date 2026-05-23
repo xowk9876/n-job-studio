@@ -31,7 +31,7 @@ export default function GuideArticle({
         '@id': `${SITE_URL}/guide/${slug}#article`,
         headline: title,
         description,
-        image: [DEFAULT_OG_IMAGE],
+        image: [`${SITE_URL}/guide/opengraph-image`],
         author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
         publisher: {
           '@type': 'Organization',

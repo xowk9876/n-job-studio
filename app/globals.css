@@ -1624,6 +1624,48 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: 0 0 10px color-mix(in srgb, var(--topic) 65%, transparent);
 }
 
+.home-guide-hub__articles {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+@media (min-width: 768px) {
+  .home-guide-hub__articles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem 1rem;
+  }
+}
+.home-guide-hub__article-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.65rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.home-guide-hub__article-link:hover {
+  border-color: rgba(110, 168, 255, 0.35);
+  background: rgba(110, 168, 255, 0.06);
+}
+.home-guide-hub__article-tag {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.home-guide-hub__article-title {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.home-guide-hub__article-link:hover .home-guide-hub__article-title {
+  color: #fff;
+}
+
 /* 로또 — 하단 안내 */
 .lotto-disclaimer {
   margin: 0 auto;

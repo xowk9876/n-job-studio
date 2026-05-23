@@ -7,6 +7,10 @@ import { calcMortgage, calcDsrLimit, RepaymentType } from '@/lib/mortgage'
 import { ChevronDown, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { getCalculatorLinks } from '@/lib/seo'
+
+const CALC_PATH = '/mortgage'
+const calcSeo = getCalculatorLinks(CALC_PATH)
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 function manwon(n: number) {
@@ -189,7 +193,7 @@ export default function MortgagePage() {
           { label: '5억 · 4.0% · 20년 (원리금균등)', input: '월 납입액', result: '약 3,032,000원', note: '총 이자 약 2억 2,768만원' },
           { label: '2억 · 3.0% · 10년 (원금균등)', input: '첫달 납입액', result: '약 2,167,000원', note: '총 이자 약 3,025만원' },
         ]} />
-        <FAQSection items={[
+        <FAQSection pagePath={CALC_PATH} items={[
           { q: '원리금균등과 원금균등의 차이는?', a: '원리금균등은 매월 동일한 금액(원금+이자)을 납부합니다. 초반엔 이자 비중이 높고 점차 원금 비중이 커져 가계 계획이 쉽습니다. 원금균등은 매월 동일한 원금에 잔여원금에 대한 이자를 더해 납부하므로 초기 부담이 크지만 총이자는 원리금균등보다 적습니다.' },
           { q: 'DSR·LTV·DTI는 무엇인가요?', a: 'LTV(담보인정비율)는 집값 대비 대출 가능 금액 비율. DTI(총부채상환비율)는 연소득 대비 주택담보대출 원리금 + 기타대출 이자의 비율. DSR(총부채원리금상환비율)은 연소득 대비 모든 대출 원리금 상환액의 비율입니다. 2022년 1월부터 차주별 DSR 40%(은행권)·50%(2금융권)가 전면 적용되고 있으며, 2024~2025년 스트레스 DSR 1~3단계가 순차 시행되었습니다.' },
           { q: '금리 0.5%p 차이가 실제로 얼마?', a: '3억원 · 30년 · 원리금균등 기준, 3.5%→4.0% 상승 시 월 납입 약 8만원(1,347,000→1,432,000) 증가, 총이자 약 2,900만원 증가. 5억·20년·4.0%→4.5%이면 월 약 12만원, 총이자 약 2,800만원 증가합니다.' },
@@ -210,12 +214,7 @@ export default function MortgagePage() {
           '금융감독원 금융상품 비교공시와 금융권 표준 상환 방식',
           '주택도시기금·한국주택금융공사 정책대출 안내',
         ]} />
-        <RelatedLinks links={[
-          { href: '/salary', label: '연봉 실수령액' },
-          { href: '/severance', label: '퇴직금' },
-          { href: '/savings', label: '적금 이자' },
-          { href: '/jeonse', label: '전월세 전환' },
-        ]} />
+        <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>
   )

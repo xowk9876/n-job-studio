@@ -8,6 +8,10 @@ import { AlertCircle } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import DatePicker from '@/components/ui/DatePicker'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { getCalculatorLinks } from '@/lib/seo'
+
+const CALC_PATH = '/severance'
+const calcSeo = getCalculatorLinks(CALC_PATH)
 
 function toISO(d: Date | null) {
   if (!d) return ''
@@ -136,7 +140,7 @@ export default function SeverancePage() {
           { label: '5년 근무 · 월급 400만원', input: '1일 평균임금 약 133,333원 · 재직 1,825일', result: '퇴직금 약 20,000,000원', note: '상여금·퇴직소득세 제외 기준' },
           { label: '10년 근무 · 월급 500만원', input: '1일 평균임금 약 166,666원 · 재직 3,650일', result: '퇴직금 약 50,000,000원', note: '상여금·퇴직소득세 제외 기준' },
         ]} />
-        <FAQSection items={[
+        <FAQSection pagePath={CALC_PATH} items={[
           { q: '퇴직금 지급 기준은 무엇인가요?', a: '근로기준법 제34조·근로자퇴직급여 보장법 제4조에 따라 1년 이상 계속 근로하고 4주 평균 주 15시간 이상 근무한 근로자가 퇴직하면 지급합니다. 계약직·일용직·아르바이트도 동일하게 적용되며 5인 미만 사업장도 2013.12.1부터 전면 적용되고 있습니다.' },
           { q: '평균임금은 어떻게 계산되나요?', a: '퇴직일 직전 3개월 동안 지급된 임금총액을 해당 기간 총일수(89~92일)로 나눈 금액입니다(근로기준법 제2조). 기본급·직책수당·연장근로수당·연차수당뿐 아니라 정기상여금의 3/12, 성과급 일부도 포함됩니다. 단, 경조사비·실비변상적 급여는 제외.' },
           { q: '퇴직금 계산식은?', a: '퇴직금 = 1일 평균임금 × 30일 × (재직일수 ÷ 365). 예시: 재직 1,825일(5년), 평균임금 133,333원이면 133,333 × 30 × 1,825/365 ≒ 20,000,000원. 계산기 결과와 일치합니다.' },
@@ -157,12 +161,7 @@ export default function SeverancePage() {
           '근로자퇴직급여 보장법 제4조·제8조 계속근로기간 기준',
           '소득세법 퇴직소득세 계산 체계와 IRP 과세이연 기준',
         ]} />
-        <RelatedLinks links={[
-          { href: '/salary', label: '연봉 실수령액' },
-          { href: '/savings', label: '적금 이자' },
-          { href: '/mortgage', label: '대출 이자' },
-          { href: '/jeonse', label: '전월세 전환' },
-        ]} />
+        <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>
   )

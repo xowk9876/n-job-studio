@@ -7,6 +7,10 @@ import { calcJeonse, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/
 import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { getCalculatorLinks } from '@/lib/seo'
+
+const CALC_PATH = '/jeonse'
+const calcSeo = getCalculatorLinks(CALC_PATH)
 
 function won(n: number) { return n.toLocaleString('ko-KR') + '원' }
 function manwon(n: number) {
@@ -185,7 +189,7 @@ export default function JeonsePage() {
           { label: '전세 2억 → 월세 (전환율 4.5%)', input: '보증금 2천만원 유지', result: '월세 약 675,000원', note: '(2억−2천만) × 4.5% ÷ 12' },
           { label: '월세 70만 → 전세 환산 (전환율 4.5%)', input: '보증금 1천만원 기준', result: '필요 전세 약 1억 9,667만원', note: '월세×12÷전환율+보증금' },
         ]} />
-        <FAQSection items={[
+        <FAQSection pagePath={CALC_PATH} items={[
           { q: '전월세 전환율이란 정확히 무엇인가요?', a: '전세보증금의 일부 또는 전부를 월세로 전환할 때 적용되는 연간 이율입니다. 주택임대차보호법 제7조의2에 따라 법정 상한은 min(한국은행 기준금리 + 2%p, 10%) 중 낮은 값입니다. 2026년 5월 한은 기준금리 2.50% 기준 상한 4.5%. 집주인이 이를 초과해 월세를 요구하면 초과분은 무효이며 반환 청구가 가능합니다.' },
           { q: '전세 vs 월세 무엇이 유리한가요?', a: '본인의 기회비용(보증금 조달 비용 또는 운용수익률)과 실제 전환율을 비교하세요. 전세자금대출 금리가 월세 전환율보다 낮으면 전세가 유리합니다. 목돈을 예적금·투자로 운용할 수 있다면 그 수익률과 비교하세요. 전세대출 금리는 한국주택금융공사(hf.go.kr) 또는 시중은행 공시에서 확인할 수 있습니다. 장기 거주 계획이면 전세, 2년 이내 이사 가능성 있으면 월세가 유연합니다.' },
           { q: '역전세·깡통전세를 피하는 법?', a: '깡통전세는 전세가가 매매가에 근접하거나 초과한 상태. 지표로 전세가율 = 전세보증금 / 매매가가 80% 이상이면 위험. HUG 전세보증금반환보증보험은 공시가격의 126% 이내만 가입 가능(2023.5 강화). 실거래가 확인은 국토부 실거래가공개시스템(rt.molit.go.kr), 전세가율은 KB부동산·아실에서 확인.' },
@@ -208,12 +212,7 @@ export default function JeonsePage() {
           '한국은행 기준금리와 국토교통부 실거래가 공개시스템',
           '주택도시보증공사(HUG) 전세보증금반환보증 가입 요건·보증료율',
         ]} />
-        <RelatedLinks links={[
-          { href: '/salary', label: '연봉 실수령액' },
-          { href: '/mortgage', label: '대출 이자' },
-          { href: '/savings', label: '적금 이자' },
-          { href: '/severance', label: '퇴직금' },
-        ]} />
+        <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>
   )

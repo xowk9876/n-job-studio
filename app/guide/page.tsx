@@ -5,7 +5,7 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, guideItems, jsonLd } from '@/lib
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '재테크 가이드 | 머니핏 계산기',
+  title: '재테크 실전 가이드',
   description:
     '2026년 최신 세율·법령을 반영한 연봉·대출·퇴직금·적금·전세·로또 실전 가이드. 공식 법령 조항을 근거로 작성된 독창적 콘텐츠.',
   keywords: ['재테크 가이드', '2026 세금 가이드', 'DSR 가이드', '퇴직금 계산 방법', 'ISA 절세', '전세사기 예방', '로또 세금'],
