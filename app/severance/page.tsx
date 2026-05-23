@@ -27,7 +27,8 @@ export default function SeverancePage() {
   const { avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage, set } = useSeveranceStore()
   usePersistRehydrate(useSeveranceStore)
   useEffect(() => {
-    if (endDate === '2026-01-01') {
+    const legacyEndDates = ['2026-01-01', '2026-05-22', '2026-05-24']
+    if (legacyEndDates.includes(endDate)) {
       set({ endDate: new Date().toISOString().split('T')[0] })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

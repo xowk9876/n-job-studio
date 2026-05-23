@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata } from '@/lib/seo'
+import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'dsr-stress-test-2026'
 const title = '2026 스트레스 DSR 3단계 완전 정리 — 한도 축소 폭과 대응 전략'
 const description =
   '금융위원회가 도입한 스트레스 DSR 3단계 구조와 가산금리 산정 방식, 주담대·신용대출별 한도 축소 폭을 사례로 정리합니다.'
-const updatedAt = '2026-05-16'
+const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '대출' })
 

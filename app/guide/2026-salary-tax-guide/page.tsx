@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata } from '@/lib/seo'
+import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = '2026-salary-tax-guide'
 const title = '2026년 연봉 실수령액 완전 가이드 — 4대보험 요율·간이세액표 총정리'
 const description =
   '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.'
-const updatedAt = '2026-01-05'
+const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '세금' })
 
@@ -51,15 +51,16 @@ export default function Page() {
             </tr>
           </thead>
           <tbody>
-            <tr><td>국민연금</td><td>9.5%</td><td>4.75%</td><td>국민연금법 제88조 (2026.1 시행)</td></tr>
+            <tr><td>국민연금</td><td>9.5%</td><td>4.75%</td><td>국민연금법 제88조 (2026.1 시행). 기준소득월액 상한 637만원 → 월 공제 상한 302,575원</td></tr>
             <tr><td>건강보험</td><td>7.19%</td><td>3.595%</td><td>2026년 보건복지부 고시</td></tr>
             <tr><td>장기요양</td><td>건보료의 13.14%</td><td>건보료의 13.14% × 50%</td><td>노인장기요양보험법 (2026 고시)</td></tr>
             <tr><td>고용보험</td><td>1.8%(실업급여)</td><td>0.9%</td><td>고용보험법 시행령</td></tr>
           </tbody>
         </table>
         <p>
-          국민연금과 고용보험은 장기간 동결되어 있고, 건강보험료율·장기요양 요율은 매년 조정됩니다.
-          실제 공제 시점의 요율은 국세청 홈택스·건강보험공단 EDI에서 확인할 수 있습니다.
+          2026년에는 국민연금 요율이 9%→9.5%로 인상되었고, 건강보험료율(7.19%)·장기요양 요율(건보료의
+          13.14%)도 조정되었습니다. 고용보험 실업급여분(1.8%, 근로자 0.9%)은 동일합니다. 실제 공제
+          시점의 요율은 국세청 홈택스·4대 사회보험 EDI에서 확인할 수 있습니다.
         </p>
       </section>
 
@@ -112,7 +113,8 @@ export default function Page() {
             또는 12%. 실질 환급액이 커집니다.
           </li>
           <li>
-            <strong>ISA 계좌</strong> — 순이익 200만 원까지 비과세, 초과분도 9.9% 분리과세.{' '}
+            <strong>ISA 계좌</strong> — 일반형 순이익 500만 원까지 비과세, 서민형·농어민형은 1,000만 원.
+            초과분은 9.9% 분리과세.{' '}
             <a href="/guide/isa-vs-regular-savings">ISA 완전 비교</a>에서 예시를 확인하세요.
           </li>
           <li>

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
-export const SEO_UPDATED_AT = '2026-05-22'
+export const CONTENT_UPDATED_AT = '2026-05-22' as const
+export const SEO_UPDATED_AT = CONTENT_UPDATED_AT
 export const SITE_NAME = '머니핏 계산기'
 
 /** OG 이미지·푸터 등에 표시할 브랜드 라벨 */
@@ -32,42 +33,42 @@ export const guideItems = [
     title: '2026년 연봉 실수령액 완전 가이드',
     description: '4대보험 요율 변경과 간이세액표 개정을 반영한 계산 공식과 실전 예시.',
     tag: '세금',
-    updatedAt: '2026-01-05',
+    updatedAt: CONTENT_UPDATED_AT,
   },
   {
     slug: 'dsr-stress-test-2026',
     title: '2026 스트레스 DSR 3단계 완전 정리',
     description: '스트레스 금리 1.50%p 적용 구간과 주담대·신용대출 영향 분석.',
     tag: '대출',
-    updatedAt: '2026-05-16',
+    updatedAt: CONTENT_UPDATED_AT,
   },
   {
     slug: 'severance-calculation-guide',
     title: '퇴직금 계산 공식과 실전 예시',
     description: '근로기준법 평균임금과 통상임금 비교, 소급 인상 반영법.',
     tag: '퇴직',
-    updatedAt: '2026-01-06',
+    updatedAt: CONTENT_UPDATED_AT,
   },
   {
     slug: 'isa-vs-regular-savings',
     title: 'ISA vs 일반계좌 10년 시뮬레이션',
     description: 'ISA 비과세 한도와 9.9% 분리과세의 실제 절세 효과 비교.',
     tag: '투자',
-    updatedAt: '2026-01-07',
+    updatedAt: CONTENT_UPDATED_AT,
   },
   {
     slug: 'jeonse-safety-2026',
     title: '2026 전세사기 방지 체크리스트',
     description: 'HUG 보증 가입 조건, 등기부등본 읽는 법, 깡통전세 판별 기준.',
     tag: '부동산',
-    updatedAt: '2026-05-16',
+    updatedAt: CONTENT_UPDATED_AT,
   },
   {
     slug: 'lotto-tax-guide',
     title: '로또 당첨금 세금·수령 완전 가이드',
     description: '원천징수 구간, 기타소득 신고, 익명 수령 절차와 유의사항.',
     tag: '복권',
-    updatedAt: '2026-05-16',
+    updatedAt: CONTENT_UPDATED_AT,
   },
 ] as const
 

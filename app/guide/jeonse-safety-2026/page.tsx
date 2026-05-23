@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata } from '@/lib/seo'
+import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'jeonse-safety-2026'
 const title = '2026 전세사기 방지 체크리스트 — 계약 전·중·후 25개 점검 포인트'
 const description =
   'HUG 전세보증금반환보증 가입 조건, 등기부등본 읽는 법, 깡통전세 판별 공식까지. 주택임대차보호법 개정 사항을 반영한 2026년판 체크리스트.'
-const updatedAt = '2026-05-16'
+const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '부동산' })
 

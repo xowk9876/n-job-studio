@@ -88,7 +88,7 @@ export function calcSavings(input: SavingsInput): SavingsResult {
     : 0
 
   // ── ISA 절세 비교 ──
-  // 비과세 500만원 한도(일반형, 2026 개편) → 초과분만 9.9% 분리과세
+  // 예·적금 단순 비교: 순손익≈이자로 가정. ISA 비과세 500만(일반형) → 초과분 9.9% 분리과세
   const isaTaxable = Math.max(0, grossInterest - ISA_TAX_EXEMPT_LIMIT)
   const isaTax = Math.round(isaTaxable * ISA_TAX_RATE)
   const isaNet = grossInterest - isaTax

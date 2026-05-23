@@ -68,7 +68,7 @@ export const useSeveranceStore = create<SeveranceStore>()(
       annualBonus: 0,
       startDate: '2020-01-01',
       // SSR hydration 안정성: 고정 초기값, 클라이언트 마운트 시 오늘 날짜로 덮어씀
-      endDate: '2026-01-01',
+      endDate: '2026-05-22',
       regularHourlyWage: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata } from '@/lib/seo'
+import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'severance-calculation-guide'
 const title = '퇴직금 계산 공식과 실전 예시 — 근로기준법 제34조 평균임금 완전 이해'
 const description =
   '근로기준법 제34조와 근로자퇴직급여 보장법 제8조에 따른 퇴직금 산정 공식, 평균임금과 통상임금 비교, 소급 인상·상여금 반영 방법을 실제 사례로 정리합니다.'
-const updatedAt = '2026-01-06'
+const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '퇴직' })
 

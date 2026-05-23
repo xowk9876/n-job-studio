@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata } from '@/lib/seo'
+import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'lotto-tax-guide'
 const title = '로또 당첨금 세금·수령 완전 가이드 — 원천징수 구간과 실수령액 계산'
 const description =
   '로또 1등 당첨 시 실제 수령액은? 소득세법상 기타소득 원천징수 22% · 33% 구간과 신고 의무, 익명 수령 절차까지 정확히 정리합니다.'
-const updatedAt = '2026-05-16'
+const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '복권' })
 
@@ -111,8 +111,8 @@ export default function Page() {
         <ol>
           <li>수령 직후 최소 1개월은 큰 의사결정(부동산 매입·창업) 보류</li>
           <li>
-            예금자보호 한도(은행당 5,000만 원)를 감안해 <strong>여러 은행 분산</strong>. 국고채·MMF 같은
-            단기 안전자산 병행.
+            예금자보호 한도(2025.9.1 시행, 금융기관·보험사·증권사 등 <strong>1인당 1억 원</strong>)를 감안해{' '}
+            <strong>여러 금융기관에 분산</strong>. 국고채·MMF 같은 단기 안전자산 병행.
           </li>
           <li>
             세무사·변호사·PB(Private Banker) 등 전문가 자문 1회 이상. 증여·상속 설계까지 함께 검토하면
