@@ -2,30 +2,28 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef } from 'react'
 
 const nav = [
-  { href: '/salary',    label: '연봉' },
+  { href: '/salary', label: '연봉' },
   { href: '/severance', label: '퇴직금' },
-  { href: '/mortgage',  label: '대출' },
-  { href: '/savings',   label: '적금' },
-  { href: '/jeonse',    label: '전월세' },
-  { href: '/lotto',     label: '로또' },
-  { href: '/guide',     label: '가이드' },
-]
+  { href: '/mortgage', label: '대출' },
+  { href: '/savings', label: '적금' },
+  { href: '/jeonse', label: '전월세' },
+  { href: '/lotto', label: '로또' },
+  { href: '/guide', label: '가이드' },
+] as const
+
+function isNavActive(pathname: string, href: string) {
+  if (href === '/guide') return pathname === '/guide' || pathname.startsWith('/guide/')
+  return pathname === href
+}
 
 export default function Header() {
   const pathname = usePathname()
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const active = scrollRef.current?.querySelector<HTMLAnchorElement>('[data-active="true"]')
-    active?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-  }, [pathname])
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#0b1220]/80 border-b border-[color:var(--line)]">
-      <div className="max-w-5xl mx-auto px-4 md:px-6 h-12 flex items-center justify-center">
+    <header className="site-header sticky top-0 z-40 backdrop-blur-xl bg-[#0b1220]/80 border-b border-[color:var(--line)]">
+      <div className="site-header__brand max-w-5xl mx-auto px-4 md:px-6 h-11 md:h-12 flex items-center justify-center">
         <Link href="/" className="inline-reset flex items-center gap-2">
           <span
             aria-hidden
@@ -34,33 +32,27 @@ export default function Header() {
           >
             M
           </span>
-          <span className="font-semibold text-[14.5px] tracking-tight text-white">머니핏 계산기</span>
+          <span className="font-semibold text-[14px] md:text-[14.5px] tracking-tight text-white">머니핏 계산기</span>
         </Link>
       </div>
 
-      <nav
-        ref={scrollRef}
-        aria-label="계산기 메뉴"
-        className="max-w-5xl mx-auto px-3 md:px-6 flex items-center justify-center gap-1 overflow-x-auto no-scrollbar h-11 border-t border-[color:var(--line)]"
-      >
-        {nav.map(n => {
-          const active = pathname === n.href
-          return (
-            <Link
-              key={n.href}
-              href={n.href}
-              data-active={active}
-              className={`inline-reset shrink-0 px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
-                active
-                  ? 'bg-[color:var(--brand-soft)] text-[color:var(--brand)] border border-[rgba(107,175,255,0.32)]'
-                  : 'text-[color:var(--sub)] hover:text-white hover:bg-white/[0.05] border border-transparent'
-              }`}
-            >
-              {n.label}
-            </Link>
-          )
-        })}
-      </nav>
+      <div className="site-header__nav-wrap">
+        <nav aria-label="계산기 메뉴" className="site-header__nav max-w-5xl mx-auto">
+          {nav.map((item) => {
+            const active = isNavActive(pathname, item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? 'page' : undefined}
+                className={`site-header__nav-link inline-reset ${active ? 'is-active' : ''}`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+      </div>
     </header>
   )
 }
