@@ -171,14 +171,10 @@ export default function HomePage() {
               key={c.href}
               href={c.href}
               className={`home-calc-card card card-hover group mf-rise mf-rise-d${Math.min(4, Math.floor(i / 2) + 1)}`}
-              style={
-                i === 0
-                  ? {
-                      borderTop: '2px solid #6bafff',
-                      boxShadow: '0 0 0 1px rgba(107,175,255,0.25)',
-                    }
-                  : undefined
-              }
+              style={{
+                borderTop: `2px solid ${c.color}`,
+                boxShadow: `0 0 0 1px ${c.color}40`,
+              }}
             >
               <div
                 aria-hidden

@@ -843,26 +843,6 @@ input[type="range"]::-moz-range-thumb {
     background: rgba(255, 255, 255, 0.05);
   }
 }
-.site-header__nav-link--guide {
-  position: relative;
-  margin-left: 0.5rem;
-  padding-left: 0.85rem;
-  opacity: 0.7;
-}
-.site-header__nav-link--guide::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 14px;
-  background: rgba(148, 163, 184, 0.28);
-}
-.site-header__nav-link--guide.is-active { opacity: 1; }
-@media (hover: hover) {
-  .site-header__nav-link--guide:hover { opacity: 1; }
-}
 
 /* Calculator page wrapper */
 .calc-page {
