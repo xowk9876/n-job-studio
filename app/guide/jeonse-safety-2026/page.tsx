@@ -3,7 +3,7 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'jeonse-safety-2026'
-const title = '2026 전세사기 방지 체크리스트 — 계약 전·중·후 25개 점검 포인트'
+const title = '2026 전세사기 방지 체크리스트'
 const description =
   'HUG 전세보증금반환보증 가입 조건, 등기부등본 읽는 법, 깡통전세 판별 공식까지. 주택임대차보호법 개정 사항을 반영한 2026년판 체크리스트.'
 const updatedAt = CONTENT_UPDATED_AT
@@ -34,14 +34,15 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>계약 전 — 시세·권리관계 확인</h2>
+        <h2>계약 전</h2>
+        <p className="guide-body__lead">시세·권리관계를 먼저 확인합니다.</p>
         <ol>
           <li>
-            <strong>시세 3채널 크로스체크</strong> — 국토교통부 실거래가, KB시세, 네이버 부동산 모두
+            <strong>시세 3채널 크로스체크.</strong> 국토교통부 실거래가, KB시세, 네이버 부동산 모두
             확인. 보증금이 매매가의 80%를 넘으면 깡통전세 가능성.
           </li>
           <li>
-            <strong>등기부등본 열람(인터넷등기소, 700원)</strong> — 표제부·갑구(소유권)·을구(저당권)
+            <strong>등기부등본 열람(인터넷등기소, 700원).</strong> 표제부·갑구(소유권)·을구(저당권)
             세 섹션 확인.
           </li>
           <li>
@@ -49,17 +50,18 @@ export default function Page() {
             근저당 4,200만 원 이상이면 요주의.
           </li>
           <li>
-            <strong>건축물대장 확인(정부24)</strong> — 위반건축물 여부, 실제 용도와 계약상 용도 일치 여부.
+            <strong>건축물대장 확인(정부24).</strong> 위반건축물 여부, 실제 용도와 계약상 용도 일치 여부.
           </li>
           <li>
-            <strong>임대인 국세·지방세 완납증명서 요구</strong> — 2023.4 개정 주택임대차보호법 제3조의7
+            <strong>임대인 국세·지방세 완납증명서 요구.</strong> 2023.4 개정 주택임대차보호법 제3조의7
             에 따라 요청 가능. 거부 시 계약 재고.
           </li>
         </ol>
       </section>
 
       <section>
-        <h2>계약 중 — 특약·서류</h2>
+        <h2>계약 중</h2>
+        <p className="guide-body__lead">특약·서류를 꼼꼼히 챙깁니다.</p>
         <ol>
           <li><strong>임대인 신분증·등기부 소유주 일치</strong> 반드시 대조(대리인 계약 시 위임장·인감증명서 필수)</li>
           <li>계약서에 <strong>&quot;잔금 지급일 다음날까지 선순위 근저당 설정 금지&quot;</strong> 특약 명시</li>
@@ -70,14 +72,15 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>계약 후 — 대항력 확보</h2>
+        <h2>계약 후</h2>
+        <p className="guide-body__lead">대항력·보증 가입까지 마무리합니다.</p>
         <ol>
           <li>
             <strong>전입신고 + 확정일자</strong>를 잔금일 당일에 동시 진행. 이 순간부터 주택임대차보호법
             상 대항력·우선변제권이 발생합니다(법 제3조, 제3조의2).
           </li>
           <li>
-            <strong>HUG 전세보증금반환보증 가입</strong> — 보증금 수도권 7억/비수도권 5억 이하, 주택가격
+            <strong>HUG 전세보증금반환보증 가입.</strong> 보증금 수도권 7억/비수도권 5억 이하, 주택가격
             대비 보증금 비율 90% 이하 시 가입 가능. 보증료 연 0.097~0.211%(위험도 차등 적용).
             비대면 신청 시 3% 기본 할인, 사회배려계층은 최대 60% 할인.
           </li>
@@ -92,10 +95,10 @@ export default function Page() {
           <p>깡통전세 위험 점수 = (선순위 채권 총액 + 보증금) ÷ 시세</p>
         </blockquote>
         <ul>
-          <li>70% 이하 — 안전</li>
-          <li>70~80% — 주의(HUG 보증 필수)</li>
-          <li>80~90% — 경고(가급적 회피)</li>
-          <li>90% 초과 — 위험(계약 재고)</li>
+          <li>70% 이하: 안전</li>
+          <li>70~80%: 주의(HUG 보증 필수)</li>
+          <li>80~90%: 경고(가급적 회피)</li>
+          <li>90% 초과: 위험(계약 재고)</li>
         </ul>
         <p>
           전세↔월세 전환을 고민 중이라면 <a href="/jeonse">전월세 전환 계산기</a>에서 법정 전환율
@@ -108,7 +111,7 @@ export default function Page() {
         <ol>
           <li>임대차분쟁조정위원회 조정 신청(한국부동산원, 무료)</li>
           <li>내용증명으로 보증금 반환 청구</li>
-          <li>임차권등기명령 신청(법원) — 이사가도 우선변제권 유지</li>
+          <li>임차권등기명령 신청(법원). 이사가도 우선변제권 유지</li>
           <li>지급명령 → 본안소송(보증금 반환 청구)</li>
           <li>HUG 가입자는 보증 이행 청구로 회수</li>
         </ol>

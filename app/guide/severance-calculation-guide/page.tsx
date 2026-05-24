@@ -3,7 +3,7 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'severance-calculation-guide'
-const title = '퇴직금 계산 공식과 실전 예시 — 근로기준법 제34조 평균임금 완전 이해'
+const title = '퇴직금 계산 공식과 실전 예시'
 const description =
   '근로기준법 제34조와 근로자퇴직급여 보장법 제8조에 따른 퇴직금 산정 공식, 평균임금과 통상임금 비교, 소급 인상·상여금 반영 방법을 실제 사례로 정리합니다.'
 const updatedAt = CONTENT_UPDATED_AT
@@ -65,7 +65,8 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>실전 사례 — 연봉 4,800만 원, 근속 5년 3개월</h2>
+        <h2>실전 사례</h2>
+        <p className="guide-body__lead">연봉 4,800만 원, 근속 5년 3개월 기준입니다.</p>
         <p>퇴직 직전 3개월(92일) 급여 지급 내역:</p>
         <ul>
           <li>기본급: 월 350만 원 × 3개월 = 1,050만 원</li>

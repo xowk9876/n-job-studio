@@ -3,7 +3,7 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = '2026-salary-tax-guide'
-const title = '2026년 연봉 실수령액 완전 가이드 — 4대보험 요율·간이세액표 총정리'
+const title = '2026년 연봉 실수령액 완전 가이드'
 const description =
   '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.'
 const updatedAt = CONTENT_UPDATED_AT
@@ -74,7 +74,7 @@ export default function Page() {
         </p>
         <blockquote>
           <p>
-            <strong>TIP</strong> — 간이세액표는 신청 시 80%·100%·120% 세 가지 비율 중 선택할 수
+            <strong>TIP</strong> 간이세액표는 신청 시 80%·100%·120% 세 가지 비율 중 선택할 수
             있습니다. 120%로 올리면 월 실수령액은 줄지만 연말정산 때 환급이 커집니다.
           </p>
         </blockquote>
@@ -105,20 +105,20 @@ export default function Page() {
         <h2>실수령액을 늘리는 합법적 방법 4가지</h2>
         <ol>
           <li>
-            <strong>비과세 항목 최대 활용</strong> — 식대(월 20만 원), 자가운전보조금(월 20만 원, 본인
+            <strong>비과세 항목 최대 활용</strong> 식대(월 20만 원), 자가운전보조금(월 20만 원, 본인
             차량 업무 사용 시), 출산·보육수당(월 20만 원 한도) 등을 급여 구조에 반영.
           </li>
           <li>
-            <strong>연금저축·IRP</strong> — 합산 연 900만 원까지 세액공제 15%(총급여 5,500만 원 이하)
+            <strong>연금저축·IRP</strong> 합산 연 900만 원까지 세액공제 15%(총급여 5,500만 원 이하)
             또는 12%. 실질 환급액이 커집니다.
           </li>
           <li>
-            <strong>ISA 계좌</strong> — 일반형 순이익 500만 원까지 비과세, 서민형·농어민형은 1,000만 원.
+            <strong>ISA 계좌</strong> 일반형 순이익 500만 원까지 비과세, 서민형·농어민형은 1,000만 원.
             초과분은 9.9% 분리과세.{' '}
             <a href="/guide/isa-vs-regular-savings">ISA 완전 비교</a>에서 예시를 확인하세요.
           </li>
           <li>
-            <strong>부양가족 등록 누락 점검</strong> — 연 소득 100만 원 이하(근로소득만 있을 경우 총
+            <strong>부양가족 등록 누락 점검</strong> 연 소득 100만 원 이하(근로소득만 있을 경우 총
             급여 500만 원 이하) 부모·자녀·배우자를 빠짐없이 등록.
           </li>
         </ol>

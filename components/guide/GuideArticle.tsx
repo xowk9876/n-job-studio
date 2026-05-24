@@ -85,7 +85,7 @@ export default function GuideArticle({
         >
           {tag}
         </span>
-        <h1 className="font-display text-[26px] md:text-[34px] font-bold text-white tracking-tight leading-[1.2]">
+        <h1 className="guide-article__title font-display text-[26px] md:text-[34px] font-bold text-white tracking-tight leading-[1.2]">
           {title}
         </h1>
         <p className="mt-4 text-[14.5px] text-[color:var(--sub)] leading-relaxed">{description}</p>

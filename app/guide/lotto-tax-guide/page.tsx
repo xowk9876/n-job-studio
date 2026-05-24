@@ -3,7 +3,7 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'lotto-tax-guide'
-const title = '로또 당첨금 세금·수령 완전 가이드 — 원천징수 구간과 실수령액 계산'
+const title = '로또 당첨금 세금·수령 완전 가이드'
 const description =
   '로또 1등 당첨 시 실제 수령액은? 소득세법상 기타소득 원천징수 22% · 33% 구간과 신고 의무, 익명 수령 절차까지 정확히 정리합니다.'
 const updatedAt = CONTENT_UPDATED_AT
@@ -21,7 +21,7 @@ export default function Page() {
       updatedAt={updatedAt}
       related={[
         { href: '/lotto', label: '로또 번호 생성기' },
-        { href: '/guide/isa-vs-regular-savings', label: '당첨금 운용 — ISA 가이드' },
+        { href: '/guide/isa-vs-regular-savings', label: '당첨금 운용 ISA 가이드' },
       ]}
     >
       <section>
@@ -71,7 +71,7 @@ export default function Page() {
         <h2>수령 절차</h2>
         <ol>
           <li>
-            <strong>1~3등</strong> — 농협은행 전국 지점(평일 9~16시) 또는 농협은행 본점(서울 서대문구)
+            <strong>1~3등:</strong> 농협은행 전국 지점(평일 9~16시) 또는 농협은행 본점(서울 서대문구)
             에서 수령. 200만 원 이하는 시중 은행 및 편의점 일부에서도 가능.
           </li>
           <li>
@@ -92,7 +92,7 @@ export default function Page() {
         <ul>
           <li>당첨 복권 뒷면에 본인 서명을 즉시 해두면 분실·도난 시 소유권 입증 용이</li>
           <li>수령 시 사진·신원 노출이 부담스러우면 본점 VIP실 수령 예약 가능(개인정보 비공개 옵션)</li>
-          <li>SNS·주변 언급 자제 — 사기·협박 범죄 표적이 될 수 있음</li>
+          <li>SNS·주변 언급 자제. 사기·협박 범죄 표적이 될 수 있음</li>
           <li>대리 수령은 원칙적으로 위임장+인감증명서+대리인 신분증 필요</li>
         </ul>
       </section>

@@ -3,7 +3,7 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'dsr-stress-test-2026'
-const title = '2026 스트레스 DSR 3단계 완전 정리 — 한도 축소 폭과 대응 전략'
+const title = '2026 스트레스 DSR 3단계 완전 정리'
 const description =
   '금융위원회가 도입한 스트레스 DSR 3단계 구조와 가산금리 산정 방식, 주담대·신용대출별 한도 축소 폭을 사례로 정리합니다.'
 const updatedAt = CONTENT_UPDATED_AT
@@ -58,9 +58,9 @@ export default function Page() {
         <h2>한도 축소 감각 잡기</h2>
         <p>연 소득 6,000만 원, 30년 만기 원리금균등, 기존 금리 4.0% 주담대로 단순 시뮬레이션:</p>
         <ul>
-          <li>스트레스 미적용 — 대출 가능 한도가 가장 큼</li>
-          <li>가산금리 0.4%p 수준 — 약 4~5% 한도 축소</li>
-          <li>가산금리 1.5%p 수준 — 약 15~18% 한도 축소</li>
+          <li>스트레스 미적용: 대출 가능 한도가 가장 큼</li>
+          <li>가산금리 0.4%p 수준: 약 4~5% 한도 축소</li>
+          <li>가산금리 1.5%p 수준: 약 15~18% 한도 축소</li>
         </ul>
         <p>
           정확한 수치는 본인 소득·기존 부채·만기·금리에 따라 달라집니다. 머니핏{' '}
@@ -87,19 +87,19 @@ export default function Page() {
         <h2>한도를 최대한 지키는 전략</h2>
         <ol>
           <li>
-            <strong>만기를 늘려라</strong> — 주담대 30년 → 40년(일부 은행)으로 바꾸면 월 상환액이 줄어
+            <strong>만기를 늘려라.</strong> 주담대 30년 → 40년(일부 은행)으로 바꾸면 월 상환액이 줄어
             DSR 여력이 생깁니다. 단, 총 이자는 늘어납니다.
           </li>
           <li>
-            <strong>고정금리 상품 선택</strong> — 일부 은행은 고정금리 대출에 대해 가산금리를 일부 차감
+            <strong>고정금리 상품 선택.</strong> 일부 은행은 고정금리 대출에 대해 가산금리를 일부 차감
             합니다.
           </li>
           <li>
-            <strong>기존 신용대출 정리</strong> — 마이너스통장 미사용 한도도 DSR에 포함됩니다. 사용하지
+            <strong>기존 신용대출 정리.</strong> 마이너스통장 미사용 한도도 DSR에 포함됩니다. 사용하지
             않는 한도는 미리 줄이는 것이 유리합니다.
           </li>
           <li>
-            <strong>부부 합산 소득 활용</strong> — 공동명의·연대보증 형태로 합산 가능. 다만 채무도 공동
+            <strong>부부 합산 소득 활용.</strong> 공동명의·연대보증 형태로 합산 가능. 다만 채무도 공동
             으로 산정됩니다.
           </li>
         </ol>

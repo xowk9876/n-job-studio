@@ -3,7 +3,7 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'isa-vs-regular-savings'
-const title = 'ISA vs 일반계좌 10년 시뮬레이션 — 얼마나 유리한가'
+const title = 'ISA vs 일반계좌 10년 시뮬레이션'
 const description =
   'ISA 비과세 한도 500만 원과 9.9% 분리과세의 실제 절세 효과를 10년 시뮬레이션으로 비교. 중개형·신탁형·일임형 선택 기준과 만기 이전 인출 시 주의사항까지.'
 const updatedAt = CONTENT_UPDATED_AT
@@ -50,10 +50,10 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>10년 시뮬레이션 — 연 4% 수익률 가정</h2>
+        <h2>10년 시뮬레이션</h2>
+        <p className="guide-body__lead">연 4% 수익률을 가정했습니다.</p>
         <p>
-          매년 말 2,000만 원씩 10년간 납입, 복리 연 4% 재투자 가정(연금 미래가치 공식 FV = PMT ×
-          [(1+r)^n − 1] / r):
+          매년 말 2,000만 원씩 10년간 납입, 복리 연 4%로 재투자한다고 가정하면:
         </p>
         <ul>
           <li>총 납입 원금: 2억 원</li>
@@ -94,9 +94,9 @@ export default function Page() {
       <section>
         <h2>어떤 사람에게 유리한가</h2>
         <ul>
-          <li><strong>예·적금 중심의 안정 추구형</strong> — 이자소득 500만 원만 벌어도 연 77만 원 절세</li>
-          <li><strong>배당 ETF 장기 보유자</strong> — 분배금 비과세로 복리 효과 극대화</li>
-          <li><strong>연 금융소득 2,000만 원 근접</strong> — 종합과세 회피 효과</li>
+          <li><strong>예·적금 중심의 안정 추구형:</strong> 이자소득 500만 원만 벌어도 연 77만 원 절세</li>
+          <li><strong>배당 ETF 장기 보유자:</strong> 분배금 비과세로 복리 효과 극대화</li>
+          <li><strong>연 금융소득 2,000만 원 근접:</strong> 종합과세 회피 효과</li>
         </ul>
       </section>
 

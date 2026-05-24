@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   alternates: buildGoogleAlternates(`${SITE_URL}/guide`),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   openGraph: {
-    title: '재테크 실전 가이드 — 2026년 최신 공식 기준',
+    title: '재테크 실전 가이드 · 2026년 최신 공식 기준',
     description: '연봉·대출·퇴직금·ISA·전월세·로또까지 공식 기준으로 정리한 머니핏 가이드 모음.',
     url: `${SITE_URL}/guide`,
     siteName: SITE_NAME,
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '재테크 실전 가이드 — 2026년 최신 공식 기준',
+    title: '재테크 실전 가이드 · 2026년 최신 공식 기준',
     description: '공식 법령·고시 기반 재테크 가이드 모음.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 재테크 실전 가이드' }],
   },

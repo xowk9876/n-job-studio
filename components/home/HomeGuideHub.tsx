@@ -117,36 +117,7 @@ export default function HomeGuideHub() {
         </div>
 
       </Link>
-
-
-
-      <ul className="home-guide-hub__articles" aria-label="인기 가이드">
-
-        {guideItems.map((guide) => (
-
-          <li key={guide.slug}>
-
-            <Link href={`/guide/${guide.slug}`} className="home-guide-hub__article-link inline-reset">
-
-              <span className="home-guide-hub__article-tag" style={{ color: guideTagColors[guide.tag] }}>
-
-                {guide.tag}
-
-              </span>
-
-              <span className="home-guide-hub__article-title">{guide.title}</span>
-
-            </Link>
-
-          </li>
-
-        ))}
-
-      </ul>
-
     </section>
-
   )
-
 }
 
