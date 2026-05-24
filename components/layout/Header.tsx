@@ -40,12 +40,19 @@ export default function Header() {
         <nav aria-label="계산기 메뉴" className="site-header__nav max-w-5xl mx-auto">
           {nav.map((item) => {
             const active = isNavActive(pathname, item.href)
+            const isGuide = item.href === '/guide'
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
-                className={`site-header__nav-link inline-reset ${active ? 'is-active' : ''}`}
+                className={[
+                  'site-header__nav-link inline-reset',
+                  isGuide ? 'site-header__nav-link--guide' : '',
+                  active ? 'is-active' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
               >
                 {item.label}
               </Link>

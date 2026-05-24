@@ -134,6 +134,9 @@ export default function HomePage() {
               <span>연봉 실수령액 계산하기</span>
               <ArrowRight size={18} />
             </Link>
+            <Link href="#calculators" className="inline-reset btn-hero-ghost">
+              <span>전체 계산기 보기</span>
+            </Link>
           </div>
 
           <dl className="home-hero__stats">
@@ -168,6 +171,14 @@ export default function HomePage() {
               key={c.href}
               href={c.href}
               className={`home-calc-card card card-hover group mf-rise mf-rise-d${Math.min(4, Math.floor(i / 2) + 1)}`}
+              style={
+                i === 0
+                  ? {
+                      borderTop: '2px solid #6bafff',
+                      boxShadow: '0 0 0 1px rgba(107,175,255,0.25)',
+                    }
+                  : undefined
+              }
             >
               <div
                 aria-hidden
