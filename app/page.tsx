@@ -134,9 +134,6 @@ export default function HomePage() {
               <span>연봉 실수령액 계산하기</span>
               <ArrowRight size={18} />
             </Link>
-            <Link href="#calculators" className="inline-reset btn-hero-ghost">
-              <span>전체 계산기 보기</span>
-            </Link>
           </div>
 
           <dl className="home-hero__stats">
