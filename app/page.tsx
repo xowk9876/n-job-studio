@@ -4,6 +4,21 @@ import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight, S
 import HomeGuideHub from '@/components/home/HomeGuideHub'
 import { DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL } from '@/lib/seo'
 import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { calcSalary } from '@/lib/salary'
+
+// 히어로 우측 미리보기 — 연봉 5,000만원·본인 1인·수당 0 기준 실제 calcSalary 결과(SSR 산출, Zero Hallucination)
+const HERO_PREVIEW_ANNUAL = 50_000_000
+const heroPreview = calcSalary({
+  annualSalary: HERO_PREVIEW_ANNUAL,
+  dependents: 1,
+  children: 0,
+  overtimeHours: 0,
+  nightHours: 0,
+  holidayHours: 0,
+  mealAllowance: 0,
+  transportAllowance: 0,
+})
+const fmtWon = (n: number) => n.toLocaleString('ko-KR')
 
 const homeDescription =
   '2026년 최신 세율·4대보험 요율·법령 기준으로 정확하게 계산합니다. 연봉 실수령액, 주택담보대출, 퇴직금, 적금·ISA, 전월세, 로또까지 무료.'
@@ -116,42 +131,83 @@ export default function HomePage() {
           <div className="home-hero__orb home-hero__orb--mint" />
         </div>
 
-        <div className="home-hero__panel">
-          <h1 className="home-hero__title font-display">
-            <span className="home-hero__title-line">복잡한 금융 계산</span>
-            <span className="home-hero__title-line home-hero__title-line--accent">
-              1분이면 끝
-            </span>
-          </h1>
+        <div className="home-hero__panel home-hero__panel--split">
+          <div className="home-hero__col-text">
+            <h1 className="home-hero__title font-display">
+              <span className="home-hero__title-line">복잡한 금융 계산</span>
+              <span className="home-hero__title-line home-hero__title-line--accent">
+                1분이면 끝
+              </span>
+            </h1>
 
-          <p className="home-hero__lead">
-            <span className="home-hero__lead-part">정부 고시·법정 공식 기준으로</span>
-            <span className="home-hero__lead-part">가입 없이, 브라우저에서 바로 계산하세요.</span>
-          </p>
+            <p className="home-hero__lead">
+              <span className="home-hero__lead-part">정부 고시·법정 공식 기준으로 정확하게.</span>
+              <span className="home-hero__lead-part">가입 없이, 브라우저에서 바로 계산하세요.</span>
+            </p>
 
-          <div className="home-hero__cta">
-            <Link href="/salary" className="inline-reset btn-hero-primary">
-              <span>연봉 실수령액 계산하기</span>
-              <ArrowRight size={18} />
-            </Link>
+            <div className="home-hero__cta">
+              <Link href="/salary" className="inline-reset btn-hero-primary">
+                <span>연봉 실수령액 계산하기</span>
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </div>
 
-          <dl className="home-hero__stats">
-            <div className="home-stat">
-              <dt className="home-stat__value text-gradient">6종</dt>
-              <dd className="home-stat__label">전문 계산기</dd>
+          <aside className="home-hero__col-preview" aria-label="연봉 5,000만원 기준 월 실수령액 미리보기">
+            <div className="home-hero__preview-card">
+              <p className="home-hero__preview-header">
+                월 실수령액 · 연봉 5,000만원 기준
+              </p>
+              <p className="home-hero__preview-amount tabular">
+                {fmtWon(heroPreview.monthlyNet)}
+                <span className="home-hero__preview-unit">원</span>
+              </p>
+
+              <div className="home-hero__preview-stats">
+                <div className="home-hero__preview-stat">
+                  <span className="home-hero__preview-stat-label">세전 월급</span>
+                  <span className="home-hero__preview-stat-value tabular">{fmtWon(heroPreview.monthlyGross)}원</span>
+                </div>
+                <div className="home-hero__preview-stat">
+                  <span className="home-hero__preview-stat-label">연 실수령</span>
+                  <span className="home-hero__preview-stat-value tabular">{fmtWon(heroPreview.annualNet)}원</span>
+                </div>
+                <div className="home-hero__preview-stat">
+                  <span className="home-hero__preview-stat-label">총 공제</span>
+                  <span className="home-hero__preview-stat-value home-hero__preview-stat-value--negative tabular">
+                    −{fmtWon(heroPreview.totalDeduction)}원
+                  </span>
+                </div>
+              </div>
+
+              <div className="home-hero__preview-chips">
+                <div className="home-hero__preview-chip">
+                  <span className="home-hero__preview-chip-label">국민연금 4.75%</span>
+                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#3ee0a5' }}>
+                    {fmtWon(heroPreview.pension)}원
+                  </span>
+                </div>
+                <div className="home-hero__preview-chip">
+                  <span className="home-hero__preview-chip-label">건강보험 3.595%</span>
+                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#6bafff' }}>
+                    {fmtWon(heroPreview.health)}원
+                  </span>
+                </div>
+                <div className="home-hero__preview-chip">
+                  <span className="home-hero__preview-chip-label">근로소득세</span>
+                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#fcc73e' }}>
+                    {fmtWon(heroPreview.incomeTax)}원
+                  </span>
+                </div>
+                <div className="home-hero__preview-chip">
+                  <span className="home-hero__preview-chip-label">총 공제</span>
+                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#ef7e7e' }}>
+                    {fmtWon(heroPreview.totalDeduction)}원
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="home-stat home-stat--divider" aria-hidden />
-            <div className="home-stat">
-              <dt className="home-stat__value" style={{ color: '#929cf8' }}>2026</dt>
-              <dd className="home-stat__label">최신 세율</dd>
-            </div>
-            <div className="home-stat home-stat--divider" aria-hidden />
-            <div className="home-stat">
-              <dt className="home-stat__value" style={{ color: '#3ee0a5' }}>0원</dt>
-              <dd className="home-stat__label">완전 무료</dd>
-            </div>
-          </dl>
+          </aside>
         </div>
       </section>
 
