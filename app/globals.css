@@ -172,38 +172,37 @@ body {
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 13px 26px;
-  color: #fff;
+  color: #ffffff;
   border-radius: var(--r);
   font-weight: 600; font-size: 15px;
-  background: linear-gradient(135deg, #4d9cf5 0%, #7071f3 100%);
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.15) inset,
-    0 0 0 1px rgba(112,113,243,0.4),
-    0 4px 12px rgba(112,113,243,0.25),
-    0 12px 36px rgba(77,156,245,0.12);
+    0 1px 0 rgba(255,255,255,0.18) inset,
+    0 0 0 1px rgba(22,163,74,0.25),
+    0 4px 12px rgba(22,163,74,0.22),
+    0 12px 28px rgba(22,163,74,0.12);
   transition: transform .18s ease, box-shadow .18s ease;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.2) inset,
-    0 0 0 1px rgba(112,113,243,0.5),
-    0 6px 16px rgba(112,113,243,0.35),
-    0 20px 50px rgba(77,156,245,0.18);
+    0 1px 0 rgba(255,255,255,0.22) inset,
+    0 0 0 1px rgba(22,163,74,0.35),
+    0 6px 16px rgba(22,163,74,0.30),
+    0 20px 40px rgba(22,163,74,0.16);
 }
 
 .btn-ghost {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 12px 22px;
-  background: rgba(148,163,184,0.05);
+  background: var(--bg-2);
   color: var(--ink);
   border: 1px solid var(--line-strong);
   border-radius: var(--r);
   font-weight: 500; font-size: 15px;
-  backdrop-filter: blur(12px);
   transition: all .18s ease;
 }
-.btn-ghost:hover { background: rgba(148,163,184,0.08); border-color: var(--line-stronger); }
+.btn-ghost:hover { background: var(--bg-3); border-color: var(--line-stronger); }
 
 /* Footer contact — pill 정렬 (아이콘·텍스트 수직 중앙) */
 .contact-chip {
@@ -852,32 +851,31 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-/* Result card — premium gradient with glow */
+/* Result card — light surface with green emphasis */
 .result-card {
   position: relative;
   padding: 24px;
   border-radius: var(--r-xl);
-  color: #fff;
-  background: linear-gradient(135deg, #1e3a8a 0%, #4d9cf5 40%, #7071f3 80%, #5c54e8 100%);
+  color: var(--ink);
+  background: #ffffff;
+  border: 1px solid var(--line);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.1) inset,
-    0 0 0 1px rgba(112,113,243,0.3),
-    0 8px 24px rgba(77,156,245,0.2),
-    0 20px 60px rgba(30,58,138,0.25);
+    0 1px 2px rgba(15,23,42,0.04),
+    0 8px 28px rgba(15,23,42,0.08);
   overflow: hidden;
 }
 .result-card::before {
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 110% 0%, rgba(146,156,248,0.3) 0%, transparent 40%),
-    radial-gradient(circle at -10% 110%, rgba(62,224,165,0.2) 0%, transparent 40%);
+    radial-gradient(circle at 110% 0%, rgba(22,163,74,0.10) 0%, transparent 45%),
+    radial-gradient(circle at -10% 110%, rgba(22,163,74,0.06) 0%, transparent 45%);
   pointer-events: none;
 }
 .result-card::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(22,163,74,0.04) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 6s linear infinite;
   pointer-events: none;
@@ -886,7 +884,7 @@ input[type="range"]::-moz-range-thumb {
 .result-card .result-label {
   font-size: 12.5px;
   font-weight: 500;
-  opacity: 0.8;
+  color: var(--sub);
   letter-spacing: 0.03em;
 }
 .result-card .result-value {
@@ -896,12 +894,57 @@ input[type="range"]::-moz-range-thumb {
   letter-spacing: -0.03em;
   line-height: 1.05;
   margin-top: 6px;
+  color: var(--brand);
   font-variant-numeric: tabular-nums;
   word-break: keep-all;
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* =========================================================
+   Light-theme bridge for legacy white-on-dark utilities
+   (페이지 인라인 text-white/XX 등을 라이트로 매핑)
+   ========================================================= */
+@layer utilities {
+  .text-white { color: var(--ink); }
+  .text-white\/95 { color: rgb(15 23 42 / 0.95); }
+  .text-white\/90 { color: rgb(15 23 42 / 0.92); }
+  .text-white\/85 { color: rgb(15 23 42 / 0.90); }
+  .text-white\/80 { color: rgb(15 23 42 / 0.88); }
+  .text-white\/75 { color: rgb(15 23 42 / 0.84); }
+  .text-white\/70 { color: rgb(15 23 42 / 0.78); }
+  .text-white\/65 { color: rgb(15 23 42 / 0.74); }
+  .text-white\/60 { color: rgb(71 85 105 / 1); }
+  .text-white\/55 { color: rgb(71 85 105 / 1); }
+  .text-white\/50 { color: rgb(71 85 105 / 0.94); }
+  .text-white\/45 { color: rgb(100 116 139 / 1); }
+  .text-white\/40 { color: rgb(148 163 184 / 1); }
+  .text-white\/38 { color: rgb(148 163 184 / 0.96); }
+  .text-white\/35 { color: rgb(148 163 184 / 0.92); }
+  .text-white\/30 { color: rgb(148 163 184 / 0.85); }
+  .text-white\/25 { color: rgb(148 163 184 / 0.78); }
+  .text-white\/20 { color: rgb(148 163 184 / 0.7); }
+  .text-white\/15 { color: rgb(148 163 184 / 0.6); }
+  .text-white\/10 { color: rgb(148 163 184 / 0.5); }
+  .text-white\/5  { color: rgb(148 163 184 / 0.4); }
+
+  .bg-white\/\[0\.05\] { background-color: rgb(15 23 42 / 0.04); }
+  .bg-white\/\[0\.06\] { background-color: rgb(15 23 42 / 0.05); }
+  .bg-white\/\[0\.08\] { background-color: rgb(15 23 42 / 0.06); }
+  .bg-white\/5  { background-color: rgb(15 23 42 / 0.04); }
+  .bg-white\/10 { background-color: rgb(15 23 42 / 0.06); }
+  .bg-white\/15 { background-color: rgb(15 23 42 / 0.08); }
+  .bg-white\/20 { background-color: rgb(15 23 42 / 0.10); }
+
+  .border-white\/5  { border-color: rgb(15 23 42 / 0.05); }
+  .border-white\/8  { border-color: rgb(15 23 42 / 0.06); }
+  .border-white\/10 { border-color: rgb(15 23 42 / 0.08); }
+  .border-white\/15 { border-color: rgb(15 23 42 / 0.10); }
+  .border-white\/20 { border-color: rgb(15 23 42 / 0.14); }
+  .border-white\/25 { border-color: rgb(15 23 42 / 0.18); }
+  .border-white\/30 { border-color: rgb(15 23 42 / 0.20); }
 }
 
 /* Guide article typography */
@@ -945,10 +988,10 @@ input[type="range"]::-moz-range-thumb {
 .guide-body li { margin: 0.25rem 0; color: var(--ink-2); line-height: 1.7; word-break: keep-all; overflow-wrap: break-word; }
 .guide-body strong { color: var(--ink); font-weight: 650; }
 .guide-body a { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; transition: color .15s; }
-.guide-body a:hover { color: #a5d0ff; }
+.guide-body a:hover { color: var(--brand-strong); }
 .guide-body blockquote {
-  border-left: 3px solid var(--accent-1);
-  background: rgba(146,156,248,0.06);
+  border-left: 3px solid var(--brand);
+  background: var(--brand-soft);
   padding: 0.85rem 1rem;
   border-radius: 8px;
   margin: 0.5rem 0;
@@ -957,7 +1000,7 @@ input[type="range"]::-moz-range-thumb {
 .guide-body table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 13.5px; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .guide-body thead, .guide-body tbody, .guide-body tr { display: table; width: 100%; table-layout: fixed; min-width: 480px; }
 .guide-body th, .guide-body td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; }
-.guide-body th { background: rgba(255,255,255,0.02); color: var(--ink); font-weight: 650; }
+.guide-body th { background: var(--bg-2); color: var(--ink); font-weight: 650; }
 
 /* =========================================================
    Home page — refined layout
@@ -983,7 +1026,7 @@ input[type="range"]::-moz-range-thumb {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--ink);
   letter-spacing: -0.02em;
 }
 @media (min-width: 768px) {
@@ -1381,21 +1424,22 @@ input[type="range"]::-moz-range-thumb {
 }
 /* Guide cards (가이드 목록 페이지) */
 .guide-card {
-  --guide-accent: #6bafff;
+  --guide-accent: #16a34a;
   display: flex;
   flex-direction: column;
   min-height: 7.5rem;
   padding: 1.1rem 1.2rem;
   border-radius: var(--r-lg);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%);
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
   transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .guide-card:hover {
   border-color: color-mix(in srgb, var(--guide-accent) 45%, transparent);
-  background: linear-gradient(160deg, color-mix(in srgb, var(--guide-accent) 8%, transparent) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--guide-accent) 4%, white) 0%, #ffffff 100%);
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--shadow-card-hover);
 }
 .guide-card__top {
   display: flex;
@@ -1429,7 +1473,7 @@ input[type="range"]::-moz-range-thumb {
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: var(--ink);
   letter-spacing: -0.02em;
   line-height: 1.4;
   display: -webkit-box;
@@ -1497,7 +1541,7 @@ input[type="range"]::-moz-range-thumb {
 .home-guide-hub__lead {
   margin-top: 0.65rem;
   font-size: 13px;
-  color: #b8c5d6;
+  color: var(--sub);
   line-height: 1.6;
   max-width: 32rem;
 }
@@ -1506,23 +1550,18 @@ input[type="range"]::-moz-range-thumb {
   display: block;
   border-radius: var(--r-xl);
   overflow: hidden;
-  border: 1px solid rgba(107, 175, 255, 0.18);
+  border: 1px solid var(--line);
   background:
-    radial-gradient(ellipse 120% 80% at 0% 0%, rgba(107, 175, 255, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 60% at 100% 100%, rgba(146, 156, 248, 0.1) 0%, transparent 50%),
-    linear-gradient(165deg, rgba(12, 20, 38, 0.95) 0%, rgba(8, 14, 28, 0.88) 100%);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    0 12px 40px rgba(0, 0, 0, 0.28);
+    radial-gradient(ellipse 120% 80% at 0% 0%, rgba(22, 163, 74, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 100% 100%, rgba(34, 197, 94, 0.04) 0%, transparent 50%),
+    #ffffff;
+  box-shadow: var(--shadow-card);
   transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
 }
 .home-guide-hub__card:hover {
-  border-color: rgba(107, 175, 255, 0.42);
+  border-color: rgba(22, 163, 74, 0.32);
   transform: translateY(-2px);
-  box-shadow:
-    0 0 0 1px rgba(107, 175, 255, 0.12) inset,
-    0 16px 48px rgba(0, 0, 0, 0.35),
-    0 0 32px rgba(107, 175, 255, 0.08);
+  box-shadow: var(--shadow-card-hover);
 }
 .home-guide-hub__card-shine {
   pointer-events: none;
@@ -1531,7 +1570,7 @@ input[type="range"]::-moz-range-thumb {
   background: linear-gradient(
     105deg,
     transparent 40%,
-    rgba(255, 255, 255, 0.04) 50%,
+    rgba(22, 163, 74, 0.05) 50%,
     transparent 60%
   );
   opacity: 0;
@@ -1571,10 +1610,10 @@ input[type="range"]::-moz-range-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8ec5ff;
-  background: rgba(107, 175, 255, 0.12);
-  border: 1px solid rgba(107, 175, 255, 0.28);
-  box-shadow: 0 0 20px rgba(107, 175, 255, 0.15);
+  color: var(--brand);
+  background: var(--brand-soft);
+  border: 1px solid rgba(22, 163, 74, 0.22);
+  box-shadow: 0 0 16px rgba(22, 163, 74, 0.10);
 }
 .home-guide-hub__copy {
   min-width: 0;
@@ -1585,21 +1624,21 @@ input[type="range"]::-moz-range-thumb {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: #8ec5ff;
+  color: var(--brand);
 }
 .home-guide-hub__title {
   font-size: 15px;
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  color: #f0f4f8;
+  color: var(--ink);
 }
 .home-guide-hub__subtitle {
   margin-top: 0.2rem;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.45;
-  color: #9aa8bc;
+  color: var(--muted);
 }
 .home-guide-hub__cta {
   display: inline-flex;
@@ -1616,9 +1655,9 @@ input[type="range"]::-moz-range-thumb {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: #0b1220;
-  background: linear-gradient(135deg, #8ec5ff 0%, #929cf8 100%);
-  box-shadow: 0 2px 12px rgba(107, 175, 255, 0.35);
+  color: #ffffff;
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  box-shadow: 0 2px 12px rgba(22, 163, 74, 0.30);
   transition: gap 0.2s ease, filter 0.2s ease;
 }
 @media (min-width: 640px) {
@@ -1669,13 +1708,13 @@ input[type="range"]::-moz-range-thumb {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: #dce4ef;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid color-mix(in srgb, var(--topic) 22%, transparent);
+  color: var(--ink-2);
+  background: var(--bg-2);
+  border: 1px solid color-mix(in srgb, var(--topic) 22%, var(--line));
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 .home-guide-hub__card:hover .home-guide-hub__topic {
-  background: color-mix(in srgb, var(--topic) 10%, rgba(255, 255, 255, 0.04));
+  background: color-mix(in srgb, var(--topic) 8%, #ffffff);
   border-color: color-mix(in srgb, var(--topic) 38%, transparent);
 }
 .home-guide-hub__topic-dot {
@@ -1693,7 +1732,7 @@ input[type="range"]::-moz-range-thumb {
   font-size: 11px;
   line-height: 1.65;
   text-align: center;
-  color: rgba(148, 163, 184, 0.75);
+  color: var(--sub);
   word-break: keep-all;
 }
 .lotto-disclaimer__age {
