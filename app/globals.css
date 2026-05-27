@@ -1,34 +1,34 @@
 @import "tailwindcss";
 
 /* =========================================================
-   머니핏 v7 — "Premium Glass"
-   Deep space · glassmorphism · gradient glow · refined depth
+   머니핏 v8 — "Minimal Green Edition"
+   Light theme · single-tone green · subtle elevation
    ========================================================= */
 
 :root {
-  --bg: #060a13;
-  --bg-2: #0a1121;
-  --bg-3: #101828;
-  --line: rgba(148,163,184,0.08);
-  --line-strong: rgba(148,163,184,0.14);
-  --line-stronger: rgba(148,163,184,0.24);
+  --bg: #ffffff;
+  --bg-2: #f7faf8;
+  --bg-3: #eef4ef;
+  --line: rgba(15,23,42,0.08);
+  --line-strong: rgba(15,23,42,0.14);
+  --line-stronger: rgba(15,23,42,0.24);
 
-  --ink: #f0f4f8;
-  --ink-2: rgba(240,244,248,0.85);
-  --sub: rgba(186,199,215,0.72);
-  --muted: rgba(148,163,184,0.55);
+  --ink: #0f172a;
+  --ink-2: rgba(15,23,42,0.85);
+  --sub: #475569;
+  --muted: #94a3b8;
 
-  --brand: #6bafff;
-  --brand-strong: #4d9cf5;
-  --brand-soft: rgba(107,175,255,0.10);
+  --brand: #16a34a;
+  --brand-strong: #15803d;
+  --brand-soft: rgba(22,163,74,0.10);
 
-  --accent-1: #929cf8;
-  --accent-2: #3ee0a5;
-  --accent-3: #f590c0;
+  --accent-1: #22c55e;
+  --accent-2: #15803d;
+  --accent-3: #f97316;
 
-  --success: #3ee0a5;
-  --warn:    #fcc73e;
-  --danger:  #f87171;
+  --success: #16a34a;
+  --warn:    #f59e0b;
+  --danger:  #ef4444;
 
   --r-sm: 10px;
   --r: 14px;
@@ -37,24 +37,21 @@
 
   --shadow-card:
     0 0 0 1px var(--line),
-    0 1px 0 rgba(255,255,255,0.02) inset,
-    0 2px 4px rgba(0,0,0,0.2),
-    0 8px 24px rgba(0,0,0,0.18);
+    0 1px 2px rgba(15,23,42,0.04),
+    0 4px 12px rgba(15,23,42,0.06);
   --shadow-card-hover:
     0 0 0 1px var(--line-strong),
-    0 1px 0 rgba(255,255,255,0.04) inset,
-    0 4px 8px rgba(0,0,0,0.25),
-    0 16px 48px rgba(0,0,0,0.35);
+    0 2px 4px rgba(15,23,42,0.06),
+    0 12px 32px rgba(15,23,42,0.10);
   --shadow-glow:
-    0 0 20px rgba(107,175,255,0.08),
-    0 0 60px rgba(107,175,255,0.04);
+    0 0 24px rgba(22,163,74,0.10);
 
   --font-display: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
   --font-body:    'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', 'SF Mono', 'Cascadia Mono', ui-monospace, Consolas, monospace;
 }
 
-html { background: var(--bg); color-scheme: dark; }
+html { background: var(--bg); color-scheme: light; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -77,8 +74,8 @@ body {
   position: fixed; inset: 0; z-index: -4;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 140% 80% at 50% -15%, #0c1a3a 0%, transparent 55%),
-    radial-gradient(ellipse 80% 50% at 50% 115%, #060818 0%, transparent 50%),
+    radial-gradient(ellipse 140% 80% at 50% -15%, rgba(220,242,228,0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 50% at 50% 115%, rgba(240,246,242,0.45) 0%, transparent 50%),
     var(--bg);
 }
 
@@ -86,30 +83,30 @@ body {
   position: fixed; z-index: -3;
   pointer-events: none;
   border-radius: 50%;
-  filter: blur(100px);
+  filter: blur(110px);
   will-change: transform;
 }
 .mf-bg-orb-1 {
   top: -15%; left: -12%;
   width: 50vw; height: 50vw;
   max-width: 680px; max-height: 680px;
-  background: radial-gradient(circle, rgba(77,156,245,0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%);
   animation: orb-drift-1 32s ease-in-out infinite alternate;
 }
 .mf-bg-orb-2 {
   bottom: -25%; right: -18%;
   width: 55vw; height: 55vw;
   max-width: 720px; max-height: 720px;
-  background: radial-gradient(circle, rgba(146,156,248,0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 70%);
   animation: orb-drift-2 40s ease-in-out infinite alternate;
 }
 .mf-bg-orb-3 {
   top: 35%; left: 45%;
   width: 40vw; height: 40vw;
   max-width: 500px; max-height: 500px;
-  background: radial-gradient(circle, rgba(62,224,165,0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%);
   animation: orb-drift-3 48s ease-in-out infinite alternate;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 @keyframes orb-drift-1 {
@@ -129,8 +126,8 @@ body {
   position: fixed; inset: 0; z-index: -2;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(148,163,184,0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148,163,184,0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15,23,42,0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15,23,42,0.025) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse 70% 55% at 50% 30%, #000 20%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 30%, #000 20%, transparent 80%);
@@ -138,7 +135,7 @@ body {
 .mf-bg-noise {
   position: fixed; inset: 0; z-index: -1;
   pointer-events: none;
-  opacity: 0.018;
+  opacity: 0.012;
   background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
@@ -154,13 +151,13 @@ body {
 .tabular, .num { font-variant-numeric: tabular-nums; }
 
 .text-gradient {
-  background: linear-gradient(135deg, #a5d0ff 0%, #6bafff 35%, #929cf8 65%, #b8a4fa 100%);
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 .text-gradient-warm {
-  background: linear-gradient(135deg, #fcc73e 0%, #f590c0 50%, #b8a4fa 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
