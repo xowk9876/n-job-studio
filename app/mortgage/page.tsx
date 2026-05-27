@@ -182,7 +182,7 @@ export default function MortgagePage() {
               <div><div className="text-white/50 text-[10.5px]">신규대출 원금 한도</div><div className="font-bold text-emerald-300 tabular mt-0.5">{manwon(dsr.maxPrincipal)}원</div></div>
               <div><div className="text-white/50 text-[10.5px]">기존부채 DSR 점유</div><div className="font-bold text-white/80 tabular mt-0.5">{dsr.utilization.toFixed(1)}%</div></div>
             </div>
-            <p className="text-[10.5px] text-white/40">금융위 「DSR 산정·운용 모범규준」 기반. 실제 한도는 은행 심사·LTV·소득산정 방식에 따라 달라질 수 있습니다.</p>
+            <p className="text-[10.5px] text-white/40 leading-relaxed">금융위 「DSR 산정·운용 모범규준」 기반. 2025.7.1 시행 <strong className="text-white/70">스트레스 DSR 3단계</strong>는 가계대출 기본 1.5% · 수도권·규제지역 주담대 3.0%(10·15 부동산 대책) · 지방 주담대 0.75%(2026.6.30까지 유예) 차등 적용됩니다. 실제 한도는 은행 심사·LTV·소득산정 방식에 따라 달라질 수 있습니다.</p>
           </div>
         )}
       </div>

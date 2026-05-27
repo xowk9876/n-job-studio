@@ -4,7 +4,17 @@ export type LottoPick = {
   numbers: number[]
 }
 
-/** 관측된 1등 조합 분포에서 자주 나오는 특성 (합계·홀짝·구간 등) */
+/** 1~45 중 소수 (당첨번호 통계 가중치용) */
+const LOTTO_PRIMES: ReadonlySet<number> = new Set([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43])
+
+/**
+ * 관측된 1등 조합 분포에서 자주 나오는 특성에 가까울수록 높은 점수를 반환합니다.
+ * 평가 항목 — 합계·홀짝·구간(zone)·연속·끝자리·색상영역·최근 회차 오버랩
+ *           · 고저 분포(1~22/23~45) · AC값(Arithmetic Complexity) · 소수 비율
+ *
+ * NOTE: 로또 6/45의 모든 조합 1등 확률은 1/8,145,060로 동일하며,
+ *       본 점수는 통계적 분포에 가까운 조합을 "추천"할 뿐 당첨을 보장하지 않습니다.
+ */
 export function scorePattern(nums: number[], latestNumbers: number[] = []): number {
   let score = 0
   const sum = nums.reduce((a, b) => a + b, 0)
@@ -56,12 +66,43 @@ export function scorePattern(nums: number[], latestNumbers: number[] = []): numb
   if (latestOverlap >= 1 && latestOverlap <= 2) score += 6
   else if (latestOverlap >= 4) score -= 14
 
+  // 고저 분포 (1~22 / 23~45) — 역대 1등 통계상 3:3·4:2·2:4가 80%+
+  const lowCount = nums.filter(n => n <= 22).length
+  if (lowCount === 3) score += 14
+  else if (lowCount === 2 || lowCount === 4) score += 10
+  else if (lowCount === 1 || lowCount === 5) score += 2
+  else score -= 14
+
+  // AC값 (Arithmetic Complexity) — 모든 두 수 차이의 distinct 개수 - 5
+  // 1등 통계상 7~10이 약 70%, 4 이하는 5% 미만
+  const diffs = new Set<number>()
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+      diffs.add(nums[j]! - nums[i]!)
+    }
+  }
+  const ac = diffs.size - 5
+  if (ac >= 7 && ac <= 10) score += 14
+  else if (ac === 5 || ac === 6 || ac === 11 || ac === 12) score += 6
+  else if (ac >= 13) score -= 4
+  else score -= 8
+
+  // 소수 비율 — 1등 통계 평균 1.8개, 0개나 5개 이상은 드묾
+  const primeCount = nums.filter(n => LOTTO_PRIMES.has(n)).length
+  if (primeCount >= 1 && primeCount <= 3) score += 8
+  else if (primeCount === 4) score += 2
+  else score -= 4
+
   return score
 }
 
-/** scorePattern 이론상 하한·상한 (정규화용) */
-const SCORE_FLOOR = -95
-const SCORE_CEIL = 110
+/**
+ * scorePattern 이론상 하한·상한 (정규화용)
+ *  베스트  = 28+24+22+12+8+10+6+14+14+8 = 146
+ *  실용 워스트 = 기존 -95 + 신규 (-14 -8 -4) = -121
+ */
+const SCORE_FLOOR = -121
+const SCORE_CEIL = 146
 
 export function patternScoreToPercent(score: number): number {
   const clamped = Math.max(SCORE_FLOOR, Math.min(SCORE_CEIL, score))
