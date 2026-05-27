@@ -5,7 +5,7 @@ import {
 } from '@/lib/seo-platform'
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
-export const CONTENT_UPDATED_AT = '2026-05-22' as const
+export const CONTENT_UPDATED_AT = '2026-05-28' as const
 export const SEO_UPDATED_AT = CONTENT_UPDATED_AT
 export const SITE_NAME = '머니핏 계산기'
 

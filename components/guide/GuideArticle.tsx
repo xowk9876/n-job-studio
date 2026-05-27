@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
+import { SITE_URL, jsonLd } from '@/lib/seo'
 
 type Props = {
   slug: string
@@ -23,6 +23,7 @@ export default function GuideArticle({
   children,
   related = [],
 }: Props) {
+  // 엔티티 통합: layout.tsx의 #organization 노드를 재사용해 시그널 분산 방지 (Entity-based ranking)
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -30,22 +31,15 @@ export default function GuideArticle({
         '@type': 'Article',
         '@id': `${SITE_URL}/guide/${slug}#article`,
         headline: title,
+        name: title,
         description,
+        articleBody: description,
         image: [`${SITE_URL}/guide/opengraph-image`],
-        author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
-        publisher: {
-          '@type': 'Organization',
-          name: SITE_NAME,
-          url: SITE_URL,
-          logo: {
-            '@type': 'ImageObject',
-            url: DEFAULT_OG_IMAGE,
-            width: 1200,
-            height: 630,
-          },
-        },
-        mainEntityOfPage: `${SITE_URL}/guide/${slug}`,
+        author: { '@id': `${SITE_URL}/#organization` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/guide/${slug}` },
         articleSection: tag,
+        keywords: [title, tag, '머니핏 계산기', '2026 재테크', '재테크 가이드'].join(', '),
         inLanguage: 'ko-KR',
         isAccessibleForFree: true,
         datePublished: updatedAt,
