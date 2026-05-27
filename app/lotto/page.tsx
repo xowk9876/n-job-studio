@@ -85,12 +85,13 @@ export default function LottoPage() {
   const [games, setGames] = useState<LottoPick[]>([])
   const [isSpinning, setIsSpinning] = useState(false)
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
-  const [, setTick] = useState(0)
+  // 회차·추첨일·매출마감 정보는 60초 인터벌로만 갱신 (매 렌더 재계산 시 useEffect deps 무한 재구독 방지)
+  const [info, setInfo] = useState(() => getLottoInfo())
   const [latestResult, setLatestResult] = useState<LatestLottoResult | null>(null)
   const [latestStatus, setLatestStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
   useEffect(() => {
-    const id = setInterval(() => setTick(t => t + 1), 60_000)
+    const id = setInterval(() => setInfo(getLottoInfo()), 60_000)
     return () => clearInterval(id)
   }, [])
 
@@ -119,8 +120,6 @@ export default function LottoPage() {
       cancelled = true
     }
   }, [])
-
-  const info = getLottoInfo()
 
   // 추첨일 카운트다운 — 클라이언트 마운트 후 매초 갱신 (render-purity 보장)
   const [countdown, setCountdown] = useState<string>('')

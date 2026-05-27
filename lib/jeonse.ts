@@ -97,7 +97,8 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
   if (direction === 'jeonse-to-wolse') {
     const jeonseDeposit = input.jeonsDeposit ?? 0
     const wolseDeposit = input.wolseDeposit ?? 0
-    const diff = jeonseDeposit - wolseDeposit
+    // 월세 보증금이 전세 보증금보다 큰 비정상 입력 가드 (음수 월세 차단)
+    const diff = Math.max(0, jeonseDeposit - wolseDeposit)
 
     // 월세 = (전세 보증금 - 월세 보증금) × 전환율 / 12
     const monthlyRent = Math.round((diff * rate) / 12)

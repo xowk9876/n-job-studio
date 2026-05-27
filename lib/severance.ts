@@ -30,7 +30,24 @@ export function calcSeverance(input: SeveranceInput): SeveranceResult {
 
   const start = new Date(startDate)
   const end = new Date(endDate)
-  const workDays = Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+  const startMs = start.getTime()
+  const endMs = end.getTime()
+
+  // 입력 가드: 빈 문자열·Invalid Date·역순(end < start) 케이스 방어 (NaN 캐스케이드 차단)
+  if (!startDate || !endDate || Number.isNaN(startMs) || Number.isNaN(endMs) || endMs < startMs) {
+    return {
+      workDays: 0,
+      workYears: 0,
+      dailyWage: 0,
+      averageDailyWage: 0,
+      regularDailyWage: 0,
+      basis: 'average',
+      severancePay: 0,
+      isEligible: false,
+    }
+  }
+
+  const workDays = Math.floor((endMs - startMs) / (1000 * 60 * 60 * 24))
   const workYears = workDays / 365
 
   // 1년 미만은 퇴직금 없음

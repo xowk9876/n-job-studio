@@ -83,7 +83,7 @@ export function calcSavings(input: SavingsInput): SavingsResult {
   const taxAmount = Math.round(grossInterest * TAX_RATE)
   const netInterest = grossInterest - taxAmount
   const maturityAmount = principal + netInterest
-  const effectiveRate = principal > 0
+  const effectiveRate = principal > 0 && months > 0
     ? (netInterest / principal) * (12 / months) * 100
     : 0
 
