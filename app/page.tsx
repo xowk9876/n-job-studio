@@ -143,12 +143,12 @@ export default function HomePage() {
             </div>
             <div className="home-stat home-stat--divider" aria-hidden />
             <div className="home-stat">
-              <dt className="home-stat__value" style={{ color: '#929cf8' }}>2026</dt>
+              <dt className="home-stat__value" style={{ color: 'var(--brand)' }}>2026</dt>
               <dd className="home-stat__label">최신 세율</dd>
             </div>
             <div className="home-stat home-stat--divider" aria-hidden />
             <div className="home-stat">
-              <dt className="home-stat__value" style={{ color: '#3ee0a5' }}>0원</dt>
+              <dt className="home-stat__value" style={{ color: 'var(--accent-3)' }}>0원</dt>
               <dd className="home-stat__label">완전 무료</dd>
             </div>
           </dl>
@@ -169,8 +169,7 @@ export default function HomePage() {
               href={c.href}
               className={`home-calc-card card card-hover group mf-rise mf-rise-d${Math.min(4, Math.floor(i / 2) + 1)}`}
               style={{
-                borderTop: `2px solid ${c.color}`,
-                boxShadow: `0 0 0 1px ${c.color}40`,
+                borderTop: '2px solid #16a34a',
               }}
             >
               <div

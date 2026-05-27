@@ -90,8 +90,8 @@ export default function Footer() {
               aria-hidden
               className="inline-flex items-center justify-center w-6 h-6 rounded text-[10.5px] font-bold text-white"
               style={{
-                background: 'linear-gradient(135deg, #6bafff 0%, #929cf8 100%)',
-                boxShadow: '0 0 10px rgba(107,175,255,0.4)',
+                background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+                boxShadow: '0 0 10px rgba(22,163,74,0.35)',
               }}
             >
               M
