@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="font-display text-[28px] md:text-[34px] font-bold text-white tracking-tight">
           개인정보처리방침
         </h1>
-        <p className="mt-3 text-[13px] text-[color:var(--muted)]">시행일: 2026년 1월 1일</p>
+        <p className="mt-3 text-[13px] text-[color:var(--muted)]">시행일: 2026년 1월 1일 · 최종 개정: 2026년 5월 30일</p>
       </header>
 
       <div className="space-y-8 text-[14.5px] text-[color:var(--sub)] leading-[1.85]">
@@ -71,7 +71,66 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">3. 계산 입력값 처리 원칙</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">3. 광고 및 제3자 쿠키 (Google AdSense)</h2>
+          <p>
+            서비스는 무료 운영을 유지하기 위해 <strong className="text-white">Google AdSense</strong>를 포함한
+            제3자 광고 사업자의 광고를 게재합니다. 이 과정에서 Google 등 제3자 공급업체는 쿠키(Cookie)를
+            사용하여 이용자가 본 사이트 및 다른 웹사이트를 방문한 기록을 바탕으로 광고를 제공할 수 있습니다.
+          </p>
+          <ul className="list-disc pl-6 mt-3 space-y-1.5">
+            <li>
+              Google은 광고 쿠키(DART 쿠키 포함)를 사용하여 이용자의 관심사에 기반한 맞춤형 광고를 게재합니다.
+            </li>
+            <li>
+              제3자 광고 네트워크가 수집하는 정보에는 IP 주소, 브라우저 정보, 방문 페이지, 광고 노출·클릭
+              기록 등이 포함될 수 있습니다. 이 정보는 해당 광고 사업자의 정책에 따라 처리됩니다.
+            </li>
+            <li>
+              이용자는{' '}
+              <a
+                href="https://www.google.com/settings/ads"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="text-[color:var(--brand)] underline"
+              >
+                Google 광고 설정
+              </a>
+              에서 개인 맞춤 광고를 비활성화할 수 있습니다.
+            </li>
+            <li>
+              제3자 공급업체의 쿠키 사용은{' '}
+              <a
+                href="https://www.aboutads.info"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="text-[color:var(--brand)] underline"
+              >
+                www.aboutads.info
+              </a>
+              에서 일괄 거부(opt-out)할 수 있으며, 브라우저 설정에서 쿠키 자체를 차단할 수도 있습니다.
+            </li>
+            <li>
+              Google의 광고 쿠키 및 데이터 처리에 관한 자세한 내용은{' '}
+              <a
+                href="https://policies.google.com/technologies/ads"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="text-[color:var(--brand)] underline"
+              >
+                Google 광고 정책
+              </a>
+              에서 확인할 수 있습니다.
+            </li>
+          </ul>
+          <p className="mt-3">
+            서비스는 방문 통계 분석을 위해 Google Analytics 등 분석 도구를 사용할 수 있으며, 이때 수집되는
+            정보는 개인을 식별하지 않는 익명·집계 형태로 처리됩니다. 쿠키를 차단하더라도 계산기 기능은 정상
+            이용할 수 있으나 일부 광고·통계 기능이 제한될 수 있습니다.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">4. 계산 입력값 처리 원칙</h2>
           <p>
             머니핏 계산기는 연봉, 대출금, 보증금, 저축액처럼 민감할 수 있는 금액 정보를 다룹니다.
             따라서 입력값은 이용자의 브라우저 안에서 계산에만 사용되며, 운영자가 별도로 확인할 수 있는
@@ -90,7 +149,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">4. 개인정보의 보유 및 파기</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">5. 개인정보의 보유 및 파기</h2>
           <p>
             자동 수집되는 접속 로그는 통신비밀보호법에 따라 3개월간 보관 후 파기됩니다. 계산 입력값은
             브라우저 세션 종료 시 함께 소멸합니다.
@@ -98,7 +157,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">5. 제3자 제공</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">6. 제3자 제공</h2>
           <p>
             서비스는 이용자의 개인정보를 외부에 제공하지 않습니다. 다만 법령에 의거하거나 수사기관의
             적법한 요청이 있을 때에는 관련 법령 절차에 따라 제공할 수 있습니다.
@@ -110,7 +169,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">6. 이용자의 권리</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">7. 이용자의 권리</h2>
           <p>
             이용자는 「개인정보 보호법」 제35조~제39조에 따라 자신의 개인정보에 대한 열람·정정·삭제·처리정지를
             요구할 권리가 있습니다. 다만 본 서비스는 회원정보를 보유하지 않으므로 일반적으로 해당되는
@@ -119,7 +178,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">7. 연락처</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">8. 연락처</h2>
           <p>
             개인정보 관련 문의는 아래 이메일로 보내주시면 영업일 기준 7일 이내 답변드립니다.
           </p>
@@ -132,7 +191,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">8. 방침의 변경</h2>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">9. 방침의 변경</h2>
           <p>
             본 방침이 변경될 경우, 시행일 최소 7일 전에 본 페이지에 공지합니다. 중대한 변경 사항은 30일
             전에 공지합니다.
