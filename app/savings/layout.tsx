@@ -8,7 +8,7 @@ export const metadata = buildCalculatorMetadata({
   path: PATH,
   title: '적금·예금 이자 계산기 — 세후 수익 + ISA 비과세 비교',
   description:
-    '단리·복리 선택, 이자소득세 15.4% 차감 후 실제 세후 만기 수령액을 계산합니다. 2026년 ISA 일반형 비과세 한도(500만원) 적용 비교까지.',
+    '단리·복리 선택, 이자소득세 15.4% 차감 후 실제 세후 만기 수령액을 계산합니다. ISA 일반형 비과세 한도(200만원) 적용 비교까지.',
   keywords: [
     '적금 계산기',
     '예금 계산기',
