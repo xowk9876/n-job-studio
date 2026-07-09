@@ -55,6 +55,24 @@
 }
 
 html { background: var(--bg); color-scheme: dark; }
+
+/* 키보드 포커스 — 브랜드 링으로 전역 통일 (마우스 클릭은 제외) */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
+/* 앵커 이동 시 고정 헤더에 가리지 않도록 */
+section[id], h2[id], [id^="faq"], [id^="tips"], [id^="examples"] {
+  scroll-margin-top: 5.5rem;
+}
 body {
   background: var(--bg);
   color: var(--ink);
@@ -491,6 +509,10 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: 20px;
+  transition: border-color .25s ease;
+}
+.glass-card:focus-within {
+  border-color: rgba(107,175,255,0.28);
 }
 .glass-card-strong {
   background: linear-gradient(180deg, rgba(15,23,42,0.65) 0%, rgba(15,23,42,0.4) 100%);
@@ -750,7 +772,7 @@ input[type="range"]::-moz-range-thumb {
 }
 .result-card .result-value {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: clamp(27px, 7.5vw, 36px);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.05;
@@ -844,6 +866,7 @@ input[type="range"]::-moz-range-thumb {
   font-weight: 600;
   color: #fff;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 @media (min-width: 768px) {
   .section-title { font-size: 1.5rem; }
@@ -1303,6 +1326,7 @@ input[type="range"]::-moz-range-thumb {
   filter: blur(32px);
 }
 .home-calc-card:hover .home-calc-card__glow { opacity: 1; }
+.home-calc-card:active { transform: translateY(-1px) scale(0.995); }
 .home-calc-card__top {
   display: flex;
   align-items: flex-start;
