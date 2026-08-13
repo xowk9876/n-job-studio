@@ -32,7 +32,7 @@ export const guideItems = [
   {
     slug: 'dsr-stress-test-2026',
     title: '2026 스트레스 DSR 3단계 완전 정리',
-    description: '스트레스 금리 1.50%p 적용 구간과 주담대·신용대출 영향 분석.',
+    description: '수도권 주담대 3.0%p·지방 0.75%p·신용대출 1.5%p 차등 적용되는 스트레스 금리 기준과 한도 영향 분석.',
     tag: '대출',
     calculatorPath: '/mortgage',
     updatedAt: CONTENT_UPDATED_AT,
