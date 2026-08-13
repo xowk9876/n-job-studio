@@ -41,7 +41,7 @@ type DhlotteryItem = {
   bnsWnNo?: unknown
   rnk1WnNope?: unknown
   rnk1WnAmt?: unknown
-  rlvtEpsdSumNtslAmt?: unknown
+  wholEpsdSumNtslAmt?: unknown
 }
 
 type DhlotteryResponse = {
@@ -76,7 +76,10 @@ function toRoundResult(item: DhlotteryItem | undefined): LottoRoundResult | null
     bonusNumber,
     firstWinnerCount: Number(item.rnk1WnNope) || 0,
     firstPrizeAmount: Number(item.rnk1WnAmt) || 0,
-    totalSalesAmount: Number(item.rlvtEpsdSumNtslAmt) || 0,
+    // 총 판매금액은 wholEpsdSumNtslAmt다. rlvtEpsdSumNtslAmt는 261회부터 당첨금
+    // 총액(판매액의 약 50%)이 담기므로 판매금액으로 쓰면 절반 값이 나온다.
+    // (1회 3,681,782,000원 = 복권위원회 공식 최저 판매액 기록과 대조 확인)
+    totalSalesAmount: Number(item.wholEpsdSumNtslAmt) || 0,
     origin: 'live',
   }
 }

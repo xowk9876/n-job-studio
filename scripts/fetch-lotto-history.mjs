@@ -73,7 +73,8 @@ function toRow(item) {
     item.bnsWnNo,
     Number(item.rnk1WnNope) || 0,
     Number(item.rnk1WnAmt) || 0,
-    Number(item.rlvtEpsdSumNtslAmt) || 0,
+    // 총 판매금액 — rlvtEpsdSumNtslAmt는 261회부터 당첨금 총액(판매액의 절반)이므로 쓰면 안 된다
+    Number(item.wholEpsdSumNtslAmt) || 0,
   ]
 }
 
