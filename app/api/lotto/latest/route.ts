@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { fetchLatestRound } from '@/lib/lotto/dhlottery'
 import { getSnapshotRound, SNAPSHOT_LATEST_ROUND } from '@/lib/lotto/history'
+import { checkRateLimit, getClientKey } from '@/lib/lotto/rate-limit'
 
 /**
  * 최신 회차 당첨번호.
@@ -12,7 +13,22 @@ import { getSnapshotRound, SNAPSHOT_LATEST_ROUND } from '@/lib/lotto/history'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+const RATE_LIMIT = 60
+const RATE_WINDOW_MS = 60_000
+
+export async function GET(request: Request) {
+  const { allowed, retryAfterSeconds } = checkRateLimit(
+    `lotto-latest:${getClientKey(request)}`,
+    RATE_LIMIT,
+    RATE_WINDOW_MS,
+  )
+  if (!allowed) {
+    return NextResponse.json(
+      { error: '요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.' },
+      { status: 429, headers: { 'Cache-Control': 'no-store', 'Retry-After': String(retryAfterSeconds) } },
+    )
+  }
+
   const live = await fetchLatestRound()
 
   if (live) {

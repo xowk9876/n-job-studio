@@ -1,17 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { CalendarDays, ChevronLeft, ChevronRight, Search, Trophy } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Search, Trophy } from 'lucide-react'
 
-import DatePicker from '@/components/ui/DatePicker'
-import { FIRST_DRAW_DATE, fromIsoDate, roundOnOrBefore } from '@/lib/lotto/schedule'
+import { FIRST_DRAW_DATE, fromIsoDate } from '@/lib/lotto/schedule'
 import type { LottoRoundResult } from '@/lib/lotto/types'
 
 import { BALL_ROW_CLASS, LottoBall } from './LottoBall'
 
 /**
  * 최신 회차 당첨번호 + 과거 회차 조회.
- * 회차 직접 입력 · 날짜 선택(DatePicker) · 이전/다음 이동을 모두 지원한다.
+ * 회차 번호 직접 입력 · 이전/다음 이동 · 최신 회차 복귀를 지원한다.
  * 데이터는 서버 프록시(`/api/lotto/*`)를 경유한 동행복권 공식 데이터다.
  */
 
@@ -49,9 +48,7 @@ export default function LottoResultBrowser() {
   const [result, setResult] = useState<LottoRoundResult | null>(null)
   const [status, setStatus] = useState<Status>('loading')
   const [error, setError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
   const [roundInput, setRoundInput] = useState('')
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   // 빠른 연속 클릭 시 늦게 도착한 이전 응답이 화면을 덮어쓰지 않도록 요청 순번을 비교한다
   const requestIdRef = useRef(0)
@@ -61,15 +58,13 @@ export default function LottoResultBrowser() {
     setStatus('ready')
     setError(null)
     setRoundInput(String(data.round))
-    setSelectedDate(fromIsoDate(data.drawDate))
   }, [])
 
   const load = useCallback(
-    async (url: string, nextNotice: string | null = null) => {
+    async (url: string) => {
       const requestId = ++requestIdRef.current
       setStatus('loading')
       setError(null)
-      setNotice(nextNotice)
 
       try {
         const response = await fetch(url)
@@ -93,8 +88,8 @@ export default function LottoResultBrowser() {
   )
 
   const loadRound = useCallback(
-    (round: number, nextNotice: string | null = null) => {
-      void load(`/api/lotto/round?round=${round}`, nextNotice)
+    (round: number) => {
+      void load(`/api/lotto/round?round=${round}`)
     },
     [load],
   )
@@ -102,6 +97,8 @@ export default function LottoResultBrowser() {
   // 최초 진입 시 최신 회차를 표시하고, 이후 회차 이동의 상한으로 사용한다
   useEffect(() => {
     let cancelled = false
+    // 사용자가 최신 회차 응답보다 먼저 다른 회차를 조회했을 때 화면을 덮어쓰지 않도록 순번을 잡는다
+    const requestId = ++requestIdRef.current
 
     async function loadLatest() {
       try {
@@ -110,10 +107,12 @@ export default function LottoResultBrowser() {
         const payload = (await response.json()) as LottoRoundResult
         if (cancelled) return
 
+        // 회차 상한은 조회 순서와 무관한 메타데이터이므로 항상 반영한다
         setLatestRound(payload.round)
+        if (requestId !== requestIdRef.current) return
         applyResult(payload)
       } catch {
-        if (cancelled) return
+        if (cancelled || requestId !== requestIdRef.current) return
         setStatus('error')
         setError('최신 당첨번호를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')
       }
@@ -146,24 +145,6 @@ export default function LottoResultBrowser() {
     loadRound(parsed)
   }
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date)
-    if (!date) return
-
-    const mapped = roundOnOrBefore(date)
-    if (mapped < 1) {
-      setError(`제1회 추첨일(${FIRST_DRAW_DATE}) 이후 날짜를 선택해 주세요.`)
-      return
-    }
-    if (latestRound !== null && mapped > latestRound) {
-      loadRound(latestRound, `아직 추첨되지 않은 날짜입니다. 최신 ${latestRound}회를 표시합니다.`)
-      return
-    }
-
-    // 로또는 매주 토요일 추첨이므로 선택한 날짜까지 추첨이 끝난 가장 가까운 회차로 매핑한다
-    loadRound(mapped, `선택한 날짜 기준 가장 가까운 추첨 회차는 ${mapped}회입니다.`)
-  }
-
   const ballAriaLabel = result
     ? `제 ${result.round}회 당첨번호 ${result.numbers.join(', ')}, 보너스 번호 ${result.bonusNumber}`
     : undefined
@@ -177,7 +158,7 @@ export default function LottoResultBrowser() {
             로또 당첨번호 조회
           </h2>
           <p className="text-[11.5px] text-ink/60 mt-1">
-            동행복권 공식 데이터 · 회차 또는 날짜로 과거 당첨번호를 확인할 수 있습니다.
+            동행복권 공식 데이터 · 회차 번호로 과거 당첨번호를 확인할 수 있습니다.
           </p>
         </div>
         <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
@@ -193,8 +174,10 @@ export default function LottoResultBrowser() {
               {Array.from({ length: 7 }).map((_, i) => (
                 <div
                   key={i}
-                  className={`h-[clamp(26px,7.2vw,52px)] w-[clamp(26px,7.2vw,52px)] rounded-full bg-ink/[0.06] ${i === 6 ? 'ring-1 ring-ink/15' : ''}`}
-                  style={{ animation: `lotto-ball-bounce 0.75s ease-in-out ${i * 0.06}s infinite` }}
+                  // Tailwind 기본 animate-bounce 사용 — styled-jsx는 keyframes 이름을 스코프 처리해
+                  // 인라인 style의 animation 이름과 어긋나므로 전역 유틸리티로 처리한다
+                  className={`h-[clamp(26px,7.2vw,52px)] w-[clamp(26px,7.2vw,52px)] shrink-0 animate-bounce rounded-full bg-ink/[0.06] ${i === 6 ? 'ring-1 ring-ink/15' : ''}`}
+                  style={{ animationDelay: `${i * 0.06}s`, animationDuration: '0.8s' }}
                 />
               ))}
             </div>
@@ -224,15 +207,8 @@ export default function LottoResultBrowser() {
                 <span aria-hidden className="shrink-0 text-[clamp(12px,3.2vw,18px)] font-light text-ink/55 leading-none">
                   +
                 </span>
-                <span className="relative shrink-0">
-                  <LottoBall number={result.bonusNumber} size="lg" bonus />
-                  <span
-                    aria-hidden
-                    className="absolute -bottom-4 left-1/2 hidden -translate-x-1/2 text-[9px] font-bold text-ink/55 md:block"
-                  >
-                    BONUS
-                  </span>
-                </span>
+                {/* 보너스 번호 — 시각 라벨 없이 공만 노출하고, 낭독은 컨테이너 aria-label이 담당한다 */}
+                <LottoBall number={result.bonusNumber} size="lg" bonus />
               </div>
             </div>
 
@@ -269,7 +245,6 @@ export default function LottoResultBrowser() {
             <p className="text-[12.5px] font-semibold text-[color:var(--danger)]">{error}</p>
           </div>
         )}
-        {!error && notice && <p className="mt-3 text-center text-[11.5px] text-ink/60">{notice}</p>}
       </div>
 
       {/* 회차 이동 컨트롤 */}
@@ -329,48 +304,22 @@ export default function LottoResultBrowser() {
           </button>
         </div>
 
-        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-1.5 text-[11.5px] text-ink/60 sm:shrink-0">
-            <CalendarDays className="h-3.5 w-3.5" aria-hidden />
-            날짜로 찾기
-          </div>
-          <div className="flex-1">
-            <DatePicker
-              value={selectedDate}
-              onChange={handleDateChange}
-              ariaLabel="추첨 날짜로 회차 찾기"
-              placeholder="추첨일 선택"
-              minYear={2002}
-              maxYear={new Date().getFullYear()}
-            />
-          </div>
+        <div className="mt-3">
           <button
             type="button"
             onClick={() => latestRound && loadRound(latestRound)}
             disabled={latestRound === null || isLatest || status === 'loading'}
-            className="h-10 shrink-0 rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-10 w-full rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
           >
-            최신 회차
+            최신 회차로 이동
           </button>
         </div>
 
         <p className="mt-3 text-[10.5px] leading-relaxed text-[color:var(--muted)]">
-          로또 6/45는 제1회({FIRST_DRAW_DATE})부터 매주 토요일 추첨됩니다. 날짜를 선택하면 그 날짜까지 추첨이 끝난 가장
-          가까운 회차를 보여 줍니다.
+          로또 6/45는 제1회({FIRST_DRAW_DATE})부터 매주 토요일 추첨됩니다. 조회하려는 회차 번호를 입력하거나 화살표로
+          앞뒤 회차를 이동할 수 있습니다.
         </p>
       </div>
-
-      <style jsx>{`
-        @keyframes lotto-ball-bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-      `}</style>
     </div>
   )
 }

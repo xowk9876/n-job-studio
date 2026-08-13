@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Check, Copy, RotateCcw, SlidersHorizontal, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Check, Copy, Sparkles, SlidersHorizontal, X } from 'lucide-react'
 
 import {
   CONSECUTIVE_UNLIMITED,
@@ -20,18 +20,20 @@ import {
 import { LOTTO_MAX, TOTAL_COMBINATIONS } from '@/lib/lotto/stats'
 import type { LottoStats } from '@/lib/lotto/types'
 
-import { LottoBall } from './LottoBall'
+import { BALL_ROW_XL_CLASS, LottoBall } from './LottoBall'
 
 /**
- * 통계 기반 번호 생성기.
+ * 번호 생성기.
  *
- * 제공 기능 — 번호 풀 가중치(핫·콜드·장기 미출현) · 홀짝/고저 비율 · 합계 구간 ·
- * 연속번호 제한 · 최소 분포 구간 · 번호 고정/제외 · 역대 1등 조합 회피 · 다중 게임.
+ * 기본 화면은 3단계로만 구성한다 — 게임 수 선택 → [번호 생성] → 큰 번호 확인.
+ * 번호 풀 전략 · 출현 통계 · 밸런스 필터(홀짝/고저/합계/연속/구간/고정·제외)는
+ * 모두 "고급 설정" 접이식 영역으로 내려 두고, 기본값은 균형(balanced) 전략으로 고정한다.
  *
  * 확률 고지: 로또는 매 회차 독립 추첨이므로 어떤 옵션도 당첨 확률을 바꾸지 못한다.
  * 이 UI는 "당첨 보장"을 주장하지 않으며 조합의 선택 근거만 투명하게 제시한다.
  */
 
+const GAME_COUNTS = [1, 3, 5] as const
 const STRATEGIES: PoolStrategy[] = ['balanced', 'hot', 'cold', 'overdue', 'uniform']
 const RATIO_PRESETS: RatioPreset[] = ['any', '3:3', '4:2', '2:4']
 
@@ -88,6 +90,23 @@ export default function LottoGenerator() {
   const [stats, setStats] = useState<LottoStats | null>(null)
   const [showAdvanced, setShowAdvanced] = useState(false)
 
+  // 연출 지연 중에 옵션이 바뀌어도 화면에 보이는 조건으로 생성되도록 최신 값을 참조한다
+  const optionsRef = useRef(options)
+  useEffect(() => {
+    optionsRef.current = options
+  }, [options])
+
+  // 언마운트 시 남은 타이머를 정리해 해제된 컴포넌트에 setState가 걸리지 않게 한다
+  const spinTimerRef = useRef<number | null>(null)
+  const copyTimerRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (spinTimerRef.current !== null) window.clearTimeout(spinTimerRef.current)
+      if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current)
+    }
+  }, [])
+
   useEffect(() => {
     let cancelled = false
 
@@ -110,7 +129,8 @@ export default function LottoGenerator() {
 
   const latestNumbers = useMemo(() => stats?.recentDraws[0]?.numbers ?? [], [stats])
   const validationErrors = useMemo(() => validateGeneratorOptions(options), [options])
-  const canGenerate = validationErrors.length === 0 && !isSpinning
+  const hasGames = games.length > 0
+  const isBlocked = validationErrors.length > 0
 
   const update = useCallback(<K extends keyof GeneratorOptions>(key: K, value: GeneratorOptions[K]) => {
     setOptions(prev => ({ ...prev, [key]: value }))
@@ -144,149 +164,224 @@ export default function LottoGenerator() {
   }, [])
 
   const handleGenerate = useCallback(() => {
-    if (!canGenerate) return
+    // 버튼은 포커스를 잃지 않도록 비활성화하지 않고, 중복 실행만 여기서 막는다
+    if (isSpinning || validateGeneratorOptions(optionsRef.current).length > 0) return
 
     setIsSpinning(true)
     setCopiedIndex(null)
 
     // 연산은 동기지만, 공이 굴러가는 연출을 보여 준 뒤 결과를 교체한다
     const delay = games.length === 0 ? 700 : 450
-    window.setTimeout(() => {
-      setGames(generateGames(options, { stats, latestNumbers }))
+    spinTimerRef.current = window.setTimeout(() => {
+      spinTimerRef.current = null
+
+      const current = optionsRef.current
+      if (validateGeneratorOptions(current).length === 0) {
+        const next = generateGames(current, { stats, latestNumbers })
+        // 구조적으로 조합이 불가능한 경우에만 빈 배열이 오므로 직전 결과를 유지한다
+        if (next.length > 0) setGames(next)
+      }
       setIsSpinning(false)
     }, delay)
-  }, [canGenerate, games.length, options, stats, latestNumbers])
+  }, [isSpinning, games.length, stats, latestNumbers])
 
   const handleCopy = useCallback(async (index: number, numbers: number[]) => {
     try {
       await navigator.clipboard.writeText(numbers.join(', '))
       setCopiedIndex(index)
-      window.setTimeout(() => setCopiedIndex(null), 1500)
+      if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current)
+      copyTimerRef.current = window.setTimeout(() => {
+        copyTimerRef.current = null
+        setCopiedIndex(null)
+      }, 1500)
     } catch {
       /* 클립보드 권한이 없으면 조용히 무시 */
     }
   }, [])
 
-  const hasGames = games.length > 0
   const overdueGapOf = useCallback(
     (num: number) => stats?.numbers.find(stat => stat.number === num)?.gap ?? 0,
     [stats],
   )
 
+  const selectionCount = options.include.length + options.exclude.length
+
   return (
     <div className="glass-card">
-      <div className="mb-5">
+      <div className="mb-4">
         <p className="font-mono text-[10px] tracking-[0.22em] text-[color:var(--muted)] mb-1">NUMBER GENERATOR</p>
-        <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">
-          통계 기반 번호 생성기
-        </h2>
+        <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">번호 생성기</h2>
         <p className="text-[11.5px] leading-relaxed text-ink/60 mt-1">
-          역대 당첨번호 통계와 밸런스 필터로 조합을 만듭니다. 로또는 매 회차 독립 추첨이므로 모든 조합의 1등 확률은
-          1/{TOTAL_COMBINATIONS.toLocaleString('ko-KR')}로 동일합니다 — 어떤 옵션도 당첨 확률을 높이지 않습니다.
+          게임 수를 고르고 <span className="font-semibold text-ink/80">번호 생성</span> 버튼만 누르면 됩니다.
         </p>
       </div>
 
-      {/* 게임 수 */}
-      <div className="mb-4">
+      {/* 1단계 — 게임 수 */}
+      <div className="mb-3">
         <OptionRow label="게임 수">
-          <div className={SEG_GROUP}>
-            {[1, 3, 5].map(count => (
+          <div className={SEG_GROUP} role="group" aria-label="게임 수 선택">
+            {GAME_COUNTS.map(count => (
               <button
                 key={count}
                 type="button"
                 onClick={() => update('games', count)}
-                disabled={isSpinning}
                 aria-pressed={options.games === count}
                 className={segButtonClass(options.games === count)}
               >
-                {count}
+                {count}게임
               </button>
             ))}
           </div>
         </OptionRow>
       </div>
 
-      {/* 번호 풀 전략 */}
-      <div className="mb-4">
-        <p className="text-[12px] font-medium text-ink/70 mb-2">번호 풀 전략</p>
-        <div className={SEG_GROUP}>
-          {STRATEGIES.map(strategy => (
-            <button
-              key={strategy}
-              type="button"
-              onClick={() => update('strategy', strategy)}
-              disabled={isSpinning}
-              aria-pressed={options.strategy === strategy}
-              className={segButtonClass(options.strategy === strategy)}
-            >
-              {STRATEGY_LABELS[strategy]}
-            </button>
-          ))}
-        </div>
-        <p className="mt-2 text-[11px] leading-relaxed text-[color:var(--muted)]">
-          {STRATEGY_DESCRIPTIONS[options.strategy]}
-          {options.strategy !== 'balanced' && options.strategy !== 'uniform' && stats && (
-            <> (최근 {stats.recentWindow}회 기준)</>
-          )}
-        </p>
-      </div>
-
-      {/* 통계 요약 */}
-      {stats && (
-        <div className="mb-4 rounded-2xl border border-ink/10 bg-ink/[0.03] p-3">
-          <div className="mb-2.5 flex flex-wrap items-baseline justify-between gap-x-2">
-            <p className="font-mono text-[10px] tracking-[0.18em] text-[color:var(--muted)]">STATS</p>
-            <p className="text-[10.5px] text-ink/55 tabular">
-              {stats.dataThrough.toLocaleString('ko-KR')}회까지 · 최근 {stats.recentWindow}회 기준
-            </p>
-          </div>
-          <div className="flex flex-col gap-2">
-            {[
-              { label: '자주 나온 번호', numbers: stats.hot, suffix: null as ((n: number) => string) | null },
-              { label: '적게 나온 번호', numbers: stats.cold, suffix: null as ((n: number) => string) | null },
-              {
-                label: '장기 미출현',
-                numbers: stats.overdue,
-                suffix: (n: number) => `${overdueGapOf(n)}회 미출현`,
-              },
-            ].map(row => (
-              <div key={row.label} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="w-[5.6rem] shrink-0 text-[11px] text-ink/60">{row.label}</span>
-                <span className="flex flex-wrap gap-1">
-                  {row.numbers.slice(0, 8).map(num => (
-                    <LottoBall
-                      key={num}
-                      number={num}
-                      size="sm"
-                      className={row.suffix ? 'cursor-help' : ''}
-                    />
-                  ))}
-                </span>
-              </div>
+      {isBlocked && (
+        <div
+          role="alert"
+          className="mb-3 rounded-2xl border border-[color:var(--danger)]/25 bg-[color:var(--danger)]/[0.06] p-3.5"
+        >
+          <ul className="flex flex-col gap-1">
+            {validationErrors.map(message => (
+              <li key={message} className="text-[12px] font-semibold leading-relaxed text-[color:var(--danger)]">
+                {message}
+              </li>
             ))}
-          </div>
-          <p className="mt-2.5 text-[10px] leading-relaxed text-[color:var(--muted)]">
-            장기 미출현 1위는 {stats.overdue[0]}번({overdueGapOf(stats.overdue[0] ?? 0)}회 미출현)입니다. 과거 출현
-            빈도는 다음 회차 확률과 무관한 참고 지표입니다.
+          </ul>
+          <p className="mt-1.5 text-[11px] text-[color:var(--danger)]/80">
+            아래 고급 설정에서 조건을 조정하면 바로 생성할 수 있습니다.
           </p>
         </div>
       )}
 
-      {/* 고급 조건 */}
-      <div className="mb-5">
+      {/* 2단계 — 생성 버튼 */}
+      <button
+        type="button"
+        onClick={handleGenerate}
+        disabled={isBlocked}
+        aria-busy={isSpinning}
+        aria-controls="lotto-generated-numbers"
+        className={`flex w-full items-center justify-center gap-2 rounded-xl py-4 text-[15.5px] font-bold transition-colors ${
+          isBlocked
+            ? 'cursor-not-allowed bg-ink/[0.06] text-ink/65'
+            : 'bg-[color:var(--brand)] text-white shadow-[0_6px_16px_-6px_oklch(47%_0.165_262/0.5)] hover:bg-[color:var(--brand-strong)]'
+        }`}
+      >
+        <Sparkles className={`h-[18px] w-[18px] ${isSpinning ? 'animate-pulse' : ''}`} aria-hidden />
+        {isSpinning ? '번호를 뽑고 있습니다' : hasGames ? `다시 생성 (${options.games}게임)` : `번호 생성 (${options.games}게임)`}
+      </button>
+
+      {/* 3단계 — 결과 번호 (이 화면의 주인공) */}
+      <div id="lotto-generated-numbers" className="mt-4" aria-live="polite" aria-busy={isSpinning}>
+        {isSpinning && (
+          <div className={BALL_ROW_XL_CLASS}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                // Tailwind 기본 animate-bounce 사용 — styled-jsx는 keyframes 이름을 스코프 처리해
+                // 인라인 style의 animation 이름과 어긋나므로 전역 유틸리티로 처리한다
+                className="h-[clamp(34px,11.5vw,56px)] w-[clamp(34px,11.5vw,56px)] shrink-0 animate-bounce rounded-full bg-ink/[0.08]"
+                style={{ animationDelay: `${i * 0.08}s`, animationDuration: '0.7s' }}
+              />
+            ))}
+          </div>
+        )}
+
+        {!isSpinning && !hasGames && (
+          <div className="flex flex-col items-center gap-2.5">
+            <div className={BALL_ROW_XL_CLASS}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex h-[clamp(34px,11.5vw,56px)] w-[clamp(34px,11.5vw,56px)] shrink-0 items-center justify-center rounded-full border-2 border-dashed border-ink/20 bg-ink/[0.04]"
+                >
+                  <span aria-hidden className="text-[clamp(14px,4.2vw,22px)] font-bold text-ink/30">
+                    ?
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[11.5px] text-ink/55">위 버튼을 누르면 번호가 표시됩니다.</p>
+          </div>
+        )}
+
+        {!isSpinning && hasGames && (
+          <ul className="flex flex-col gap-2.5">
+            {games.map((game, index) => {
+              const label = String.fromCharCode(65 + index)
+              return (
+                <li
+                  key={`${index}-${game.numbers.join('-')}`}
+                  className="mf-rise rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-3 sm:px-3"
+                  style={{ animationDelay: `${index * 60}ms` }}
+                >
+                  <div className="mb-2 flex items-center justify-between gap-2 px-1">
+                    <span className="font-mono text-[10.5px] tracking-[0.14em] text-ink/50">GAME {label}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(index, game.numbers)}
+                      className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] text-ink/60 transition-colors hover:bg-ink/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40"
+                      aria-label={`${label} 게임 번호 복사`}
+                    >
+                      {copiedIndex === index ? (
+                        <>
+                          <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
+                          복사됨
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3.5 w-3.5" aria-hidden />
+                          복사
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div
+                    className={BALL_ROW_XL_CLASS}
+                    role="img"
+                    aria-label={`${label} 게임 번호 ${game.numbers.join(', ')}`}
+                  >
+                    {game.numbers.map(num => (
+                      <LottoBall key={num} number={num} size="xl" highlighted={latestNumbers.includes(num)} />
+                    ))}
+                  </div>
+
+                  <p className="mt-2.5 text-center text-[10.5px] leading-relaxed text-[color:var(--muted)]">
+                    {game.reasons.join(' · ')}
+                  </p>
+                  {game.relaxed && (
+                    <p className="mt-1 text-center text-[10.5px] font-semibold text-[color:var(--warn)]">
+                      조건이 너무 촘촘해 일부를 완화했습니다.
+                    </p>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+
+      {/* 고급 설정 — 기본 접힘. 번호 풀 전략 · 출현 통계 · 밸런스 필터 */}
+      <div className="mt-4">
         <button
           type="button"
           onClick={() => setShowAdvanced(value => !value)}
           aria-expanded={showAdvanced}
           aria-controls="lotto-advanced-options"
-          className="flex w-full items-center justify-between rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 py-2.5 text-left transition-colors hover:border-[color:var(--brand)]/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40"
+          className="flex w-full items-center justify-between gap-2 rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 py-2.5 text-left transition-colors hover:border-[color:var(--brand)]/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40"
         >
           <span className="flex items-center gap-2 text-[13px] font-semibold text-ink">
             <SlidersHorizontal className="h-4 w-4 text-[color:var(--brand)]" aria-hidden />
-            고급 조건
+            고급 설정
+            <span className="font-normal text-[11px] text-[color:var(--muted)]">전략 · 통계 · 조건</span>
           </span>
-          <span className="flex items-center gap-2">
-            {(options.include.length > 0 || options.exclude.length > 0) && (
+          <span className="flex shrink-0 items-center gap-2">
+            {options.strategy !== 'balanced' && (
+              <span className="rounded-full bg-[color:var(--brand-soft)] px-2 py-0.5 text-[10.5px] font-bold text-[color:var(--brand)]">
+                {STRATEGY_LABELS[options.strategy]}
+              </span>
+            )}
+            {selectionCount > 0 && (
               <span className="rounded-full bg-[color:var(--brand-soft)] px-2 py-0.5 text-[10.5px] font-bold text-[color:var(--brand)]">
                 고정 {options.include.length} · 제외 {options.exclude.length}
               </span>
@@ -299,8 +394,66 @@ export default function LottoGenerator() {
 
         {showAdvanced && (
           <div id="lotto-advanced-options" className="mt-3 flex flex-col gap-3.5 rounded-2xl border border-ink/10 bg-ink/[0.03] p-3.5">
+            {/* 번호 풀 전략 */}
+            <div>
+              <p className="text-[12px] font-medium text-ink/70 mb-2">번호 풀 전략</p>
+              <div className={SEG_GROUP} role="group" aria-label="번호 풀 전략 선택">
+                {STRATEGIES.map(strategy => (
+                  <button
+                    key={strategy}
+                    type="button"
+                    onClick={() => update('strategy', strategy)}
+                    aria-pressed={options.strategy === strategy}
+                    className={segButtonClass(options.strategy === strategy)}
+                  >
+                    {STRATEGY_LABELS[strategy]}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-2 text-[11px] leading-relaxed text-[color:var(--muted)]">
+                {STRATEGY_DESCRIPTIONS[options.strategy]}
+                {options.strategy !== 'balanced' && options.strategy !== 'uniform' && stats && (
+                  <> (최근 {stats.recentWindow}회 기준)</>
+                )}
+              </p>
+            </div>
+
+            {/* 출현 통계 */}
+            {stats && (
+              <div className="rounded-xl border border-ink/10 bg-[color:var(--surface)] p-3">
+                <div className="mb-2.5 flex flex-wrap items-baseline justify-between gap-x-2">
+                  <p className="font-mono text-[10px] tracking-[0.18em] text-[color:var(--muted)]">STATS</p>
+                  <p className="text-[10.5px] text-ink/55 tabular">
+                    {stats.dataThrough.toLocaleString('ko-KR')}회까지 · 최근 {stats.recentWindow}회 기준
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {[
+                    { label: '자주 나온 번호', numbers: stats.hot },
+                    { label: '적게 나온 번호', numbers: stats.cold },
+                    { label: '장기 미출현', numbers: stats.overdue },
+                  ].map(row => (
+                    <div key={row.label} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="w-[5.6rem] shrink-0 text-[11px] text-ink/60">{row.label}</span>
+                      <span className="flex flex-wrap gap-1">
+                        {row.numbers.slice(0, 8).map(num => (
+                          <LottoBall key={num} number={num} size="sm" />
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                {stats.overdue.length > 0 && (
+                  <p className="mt-2.5 text-[10px] leading-relaxed text-[color:var(--muted)]">
+                    장기 미출현 1위는 {stats.overdue[0]}번({overdueGapOf(stats.overdue[0]!)}회 미출현)입니다. 과거 출현
+                    빈도는 다음 회차 확률과 무관한 참고 지표입니다.
+                  </p>
+                )}
+              </div>
+            )}
+
             <OptionRow label="홀:짝 비율">
-              <div className={SEG_GROUP}>
+              <div className={SEG_GROUP} role="group" aria-label="홀짝 비율 선택">
                 {RATIO_PRESETS.map(preset => (
                   <button
                     key={preset}
@@ -316,7 +469,7 @@ export default function LottoGenerator() {
             </OptionRow>
 
             <OptionRow label="저(1~22):고(23~45)">
-              <div className={SEG_GROUP}>
+              <div className={SEG_GROUP} role="group" aria-label="고저 비율 선택">
                 {RATIO_PRESETS.map(preset => (
                   <button
                     key={preset}
@@ -332,7 +485,7 @@ export default function LottoGenerator() {
             </OptionRow>
 
             <OptionRow label="번호 합계 구간">
-              <div className={SEG_GROUP}>
+              <div className={SEG_GROUP} role="group" aria-label="번호 합계 구간 선택">
                 {SUM_PRESETS.map(preset => {
                   const active = options.sumMin === preset.min && options.sumMax === preset.max
                   return (
@@ -351,7 +504,7 @@ export default function LottoGenerator() {
             </OptionRow>
 
             <OptionRow label="연속번호 허용">
-              <div className={SEG_GROUP}>
+              <div className={SEG_GROUP} role="group" aria-label="연속번호 허용 범위 선택">
                 {CONSECUTIVE_PRESETS.map(preset => (
                   <button
                     key={preset.label}
@@ -367,7 +520,7 @@ export default function LottoGenerator() {
             </OptionRow>
 
             <OptionRow label="최소 분포 구간">
-              <div className={SEG_GROUP}>
+              <div className={SEG_GROUP} role="group" aria-label="최소 분포 구간 선택">
                 {ZONE_PRESETS.map(zones => (
                   <button
                     key={zones}
@@ -406,7 +559,7 @@ export default function LottoGenerator() {
                 <button
                   type="button"
                   onClick={resetSelection}
-                  disabled={options.include.length === 0 && options.exclude.length === 0}
+                  disabled={selectionCount === 0}
                   className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11.5px] text-ink/60 transition-colors hover:bg-ink/[0.06] hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <X className="h-3 w-3" aria-hidden />
@@ -454,124 +607,10 @@ export default function LottoGenerator() {
         )}
       </div>
 
-      {validationErrors.length > 0 && (
-        <div
-          role="alert"
-          className="mb-4 rounded-2xl border border-[color:var(--danger)]/25 bg-[color:var(--danger)]/[0.06] p-3.5"
-        >
-          <ul className="flex flex-col gap-1">
-            {validationErrors.map(message => (
-              <li key={message} className="text-[12px] font-semibold leading-relaxed text-[color:var(--danger)]">
-                {message}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* 번호 영역 */}
-      <div className="mb-5 flex min-h-[56px] flex-col gap-3">
-        {!hasGames && !isSpinning && (
-          <div className="flex justify-center gap-2">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-ink/20 bg-ink/[0.04] md:h-12 md:w-12"
-              >
-                <span className="text-base font-bold text-ink/35">?</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {isSpinning && (
-          <div className="flex justify-center gap-2">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-ink/[0.08] text-ink/65 md:h-12 md:w-12"
-                style={{ animation: `lotto-gen-bounce 0.6s ease-in-out ${i * 0.08}s infinite` }}
-              >
-                ···
-              </div>
-            ))}
-          </div>
-        )}
-
-        {hasGames && !isSpinning && (
-          <ul className="flex flex-col gap-3">
-            {games.map((game, index) => (
-              <li
-                key={`${index}-${game.numbers.join('-')}`}
-                className="mf-rise rounded-2xl border border-ink/10 bg-ink/[0.03] p-2.5"
-                style={{ animationDelay: `${index * 60}ms` }}
-              >
-                <div className="flex items-center gap-2">
-                  <span className="w-5 shrink-0 font-mono text-[11px] text-ink/55">
-                    {String.fromCharCode(65 + index)}
-                  </span>
-                  <div
-                    className="flex flex-1 flex-nowrap justify-center gap-1 md:gap-2"
-                    role="img"
-                    aria-label={`${String.fromCharCode(65 + index)} 게임 번호 ${game.numbers.join(', ')}`}
-                  >
-                    {game.numbers.map(num => (
-                      <LottoBall key={num} number={num} highlighted={latestNumbers.includes(num)} />
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleCopy(index, game.numbers)}
-                    className="shrink-0 rounded-md p-1.5 text-ink/60 transition-colors hover:bg-ink/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40"
-                    aria-label={`${String.fromCharCode(65 + index)} 게임 번호 복사`}
-                  >
-                    {copiedIndex === index ? (
-                      <Check className="h-4 w-4 text-emerald-600" aria-hidden />
-                    ) : (
-                      <Copy className="h-4 w-4" aria-hidden />
-                    )}
-                  </button>
-                </div>
-
-                <p className="mt-2 pl-7 text-[10.5px] leading-relaxed text-[color:var(--muted)]">
-                  {game.reasons.join(' · ')}
-                </p>
-                {game.relaxed && (
-                  <p className="mt-1 pl-7 text-[10.5px] font-semibold text-[color:var(--warn)]">
-                    조건이 너무 촘촘해 일부를 완화했습니다.
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <button
-        type="button"
-        onClick={handleGenerate}
-        disabled={!canGenerate}
-        className={`flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[14.5px] font-bold transition-all ${
-          canGenerate
-            ? 'bg-[color:var(--brand)] text-white shadow-[0_6px_16px_-6px_oklch(47%_0.165_262/0.5)] hover:bg-[color:var(--brand-strong)]'
-            : 'cursor-not-allowed bg-ink/[0.06] text-ink/65'
-        }`}
-      >
-        <RotateCcw className={`h-4 w-4 ${isSpinning ? 'animate-spin' : ''}`} aria-hidden />
-        {hasGames ? `다시 뽑기 (${options.games}게임)` : `번호 뽑기 (${options.games}게임)`}
-      </button>
-
-      <style jsx>{`
-        @keyframes lotto-gen-bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-      `}</style>
+      <p className="mt-3.5 text-[10.5px] leading-relaxed text-[color:var(--muted)]">
+        로또는 매 회차 독립 추첨이므로 모든 조합의 1등 확률은 1/{TOTAL_COMBINATIONS.toLocaleString('ko-KR')}로
+        동일합니다. 통계 가중치와 밸런스 필터는 조합의 선택 근거를 보여 주는 참고 도구이며 당첨 확률을 높이지 않습니다.
+      </p>
     </div>
   )
 }
