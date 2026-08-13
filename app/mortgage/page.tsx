@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { useMortgageStore } from '@/store'
 import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
-import { calcMortgage, calcDsrLimit, RepaymentType } from '@/lib/mortgage'
+import { calcMortgage, calcDsrLimit, STRESS_DSR_RATES, RepaymentType } from '@/lib/mortgage'
 import { ChevronDown, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
@@ -33,7 +33,7 @@ export default function MortgagePage() {
   const [dsrIncome, setDsrIncome] = useState(60_000_000)
   const [dsrExistingDebt, setDsrExistingDebt] = useState(0)
   const [dsrCap, setDsrCap] = useState(40)
-  const [dsrStress, setDsrStress] = useState(1.5)
+  const [dsrStress, setDsrStress] = useState<number>(STRESS_DSR_RATES.metroMortgage)
   const r = useMemo(() => calcMortgage({ principal, annualRate, years, type }), [principal, annualRate, years, type])
   const dsr = useMemo(() => calcDsrLimit({
     annualIncome: dsrIncome,
@@ -173,7 +173,7 @@ export default function MortgagePage() {
               </div>
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%)</label>
-                <NumericInput className="glass-input w-full rounded-lg font-bold" value={dsrStress} defaultValue={1.5} allowDecimal onChange={setDsrStress} />
+                <NumericInput className="glass-input w-full rounded-lg font-bold" value={dsrStress} defaultValue={STRESS_DSR_RATES.metroMortgage} allowDecimal onChange={setDsrStress} />
               </div>
             </div>
             <div className="rounded-lg bg-white/[0.05] px-3 py-2.5 grid grid-cols-2 gap-2 text-[11.5px]">
@@ -189,14 +189,14 @@ export default function MortgagePage() {
 
       <div className="mt-2 flex flex-col gap-8">
         <ExamplesSection title="주담대 계산 예시" items={[
-          { label: '3억 · 3.5% · 30년 (원리금균등)', input: '월 납입액', result: '약 1,347,000원', note: '총 이자 약 1억 8,492만원' },
-          { label: '5억 · 4.0% · 20년 (원리금균등)', input: '월 납입액', result: '약 3,032,000원', note: '총 이자 약 2억 2,768만원' },
-          { label: '2억 · 3.0% · 10년 (원금균등)', input: '첫달 납입액', result: '약 2,167,000원', note: '총 이자 약 3,025만원' },
+          { label: '3억 · 3.5% · 30년 (원리금균등)', input: '월 납입액', result: '1,347,134원', note: '총 이자 약 1억 8,497만원' },
+          { label: '5억 · 4.0% · 20년 (원리금균등)', input: '월 납입액', result: '3,029,902원', note: '총 이자 약 2억 2,718만원' },
+          { label: '2억 · 3.0% · 10년 (원금균등)', input: '첫달 납입액', result: '2,166,667원', note: '총 이자 3,025만원' },
         ]} />
         <FAQSection pagePath={CALC_PATH} items={[
           { q: '원리금균등과 원금균등의 차이는?', a: '원리금균등은 매월 동일한 금액(원금+이자)을 납부합니다. 초반엔 이자 비중이 높고 점차 원금 비중이 커져 가계 계획이 쉽습니다. 원금균등은 매월 동일한 원금에 잔여원금에 대한 이자를 더해 납부하므로 초기 부담이 크지만 총이자는 원리금균등보다 적습니다.' },
           { q: 'DSR·LTV·DTI는 무엇인가요?', a: 'LTV(담보인정비율)는 집값 대비 대출 가능 금액 비율. DTI(총부채상환비율)는 연소득 대비 주택담보대출 원리금 + 기타대출 이자의 비율. DSR(총부채원리금상환비율)은 연소득 대비 모든 대출 원리금 상환액의 비율입니다. 2022년 1월부터 차주별 DSR 40%(은행권)·50%(2금융권)가 전면 적용되고 있으며, 2024~2025년 스트레스 DSR 1~3단계가 순차 시행되었습니다.' },
-          { q: '금리 0.5%p 차이가 실제로 얼마?', a: '3억원 · 30년 · 원리금균등 기준, 3.5%→4.0% 상승 시 월 납입 약 8만원(1,347,000→1,432,000) 증가, 총이자 약 2,900만원 증가. 5억·20년·4.0%→4.5%이면 월 약 12만원, 총이자 약 2,800만원 증가합니다.' },
+          { q: '금리 0.5%p 차이가 실제로 얼마?', a: '3억원 · 30년 · 원리금균등 기준, 3.5%→4.0% 상승 시 월 납입 약 8.5만원(1,347,134→1,432,246원) 증가, 총이자 약 3,064만원 증가. 5억·20년·4.0%→4.5%이면 월 약 13.3만원(3,029,902→3,163,247원), 총이자 약 3,200만원 증가합니다.' },
           { q: '중도상환수수료는 언제 발생하나요?', a: '주담대는 통상 대출 실행일로부터 3년 이내에 조기상환 시 잔여 원금의 약 1.2~1.4%가 부과되며 경과기간에 비례해 감소(슬라이딩)합니다. 3년 경과 후엔 대부분 면제. 2024~2025년 정부 대환대출 정책으로 수수료 인하·면제 캠페인이 확산되고 있어 대환 검토 시 최신 조건을 확인하세요.' },
           { q: '생애최초·청년은 LTV가 완화되나요?', a: '생애최초 주택구입자는 지역 무관 LTV 최대 80%·DTI 60%까지 완화 적용(2022.8 시행 이후 유지). 청년주택드림대출은 만 19~34세 무주택 청년(미혼 연소득 5,000만원 이하, 기혼 7,000만원 이하)이 최저 2.2% 금리·최대 40년 상환으로 이용 가능합니다.' },
           { q: '변동금리 vs 고정금리, 무엇이 유리?', a: '금리 하락기에는 변동(COFIX 6개월·1년 연동)이, 상승기이거나 장기 보유 목적이면 고정(5년 고정 후 변동 혼합형 포함)이 유리합니다. 한국은행 기준금리 사이클과 본인의 상환계획 기간을 함께 고려하세요. 본 계산기는 단일 금리 기준이므로 변동 시나리오는 별도 산출해보셔야 합니다.' },
