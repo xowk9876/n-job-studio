@@ -304,21 +304,20 @@ export default function LottoResultBrowser() {
           </button>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-3 flex flex-col items-center gap-3">
           <button
             type="button"
             onClick={() => latestRound && loadRound(latestRound)}
             disabled={latestRound === null || isLatest || status === 'loading'}
-            className="h-10 w-full rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+            className="h-10 rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40"
           >
             최신 회차로 이동
           </button>
+          <p className="text-center text-[10.5px] leading-relaxed text-[color:var(--muted)]">
+            로또 6/45는 제1회({FIRST_DRAW_DATE})부터 매주 토요일 추첨됩니다. 조회하려는 회차 번호를 입력하거나 화살표로
+            앞뒤 회차를 이동할 수 있습니다.
+          </p>
         </div>
-
-        <p className="mt-3 text-[10.5px] leading-relaxed text-[color:var(--muted)]">
-          로또 6/45는 제1회({FIRST_DRAW_DATE})부터 매주 토요일 추첨됩니다. 조회하려는 회차 번호를 입력하거나 화살표로
-          앞뒤 회차를 이동할 수 있습니다.
-        </p>
       </div>
     </div>
   )
