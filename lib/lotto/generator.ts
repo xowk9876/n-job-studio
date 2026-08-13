@@ -70,6 +70,10 @@ export const SUM_MAX_POSSIBLE = 255
 /** 연속 번호 제한 옵션에서 "제한 없음"을 뜻하는 값 */
 export const CONSECUTIVE_UNLIMITED = 6
 
+/**
+ * UI는 전략 선택을 노출하지 않고 항상 이 기본값(균형)을 사용한다.
+ * 균형 전략은 45개 번호를 동일 가중치로 뽑으므로 출현 빈도 통계에 의존하지 않는다.
+ */
 export const DEFAULT_GENERATOR_OPTIONS: GeneratorOptions = {
   games: 5,
   strategy: 'balanced',
@@ -82,22 +86,6 @@ export const DEFAULT_GENERATOR_OPTIONS: GeneratorOptions = {
   maxConsecutive: 2,
   minZones: 3,
   avoidPastWinning: true,
-}
-
-export const STRATEGY_LABELS: Record<PoolStrategy, string> = {
-  balanced: '균형',
-  hot: '핫 넘버',
-  cold: '콜드 넘버',
-  overdue: '장기 미출현',
-  uniform: '순수 무작위',
-}
-
-export const STRATEGY_DESCRIPTIONS: Record<PoolStrategy, string> = {
-  balanced: '모든 번호를 동일 확률로 뽑고, 역대 1등 조합에서 흔한 분포에 가까운 조합을 고릅니다.',
-  hot: '최근 회차에 자주 나온 번호에 가중치를 둡니다.',
-  cold: '최근 회차에 적게 나온 번호에 가중치를 둡니다.',
-  overdue: '오래 나오지 않은 번호에 가중치를 둡니다.',
-  uniform: '어떤 가중치·패턴 보정도 없이 순수 균등 무작위로 뽑습니다.',
 }
 
 const ODD_TARGET: Record<RatioPreset, number | null> = { any: null, '3:3': 3, '4:2': 4, '2:4': 2 }
