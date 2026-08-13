@@ -5,15 +5,14 @@
  * 로또 6/45는 매 회차 독립 추첨이며 모든 조합의 1등 확률은 1/8,145,060로 **동일**하다.
  * 통계 가중치·밸런스 필터는 당첨 확률을 높이지 못한다. 이 모듈이 하는 일은
  *   ① 역대 1등 조합에서 드물게 관측된 극단적 분포(예: 1·2·3·4·5·6, 합계 30)를 피하고
- *   ② 사용자가 정한 조건(고정·제외·홀짝·합계 등)을 만족하는 조합을 찾아 주며
- *   ③ 그 조합이 왜 선택됐는지 근거를 함께 제시하는 것
+ *   ② 사용자가 정한 조건(고정·제외·홀짝·합계 등)을 만족하는 조합을 찾아 주는 것
  * 까지이며, 당첨을 보장하지 않는다.
  *
  * 알고리즘: 가중 비복원 추출(weighted sampling without replacement) → 하드 필터 →
  *          패턴 점수 최댓값 선택 → 조건 미충족 시 스왑 기반 복구(hill-climbing)
  */
 
-import { analyzeCombination, describeCombination, scorePattern, type CombinationMetrics } from './pattern'
+import { analyzeCombination, scorePattern, type CombinationMetrics } from './pattern'
 import { secureRandomFloat, secureRandomInt } from './random'
 import { combinationRank, LOTTO_MAX, LOTTO_PICK } from './stats'
 import type { LottoStats } from './types'
@@ -49,8 +48,6 @@ export type GeneratorOptions = {
 export type GeneratedGame = {
   numbers: number[]
   metrics: CombinationMetrics
-  /** "왜 이 조합인지" 근거 문구 */
-  reasons: string[]
   score: number
   /** 조건을 모두 만족하는 조합을 찾지 못해 일부를 완화한 경우 true */
   relaxed: boolean
@@ -316,7 +313,7 @@ function repair(
 
 function toGame(numbers: number[], score: number, relaxed: boolean): GeneratedGame {
   const metrics = analyzeCombination(numbers)
-  return { numbers, metrics, reasons: describeCombination(metrics), score, relaxed }
+  return { numbers, metrics, score, relaxed }
 }
 
 /**

@@ -165,23 +165,6 @@ export function scorePattern(numbers: number[], latestNumbers: number[] = []): n
   return score
 }
 
-/** 생성된 조합의 특성을 사용자에게 보여줄 짧은 문구 목록으로 변환 */
-export function describeCombination(m: CombinationMetrics): string[] {
-  const reasons: string[] = [
-    `합계 ${m.sum}`,
-    `홀짝 ${m.oddCount}:${m.evenCount}`,
-    `고저 ${m.lowCount}:${m.highCount}`,
-    `${m.filledZones}개 구간 분산`,
-    `AC ${m.ac}`,
-  ]
-
-  reasons.push(m.consecutivePairs === 0 ? '연속번호 없음' : `연속 ${m.consecutivePairs}쌍`)
-  if (m.maxSameLastDigit >= 2) reasons.push(`끝수 중복 ${m.maxSameLastDigit}`)
-  reasons.push(`끝수합 ${m.lastDigitSum}`)
-
-  return reasons
-}
-
 /** 번호 배열이 1~45 범위의 중복 없는 정수인지 검사 */
 export function isValidNumberSet(numbers: number[], size = 6): boolean {
   if (numbers.length !== size) return false

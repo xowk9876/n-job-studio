@@ -72,7 +72,10 @@ export default function LottoPage() {
         </p>
       </div>
 
-      {/* 번호 생성기 — 게임 수 선택 → 생성 버튼 → 번호 확인이 이 페이지의 주 동선이므로 최상단에 둔다 */}
+      {/* 당첨번호 조회 — 히어로 바로 아래 (최신 회차 + 과거 회차) */}
+      <LottoResultBrowser />
+
+      {/* 번호 생성기 — 당첨번호 조회 아래 */}
       <LottoGenerator />
 
       {/* 오락용 고지는 생성기 바로 아래에 둔다 — 공식 당첨번호 조회 결과에 걸리면 오해를 준다 */}
@@ -80,9 +83,6 @@ export default function LottoPage() {
         생성된 번호는 참고·오락용이며, 실제 추첨 결과·당첨을 보장하지 않습니다.
         <span className="lotto-disclaimer__age">복권 이용은 만 19세 이상입니다.</span>
       </p>
-
-      {/* 당첨번호 조회 — 최신 회차 + 과거 회차(회차 번호 기준) */}
-      <LottoResultBrowser />
 
       {/* 당첨 등위 안내 — 동행복권 공식 공 색상 매핑 */}
       <div className="glass-card">

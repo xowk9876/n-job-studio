@@ -12,7 +12,7 @@ import { BALL_ROW_XL_CLASS, LottoBall } from './LottoBall'
 /**
  * 번호 생성기.
  *
- * 화면은 3단계뿐이다 — 게임 수 선택 → [번호 생성] → 큰 번호 확인.
+ * 화면은 3단계뿐이다 — 게임 수 선택 → [번호 생성] → 번호 확인.
  *
  * 번호 풀 전략과 밸런스 필터(홀짝·고저·합계·연속·구간·고정·제외)는 UI에서 노출하지
  * 않고 `DEFAULT_GENERATOR_OPTIONS`를 그대로 사용한다. 즉 균형(balanced) 전략으로
@@ -24,12 +24,12 @@ import { BALL_ROW_XL_CLASS, LottoBall } from './LottoBall'
  * 직전 회차 번호 강조에만 사용한다.
  *
  * 확률 고지: 로또는 매 회차 독립 추첨이므로 어떤 옵션도 당첨 확률을 바꾸지 못한다.
- * 이 UI는 "당첨 보장"을 주장하지 않으며 조합의 선택 근거만 투명하게 제시한다.
+ * 이 UI는 "당첨 보장"을 주장하지 않으며, 생성 결과는 번호 공만 표시한다.
  */
 
 const GAME_COUNTS = [1, 3, 5] as const
 
-const BALL_PLACEHOLDER = 'h-[clamp(34px,11.5vw,56px)] w-[clamp(34px,11.5vw,56px)] shrink-0'
+const BALL_PLACEHOLDER = 'h-[clamp(28px,8vw,40px)] w-[clamp(28px,8vw,40px)] shrink-0'
 
 export default function LottoGenerator() {
   const [gameCount, setGameCount] = useState<number>(DEFAULT_GENERATOR_OPTIONS.games)
@@ -185,7 +185,7 @@ export default function LottoGenerator() {
                   key={i}
                   className={`${BALL_PLACEHOLDER} flex items-center justify-center rounded-full border-2 border-dashed border-ink/20 bg-ink/[0.04]`}
                 >
-                  <span aria-hidden className="text-[clamp(14px,4.2vw,22px)] font-bold text-ink/30">
+                  <span aria-hidden className="text-[clamp(12px,3.1vw,16px)] font-bold text-ink/30">
                     ?
                   </span>
                 </div>
@@ -202,7 +202,7 @@ export default function LottoGenerator() {
               return (
                 <li
                   key={`${index}-${game.numbers.join('-')}`}
-                  className="mf-rise rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-3 sm:px-3"
+                  className="mf-rise rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-2.5 sm:px-3"
                   style={{ animationDelay: `${index * 60}ms` }}
                 >
                   <div className="mb-2 flex items-center justify-between gap-2 px-1">
@@ -236,15 +236,6 @@ export default function LottoGenerator() {
                       <LottoBall key={num} number={num} size="xl" highlighted={latestNumbers.includes(num)} />
                     ))}
                   </div>
-
-                  <p className="mt-2.5 text-center text-[10.5px] leading-relaxed text-[color:var(--muted)]">
-                    {game.reasons.join(' · ')}
-                  </p>
-                  {game.relaxed && (
-                    <p className="mt-1 text-center text-[10.5px] font-semibold text-[color:var(--warn)]">
-                      조건이 너무 촘촘해 일부를 완화했습니다.
-                    </p>
-                  )}
                 </li>
               )
             })}

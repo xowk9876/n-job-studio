@@ -25,8 +25,8 @@ export type BallSize = 'xl' | 'lg' | 'md'
 
 /** 모바일 320px에서도 공 7개 + 보너스가 한 줄에 들어가도록 뷰포트 비례 크기를 사용한다 */
 const SIZE_CLASS: Record<BallSize, string> = {
-  // 생성 결과용 — 번호 가독성을 최우선으로 두고 공 6개가 한 줄에 들어가는 최대 크기
-  xl: 'h-[clamp(34px,11.5vw,56px)] w-[clamp(34px,11.5vw,56px)] text-[clamp(14px,4.2vw,24px)]',
+  // 생성 결과용 — md보다 조금 크고, 6개가 한 줄에 여유 있게 들어가는 크기 (데스크탑 ~40px)
+  xl: 'h-[clamp(28px,8vw,40px)] w-[clamp(28px,8vw,40px)] text-[clamp(12px,3.1vw,16px)]',
   lg: 'h-[clamp(26px,7.2vw,52px)] w-[clamp(26px,7.2vw,52px)] text-[clamp(10px,2.8vw,16px)]',
   md: 'w-8 h-8 min-[390px]:w-9 min-[390px]:h-9 md:w-11 md:h-11 text-[12px] min-[390px]:text-[13px] md:text-[15px]',
 }
