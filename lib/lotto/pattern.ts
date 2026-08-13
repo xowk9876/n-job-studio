@@ -1,190 +1,191 @@
-import { fisherYatesPick6, secureRandomInt } from './random'
+/**
+ * 조합 패턴 분석 및 통계적 적합도 평가.
+ *
+ * NOTE: 로또 6/45의 1등 확률은 모든 조합이 1/8,145,060로 동일하다.
+ *       여기서 계산하는 점수는 "역대 1등 조합에서 흔히 관측된 분포에 얼마나 가까운가"를
+ *       나타내는 지표일 뿐이며, 당첨 확률을 높이거나 당첨을 보장하지 않는다.
+ *       극단적 조합(예: 1·2·3·4·5·6)을 피해 심리적 만족도를 높이는 용도다.
+ */
 
-export type LottoPick = {
-  numbers: number[]
-}
+import { LOTTO_MAX } from './stats'
 
-/** 1~45 중 소수 (당첨번호 통계 가중치용) */
+/** 1~45 중 소수 */
 const LOTTO_PRIMES: ReadonlySet<number> = new Set([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43])
 
-/**
- * 관측된 1등 조합 분포에서 자주 나오는 특성에 가까울수록 높은 점수를 반환합니다.
- * 평가 항목 — 합계·홀짝·구간(zone)·연속·끝자리·색상영역·최근 회차 오버랩
- *           · 고저 분포(1~22/23~45) · AC값(Arithmetic Complexity) · 소수 비율
- *
- * NOTE: 로또 6/45의 모든 조합 1등 확률은 1/8,145,060로 동일하며,
- *       본 점수는 통계적 분포에 가까운 조합을 "추천"할 뿐 당첨을 보장하지 않습니다.
- */
-export function scorePattern(nums: number[], latestNumbers: number[] = []): number {
-  let score = 0
-  const sum = nums.reduce((a, b) => a + b, 0)
-  if (sum >= 115 && sum <= 175) score += 28
-  else if (sum >= 100 && sum <= 195) score += 14
-  else score -= 25
+/** 구간 경계 — 동행복권 공식 볼 색상 구간과 동일 (1-10 / 11-20 / 21-30 / 31-40 / 41-45) */
+export const ZONE_COUNT = 5
 
-  const oddCount = nums.filter(n => n % 2 === 1).length
-  if (oddCount === 3) score += 24
-  else if (oddCount === 2 || oddCount === 4) score += 20
-  else if (oddCount === 1 || oddCount === 5) score += 6
-  else score -= 18
+/** 저구간/고구간 경계 — 1~22 / 23~45 */
+const LOW_MAX = 22
 
-  const zones = new Set(nums.map(n => Math.ceil(n / 10)))
-  if (zones.size >= 4) score += 22
-  else if (zones.size === 3) score += 12
-  else score -= 18
+export type CombinationMetrics = {
+  /** 6개 번호 합계 */
+  sum: number
+  oddCount: number
+  evenCount: number
+  /** 1~22 개수 */
+  lowCount: number
+  /** 23~45 개수 */
+  highCount: number
+  /** 5개 구간별 개수 */
+  zoneCounts: number[]
+  /** 번호가 분포한 구간 수 (1~5) */
+  filledZones: number
+  /** 한 구간에 몰린 최대 개수 */
+  maxZoneConcentration: number
+  /** 최장 연속 번호 길이 (1이면 연속 없음) */
+  maxConsecutive: number
+  /** 연속 번호 쌍 개수 */
+  consecutivePairs: number
+  /** AC값 (Arithmetic Complexity) — 두 수 차이의 서로 다른 값 개수 - 5, 최대 10 */
+  ac: number
+  primeCount: number
+  /** 끝수(일의 자리) 합 */
+  lastDigitSum: number
+  /** 같은 끝수가 겹친 최대 개수 */
+  maxSameLastDigit: number
+}
+
+/** 정렬된 6개 번호의 분포 지표를 한 번에 계산 — O(1) (고정 크기 루프) */
+export function analyzeCombination(numbers: number[]): CombinationMetrics {
+  const nums = [...numbers].sort((a, b) => a - b)
+
+  let sum = 0
+  let oddCount = 0
+  let lowCount = 0
+  let primeCount = 0
+  let lastDigitSum = 0
+
+  const zoneCounts = new Array<number>(ZONE_COUNT).fill(0)
+  const lastDigitCounts = new Array<number>(10).fill(0)
+
+  for (const num of nums) {
+    sum += num
+    if (num % 2 === 1) oddCount++
+    if (num <= LOW_MAX) lowCount++
+    if (LOTTO_PRIMES.has(num)) primeCount++
+
+    const digit = num % 10
+    lastDigitSum += digit
+    lastDigitCounts[digit]! += 1
+
+    zoneCounts[Math.min(Math.ceil(num / 10), ZONE_COUNT) - 1]! += 1
+  }
 
   let maxConsecutive = 1
-  let curr = 1
+  let run = 1
+  let consecutivePairs = 0
   for (let i = 1; i < nums.length; i++) {
     if (nums[i] === nums[i - 1]! + 1) {
-      curr++
-      maxConsecutive = Math.max(maxConsecutive, curr)
-    } else curr = 1
+      run++
+      consecutivePairs++
+      if (run > maxConsecutive) maxConsecutive = run
+    } else {
+      run = 1
+    }
   }
-  if (maxConsecutive <= 2) score += 12
-  else if (maxConsecutive === 3) score += 4
-  else score -= 24
 
-  const lastDigitCounts = new Map<number, number>()
-  nums.forEach(n => lastDigitCounts.set(n % 10, (lastDigitCounts.get(n % 10) || 0) + 1))
-  const maxSameLastDigit = Math.max(...lastDigitCounts.values())
-  if (maxSameLastDigit <= 2) score += 8
-  else score -= 10
-
-  const colorZones = new Map<string, number>()
-  nums.forEach(n => {
-    const color = n <= 10 ? 'y' : n <= 20 ? 'b' : n <= 30 ? 'r' : n <= 40 ? 'g' : 'gr'
-    colorZones.set(color, (colorZones.get(color) || 0) + 1)
-  })
-  const maxSameColor = Math.max(...colorZones.values())
-  if (maxSameColor <= 2) score += 10
-  else if (maxSameColor === 3) score += 3
-  else score -= 12
-
-  const latestOverlap =
-    latestNumbers.length > 0 ? nums.filter(n => latestNumbers.includes(n)).length : 0
-  if (latestOverlap >= 1 && latestOverlap <= 2) score += 6
-  else if (latestOverlap >= 4) score -= 14
-
-  // 고저 분포 (1~22 / 23~45) — 역대 1등 통계상 3:3·4:2·2:4가 80%+
-  const lowCount = nums.filter(n => n <= 22).length
-  if (lowCount === 3) score += 14
-  else if (lowCount === 2 || lowCount === 4) score += 10
-  else if (lowCount === 1 || lowCount === 5) score += 2
-  else score -= 14
-
-  // AC값 (Arithmetic Complexity) — 모든 두 수 차이의 distinct 개수 - 5
-  // 1등 통계상 7~10이 약 70%, 4 이하는 5% 미만
   const diffs = new Set<number>()
   for (let i = 0; i < nums.length; i++) {
     for (let j = i + 1; j < nums.length; j++) {
       diffs.add(nums[j]! - nums[i]!)
     }
   }
-  const ac = diffs.size - 5
-  if (ac >= 7 && ac <= 10) score += 14
-  else if (ac === 5 || ac === 6 || ac === 11 || ac === 12) score += 6
-  else if (ac >= 13) score -= 4
+
+  return {
+    sum,
+    oddCount,
+    evenCount: nums.length - oddCount,
+    lowCount,
+    highCount: nums.length - lowCount,
+    zoneCounts,
+    filledZones: zoneCounts.filter(c => c > 0).length,
+    maxZoneConcentration: Math.max(...zoneCounts),
+    maxConsecutive,
+    consecutivePairs,
+    ac: diffs.size - 5,
+    primeCount,
+    lastDigitSum,
+    maxSameLastDigit: Math.max(...lastDigitCounts),
+  }
+}
+
+/**
+ * 관측된 1등 조합 분포에 가까울수록 높은 점수를 반환한다.
+ * 평가 항목 — 합계 · 홀짝 · 구간 분포 · 연속 · 끝수 · 고저 · AC값 · 소수 비율 · 직전 회차 오버랩
+ */
+export function scorePattern(numbers: number[], latestNumbers: number[] = []): number {
+  const m = analyzeCombination(numbers)
+  let score = 0
+
+  if (m.sum >= 115 && m.sum <= 175) score += 28
+  else if (m.sum >= 100 && m.sum <= 195) score += 14
+  else score -= 25
+
+  if (m.oddCount === 3) score += 24
+  else if (m.oddCount === 2 || m.oddCount === 4) score += 20
+  else if (m.oddCount === 1 || m.oddCount === 5) score += 6
+  else score -= 18
+
+  if (m.filledZones >= 4) score += 22
+  else if (m.filledZones === 3) score += 12
+  else score -= 18
+
+  if (m.maxConsecutive <= 2) score += 12
+  else if (m.maxConsecutive === 3) score += 4
+  else score -= 24
+
+  if (m.maxSameLastDigit <= 2) score += 8
+  else score -= 10
+
+  if (m.maxZoneConcentration <= 2) score += 10
+  else if (m.maxZoneConcentration === 3) score += 3
+  else score -= 12
+
+  // 직전 회차와 1~2개 겹치는 패턴이 통계적으로 가장 흔하다
+  const latestOverlap = latestNumbers.length > 0 ? numbers.filter(n => latestNumbers.includes(n)).length : 0
+  if (latestOverlap >= 1 && latestOverlap <= 2) score += 6
+  else if (latestOverlap >= 4) score -= 14
+
+  // 고저 분포 (1~22 / 23~45) — 역대 1등 통계상 3:3 · 4:2 · 2:4가 대부분
+  if (m.lowCount === 3) score += 14
+  else if (m.lowCount === 2 || m.lowCount === 4) score += 10
+  else if (m.lowCount === 1 || m.lowCount === 5) score += 2
+  else score -= 14
+
+  // AC값 — 1등 통계상 7~10 구간의 비중이 가장 높다
+  if (m.ac >= 7 && m.ac <= 10) score += 14
+  else if (m.ac === 5 || m.ac === 6) score += 6
   else score -= 8
 
-  // 소수 비율 — 1등 통계 평균 1.8개, 0개나 5개 이상은 드묾
-  const primeCount = nums.filter(n => LOTTO_PRIMES.has(n)).length
-  if (primeCount >= 1 && primeCount <= 3) score += 8
-  else if (primeCount === 4) score += 2
+  if (m.primeCount >= 1 && m.primeCount <= 3) score += 8
+  else if (m.primeCount === 4) score += 2
   else score -= 4
 
   return score
 }
 
-function passesHardFilters(nums: number[]): boolean {
-  const sum = nums.reduce((a, b) => a + b, 0)
-  if (sum < 100 || sum > 195) return false
-  const odd = nums.filter(n => n % 2 === 1).length
-  if (odd === 0 || odd === 6) return false
-  if (new Set(nums.map(n => Math.ceil(n / 10))).size < 3) return false
-  return true
+/** 생성된 조합의 특성을 사용자에게 보여줄 짧은 문구 목록으로 변환 */
+export function describeCombination(m: CombinationMetrics): string[] {
+  const reasons: string[] = [
+    `합계 ${m.sum}`,
+    `홀짝 ${m.oddCount}:${m.evenCount}`,
+    `고저 ${m.lowCount}:${m.highCount}`,
+    `${m.filledZones}개 구간 분산`,
+    `AC ${m.ac}`,
+  ]
+
+  reasons.push(m.consecutivePairs === 0 ? '연속번호 없음' : `연속 ${m.consecutivePairs}쌍`)
+  if (m.maxSameLastDigit >= 2) reasons.push(`끝수 중복 ${m.maxSameLastDigit}`)
+  reasons.push(`끝수합 ${m.lastDigitSum}`)
+
+  return reasons
 }
 
-/** 1개 번호 교체로 점수 개선 (hill-climb) */
-function refineBySwap(nums: number[], latestNumbers: number[]): number[] {
-  let current = [...nums]
-  let currentScore = scorePattern(current, latestNumbers)
-
-  for (let round = 0; round < 8; round++) {
-    let improved = false
-    for (let i = 0; i < 6; i++) {
-      for (let candidate = 1; candidate <= 45; candidate++) {
-        if (current.includes(candidate)) continue
-        const next = [...current]
-        next[i] = candidate
-        next.sort((a, b) => a - b)
-        if (!passesHardFilters(next)) continue
-        const nextScore = scorePattern(next, latestNumbers)
-        if (nextScore > currentScore) {
-          current = next
-          currentScore = nextScore
-          improved = true
-        }
-      }
-    }
-    if (!improved) break
-  }
-  return current
-}
-
-const OPTIMIZATION_ROUNDS = 480
-
-/**
- * 역대 당첨 번호 통계 패턴에 최대한 맞춘 6수 추천.
- * 6/45 모든 조합의 1등 확률은 동일하며, 이 함수는 당첨을 보장하지 않습니다.
- */
-export function generateOptimizedPick(latestNumbers: number[] = []): LottoPick {
-  let best = fisherYatesPick6()
-  let bestScore = scorePattern(best, latestNumbers)
-
-  for (let attempt = 0; attempt < OPTIMIZATION_ROUNDS; attempt++) {
-    const nums = fisherYatesPick6()
-    if (!passesHardFilters(nums)) continue
-    const score = scorePattern(nums, latestNumbers) + secureRandomInt(3)
-    if (score > bestScore) {
-      best = nums
-      bestScore = score
-    }
-  }
-
-  if (!passesHardFilters(best)) {
-    for (let attempt = 0; attempt < 200; attempt++) {
-      const nums = fisherYatesPick6()
-      if (!passesHardFilters(nums)) continue
-      const score = scorePattern(nums, latestNumbers)
-      if (score > bestScore) {
-        best = nums
-        bestScore = score
-      }
-    }
-  }
-
-  const refined = refineBySwap(best, latestNumbers)
-
-  return { numbers: refined }
-}
-
-export function generateOptimizedGames(
-  count: number,
-  latestNumbers: number[] = [],
-): LottoPick[] {
-  const used = new Set<string>()
-  const games: LottoPick[] = []
-
-  for (let i = 0; i < count; i++) {
-    let pick = generateOptimizedPick(latestNumbers)
-    let guard = 0
-    while (used.has(pick.numbers.join(',')) && guard < 40) {
-      pick = generateOptimizedPick(latestNumbers)
-      guard++
-    }
-    used.add(pick.numbers.join(','))
-    games.push(pick)
-  }
-  return games
+/** 번호 배열이 1~45 범위의 중복 없는 정수인지 검사 */
+export function isValidNumberSet(numbers: number[], size = 6): boolean {
+  if (numbers.length !== size) return false
+  const unique = new Set(numbers)
+  if (unique.size !== size) return false
+  return numbers.every(n => Number.isInteger(n) && n >= 1 && n <= LOTTO_MAX)
 }

@@ -14,12 +14,12 @@ export function secureRandomInt(maxExclusive: number): number {
   return Math.floor(Math.random() * maxExclusive)
 }
 
-/** Fisher-Yates — 1~45 중 6개 균등 무작위 */
-export function fisherYatesPick6(): number[] {
-  const pool = Array.from({ length: 45 }, (_, i) => i + 1)
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = secureRandomInt(i + 1)
-    ;[pool[i], pool[j]] = [pool[j]!, pool[i]!]
+/** [0, 1) 구간 균등 실수 — 가중 표본 추출(weighted sampling)용 */
+export function secureRandomFloat(): number {
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    const arr = new Uint32Array(1)
+    crypto.getRandomValues(arr)
+    return arr[0]! / 0x100000000
   }
-  return pool.slice(0, 6).sort((a, b) => a - b)
+  return Math.random()
 }
