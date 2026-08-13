@@ -12,6 +12,9 @@ const PENSION_RATE = 0.0475
 // 기준소득월액 상한액 (2026.7~2027.6: 6,590,000원 — 보건복지부 고시, A값 변동률 3.4% 반영)
 // 월 보험료 상한(근로자 부담) = 6,590,000 × 4.75% = 313,025원
 const PENSION_MONTHLY_CAP = 313_025
+// 기준소득월액 하한액 (2026.7~2027.6: 410,000원 — 동일 고시)
+// 월 보험료 하한(근로자 부담) = 410,000 × 4.75% = 19,475원
+const PENSION_MONTHLY_MIN = 19_475
 // 건강보험: 2026년 7.19%(노사 각 3.595%) — 건강보험정책심의위원회 결정
 //          출처: 국민건강보험공단 고시
 const HEALTH_RATE = 0.03595
@@ -85,8 +88,12 @@ function earnedIncomeTaxCredit(grossTax: number, annualGross: number): number {
     limit = 740_000
   } else if (annualGross <= 70_000_000) {
     limit = Math.max(740_000 - (annualGross - 33_000_000) * 0.008, 660_000)
+  } else if (annualGross <= 120_000_000) {
+    // 소득세법 §59③ 3호: 66만원 - (총급여 - 7,000만원) × 1/2, 최저 50만원
+    limit = Math.max(660_000 - (annualGross - 70_000_000) * 0.5, 500_000)
   } else {
-    limit = Math.max(660_000 - (annualGross - 70_000_000) * 0.005, 500_000)
+    // 소득세법 §59③ 4호: 50만원 - (총급여 - 1억2,000만원) × 1/2, 최저 20만원
+    limit = Math.max(500_000 - (annualGross - 120_000_000) * 0.5, 200_000)
   }
 
   return Math.min(credit, limit)
@@ -175,17 +182,23 @@ export function calcSalary(input: SalaryInput): SalaryResult {
   )
   const totalAllowance = overtimePay + nightPay + holidayPay
 
-  // ── 비과세 처리 ──
+  // ── 총 월급여 ──
+  // 식대·차량유지비는 연봉에 포함된 항목이므로 월급여에 가산하지 않는다.
+  // (사람인·인크루트 등 표준 산식: 세전 월급 = 연봉÷12, 비과세액은 과세표준에서만 차감)
+  const monthlyGross = monthlyBase + totalAllowance
+
+  // ── 비과세 처리 (소득세법 시행령 §12) ──
   const mealExempt = Math.min(mealAllowance, MEAL_EXEMPT_LIMIT)
   const transportExempt = Math.min(transportAllowance, TRANSPORT_EXEMPT_LIMIT)
-  const taxExempt = mealExempt + transportExempt
+  const taxExempt = Math.min(mealExempt + transportExempt, monthlyGross)
 
-  // ── 총 월급여 / 과세 월급여 ──
-  const monthlyGross = monthlyBase + totalAllowance + mealAllowance + transportAllowance
+  // ── 과세 월급여 ──
   const taxableMonthly = monthlyGross - taxExempt
 
   // ── 4대보험 (과세 월급여 기준) ──
-  const pension = Math.min(Math.round(taxableMonthly * PENSION_RATE), PENSION_MONTHLY_CAP)
+  const pension = taxableMonthly > 0
+    ? Math.min(Math.max(Math.round(taxableMonthly * PENSION_RATE), PENSION_MONTHLY_MIN), PENSION_MONTHLY_CAP)
+    : 0
   const health = Math.round(taxableMonthly * HEALTH_RATE)
   const care = Math.round(health * CARE_RATE)
   const employment = Math.round(taxableMonthly * EMPLOYMENT_RATE)

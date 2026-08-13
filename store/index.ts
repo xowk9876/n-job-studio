@@ -125,6 +125,16 @@ export const useJeonseStore = create<JeonseStore>()(
       marketPrice: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-jeonse', skipHydration: true }
+    {
+      name: 'mf-jeonse',
+      skipHydration: true,
+      // 기준금리 인상(2026.7.16, 2.50%→2.75%)으로 법정 전환율 상한이 4.5%→4.75%로 변경됐다.
+      // 버전을 올려 이전 값을 저장한 재방문자에게도 갱신된 법정 상한이 적용되도록 한다.
+      version: 1,
+      migrate: (persisted) => ({
+        ...(persisted as JeonseStore),
+        conversionRate: DEFAULT_CONVERSION_RATE,
+      }),
+    }
   )
 )
