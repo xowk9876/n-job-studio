@@ -96,20 +96,6 @@ export function scorePattern(nums: number[], latestNumbers: number[] = []): numb
   return score
 }
 
-/**
- * scorePattern 이론상 하한·상한 (정규화용)
- *  베스트  = 28+24+22+12+8+10+6+14+14+8 = 146
- *  실용 워스트 = 기존 -95 + 신규 (-14 -8 -4) = -121
- */
-const SCORE_FLOOR = -121
-const SCORE_CEIL = 146
-
-export function patternScoreToPercent(score: number): number {
-  const clamped = Math.max(SCORE_FLOOR, Math.min(SCORE_CEIL, score))
-  const raw = ((clamped - SCORE_FLOOR) / (SCORE_CEIL - SCORE_FLOOR)) * 100
-  return Math.round(raw)
-}
-
 function passesHardFilters(nums: number[]): boolean {
   const sum = nums.reduce((a, b) => a + b, 0)
   if (sum < 100 || sum > 195) return false

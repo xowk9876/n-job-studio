@@ -9,17 +9,6 @@ export const CONTENT_UPDATED_AT = '2026-07-09' as const
 export const SEO_UPDATED_AT = CONTENT_UPDATED_AT
 export const SITE_NAME = '머니핏 계산기'
 
-/** OG 이미지·푸터 등에 표시할 브랜드 라벨 */
-export const OG_BRAND_LINE = SITE_NAME
-
-export const SITE_HOST = (() => {
-  try {
-    return new URL(SITE_URL).host
-  } catch {
-    return 'n-job-studio.vercel.app'
-  }
-})()
-
 /** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
 export const guideTagColors: Record<string, string> = {
   세금: '#6bafff',
