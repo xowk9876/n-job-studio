@@ -62,7 +62,10 @@ export function calcSeverance(input: SeveranceInput): SeveranceResult {
     }
   }
 
-  const workDays = Math.floor((endMs - startMs) / (1000 * 60 * 60 * 24))
+  // 입사일·퇴직일(마지막 근무일) 양일 포함. 고용노동부 계산기는 퇴직일자를
+  // 마지막 근무일 다음날로 넣으라고 안내하므로 exclusive 일수와 맞춘다.
+  // 평균임금 3개월 일수(threeMonthDays)는 exclusive를 유지한다.
+  const workDays = Math.floor((endMs - startMs) / (1000 * 60 * 60 * 24)) + 1
   const workYears = workDays / 365
 
   // 1년 미만은 퇴직금 없음

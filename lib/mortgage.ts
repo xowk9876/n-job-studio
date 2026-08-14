@@ -67,7 +67,7 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
     // 원리금균등상환
     let monthlyPayment: number
     if (monthlyRate === 0) {
-      monthlyPayment = principal / totalMonths
+      monthlyPayment = Math.round(principal / totalMonths)
     } else {
       monthlyPayment = Math.round(
         principal * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) /
@@ -78,14 +78,16 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
     let totalInterest = 0
     for (let m = 1; m <= totalMonths; m++) {
       const interest = Math.round(remaining * monthlyRate)
-      const principalPmt = monthlyPayment - interest
-      remaining = Math.max(0, remaining - principalPmt)
+      const principalPmt = m === totalMonths ? remaining : monthlyPayment - interest
+      const payment = principalPmt + interest
+      remaining -= principalPmt
       totalInterest += interest
-      schedule.push({ month: m, payment: monthlyPayment, principal: principalPmt, interest, remaining })
+      schedule.push({ month: m, payment, principal: principalPmt, interest, remaining })
     }
+    const totalPayment = schedule.reduce((s, r) => s + r.payment, 0)
     return {
       monthlyPayment,
-      totalPayment: monthlyPayment * totalMonths,
+      totalPayment,
       totalInterest,
       interestRatio: (totalInterest / principal) * 100,
       schedule,
@@ -98,10 +100,11 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
   let totalInterest = 0
   for (let m = 1; m <= totalMonths; m++) {
     const interest = Math.round(remaining * monthlyRate)
-    const payment = monthlyPrincipal + interest
-    remaining = Math.max(0, remaining - monthlyPrincipal)
+    const principalPmt = m === totalMonths ? remaining : monthlyPrincipal
+    const payment = principalPmt + interest
+    remaining -= principalPmt
     totalInterest += interest
-    schedule.push({ month: m, payment, principal: monthlyPrincipal, interest, remaining })
+    schedule.push({ month: m, payment, principal: principalPmt, interest, remaining })
   }
   const firstPayment = schedule[0]?.payment ?? 0
   const totalPayment = schedule.reduce((s, r) => s + r.payment, 0)

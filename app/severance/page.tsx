@@ -33,7 +33,7 @@ export default function SeverancePage() {
   useEffect(() => {
     const legacyEndDates = ['2026-01-01', '2026-05-22', '2026-05-24']
     if (legacyEndDates.includes(endDate)) {
-      set({ endDate: new Date().toISOString().split('T')[0] })
+      set({ endDate: toISO(new Date()) })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -130,6 +130,7 @@ export default function SeverancePage() {
           <li>1일 평균임금 = 최근 3개월 총 임금 ÷ 실제 일수(89~92일)</li>
           <li>연간 상여금의 3개월분(÷4)을 합산합니다</li>
           <li>1년 미만 근무 시 퇴직금 없음</li>
+          <li>재직일수는 입사일·퇴직일(마지막 근무일)을 모두 포함합니다. 고용노동부 계산기는 퇴직일자를 마지막 근무일 다음날로 넣으라고 안내하므로 하루 차이가 날 수 있습니다.</li>
           <li>퇴직소득세는 국세청 홈택스에서 확인</li>
         </ul>
       </div>

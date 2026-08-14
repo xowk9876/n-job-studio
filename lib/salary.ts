@@ -246,7 +246,8 @@ export function calcSalary(input: SalaryInput): SalaryResult {
 
   // ── 합산 ──
   const totalDeduction = pension + health + care + employment + incomeTax + localTax
-  const monthlyNet = monthlyGross - totalDeduction
+  // 국민연금 하한(19,475원)이 과세월급보다 큰 초저소득에서 실수령이 음수가 되지 않게 한다.
+  const monthlyNet = Math.max(0, monthlyGross - totalDeduction)
   const annualNet = monthlyNet * 12
 
   return {
