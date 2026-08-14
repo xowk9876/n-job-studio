@@ -26,7 +26,12 @@ export const useSalaryStore = create<SalaryStore>()(
       transportAllowance: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-salary', skipHydration: true }
+    {
+      name: 'mf-salary',
+      skipHydration: true,
+      // NumericInput 만원 단위 회귀 복구 — 원 단위로 잘못 저장된 재방문자 입력값을 초기화
+      version: 1,
+    }
   )
 )
 
@@ -48,7 +53,11 @@ export const useMortgageStore = create<MortgageStore>()(
       type: 'equal-payment' as RepaymentType,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-mortgage', skipHydration: true }
+    {
+      name: 'mf-mortgage',
+      skipHydration: true,
+      version: 1,
+    }
   )
 )
 
@@ -72,7 +81,11 @@ export const useSeveranceStore = create<SeveranceStore>()(
       regularHourlyWage: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-severance', skipHydration: true }
+    {
+      name: 'mf-severance',
+      skipHydration: true,
+      version: 1,
+    }
   )
 )
 
@@ -96,7 +109,11 @@ export const useSavingsStore = create<SavingsStore>()(
       interestType: 'simple' as InterestType,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
-    { name: 'mf-savings', skipHydration: true }
+    {
+      name: 'mf-savings',
+      skipHydration: true,
+      version: 1,
+    }
   )
 )
 

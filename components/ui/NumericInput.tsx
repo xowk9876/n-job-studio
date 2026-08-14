@@ -9,15 +9,29 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 
   ariaLabel?: string
   /** @deprecated 초기값이 있어도 내부에서 사용하지 않음 (상태는 외부 value로 제어) */
   defaultValue?: number
-  /** @deprecated 단위 배수는 외부에서 처리 */
+  /**
+   * 표시 단위 배수. 스토어는 원 단위를 유지한다.
+   * 10000이면 입력칸은 만원, onChange는 원(×10000)으로 내보낸다.
+   */
   unitMultiplier?: number
   /** 소수점 허용 (전환율 등) */
   allowDecimal?: boolean
 }
 
+function formatDisplay(n: number, allowDecimal: boolean) {
+  if (!Number.isFinite(n)) return ''
+  if (allowDecimal) {
+    const s = n.toString()
+    const [intPart, dec] = s.split('.')
+    const withComma = parseInt(intPart || '0', 10).toLocaleString('ko-KR')
+    return dec !== undefined ? `${withComma}.${dec}` : withComma
+  }
+  return Math.round(n).toLocaleString('ko-KR')
+}
+
 /**
  * 숫자 입력 — 3자리 콤마 자동 포맷 + tabular-nums
- * 내부 표시값: string(콤마 포함), 외부 값: number
+ * 내부 표시값: string(콤마 포함), 외부 값: number (원 등 스토어 단위)
  */
 const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
   {
@@ -27,46 +41,47 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
     ariaLabel,
     className = '',
     defaultValue: _dv,
-    unitMultiplier: _um,
+    unitMultiplier = 1,
     allowDecimal = false,
     ...rest
   },
   ref
 ) {
+  const multiplier = unitMultiplier > 0 ? unitMultiplier : 1
+
+  const toDisplayNum = (raw: number) => raw / multiplier
+  const toStoreNum = (displayNum: number) => {
+    const product = displayNum * multiplier
+    if (allowDecimal && multiplier === 1) return product
+    return Math.round(product)
+  }
+
   // 호출자 className을 그대로 존중. className이 비어 있으면 기본 glass-input 스타일 적용
   const baseClass = className.trim()
     ? className
     : 'glass-input w-full rounded-xl px-4 py-3 text-[15px] font-semibold'
   const mergedClass = `${baseClass} tabular${suffix && !/\bpr-\d+/.test(baseClass) ? ' pr-14' : ''}`
 
-  const formatNumber = (n: number) => {
-    if (!Number.isFinite(n)) return ''
-    if (allowDecimal) {
-      const s = n.toString()
-      const [intPart, dec] = s.split('.')
-      const withComma = parseInt(intPart || '0', 10).toLocaleString('ko-KR')
-      return dec !== undefined ? `${withComma}.${dec}` : withComma
-    }
-    return Math.round(n).toLocaleString('ko-KR')
-  }
-
-  const [display, setDisplay] = useState<string>(
-    typeof value === 'number' && Number.isFinite(value) ? formatNumber(value) : ''
+  const [display, setDisplay] = useState<string>(() =>
+    typeof value === 'number' && Number.isFinite(value)
+      ? formatDisplay(toDisplayNum(value), allowDecimal)
+      : ''
   )
 
   useEffect(() => {
     const next =
-      typeof value === 'number' && Number.isFinite(value) ? formatNumber(value) : ''
+      typeof value === 'number' && Number.isFinite(value)
+        ? formatDisplay(toDisplayNum(value), allowDecimal)
+        : ''
     setDisplay(prev => (prev.replace(/,/g, '') === next.replace(/,/g, '') ? prev : next))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [value, multiplier, allowDecimal])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawInput = e.target.value
     const cleanPattern = allowDecimal ? /[^\d.]/g : /[^\d]/g
     let raw = rawInput.replace(cleanPattern, '')
     if (allowDecimal) {
-      // 소수점 중복 제거
       const firstDot = raw.indexOf('.')
       if (firstDot !== -1) {
         raw = raw.slice(0, firstDot + 1) + raw.slice(firstDot + 1).replace(/\./g, '')
@@ -74,9 +89,9 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
     }
     const n = raw === '' || raw === '.' ? 0 : parseFloat(raw)
     if (raw === '') setDisplay('')
-    else if (allowDecimal && raw.endsWith('.')) setDisplay(formatNumber(parseInt(raw, 10) || 0) + '.')
-    else setDisplay(formatNumber(n))
-    onChange(Number.isFinite(n) ? n : 0)
+    else if (allowDecimal && raw.endsWith('.')) setDisplay(formatDisplay(parseInt(raw, 10) || 0, false) + '.')
+    else setDisplay(formatDisplay(n, allowDecimal))
+    onChange(Number.isFinite(n) ? toStoreNum(n) : 0)
   }
 
   return (
