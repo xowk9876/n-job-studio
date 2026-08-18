@@ -202,33 +202,14 @@ export default function LottoGenerator() {
               return (
                 <li
                   key={`${index}-${game.numbers.join('-')}`}
-                  className="mf-rise flex flex-col gap-1.5 rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-2 sm:px-3"
+                  className="mf-rise grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-1 rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-1.5 sm:px-3"
                   style={{ animationDelay: `${index * 60}ms` }}
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-[10.5px] tracking-[0.14em] text-ink/50">GAME {label}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleCopy(index, game.numbers)}
-                      className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] text-ink/60 transition-colors hover:bg-ink/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40"
-                      aria-label={`${label} 게임 번호 복사`}
-                    >
-                      {copiedIndex === index ? (
-                        <>
-                          <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
-                          복사됨
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="h-3.5 w-3.5" aria-hidden />
-                          복사
-                        </>
-                      )}
-                    </button>
-                  </div>
-
+                  <span className="justify-self-start truncate font-mono text-[10.5px] tracking-[0.14em] text-ink/50">
+                    GAME {label}
+                  </span>
                   <div
-                    className="flex w-full flex-wrap items-center justify-center gap-[clamp(3px,1vw,10px)]"
+                    className="flex items-center justify-center gap-[clamp(3px,1vw,10px)]"
                     role="img"
                     aria-label={`${label} 게임 번호 ${game.numbers.join(', ')}`}
                   >
@@ -236,6 +217,24 @@ export default function LottoGenerator() {
                       <LottoBall key={num} number={num} size="xl" highlighted={latestNumbers.includes(num)} />
                     ))}
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(index, game.numbers)}
+                    className="inline-flex items-center justify-self-end gap-1 rounded-md px-1.5 py-1 text-[11px] text-ink/60 transition-colors hover:bg-ink/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40"
+                    aria-label={`${label} 게임 번호 복사`}
+                  >
+                    {copiedIndex === index ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
+                        복사됨
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" aria-hidden />
+                        복사
+                      </>
+                    )}
+                  </button>
                 </li>
               )
             })}
