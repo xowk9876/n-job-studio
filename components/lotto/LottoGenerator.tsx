@@ -202,10 +202,10 @@ export default function LottoGenerator() {
               return (
                 <li
                   key={`${index}-${game.numbers.join('-')}`}
-                  className="mf-rise rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-2.5 sm:px-3"
+                  className="mf-rise relative flex min-h-[8rem] flex-col items-center justify-center rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-2.5 sm:px-3"
                   style={{ animationDelay: `${index * 60}ms` }}
                 >
-                  <div className="mb-2 flex items-center justify-between gap-2 px-1">
+                  <div className="absolute inset-x-2 top-2 z-10 flex items-center justify-between gap-2 sm:inset-x-3">
                     <span className="font-mono text-[10.5px] tracking-[0.14em] text-ink/50">GAME {label}</span>
                     <button
                       type="button"
@@ -228,7 +228,7 @@ export default function LottoGenerator() {
                   </div>
 
                   <div
-                    className={BALL_ROW_XL_CLASS}
+                    className="flex w-full flex-wrap items-center justify-center gap-[clamp(3px,1vw,10px)]"
                     role="img"
                     aria-label={`${label} 게임 번호 ${game.numbers.join(', ')}`}
                   >
