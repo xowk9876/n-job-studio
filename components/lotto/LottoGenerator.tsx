@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Check, Copy, Sparkles } from 'lucide-react'
 
 import { DEFAULT_GENERATOR_OPTIONS, generateGames, type GeneratedGame } from '@/lib/lotto/generator'
-import { TOTAL_COMBINATIONS } from '@/lib/lotto/stats'
 import type { LottoStats } from '@/lib/lotto/types'
 
 import { BALL_ROW_XL_CLASS, LottoBall } from './LottoBall'
@@ -241,12 +240,6 @@ export default function LottoGenerator() {
           </ul>
         )}
       </div>
-
-      <p className="mt-4 text-[10.5px] leading-relaxed text-[color:var(--muted)]">
-        로또는 매 회차 독립 추첨이므로 모든 조합의 1등 확률은 1/{TOTAL_COMBINATIONS.toLocaleString('ko-KR')}로
-        동일합니다. 이 생성기는 45개 번호를 같은 확률로 뽑은 뒤 합계·홀짝 등 기본 밸런스 조건을 만족하는 조합을 고르는
-        것이며, 당첨 확률을 높이지 않습니다.
-      </p>
     </div>
   )
 }
