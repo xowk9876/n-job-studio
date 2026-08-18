@@ -202,10 +202,10 @@ export default function LottoGenerator() {
               return (
                 <li
                   key={`${index}-${game.numbers.join('-')}`}
-                  className="mf-rise relative flex min-h-[8rem] flex-col items-center justify-center rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-2.5 sm:px-3"
+                  className="mf-rise flex flex-col gap-1.5 rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-2 sm:px-3"
                   style={{ animationDelay: `${index * 60}ms` }}
                 >
-                  <div className="absolute inset-x-2 top-2 z-10 flex items-center justify-between gap-2 sm:inset-x-3">
+                  <div className="flex items-center justify-between gap-2">
                     <span className="font-mono text-[10.5px] tracking-[0.14em] text-ink/50">GAME {label}</span>
                     <button
                       type="button"
