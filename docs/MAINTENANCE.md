@@ -1,6 +1,8 @@
 # 정기 점검 (머니핏 계산기)
 
 > 계산 수치·버그·입력·API·보안 전체 점검은 [`AUDIT_CHECKLIST.md`](./AUDIT_CHECKLIST.md)를 따른다.
+> 화면 문구·FAQ·가이드 점검은 [`COPY_CHECKLIST.md`](./COPY_CHECKLIST.md)를 따른다.
+> 홈 화면 앱 추가는 [`APP_SHORTCUT.md`](./APP_SHORTCUT.md)를 따른다.
 
 ## 의존성
 

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight, Shield, Scale, Lock } from 'lucide-react'
 import HomeGuideHub from '@/components/home/HomeGuideHub'
+import HomeAppShortcut from '@/components/home/HomeAppShortcut'
 import { DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL } from '@/lib/seo'
 import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
 import { calcSalary } from '@/lib/salary'
@@ -262,6 +263,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <HomeAppShortcut />
 
       {/* TRUST */}
       <section className="home-section" aria-label="서비스 신뢰">

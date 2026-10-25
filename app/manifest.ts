@@ -22,18 +22,9 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['finance', 'productivity', 'utilities'],
     id: SITE_URL,
     icons: [
-      {
-        src: '/favicon.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-        purpose: 'any',
-      },
-      {
-        src: '/opengraph-image',
-        sizes: '1200x630',
-        type: 'image/png',
-        purpose: 'any',
-      },
+      { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
     shortcuts: [
       {
@@ -41,24 +32,28 @@ export default function manifest(): MetadataRoute.Manifest {
         short_name: '연봉',
         description: '2026년 4대보험·소득세 기준 세후 월급 즉시 계산',
         url: '/salary',
+        icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
       },
       {
         name: '주담대 이자 계산',
         short_name: '주담대',
         description: '원리금균등·원금균등·만기일시 + 스트레스 DSR',
         url: '/mortgage',
+        icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
       },
       {
         name: '퇴직금 계산',
         short_name: '퇴직금',
         description: '근로기준법 평균임금 기준 자동 산출',
         url: '/severance',
+        icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
       },
       {
         name: '적금·예금 이자 계산',
         short_name: '적금',
         description: '세후 이자 + ISA 비과세 비교',
         url: '/savings',
+        icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
       },
     ],
   }

@@ -69,9 +69,18 @@ export const metadata: Metadata = {
     }],
   },
   icons: {
-    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/icon-192.png',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: '머니핏 계산기',
+    statusBarStyle: 'black-translucent',
   },
   robots: {
     index: true,
@@ -93,6 +102,7 @@ export const metadata: Metadata = {
   },
   referrer: 'strict-origin-when-cross-origin',
   other: {
+    'apple-mobile-web-app-capable': 'yes',
     'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2765055385218528',
     ...buildNaverMeta(
       formatPageTitle('2026년 연봉 실수령액·대출·퇴직금·적금·전월세·로또 계산기'),
