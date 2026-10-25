@@ -99,7 +99,7 @@ function earnedIncomeTaxCredit(grossTax: number, annualGross: number): number {
   return Math.min(credit, limit)
 }
 
-// ═══ 자녀세액공제 (소득세법 §59의2, 2026 개정 — 8세 이상 자녀 기준) ═══
+// ═══ 자녀세액공제 (소득세법 §59의2, 2026.4.21 개정 — 13세 이상, 부칙 경과: 2026년 귀속 9세 이상·2017년생 제외) ═══
 // 첫째 25만원, 둘째 30만원, 셋째 이상 1인당 40만원
 function childTaxCredit(childCount: number): number {
   if (childCount <= 0) return 0
@@ -113,7 +113,7 @@ function childTaxCredit(childCount: number): number {
 export interface SalaryInput {
   annualSalary: number        // 연봉 (원)
   dependents: number          // 부양가족 수 (본인 포함)
-  children: number            // 20세 미만 자녀 수
+  children: number            // 자녀세액공제 대상 자녀 수 (2026년 귀속 9~20세)
   overtimeHours: number       // 월 연장근로 시간
   nightHours: number          // 월 야간근로 시간
   holidayHours: number        // 월 휴일근로 시간

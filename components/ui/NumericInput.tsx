@@ -73,7 +73,7 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
       typeof value === 'number' && Number.isFinite(value)
         ? formatDisplay(toDisplayNum(value), allowDecimal)
         : ''
-    setDisplay(prev => (prev.replace(/,/g, '') === next.replace(/,/g, '') ? prev : next))
+    setDisplay(prev => (parseFloat(prev.replace(/,/g, '')) === parseFloat(next.replace(/,/g, '')) ? prev : next))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, multiplier, allowDecimal])
 
@@ -88,8 +88,9 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
       }
     }
     const n = raw === '' || raw === '.' ? 0 : parseFloat(raw)
+    const dot = allowDecimal ? raw.indexOf('.') : -1
     if (raw === '') setDisplay('')
-    else if (allowDecimal && raw.endsWith('.')) setDisplay(formatDisplay(parseInt(raw, 10) || 0, false) + '.')
+    else if (dot !== -1) setDisplay(`${formatDisplay(parseInt(raw.slice(0, dot), 10) || 0, false)}.${raw.slice(dot + 1)}`)
     else setDisplay(formatDisplay(n, allowDecimal))
     onChange(Number.isFinite(n) ? toStoreNum(n) : 0)
   }

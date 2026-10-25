@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { useJeonseStore } from '@/store'
 import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
-import { calcJeonse, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
+import { calcJeonse, DEFAULT_BASE_RATE, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
 import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
@@ -115,7 +115,7 @@ export default function JeonsePage() {
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">
             전월세 전환율 (%)
-            <span className="ml-2 text-[10.5px] font-normal text-white/40">법정 상한 {DEFAULT_CONVERSION_RATE}% (기준금리 2.75%+2%)</span>
+            <span className="ml-2 text-[10.5px] font-normal text-white/40">법정 상한 {DEFAULT_CONVERSION_RATE.toFixed(2)}% (기준금리 {DEFAULT_BASE_RATE.toFixed(2)}%+2%)</span>
           </label>
           <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={DEFAULT_CONVERSION_RATE} allowDecimal onChange={(n) => set({ conversionRate: n })} />
         </div>
@@ -174,7 +174,7 @@ export default function JeonsePage() {
 
       <div className="glass-card text-[12.5px] text-white/65">
         <h2 className="font-semibold text-white mb-2 text-[13.5px]">전월세 전환율이란?</h2>
-        <p className="mb-2">전월세 전환율은 전세 보증금을 월세로 전환할 때 적용하는 이율입니다. 법정 상한은 <strong className="text-white">기준금리 + 2%</strong>로, 2026년 기준 <strong className="text-white">4.75%</strong>입니다.</p>
+        <p className="mb-2">전월세 전환율은 전세 보증금을 월세로 전환할 때 적용하는 이율입니다. 법정 상한은 <strong className="text-white">기준금리 + 2%</strong>로, 2026년 10월 기준 <strong className="text-white">{DEFAULT_CONVERSION_RATE.toFixed(2)}%</strong>입니다.</p>
         <ul className="list-disc list-inside space-y-1 text-white/45 text-[11.5px]">
           <li>월세 = (전세 보증금 − 월세 보증금) × 전환율 ÷ 12</li>
           <li>집주인이 법정 상한 초과 요구 시 거부 가능</li>
@@ -185,12 +185,12 @@ export default function JeonsePage() {
 
       <div className="mt-2 flex flex-col gap-8">
         <ExamplesSection title="전월세 전환 계산 예시" items={[
-          { label: '전세 3억 → 월세 (전환율 4.75%)', input: '보증금 5천만원 유지', result: '월세 약 989,583원', note: '(3억−5천만) × 4.75% ÷ 12' },
-          { label: '전세 2억 → 월세 (전환율 4.75%)', input: '보증금 2천만원 유지', result: '월세 약 712,500원', note: '(2억−2천만) × 4.75% ÷ 12' },
-          { label: '월세 70만 → 전세 환산 (전환율 4.75%)', input: '보증금 1천만원 기준', result: '필요 전세 약 1억 8,684만원', note: '월세×12÷전환율+보증금' },
+          { label: '전세 3억 → 월세 (전환율 5.00%)', input: '보증금 5천만원 유지', result: '월세 약 1,041,667원', note: '(3억−5천만) × 5.00% ÷ 12' },
+          { label: '전세 2억 → 월세 (전환율 5.00%)', input: '보증금 2천만원 유지', result: '월세 750,000원', note: '(2억−2천만) × 5.00% ÷ 12' },
+          { label: '월세 70만 → 전세 환산 (전환율 5.00%)', input: '보증금 1천만원 기준', result: '필요 전세 1억 7,800만원', note: '월세×12÷전환율+보증금' },
         ]} />
         <FAQSection pagePath={CALC_PATH} items={[
-          { q: '전월세 전환율이란 정확히 무엇인가요?', a: '전세보증금의 일부 또는 전부를 월세로 전환할 때 적용되는 연간 이율입니다. 주택임대차보호법 제7조의2에 따라 법정 상한은 min(한국은행 기준금리 + 2%p, 10%) 중 낮은 값입니다. 2026년 7월 한은 기준금리 2.75% 기준 상한 4.75%. 집주인이 이를 초과해 월세를 요구하면 초과분은 무효이며 반환 청구가 가능합니다.' },
+          { q: '전월세 전환율이란 정확히 무엇인가요?', a: '전세보증금의 일부 또는 전부를 월세로 전환할 때 적용되는 연간 이율입니다. 주택임대차보호법 제7조의2에 따라 법정 상한은 min(한국은행 기준금리 + 2%p, 10%) 중 낮은 값입니다. 2026년 8월 27일 한은 기준금리 3.00% 인상(10월 22일 동결) 기준 상한 5.00%. 집주인이 이를 초과해 월세를 요구하면 초과분은 무효이며 반환 청구가 가능합니다.' },
           { q: '전세 vs 월세 무엇이 유리한가요?', a: '본인의 기회비용(보증금 조달 비용 또는 운용수익률)과 실제 전환율을 비교하세요. 전세자금대출 금리가 월세 전환율보다 낮으면 전세가 유리합니다. 목돈을 예적금·투자로 운용할 수 있다면 그 수익률과 비교하세요. 전세대출 금리는 한국주택금융공사(hf.go.kr) 또는 시중은행 공시에서 확인할 수 있습니다. 장기 거주 계획이면 전세, 2년 이내 이사 가능성 있으면 월세가 유연합니다.' },
           { q: '역전세·깡통전세를 피하는 법?', a: '깡통전세는 전세가가 매매가에 근접하거나 초과한 상태. 지표로 전세가율 = 전세보증금 / 매매가가 80% 이상이면 위험. HUG 전세보증금반환보증보험은 공시가격의 126% 이내만 가입 가능(2023.5 강화). 실거래가 확인은 국토부 실거래가공개시스템(rt.molit.go.kr), 전세가율은 KB부동산·아실에서 확인.' },
           { q: '전세 보증금 지키는 5단계?', a: '① 계약 전 등기부등본 열람(인터넷등기소 700원)으로 근저당·가압류 확인 ② 집주인 국세·지방세 완납증명서 요구(2023.4 의무화) ③ 이사 당일 주민센터에서 전입신고 + 확정일자 동시 처리(대항력 + 우선변제권) ④ HUG·SGI 전세보증금반환보증 가입(HUG 보증료 연 0.097~0.211%, 위험도 차등) ⑤ 등기부등본 재열람으로 계약 직후 추가 근저당 없는지 확인.' },

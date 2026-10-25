@@ -1,5 +1,7 @@
 # 정기 점검 (머니핏 계산기)
 
+> 계산 수치·버그·입력·API·보안 전체 점검은 [`AUDIT_CHECKLIST.md`](./AUDIT_CHECKLIST.md)를 따른다.
+
 ## 의존성
 
 ```powershell
