@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>머니핏 반응형 검증</title>
+<style>body{margin:0;padding:12px;font:14px system-ui;background:#101827;color:white}header{display:flex;gap:12px;align-items:center;margin-bottom:12px}select{font:inherit;padding:8px}main{overflow:auto;padding:2px}iframe{display:block;border:0;outline:1px solid #64748b;width:393px;height:780px;background:#0b1120}</style>
+</head>
+<body><header><strong>머니핏 실제 화면 검증</strong><label>화면 너비 <select id="width"><option>320</option><option>360</option><option selected>393</option><option>430</option><option>768</option><option>1280</option></select> px</label></header>
+<main><iframe id="preview" title="머니핏 반응형 검증 화면" src="/lotto" allow="clipboard-write"></iframe></main>
+<script>document.getElementById('width').addEventListener('change',function(){document.getElementById('preview').style.width=this.value+'px'})</script>
+</body></html>
