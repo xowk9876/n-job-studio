@@ -21,10 +21,12 @@ export function getLottoBallStyle(n: number): BallPalette {
   return LOTTO_BALL_COLORS.green
 }
 
-export type BallSize = 'xl' | 'lg' | 'md'
+export type BallSize = 'row' | 'xl' | 'lg' | 'md'
 
 /** 모바일 320px에서도 공 7개 + 보너스가 한 줄에 들어가도록 뷰포트 비례 크기를 사용한다 */
 const SIZE_CLASS: Record<BallSize, string> = {
+  // GAME·번호·복사가 한 행에 들어가도록 중앙 6열의 실제 남은 너비에 맞춘다.
+  row: 'aspect-square w-full min-w-0 max-w-10 text-[clamp(10px,2.8vw,16px)]',
   // 생성 결과용 — md보다 조금 크고, 6개가 한 줄에 여유 있게 들어가는 크기 (데스크탑 ~40px)
   xl: 'h-[clamp(28px,8vw,40px)] w-[clamp(28px,8vw,40px)] text-[clamp(12px,3.1vw,16px)]',
   lg: 'h-[clamp(26px,7.2vw,52px)] w-[clamp(26px,7.2vw,52px)] text-[clamp(10px,2.8vw,16px)]',

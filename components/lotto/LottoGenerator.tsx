@@ -223,35 +223,35 @@ export default function LottoGenerator() {
               return (
                 <li
                   key={`${index}-${game.numbers.join('-')}`}
-                  className="mf-rise grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 rounded-2xl border border-ink/10 bg-ink/[0.03] px-2 py-1.5 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:px-3"
+                  className="mf-rise grid grid-cols-[38px_minmax(0,1fr)_44px] items-center gap-x-1 rounded-2xl border border-ink/10 bg-ink/[0.03] px-1.5 py-1.5 sm:grid-cols-[52px_minmax(0,1fr)_52px] sm:gap-x-2 sm:px-3"
                   style={{ animationDelay: `${index * 60}ms` }}
                 >
-                  <span className="order-1 justify-self-start truncate font-mono text-[10.5px] tracking-[0.14em] text-ink/50">
+                  <span className="whitespace-nowrap font-mono text-[9.5px] tracking-[0.02em] text-ink/60 sm:text-[10.5px]">
                     GAME {label}
                   </span>
                   <div
-                    className="order-3 col-span-2 flex items-center justify-center gap-[clamp(3px,1vw,10px)] pb-2 sm:order-2 sm:col-span-1 sm:pb-0"
+                    className="grid w-full min-w-0 max-w-[280px] grid-cols-6 items-center justify-self-center gap-[clamp(2px,0.8vw,8px)]"
                     role="img"
                     aria-label={`${label} 게임 번호 ${game.numbers.join(', ')}`}
                   >
                     {game.numbers.map(num => (
-                      <LottoBall key={num} number={num} size="xl" highlighted={latestNumbers.includes(num)} />
+                      <LottoBall key={num} number={num} size="row" highlighted={latestNumbers.includes(num)} />
                     ))}
                   </div>
                   <button
                     type="button"
                     onClick={() => handleCopy(index, game.numbers)}
-                    className="order-2 inline-flex min-h-11 min-w-11 items-center justify-center justify-self-end gap-1 rounded-md px-1.5 py-1 text-[11px] text-ink/60 transition-colors hover:bg-ink/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 sm:order-3"
+                    className="inline-flex h-11 w-11 items-center justify-center justify-self-end gap-1 whitespace-nowrap rounded-md text-[10.5px] text-ink/70 transition-colors hover:bg-ink/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 sm:w-[52px] sm:text-[11px]"
                     aria-label={`${label} 게임 번호 복사`}
                   >
                     {copiedIndex === index ? (
                       <>
-                        <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
+                        <Check className="hidden h-3.5 w-3.5 shrink-0 text-emerald-600 sm:block" aria-hidden />
                         복사됨
                       </>
                     ) : (
                       <>
-                        <Copy className="h-3.5 w-3.5" aria-hidden />
+                        <Copy className="hidden h-3.5 w-3.5 shrink-0 sm:block" aria-hidden />
                         복사
                       </>
                     )}
