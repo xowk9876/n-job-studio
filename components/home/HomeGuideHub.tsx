@@ -17,7 +17,7 @@ export default function HomeGuideHub() {
         <p className="section-label">GUIDES</p>
         <h2 className="section-title">재테크 실전 가이드</h2>
         <p className="home-guide-hub__lead">
-          법령·세율 기준 {count}편. 계산 결과를 실무에 적용하는 방법을 정리했습니다.
+          가이드 {count}편에서 계산 기준과 적용 조건을 확인하세요.
         </p>
       </header>
 

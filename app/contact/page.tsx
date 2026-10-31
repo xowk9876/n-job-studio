@@ -50,8 +50,8 @@ export default function ContactPage() {
         <p className="font-mono text-[11px] tracking-[0.28em] text-[color:var(--muted)] mb-3">CONTACT</p>
         <h1 className="font-display text-[28px] md:text-[34px] font-bold text-white tracking-tight">문의하기</h1>
         <p className="mt-4 text-[14.5px] text-[color:var(--sub)] leading-relaxed">
-          계산 오류 제보, 새 계산기 제안, 제휴·광고 문의 모두 환영합니다. 아래 채널 중 편한 쪽으로
-          연락주세요. 오류 제보는 최우선 처리, 일반 문의는 영업일 기준 3일 이내 답변을 목표로 합니다.
+          계산 오류 제보, 기능 제안, 제휴·광고 문의를 아래 채널로 보내주세요.
+          오류 화면을 첨부할 때는 이름·연락처·계좌번호 등 개인정보를 가려주세요.
         </p>
       </header>
 
@@ -96,11 +96,11 @@ export default function ContactPage() {
           <ul className="list-disc pl-6 space-y-2">
             <li>
               <strong className="text-white">계산 오류 제보</strong> — 어느 계산기에서, 어떤 입력값으로,
-              어떤 결과가 나왔는지, 예상한 결과는 무엇이었는지를 함께 보내주시면 가장 빠르게 수정됩니다.
+              어떤 결과가 나왔는지, 예상한 결과는 무엇이었는지를 함께 보내주시면 확인에 도움이 됩니다.
             </li>
             <li>
               <strong className="text-white">새 계산기 제안</strong> — 자주 쓰는 계산 상황과 근거 법령·공식
-              링크를 알려주시면 검토 후 반영 여부를 회신드립니다.
+              링크를 함께 알려주세요.
             </li>
             <li>
               <strong className="text-white">제휴·광고 문의</strong> — 회사명·담당자·제안 내용을 이메일로
@@ -114,11 +114,8 @@ export default function ContactPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">응답 정책</h2>
-          <p>
-            모든 문의는 확인 즉시 우선순위에 따라 처리됩니다. 오류 제보는 최우선 처리하며,
-            제휴·일반 질문은 영업일 기준 3일 이내 답변을 목표로 합니다.
-          </p>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">문의 전 확인</h2>
+          <p>계산기 이용과 오류 제보에 관한 문의를 받습니다. 개별 사안의 법률·세무 상담은 해당 전문가나 기관에 문의해주세요. 주민등록번호·계좌번호·비밀번호는 보내지 마세요.</p>
         </section>
 
         <section>

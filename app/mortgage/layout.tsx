@@ -8,7 +8,7 @@ export const metadata = buildCalculatorMetadata({
   path: PATH,
   title: '주택담보대출 이자 계산기 — 원리금균등·원금균등·만기일시 비교',
   description:
-    '대출 금액·금리·기간을 입력하면 원리금균등·원금균등·만기일시 3가지 상환 방식의 월 납입금과 총 이자를 한눈에 비교합니다. DSR 한도 자동 계산 포함.',
+    '대출 금액·금리·기간을 입력하면 원리금균등·원금균등·만기일시 3가지 상환 방식의 월 납입금과 총 이자를 한눈에 비교합니다. DSR 한도 참고 계산 포함.',
   keywords: [
     '주담대 계산기',
     '대출 이자 계산기',
@@ -23,7 +23,7 @@ export const metadata = buildCalculatorMetadata({
   ],
   ogImagePath: '/mortgage/opengraph-image',
   ogTitle: '주택담보대출 이자 계산기 — 3가지 상환방식 비교',
-  ogDescription: '원리금균등·원금균등·만기일시 상환 월 납입금·총 이자 비교. DSR 한도 자동 계산.',
+  ogDescription: '원리금균등·원금균등·만기일시 상환 월 납입금·총 이자 비교. DSR 한도 참고 계산.',
 })
 
 export default function MortgageLayout({ children }: { children: React.ReactNode }) {

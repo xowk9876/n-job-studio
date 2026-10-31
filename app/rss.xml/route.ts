@@ -73,7 +73,7 @@ export function GET() {
       <channel>
         <title>${escapeXml(SITE_NAME)} — 계산기·재테크 가이드</title>
         <link>${SITE_URL}</link>
-        <description>2026년 최신 세율·법령·공식 기준 재테크 계산기와 가이드 (네이버·Google 공통 RSS)</description>
+        <description>금융 계산의 예상 금액·적용 기준과 가이드</description>
         <language>ko-KR</language>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
         <atom:link href="${RSS_FEED_URL}" rel="self" type="application/rss+xml" />

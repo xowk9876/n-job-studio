@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { buildFaqJsonLd, jsonLd, SITE_URL } from '@/lib/seo'
+import type { OfficialSource } from '@/lib/content-sources'
 
 function SectionHeader({ num, title }: { num?: string; title: string }) {
   return (
@@ -76,7 +77,7 @@ export function ExamplesSection({
         <SectionHeader num="CASE · 예시" title={title} />
       </div>
       <div className="grid md:grid-cols-2 gap-4">
-        {items.slice(0, 2).map(({ label, input, result, note }) => (
+        {items.map(({ label, input, result, note }) => (
           <div key={label} className="card p-5 md:p-6">
             <span className="chip chip-brand mb-3 text-[10.5px]">CASE</span>
             <h3 className="font-display text-[16.5px] font-semibold text-white mb-3 leading-snug tracking-tight">
@@ -145,9 +146,9 @@ export function TipsSection({
 
 export function OfficialSourcesSection({
   sources,
-  note = '정책·법령·고시는 수시로 변경될 수 있으므로 중요한 의사결정 전에는 해당 기관의 최신 공지와 전문가 상담을 함께 확인하세요.',
+  note = '확인 기준일: 2026-10-31. 실제 적용 조건과 이후 변경 사항은 해당 기관의 원문에서 확인하세요.',
 }: {
-  sources: string[]
+  sources: readonly OfficialSource[]
   note?: string
 }) {
   return (
@@ -158,9 +159,9 @@ export function OfficialSourcesSection({
       <div className="card p-6 md:p-8">
         <ul className="grid gap-2 text-[13.5px] text-[color:var(--ink-2)]">
           {sources.map(source => (
-            <li key={source} className="flex gap-2 leading-relaxed">
+            <li key={source.href} className="flex gap-2 leading-relaxed">
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--brand)]" aria-hidden />
-              <span>{source}</span>
+              <a href={source.href} className="underline underline-offset-4 hover:text-[color:var(--brand)]">{source.label}</a>
             </li>
           ))}
         </ul>

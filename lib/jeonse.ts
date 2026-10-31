@@ -13,7 +13,7 @@ export const LEGAL_PREMIUM = 2.0
 // 법정 전월세 전환율 상한 (기준금리 + 2%)
 export const DEFAULT_CONVERSION_RATE = DEFAULT_BASE_RATE + LEGAL_PREMIUM
 
-// 기회비용 비교 기준 (시장 평균 예금금리 근사값)
+// 기회비용 비교용 고정 가정. 시장 평균 또는 사용자 실제 조달금리가 아니다.
 const OPPORTUNITY_RATE = 3.0  // %
 
 export type ConversionDirection = 'jeonse-to-wolse' | 'wolse-to-jeonse'
@@ -62,15 +62,15 @@ function buildRisk(deposit: number, marketPrice?: number): JeonseRisk | undefine
     return {
       ratio,
       level: 'danger',
-      label: '깡통전세 위험',
-      message: '전세가율이 90%를 넘으면 HUG 전세보증금반환보증 가입 조건을 충족하지 못할 가능성이 큽니다. 계약 전 등기부등본·근저당 확인과 보증보험 가입을 반드시 검토하세요.',
+      label: '전세가율 90% 이상',
+      message: '보증금이 입력 시세에 근접하거나 초과합니다. 시세 하락·선순위 권리에 따른 회수 위험을 확인하세요. 이 비율은 보증기관의 인정 주택가격이나 가입 심사 결과가 아닙니다.',
     }
   }
   if (ratio >= 80) {
     return {
       ratio,
       level: 'caution',
-      label: '주의 구간',
+      label: '전세가율 80~90%',
       message: '전세가율 80~90%는 시세 하락 시 보증금 회수 위험이 있습니다. HUG 반환보증 한도와 선순위 채권을 반드시 확인하세요.',
     }
   }
@@ -95,7 +95,7 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
       jeonseDeposit: direction === 'wolse-to-jeonse' ? 0 : undefined,
       annualCost: 0,
       breakEvenRate: OPPORTUNITY_RATE,
-      suggestion: '전환율은 0%보다 커야 합니다. 법정 상한(기준금리 + 2%)을 확인해주세요.',
+      suggestion: '전환율은 0%보다 커야 합니다. 보증금을 월세로 전환할 때의 법정 상한과 적용 범위를 확인해주세요.',
     }
   }
 
@@ -111,8 +111,8 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
     const breakEvenRate = OPPORTUNITY_RATE
 
     const suggestion = conversionRate > OPPORTUNITY_RATE
-      ? `전환율(${conversionRate}%)이 시장 예금금리 근사값(${OPPORTUNITY_RATE}%)보다 높아 전세 유지가 유리할 수 있습니다. 보증금을 묶어두는 기회비용보다 월세 부담이 더 큽니다.`
-      : `전환율(${conversionRate}%)이 시장 예금금리 근사값(${OPPORTUNITY_RATE}%) 이하로 낮아 월세 전환도 고려할 만합니다.`
+      ? `전환율(${conversionRate}%)이 비교 가정 금리(${OPPORTUNITY_RATE}%)보다 높아 전세 유지가 유리할 수 있습니다. 보증금을 묶어두는 기회비용보다 월세 부담이 더 큽니다.`
+      : `전환율(${conversionRate}%)이 비교 가정 금리(${OPPORTUNITY_RATE}%) 이하로 낮아 월세 전환도 고려할 만합니다.`
 
     return {
       monthlyRent,
@@ -139,7 +139,7 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
   const breakEvenRate = OPPORTUNITY_RATE
 
   const suggestion = opportunityCostAnnual < annualCost
-    ? `전세 전환 시 추가 보증금의 기회비용(연 ${Math.round(opportunityCostAnnual / 10000).toLocaleString()}만원)이 현재 월세 합계(연 ${Math.round(annualCost / 10000).toLocaleString()}만원)보다 낮아 전세 전환이 유리합니다.`
+    ? `전세 전환 시 추가 보증금의 기회비용(연 ${Math.round(opportunityCostAnnual / 10000).toLocaleString()}만원)이 현재 월세 합계(연 ${Math.round(annualCost / 10000).toLocaleString()}만원)보다 낮아 이 가정에서는 전세 전환의 비용이 낮습니다. 실제 대출금리·세후 운용수익·보증료는 별도로 비교하세요.`
     : `전세 전환 시 추가 보증금의 기회비용이 월세 절감액보다 클 수 있습니다. 전세 자금 대출 금리도 함께 비교해보세요.`
 
   return {

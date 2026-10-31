@@ -8,6 +8,7 @@ import { ChevronDown, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 import { getCalculatorLinks } from '@/lib/seo'
+import { officialSources } from '@/lib/content-sources'
 
 const CALC_PATH = '/mortgage'
 const calcSeo = getCalculatorLinks(CALC_PATH)
@@ -173,7 +174,7 @@ export default function MortgagePage() {
                 </div>
               </div>
               <div>
-                <label className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%)</label>
+                <label className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%p)</label>
                 <NumericInput ariaLabel="스트레스 가산금리 (%p)" max={3}  className="glass-input w-full rounded-lg font-bold" value={dsrStress} defaultValue={STRESS_DSR_RATES.metroMortgage} allowDecimal onChange={setDsrStress} />
               </div>
             </div>
@@ -181,10 +182,10 @@ export default function MortgagePage() {
             <div className="rounded-lg bg-white/[0.05] px-3 py-2.5 grid grid-cols-2 gap-2 text-[11.5px]">
               <div><div className="text-white/50 text-[10.5px]">적용 금리 (스트레스 후)</div><div className="font-bold text-white tabular mt-0.5">{dsr.stressedRate.toFixed(2)}%</div></div>
               <div><div className="text-white/50 text-[10.5px]">월 상환 한도</div><div className="font-bold text-[color:var(--brand)] tabular mt-0.5">{won(dsr.maxMonthlyPmt)}</div></div>
-              <div><div className="text-white/50 text-[10.5px]">신규대출 원금 한도</div><div className="font-bold text-emerald-300 tabular mt-0.5">{manwon(dsr.maxPrincipal)}원</div></div>
+              <div><div className="text-white/50 text-[10.5px]">신규 원금 한도 (가정)</div><div className="font-bold text-emerald-300 tabular mt-0.5">{manwon(dsr.maxPrincipal)}원</div></div>
               <div><div className="text-white/50 text-[10.5px]">기존부채 DSR 점유</div><div className="font-bold text-white/80 tabular mt-0.5">{dsr.utilization.toFixed(1)}%</div></div>
             </div>
-            <p className="text-[10.5px] text-white/40 leading-relaxed">금융위 「DSR 산정·운용 모범규준」 기반. 2025.7.1 시행 <strong className="text-white/70">스트레스 DSR 3단계</strong>는 가계대출 기본 1.5% · 수도권·규제지역 주담대 3.0%(10·15 부동산 대책) · 지방 비규제지역 주담대 0.75%(2026.12.31까지 유예 연장) 차등 적용됩니다. 실제 한도는 은행 심사·LTV·소득산정 방식에 따라 달라질 수 있습니다.</p>
+            <p className="text-[10.5px] text-white/40 leading-relaxed">원리금균등 상환을 가정한 역산입니다. 위 상환 방식 선택과 별개이며, 스트레스 금리는 실제 이자에 더해지지 않습니다. 변동형 기준 수도권·규제지역 주담대 3.0%p, 지방 비규제지역 0.75%p(2026.12.31까지), 그 외 기본 1.5%p입니다. 금리 유형별 적용비율·LTV·지역별 한도·심사 인정 만기는 별도 확인하세요.</p>
           </div>
         )}
       </div>
@@ -193,29 +194,20 @@ export default function MortgagePage() {
         <ExamplesSection title="주담대 계산 예시" items={[
           { label: '3억 · 3.5% · 30년 (원리금균등)', input: '월 납입액', result: '1,347,134원', note: '총 이자 약 1억 8,497만원' },
           { label: '5억 · 4.0% · 20년 (원리금균등)', input: '월 납입액', result: '3,029,902원', note: '총 이자 약 2억 2,718만원' },
-          { label: '2억 · 3.0% · 10년 (원금균등)', input: '첫달 납입액', result: '2,166,667원', note: '총 이자 3,025만원' },
         ]} />
         <FAQSection pagePath={CALC_PATH} items={[
-          { q: '원리금균등과 원금균등의 차이는?', a: '원리금균등은 매월 동일한 금액(원금+이자)을 납부합니다. 초반엔 이자 비중이 높고 점차 원금 비중이 커져 가계 계획이 쉽습니다. 원금균등은 매월 동일한 원금에 잔여원금에 대한 이자를 더해 납부하므로 초기 부담이 크지만 총이자는 원리금균등보다 적습니다.' },
-          { q: 'DSR·LTV·DTI는 무엇인가요?', a: 'LTV(담보인정비율)는 집값 대비 대출 가능 금액 비율. DTI(총부채상환비율)는 연소득 대비 주택담보대출 원리금 + 기타대출 이자의 비율. DSR(총부채원리금상환비율)은 연소득 대비 모든 대출 원리금 상환액의 비율입니다. 2022년 1월부터 차주별 DSR 40%(은행권)·50%(2금융권)가 전면 적용되고 있으며, 2024~2025년 스트레스 DSR 1~3단계가 순차 시행되었습니다.' },
-          { q: '금리 0.5%p 차이가 실제로 얼마?', a: '3억원 · 30년 · 원리금균등 기준, 3.5%→4.0% 상승 시 월 납입 약 8.5만원(1,347,134→1,432,246원) 증가, 총이자 약 3,064만원 증가. 5억·20년·4.0%→4.5%이면 월 약 13.3만원(3,029,902→3,163,247원), 총이자 약 3,200만원 증가합니다.' },
-          { q: '중도상환수수료는 언제 발생하나요?', a: '주담대는 통상 대출 실행일로부터 3년 이내 조기상환 시 부과되며, 경과기간에 비례해 감소(슬라이딩)하고 3년 경과 후엔 대부분 면제됩니다. 2025.1.13 시행된 금융위 「중도상환수수료 개편」으로 실비용 범위 내에서만 부과되어, 은행권 주담대 요율은 종전 1.2~1.4%에서 0.5~0.8% 수준으로 낮아졌습니다(2025.1.12 이전 체결 계약은 종전 요율 유지). 요율은 금융사별로 매년 1월 은행연합회 소비자포털에 재공시되므로 대환 검토 시 최신 공시를 확인하세요.' },
-          { q: '생애최초·청년은 LTV가 완화되나요?', a: '생애최초 주택구입자는 지방 비규제지역 LTV 80%, 수도권·규제지역 LTV 70%(DTI 60%)가 적용됩니다. 2025.6.28부터 수도권·규제지역이 80%→70%로 강화되고 6개월 이내 전입의무가 부과되며, 디딤돌·보금자리론 등 정책대출도 동일합니다. 10·15 대책으로 규제지역 일반 차주 LTV가 40%로 축소된 뒤에도 생애최초 70%는 유지되지만, 수도권·규제지역 주택구입 목적 주담대 최대한도는 주택가격 15억원 이하 6억원·15억원 초과 4억원·25억원 초과 2억원으로 제한됩니다. 청년주택드림대출은 청년주택드림 청약통장(1년 이상 가입·1,000만원 이상 납입)으로 청약에 당첨된 만 39세 이하 무주택 세대주가 대상이며, 소득 요건은 미혼 연 7,000만원·신혼부부 부부합산 1억원 이하입니다. 분양가 6억원 이하·전용 85㎡ 이하 주택에 한해 최저 2.2% 금리·최대 40년 상환으로 미혼 3억원·신혼 4억원까지 이용 가능합니다.' },
-          { q: '변동금리 vs 고정금리, 무엇이 유리?', a: '금리 하락기에는 변동(COFIX 6개월·1년 연동)이, 상승기이거나 장기 보유 목적이면 고정(5년 고정 후 변동 혼합형 포함)이 유리합니다. 한국은행 기준금리 사이클과 본인의 상환계획 기간을 함께 고려하세요. 본 계산기는 단일 금리 기준이므로 변동 시나리오는 별도 산출해보셔야 합니다.' },
-          { q: '중도상환으로 얼마나 절감될까요?', a: '대출 초기에 일부 상환할수록 절감 효과가 큽니다. 3억 · 30년 · 5%(월 약 161만원) 조건에서 5년 차에 5,000만원을 상환하면, 월 납입금을 유지해 만기를 당기는 기간 단축 방식은 총이자 약 9,400만원(만기 89개월 단축), 기간을 그대로 두고 월 납입금을 낮추는 기간 유지 방식은 약 3,769만원(월 161만원→132만원)이 절감됩니다. 기간 단축 쪽 절감액이 2.5배가량 큰 이유는 원금이 줄어든 만큼 이자가 붙는 기간까지 함께 짧아지기 때문입니다. 3년 이내 상환이라면 중도상환수수료(은행권 주담대 0.5~0.8%, 경과기간 비례 차감)를 뺀 실절감액으로 비교하세요. 위 5년 차 예시는 3년 경과로 통상 면제 구간입니다.' },
+          { q: '원리금균등과 원금균등의 차이는?', a: '원리금균등은 원금과 이자를 합친 월 납입액이 일정합니다. 원금균등은 매달 같은 원금과 남은 잔액의 이자를 내므로 초기 부담이 크고 이후 줄어듭니다. 같은 금리·기간이면 원금균등의 총이자가 더 적습니다.' },
+          { q: 'DSR 결과가 은행 승인 한도인가요?', a: '아닙니다. 입력 소득·기존 월 상환액·금리·만기로 원리금균등 한도를 역산한 참고값입니다. 은행의 인정 소득, 대출별 DSR 산식, LTV, 지역별 총액 제한과 상품 조건에 따라 승인 한도가 달라집니다.' },
+          { q: '스트레스 가산금리를 실제로 더 내나요?', a: '아닙니다. 금리 상승에 대비한 심사 가정입니다. 실제 월 납입액은 약정금리로 계산하며, 고정·혼합·주기형은 스트레스 적용비율이 다를 수 있습니다.' },
+          { q: '중도상환이나 대환 비용도 포함되나요?', a: '포함되지 않습니다. 중도상환수수료, 인지세 등 부대비용과 새 상품의 우대조건을 별도로 확인하세요. 수수료는 계약·상환 시점과 금융기관에 따라 다릅니다.' },
+          { q: '변동금리와 고정금리는 어떻게 비교하나요?', a: '미래 금리는 확정할 수 없습니다. 현재 금리뿐 아니라 금리 변경 주기, 고정기간 이후 조건, 중도상환 계획을 비교하세요. 이 계산기는 입력한 금리가 전체 기간 동안 유지된다고 가정합니다.' },
         ]} />
-        <TipsSection title="주담대 부담 줄이기" items={[
-          { title: '시중은행·인뱅·정책자금 3단 비교', desc: '같은 조건에서도 은행별 0.3~1%p 금리 차이가 흔합니다. 시중은행·인터넷은행·주택도시기금(디딤돌/버팀목/청년주택드림)을 모두 상담받아 비교 후 결정하세요.' },
-          { title: '우대금리 모두 등록', desc: '급여이체·주거래카드·자동이체·청약저축·전자금융 가입 등 항목별 0.1~0.3%p, 최대 합산 1%p까지 우대 가능. 대출 실행 전 상담 단계에서 모두 등록 요청하세요.' },
-          { title: '정책 대출 적극 검토', desc: '디딤돌대출(주택구입)·버팀목 전세자금·청년주택드림 등 정책자금은 시중금리 대비 유리한 경우가 많습니다. 자격·한도·금리는 정책 변경이 잦으므로 주택도시기금 nhuf.molit.go.kr 또는 한국주택금융공사 hf.go.kr에서 최신 조건을 확인 후 우선 검토하세요.' },
-          { title: '대환대출 플랫폼 활용', desc: '네이버·카카오·토스 등 대환대출 인프라로 복수은행 금리를 실시간 비교 가능. 기존대출 대비 0.3%p 이상 낮으면 수수료·부대비용 고려해 갈아타기 검토.' },
-          { title: '원리금 상환액 소득의 30% 이내', desc: '월 소득 대비 원리금이 30%를 넘으면 생활자금 압박이 커집니다. DSR 40% 규제보다 보수적으로 30% 선에서 관리하면 금리 상승·소득 변동 리스크에도 안정적입니다.' },
+        <TipsSection title="대출 비교 체크리스트" items={[
+          { title: '같은 조건으로 비교', desc: '대출금액·기간·상환 방식과 우대조건을 맞춰 비교하세요. 광고의 최저금리가 본인에게 적용되는 금리와 같지는 않을 수 있습니다.' },
+          { title: '월 납입액과 총이자 함께 확인', desc: '만기를 늘리면 월 부담은 낮아져도 총이자가 늘 수 있습니다. 만기일시는 마지막에 상환할 원금도 준비해야 합니다.' },
+          { title: '정책대출은 별도 자격 확인', desc: '주택가격·소득·보유주택·자금 용도 등 상품 조건을 주택도시기금 또는 한국주택금융공사에서 확인하세요.' },
         ]} />
-        <OfficialSourcesSection sources={[
-          '금융위원회 스트레스 DSR 3단계 시행 자료 및 DSR 산정 기준',
-          '금융감독원 금융상품 비교공시와 금융권 표준 상환 방식',
-          '주택도시기금·한국주택금융공사 정책대출 안내',
-        ]} />
+        <OfficialSourcesSection sources={officialSources[CALC_PATH]} />
         <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>

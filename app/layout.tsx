@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: '%s | 머니핏 계산기',
   },
   description:
-    '2026년 최신 세율·4대보험 요율·법령 기준으로 정확하게 계산합니다. 연봉 실수령액, 주택담보대출 이자(DSR), 퇴직금, 적금·예금 복리 이자(ISA 비교), 전월세 전환율, 로또 번호 생성까지. 가입 없이 무료로 바로 사용하는 한국 재테크 계산기.',
+    '연봉·퇴직금·대출·저축·전월세의 예상 금액을 계산하고 적용 기준을 확인하세요. 연봉 실수령액, 주택담보대출 이자(DSR), 퇴직금, 적금·예금 복리 이자(ISA 비교), 전월세 전환율, 로또 번호 생성까지. 가입 없이 무료로 바로 사용하는 한국 재테크 계산기.',
   keywords: [
     '머니핏', '머니핏 계산기', '재테크 계산기', '무료 계산기',
     '연봉 실수령액 계산기', '연봉 세후 계산', '2026 연봉 계산기', '세후 월급 계산', '실수령액',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     title: '머니핏 계산기 — 2026년 한국 재테크 필수 계산기 6종',
-    description: '연봉 실수령액·대출 이자·퇴직금·적금·전월세·로또 — 2026년 최신 세율 기준, 가입 없이 무료. 결과부터 바로 보여주는 계산기.',
+    description: '연봉 실수령액·대출 이자·퇴직금·적금·전월세·로또 — 가입 없이 무료로 예상 금액과 계산 기준을 확인하세요.',
     images: [{
       url: DEFAULT_OG_IMAGE,
       width: 1200,
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '머니핏 계산기 — 2026년 재테크 필수 계산기 6종',
-    description: '연봉·대출·퇴직금·적금·전월세·로또 — 2026년 최신 세율, 무료. 바로 결과 확인.',
+    description: '연봉·대출·퇴직금·적금·전월세·로또 — 무료로 예상 금액과 적용 기준 확인.',
     images: [{
       url: DEFAULT_OG_IMAGE,
       alt: '머니핏 계산기 소셜 미리보기 이미지',
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
     'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2765055385218528',
     ...buildNaverMeta(
       formatPageTitle('2026년 연봉 실수령액·대출·퇴직금·적금·전월세·로또 계산기'),
-      '2026년 최신 세율·4대보험 요율·법령 기준으로 정확하게 계산합니다. 연봉 실수령액, 주택담보대출 이자(DSR), 퇴직금, 적금·예금 복리 이자(ISA 비교), 전월세 전환율, 로또 번호 생성까지.',
+      '연봉·퇴직금·대출·저축·전월세의 예상 금액을 계산하고 적용 기준을 확인하세요. 연봉 실수령액, 주택담보대출 이자(DSR), 퇴직금, 적금·예금 복리 이자(ISA 비교), 전월세 전환율, 로또 번호 생성까지.',
       {
         subject: '한국 재테크 계산기 — 연봉·대출·퇴직금·적금·전월세·로또',
         keywords: [
@@ -126,7 +126,7 @@ function StructuredData() {
       name: '연봉 실수령액 계산기', path: '/salary',
       desc: '2026년 4대보험(국민연금·건강보험·고용보험·장기요양)과 근로소득세를 공제한 실수령액 계산',
       category: 'FinanceApplication', keywords: '연봉 계산기, 세후 월급, 4대보험',
-      features: ['2026년 4대보험 요율 자동 적용', '비과세 식대 반영', '자녀세액공제', '간이세액표 80/100/120% 선택', '결과 즉시 표시'],
+      features: ['2026년 4대보험 요율 자동 적용', '비과세 식대 반영', '자녀세액공제', '간이세액표 100% 원천징수 기준', '결과 즉시 표시'],
     },
     {
       name: '주택담보대출 이자 계산기', path: '/mortgage',
@@ -138,25 +138,25 @@ function StructuredData() {
       name: '퇴직금 계산기', path: '/severance',
       desc: '근로기준법 제34조 기준 평균임금 산출 및 퇴직금 자동 계산',
       category: 'FinanceApplication', keywords: '퇴직금 계산, 평균임금',
-      features: ['직전 3개월 평균임금 자동 산출', '통상임금 비교 적용', '연차수당·상여금 반영', '입사·퇴직일 기반 일할 계산'],
+      features: ['직전 3개월 평균임금 자동 산출', '통상임금 비교 적용', '연 상여금 입력 반영', '입사·퇴직일 기반 일할 계산'],
     },
     {
       name: '적금·예금 이자 계산기', path: '/savings',
       desc: '단리·복리 이자소득세 15.4% 차감 후 세후 만기 수령액 계산, ISA 비과세 비교',
       category: 'FinanceApplication', keywords: '적금 이자, 복리 계산기, ISA',
-      features: ['단리·월복리·연복리 선택', '이자소득세 15.4% 차감', 'ISA 일반형 500만원·서민형 1,000만원 비교', '세후 만기 수령액'],
+      features: ['단리·월복리 선택', '이자소득세 15.4% 차감', 'ISA 일반형 비과세 200만원 세금 가정 비교', '세후 만기 수령액'],
     },
     {
       name: '전월세 전환 계산기', path: '/jeonse',
-      desc: '주택임대차보호법 법정 전환율(기준금리+2%) 기반 전세↔월세 양방향 환산',
+      desc: '입력한 전환율로 보증금과 월세 환산 및 법정 상한 안내',
       category: 'FinanceApplication', keywords: '전월세 전환, 전환율 계산',
-      features: ['법정 전환율 자동 적용', '전세→월세 양방향 환산', '손익분기 전환율', '깡통전세 리스크 점검'],
+      features: ['전환율 입력 및 법정 상한 안내', '전세↔월세 환산', '보증금 차이에 따른 비용 비교', '전세가율 참고 구간'],
     },
     {
       name: '로또 번호 생성기', path: '/lotto',
       desc: '동행복권 최신 회차 당첨번호 조회, 6/45 번호 생성, 1~5등 당첨 등위·수령·세금 안내',
       category: 'GameApplication', keywords: '로또 번호, 로또 당첨번호, 로또 등위, 당첨금 수령',
-      features: ['최신 회차 당첨번호', '통계 기반 스마트 추천', '1~5등 당첨 조건 안내', '당첨금 세금 시뮬레이션'],
+      features: ['최신 회차 당첨번호', '무작위·균형 필터 번호 생성', '1~5등 당첨 조건 안내', '당첨금 세율 안내'],
     },
   ]
   const ld = {
@@ -168,10 +168,9 @@ function StructuredData() {
         url: SITE_URL,
         name: '머니핏 계산기',
         alternateName: ['머니핏', 'Moneyfit', 'Moneyfit Calculator'],
-        description: '2026년 최신 세율·법령 기준 한국 재테크 계산기. 연봉 실수령액, 대출 이자, 퇴직금, 적금, 전월세, 로또까지 무료.',
+        description: '계산 기준을 함께 안내하는 한국 재테크 계산기. 연봉 실수령액, 대출 이자, 퇴직금, 적금, 전월세, 로또까지 무료.',
         inLanguage: 'ko-KR',
         publisher: { '@id': `${SITE_URL}/#organization` },
-        datePublished: '2025-12-01',
         dateModified: SEO_UPDATED_AT,
       },
       {
@@ -180,8 +179,8 @@ function StructuredData() {
         name: '머니핏 계산기',
         alternateName: ['머니핏', 'Moneyfit'],
         url: SITE_URL,
-        description: '2026년 최신 세율·4대보험 요율·법령 기준으로 정확하게 계산하는 한국 재테크 계산기 서비스. 가입 없이 무료로 즉시 사용.',
-        slogan: '결과부터 바로 — 2026 최신 세율 기준 한국 재테크 계산기',
+        description: '연봉·퇴직금·대출·저축·전월세의 예상 금액과 적용 기준을 안내하는 계산기 서비스. 가입 없이 무료로 즉시 사용.',
+        slogan: '금융 계산과 적용 기준을 한곳에서',
         email: 'bhd03014@gmail.com',
         logo: {
           '@type': 'ImageObject',
@@ -201,7 +200,6 @@ function StructuredData() {
           areaServed: 'KR',
         },
         areaServed: { '@type': 'Country', name: '대한민국' },
-        foundingDate: '2025',
         knowsAbout: [
           '한국 소득세법', '4대보험 요율', '근로기준법', '주택임대차보호법',
           'DSR 스트레스 테스트', 'ISA 비과세 한도', '주택담보대출',
@@ -243,7 +241,6 @@ function StructuredData() {
           audienceType: '대한민국 직장인·자영업자·재테크 입문자',
           geographicArea: { '@type': 'Country', name: '대한민국' },
         },
-        datePublished: '2025-12-01',
         dateModified: SEO_UPDATED_AT,
       })),
       {

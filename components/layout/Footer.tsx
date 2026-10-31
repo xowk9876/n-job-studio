@@ -4,7 +4,7 @@ const guideLinks = [
   { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스', shortLabel: 'DSR' },
   { href: '/guide/severance-calculation-guide', label: '퇴직금 가이드', shortLabel: '퇴직금' },
   { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세', shortLabel: 'ISA' },
-  { href: '/guide/jeonse-safety-2026', label: '전세사기 방지', shortLabel: '전세사기' },
+  { href: '/guide/jeonse-safety-2026', label: '전세 보증금 확인', shortLabel: '전세 확인' },
   { href: '/guide/lotto-tax-guide', label: '로또 세금·수령', shortLabel: '로또·세금' },
 ] as const
 
@@ -86,7 +86,7 @@ export default function Footer() {
             <span className="site-footer__brand-title">머니핏 계산기</span>
           </div>
           <p className="site-footer__desc">
-            2026년 최신 세율·정책 기준으로 정확하게.
+            예상 금액과 적용 기준을 한곳에서.
             <br />
             연봉, 대출, 퇴직금, 적금, 전월세, 로또까지 바로 확인하는 무료 계산기.
           </p>

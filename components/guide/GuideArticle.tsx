@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { SITE_URL, jsonLd } from '@/lib/seo'
+import { SITE_URL, guideItems, jsonLd } from '@/lib/seo'
+import { officialSources } from '@/lib/content-sources'
+import { OfficialSourcesSection } from '@/components/ui/PageContent'
 
 type Props = {
   slug: string
@@ -23,6 +25,7 @@ export default function GuideArticle({
   children,
   related = [],
 }: Props) {
+  const calculatorPath = guideItems.find(guide => guide.slug === slug)?.calculatorPath
   // 엔티티 통합: layout.tsx의 #organization 노드를 재사용해 시그널 분산 방지 (Entity-based ranking)
   const structuredData = {
     '@context': 'https://schema.org',
@@ -42,7 +45,6 @@ export default function GuideArticle({
         keywords: [title, tag, '머니핏 계산기', '2026 재테크', '재테크 가이드'].join(', '),
         inLanguage: 'ko-KR',
         isAccessibleForFree: true,
-        datePublished: updatedAt,
         dateModified: updatedAt,
       },
       {
@@ -85,16 +87,14 @@ export default function GuideArticle({
         <p className="mt-4 text-[14.5px] text-[color:var(--sub)] leading-relaxed">{description}</p>
         <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11.5px] text-[color:var(--muted)]">
           <span>
-            작성·검토{' '}
+            제공{' '}
             <Link
               href="/about"
               className="text-[color:var(--ink-2)] underline underline-offset-2 hover:text-[color:var(--brand)]"
             >
-              머니핏 계산기 편집팀
+              머니핏 계산기
             </Link>
           </span>
-          <span aria-hidden>·</span>
-          <span>공식 법령·고시 기반</span>
           <span aria-hidden>·</span>
           <span>최종 업데이트 {updatedAt}</span>
         </div>
@@ -104,23 +104,11 @@ export default function GuideArticle({
         {children}
       </div>
 
-      <section className="mt-12 pt-6 border-t border-[color:var(--line)]">
-        <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-3">
-          편집 원칙
-        </p>
-        <p className="text-[12.5px] text-[color:var(--muted)] leading-relaxed">
-          이 글은 머니핏 계산기 편집팀이 근로기준법·소득세법·금융위원회 고시 등 공식 1차 자료를 직접 확인해
-          작성했으며, 관련 법령·요율이 바뀌면 갱신합니다. 계산 근거와 데이터 업데이트 원칙은{' '}
-          <Link
-            href="/about"
-            className="text-[color:var(--ink-2)] underline underline-offset-2 hover:text-[color:var(--brand)]"
-          >
-            소개 페이지
-          </Link>
-          에서 확인할 수 있습니다. 본 내용은 일반적인 정보 제공을 목적으로 하며, 개별 세무·법률 판단은
-          세무사·변호사 등 전문가 상담을 권장합니다.
-        </p>
-      </section>
+      {calculatorPath && (
+        <div className="mt-10">
+          <OfficialSourcesSection sources={officialSources[calculatorPath]} />
+        </div>
+      )}
 
       {related.length > 0 && (
         <section className="mt-12 pt-6 border-t border-[color:var(--line)]">

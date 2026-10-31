@@ -6,9 +6,9 @@ const guide = getGuideLinkForCalculator(PATH)
 
 export const metadata = buildCalculatorMetadata({
   path: PATH,
-  title: '전세↔월세 전환 계산기 — 2026년 법정 전환율(기준금리+2%)',
+  title: '전세↔월세 전환 계산기 — 보증금·월세 환산과 법정 상한 안내',
   description:
-    '전세 보증금을 월세로, 월세를 전세 보증금으로 양방향 전환합니다. 주택임대차보호법 법정 상한 전환율(기준금리+2%) 자동 적용. 손익분기 전환율 분석.',
+    '입력한 전환율로 전세 보증금과 월세를 환산합니다. 보증금의 월차임 전환 상한과 비용 비교 가정을 안내하며, 월세의 전세 역산은 협의용 참고치입니다.',
   keywords: [
     '전월세 전환 계산기',
     '전세 월세 전환',
@@ -22,8 +22,8 @@ export const metadata = buildCalculatorMetadata({
     '임대차보호법',
   ],
   ogImagePath: '/jeonse/opengraph-image',
-  ogTitle: '전세↔월세 전환 계산기 — 법정 전환율 자동 적용',
-  ogDescription: '법정 상한(기준금리+2%) 기준 전세↔월세 양방향 전환 + 손익분기 분석.',
+  ogTitle: '전세↔월세 전환 계산기 — 전환율 입력·법정 상한 안내',
+  ogDescription: '전환율에 따른 보증금·월세 환산과 비용 비교. 법정 상한의 적용 범위 안내.',
 })
 
 export default function JeonseLayout({ children }: { children: React.ReactNode }) {
@@ -38,7 +38,7 @@ export default function JeonseLayout({ children }: { children: React.ReactNode }
         webApp={{
           path: PATH,
           name: '전월세 전환 계산기',
-          description: '주택임대차보호법 법정 전환율 기준 전세↔월세 양방향 환산',
+          description: '입력한 전환율에 따른 전세↔월세 환산 및 법정 상한 안내',
           guidePath: guide?.href,
         }}
       />

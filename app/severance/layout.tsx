@@ -8,7 +8,7 @@ export const metadata = buildCalculatorMetadata({
   path: PATH,
   title: '퇴직금 계산기 — 2026년 근로기준법 제34조 기준',
   description:
-    '입사일·퇴직일·월급·상여금을 입력하면 근로기준법 제34조에 따른 퇴직금을 정확히 계산합니다. 1일 평균임금 자동 산출, 근속 연수별 퇴직금 분석.',
+    '입사일·마지막 근무일·월급·상여금으로 세전 퇴직금을 예상합니다. 평균임금과 통상임금을 비교하며, 연차수당·산정 제외 기간·퇴직소득세는 별도 확인이 필요합니다.',
   keywords: [
     '퇴직금 계산기',
     '퇴직금 얼마',
@@ -22,7 +22,7 @@ export const metadata = buildCalculatorMetadata({
   ],
   ogImagePath: '/severance/opengraph-image',
   ogTitle: '퇴직금 계산기 — 근로기준법 기준 자동 산출',
-  ogDescription: '입사일·퇴직일·월급 입력 → 1일 평균임금·퇴직금 자동 계산. 근로기준법 제34조 기준.',
+  ogDescription: '입사일·마지막 근무일·월급으로 평균임금과 통상임금 기준 세전 퇴직금 예상.',
 })
 
 export default function SeveranceLayout({ children }: { children: React.ReactNode }) {

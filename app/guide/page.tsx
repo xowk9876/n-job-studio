@@ -6,7 +6,7 @@ import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/se
 
 const pageTitle = '재테크 실전 가이드'
 const description =
-  '2026년 최신 세율·법령을 반영한 연봉·대출·퇴직금·적금·전세·로또 실전 가이드. 공식 법령 조항을 근거로 작성된 독창적 콘텐츠.'
+  '연봉·대출·퇴직금·ISA·전세·로또의 계산 기준과 적용 조건을 설명하는 가이드 6편. 공식 출처와 확인 기준일을 함께 제공합니다.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   alternates: buildGoogleAlternates(`${SITE_URL}/guide`),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   openGraph: {
-    title: '재테크 실전 가이드 · 2026년 최신 공식 기준',
+    title: '재테크 실전 가이드 · 계산 기준과 적용 조건',
     description: '연봉·대출·퇴직금·ISA·전월세·로또까지 공식 기준으로 정리한 머니핏 가이드 모음.',
     url: `${SITE_URL}/guide`,
     siteName: SITE_NAME,
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '재테크 실전 가이드 · 2026년 최신 공식 기준',
+    title: '재테크 실전 가이드 · 계산 기준과 적용 조건',
     description: '공식 법령·고시 기반 재테크 가이드 모음.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 재테크 실전 가이드' }],
   },
@@ -41,7 +41,7 @@ function GuideIndexStructuredData() {
         '@type': 'CollectionPage',
         '@id': `${SITE_URL}/guide#collection`,
         name: '재테크 실전 가이드',
-        description: '2026년 최신 세율·법령 기준 연봉·대출·퇴직·적금·전세·로또 가이드 모음',
+        description: '연봉·대출·퇴직·ISA·전세·로또의 계산 기준과 적용 조건 안내',
         url: `${SITE_URL}/guide`,
         inLanguage: 'ko-KR',
         isPartOf: { '@id': `${SITE_URL}/#website` },
@@ -89,8 +89,8 @@ export default function GuideIndexPage() {
             재테크 실전 가이드
           </h1>
           <p className="mt-4 text-[14.5px] text-[color:var(--sub)] leading-relaxed max-w-xl">
-            2026년 최신 법령·세율을 근거로 작성된 독창 콘텐츠입니다. 계산기 결과를 실무에 어떻게
-            적용해야 하는지, 자주 놓치는 예외 상황이 무엇인지 짚어드립니다.
+            계산 결과를 읽는 방법과 적용 조건을 주제별로 정리했습니다.
+            각 글의 확인 기준일과 공식 출처를 함께 확인하세요.
           </p>
         </header>
 

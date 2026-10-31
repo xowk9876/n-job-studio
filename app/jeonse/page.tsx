@@ -8,6 +8,7 @@ import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 import { getCalculatorLinks } from '@/lib/seo'
+import { officialSources } from '@/lib/content-sources'
 
 const CALC_PATH = '/jeonse'
 const calcSeo = getCalculatorLinks(CALC_PATH)
@@ -35,7 +36,7 @@ export default function JeonsePage() {
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">JEONSE</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">전월세 전환 계산기</h1>
-        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">법정 전월세 전환율 기준</p>
+        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">보증금·월세 환산 · 적용 범위 확인</p>
       </div>
 
       <div className="result-card">
@@ -43,7 +44,7 @@ export default function JeonsePage() {
           <>
             <p className="result-label">전환 후 월세</p>
             <p className="result-value">{won(r.monthlyRent ?? 0)}</p>
-            <p className="text-[12px] opacity-70 mt-2">연간 주거비 {manwon(r.annualCost)}</p>
+            <p className="text-[12px] opacity-70 mt-2">연간 월세 {manwon(r.annualCost)}</p>
           </>
         ) : (
           <>
@@ -123,12 +124,12 @@ export default function JeonsePage() {
 
         {isToWolse && (
           <div>
-            <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 깡통전세 위험 분석)</span></label>
+            <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 전세가율 참고)</span></label>
             <div className="relative">
               <NumericInput ariaLabel="매매 시세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
             </div>
-            <p className="text-[11.5px] text-white/40 mt-1">국토부 실거래가 또는 KB 시세 입력 → 전세가율(보증금÷시세) 기준 위험도 산출</p>
+            <p className="text-[11.5px] text-white/40 mt-1">입력한 시세 대비 보증금 비율입니다. 선순위 채권·체납·반환보증 가입 여부는 판단하지 않습니다.</p>
           </div>
         )}
       </div>
@@ -165,54 +166,43 @@ export default function JeonsePage() {
 
       {/* 손익 */}
       <div className="glass-card">
-        <h2 className="font-semibold text-white mb-2.5 text-[13.5px] flex items-center gap-1.5"><Info className="w-3.5 h-3.5 text-white/40" />손익 분석</h2>
+        <h2 className="font-semibold text-white mb-2.5 text-[13.5px] flex items-center gap-1.5"><Info className="w-3.5 h-3.5 text-white/40" />비용 비교 가정</h2>
         <div className="rounded-lg px-3 py-2.5 text-[12.5px] text-white/70 mb-2.5 bg-white/[0.05]">{r.suggestion}</div>
         <div className="flex justify-between text-[12.5px]">
-          <span className="text-white/50">손익분기 전환율</span>
+          <span className="text-white/50">비교 가정 금리</span>
           <span className="font-bold text-[color:var(--brand)] tabular">{r.breakEvenRate.toFixed(2)}%</span>
         </div>
       </div>
 
       <div className="glass-card text-[12.5px] text-white/65">
         <h2 className="font-semibold text-white mb-2 text-[13.5px]">전월세 전환율이란?</h2>
-        <p className="mb-2">전월세 전환율은 전세 보증금을 월세로 전환할 때 적용하는 이율입니다. 법정 상한은 <strong className="text-white">기준금리 + 2%</strong>로, 2026년 10월 기준 <strong className="text-white">{DEFAULT_CONVERSION_RATE.toFixed(2)}%</strong>입니다.</p>
+        <p className="mb-2">전월세 전환율은 전세 보증금을 월세로 전환할 때 적용하는 이율입니다. 법정 상한은 <strong className="text-white">min(기준금리 + 2%p, 10%)</strong>로, 2026년 10월 기준 <strong className="text-white">{DEFAULT_CONVERSION_RATE.toFixed(2)}%</strong>입니다.</p>
         <ul className="list-disc list-inside space-y-1 text-white/45 text-[11.5px]">
           <li>월세 = (전세 보증금 − 월세 보증금) × 전환율 ÷ 12</li>
-          <li>집주인이 법정 상한 초과 요구 시 거부 가능</li>
-          <li>시장 전환율은 지역·상황마다 다름</li>
+          <li>법정 상한은 보증금을 월세로 전환하는 경우의 기준</li>
+          <li>월세→전세 역산은 계약 협의를 위한 참고값</li>
           <li>한국은행 기준금리 변동 시 법정 상한도 변동</li>
         </ul>
       </div>
 
       <div className="mt-2 flex flex-col gap-8">
         <ExamplesSection title="전월세 전환 계산 예시" items={[
-          { label: '전세 3억 → 월세 (전환율 5.00%)', input: '보증금 5천만원 유지', result: '월세 약 1,041,667원', note: '(3억−5천만) × 5.00% ÷ 12' },
-          { label: '전세 2억 → 월세 (전환율 5.00%)', input: '보증금 2천만원 유지', result: '월세 750,000원', note: '(2억−2천만) × 5.00% ÷ 12' },
-          { label: '월세 70만 → 전세 환산 (전환율 5.00%)', input: '보증금 1천만원 기준', result: '필요 전세 1억 7,800만원', note: '월세×12÷전환율+보증금' },
+          { label: '전세 3억원 → 월세 · 연 5% 가정', input: '월세 보증금 5,000만원 유지', result: '월세 약 1,041,667원', note: '(3억원 − 5,000만원) × 5% ÷ 12' },
+          { label: '월세 70만원 → 전세 · 연 5% 가정', input: '기존 월세 보증금 1,000만원', result: '전세 환산액 1억 7,800만원', note: '월세 × 12 ÷ 5% + 보증금 · 협의용 참고값' },
         ]} />
         <FAQSection pagePath={CALC_PATH} items={[
-          { q: '전월세 전환율이란 정확히 무엇인가요?', a: '전세보증금의 일부 또는 전부를 월세로 전환할 때 적용되는 연간 이율입니다. 주택임대차보호법 제7조의2에 따라 법정 상한은 min(한국은행 기준금리 + 2%p, 10%) 중 낮은 값입니다. 2026년 8월 27일 한은 기준금리 3.00% 인상(10월 22일 동결) 기준 상한 5.00%. 집주인이 이를 초과해 월세를 요구하면 초과분은 무효이며 반환 청구가 가능합니다.' },
-          { q: '전세 vs 월세 무엇이 유리한가요?', a: '본인의 기회비용(보증금 조달 비용 또는 운용수익률)과 실제 전환율을 비교하세요. 전세자금대출 금리가 월세 전환율보다 낮으면 전세가 유리합니다. 목돈을 예적금·투자로 운용할 수 있다면 그 수익률과 비교하세요. 전세대출 금리는 한국주택금융공사(hf.go.kr) 또는 시중은행 공시에서 확인할 수 있습니다. 장기 거주 계획이면 전세, 2년 이내 이사 가능성 있으면 월세가 유연합니다.' },
-          { q: '역전세·깡통전세를 피하는 법?', a: '깡통전세는 전세가가 매매가에 근접하거나 초과한 상태. 지표로 전세가율 = 전세보증금 / 매매가가 80% 이상이면 위험. HUG 전세보증금반환보증보험은 공시가격의 126% 이내만 가입 가능(2023.5 강화). 실거래가 확인은 국토부 실거래가공개시스템(rt.molit.go.kr), 전세가율은 KB부동산·아실에서 확인.' },
-          { q: '전세 보증금 지키는 5단계?', a: '① 계약 전 등기부등본 열람(인터넷등기소 700원)으로 근저당·가압류 확인 ② 집주인 국세·지방세 완납증명서 요구(2023.4 의무화) ③ 이사 당일 주민센터에서 전입신고 + 확정일자 동시 처리(대항력 + 우선변제권) ④ HUG·SGI 전세보증금반환보증 가입(HUG 보증료 연 0.097~0.211%, 위험도 차등) ⑤ 등기부등본 재열람으로 계약 직후 추가 근저당 없는지 확인.' },
-          { q: '계약갱신청구권·전월세상한제는?', a: '주택임대차보호법(2020.7.31 시행)에 따라 임차인은 계약 만료 6개월~2개월 전 1회 계약갱신청구권 행사 가능(총 4년 거주 보장). 갱신 시 임대료 인상률은 5% 이내(전월세상한제). 집주인 본인·직계존비속 실거주 목적이면 갱신 거절 가능하나, 2년 내 타인에게 임대 시 임차인에게 손해배상 책임.' },
-          { q: '전월세 전환 시 계약서는 어떻게?', a: '기존 전세 계약 종료 후 새 월세 계약을 체결하거나 변경계약서(합의각서)로 기존 계약을 일부 변경합니다. 어느 방법이든 새로운 확정일자를 받아야 새 월세 금액까지 대항력이 확보됩니다. 보증금이 줄어드는 경우 집주인은 줄어든 금액만큼 반환해야 하며, 이때 근저당 등 선순위 권리가 추가되지 않는지 등기부등본을 반드시 재확인하세요.' },
-          { q: '집주인이 법정 상한 초과 요구 시?', a: '법정 상한 초과 전환율은 주택임대차보호법 제7조의2에 의해 무효이며, 초과 납부액은 반환 청구 가능. 합의로 해결이 안 되면 각 시도 주택임대차분쟁조정위원회(한국부동산원·주택도시보증공사 등) 무료 조정 신청 → 불복 시 민사소송. 대한법률구조공단(132) 무료 법률상담 활용 가능.' },
+          { q: '법정 전환율은 양방향 모두 적용되나요?', a: '법정 상한은 보증금을 월차임으로 전환하는 경우의 기준으로, 기준금리 + 2%p와 연 10% 중 낮은 값입니다. 월세를 전세로 역산한 금액을 법정 보증금으로 볼 수는 없습니다. 신규 계약·갱신·조건 변경 여부에 따라 적용 범위를 확인하세요.' },
+          { q: '표시된 상한은 언제 기준인가요?', a: '2026년 10월 22일 한국은행 기준금리 3.00% 기준 법정 상한은 연 5.00%입니다. 이후 기준금리가 바뀌면 상한도 달라집니다. 사용자가 입력한 전환율과 법정 상한은 구분해 비교하세요.' },
+          { q: '전세가율이 낮으면 보증금이 안전한가요?', a: '아닙니다. 이 화면은 보증금÷입력 시세만 계산하며 선순위 채권, 다른 임차보증금, 체납과 경매 낙찰가를 반영하지 않습니다. HUG 보증한도는 인정 주택가격의 90%에서 선순위채권 등을 차감하고 다른 가입 조건도 확인합니다.' },
+          { q: '전입신고와 확정일자를 받으면 바로 보호되나요?', a: '대항력은 주택 인도와 주민등록을 모두 갖춘 다음 날 발생합니다. 우선변제권에는 이 요건과 확정일자가 필요합니다. 보증금 회수는 선순위 권리와 배당 재원 등에도 영향을 받습니다.' },
+          { q: '계약 변경이나 분쟁이 생기면 어떻게 하나요?', a: '기존 계약서·확정일자·지급 증빙을 보관하고, 변경된 보증금과 권리 순위를 확인하세요. 해결이 어렵다면 주택임대차분쟁조정위원회 또는 법률상담을 이용할 수 있습니다. 수수료·면제 여부와 절차는 접수 기관에서 확인하세요.' },
         ]} />
-        <TipsSection title="전세 · 월세 안전 체크리스트" items={[
-          { title: '전세보증금반환보증 필수', desc: 'HUG(주택도시보증공사) 보증료는 연 0.097~0.211% 범위에서 위험도에 따라 달라집니다. 비대면 신청 시 3% 기본 할인, 사회배려계층은 최대 60% 할인 가능. 전세가율 80% 이하·공시가격 126% 이내 등 가입조건을 계약 전 확인하세요.' },
-          { title: '이사 당일 확정일자 + 전입신고', desc: '주민센터 또는 정부24(gov.kr)에서 전입신고 즉시 처리, 임대차계약서 원본 지참해 확정일자 도장 받기(수수료 600원). 두 가지 완료 시 대항력 + 우선변제권 발생. 경매 시에도 보증금 회수 가능.' },
-          { title: '등기부등본 3회 확인', desc: '① 계약 전(근저당·가압류 확인) ② 계약 직전(추가 설정 여부) ③ 잔금일 당일(최종 확인). 인터넷등기소 700원. 근저당이 집값의 60% 이상이면 위험. 선순위 채권 + 내 보증금 < 집값 80% 수준이어야 안전.' },
-          { title: '집주인 국세 체납 확인', desc: '2023.4.1부터 임차인이 임대차계약 후 국세청에 집주인 체납 국세 열람 신청 가능(홈택스·세무서). 1천만원 초과 보증금이면 필수 확인. 집주인이 체납 시 압류·경매로 보증금 회수 우선순위 후순위가 될 수 있습니다.' },
-          { title: '전세자금대출 활용', desc: '청년·신혼·서민 대상 정책자금(중소기업청년전세대출, 버팀목전세자금, 청년주택드림 등)은 시중금리 대비 유리합니다. 자격·한도·금리는 정부 정책에 따라 변경되므로 주택도시기금 nhuf.molit.go.kr 또는 한국주택금융공사 hf.go.kr에서 최신 정보를 확인하세요. 시중은행 HF 보증 전세대출도 상품별 차이가 큽니다.' },
-          { title: '월세 세액공제 신청', desc: '총급여 8,000만원 이하 무주택 세대주는 월세 연 1,000만원 한도의 15~17% 세액공제(총급여 5,500만원 이하 17%, 초과 15%). 연말정산 시 임대차계약서 사본·월세 납입증빙(계좌이체내역) 제출. 근거: 조세특례제한법 제95조의2.' },
-          { title: '분쟁 시 무료 조정 활용', desc: '주택임대차분쟁조정위원회(각 시도·LH·HUG 운영)는 무료로 60일 내 조정안 제시. 보증금반환·월세 증감·계약갱신 등 모든 분쟁 대상. 불복 시 민사소송 진행. 대한법률구조공단 132(무료 상담).' },
+        <TipsSection title="계약 전 확인사항" items={[
+          { title: '시세·등기·체납 함께 확인', desc: '보증금 비율 하나로 판단하지 말고 등기상 소유자·근저당·신탁, 다른 임차보증금과 임대인의 납세 관련 자료를 확인하세요.' },
+          { title: '반환보증을 계약 전에 확인', desc: '보증금과 주택 조건, 선순위 권리, 신청기한을 확인하세요. 보증료와 인정 주택가격은 신청 조건별로 달라집니다.' },
+          { title: '입주 후 권리와 증빙 유지', desc: '주택 인도·전입신고·확정일자를 갖추고 계약서와 송금 기록을 보관하세요. 보증금을 받기 전 이사할 때는 임차권등기 완료 등 권리 보전 절차를 확인하세요.' },
         ]} />
-        <OfficialSourcesSection sources={[
-          '주택임대차보호법 제7조의2 및 시행령 제9조 전월세 전환율 상한',
-          '한국은행 기준금리와 국토교통부 실거래가 공개시스템',
-          '주택도시보증공사(HUG) 전세보증금반환보증 가입 요건·보증료율',
-        ]} />
+        <OfficialSourcesSection sources={officialSources[CALC_PATH]} />
         <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>
