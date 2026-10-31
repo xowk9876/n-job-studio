@@ -1395,7 +1395,7 @@ input[type="range"]::-moz-range-thumb {
   margin: 0 0 0.9rem;
   font-size: 13px;
   line-height: 1.55;
-  color: #3ee0a5;
+  color: var(--brand);
   word-break: keep-all;
 }
 .home-app-grid {
@@ -1403,7 +1403,7 @@ input[type="range"]::-moz-range-thumb {
   gap: 0.75rem;
 }
 @media (min-width: 768px) {
-  .home-app-grid { grid-template-columns: 1fr 1fr; }
+  .home-app-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 .home-app__steps {
   margin: 0.65rem 0 0;
@@ -1785,3 +1785,16 @@ input[type="range"]::-moz-range-thumb {
   color: rgba(148, 163, 184, 0.55);
 }
 
+
+.home-app__card { display: flex; flex-direction: column; align-items: flex-start; }
+.home-app__action {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; width: 100%; margin-top: auto; padding: 10px 14px;
+  border: 1px solid var(--line-strong); border-radius: 12px;
+  color: var(--brand); background: var(--surface); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: border-color 160ms, background 160ms;
+}
+.home-app__action:hover { border-color: var(--brand); background: var(--surface-2); }
+.home-app__action:focus-visible, .home-app__hero-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
+.home-app__action:disabled { cursor: default; opacity: 0.6; }
+.home-app__hero-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; color: var(--brand); font-size: 13px; font-weight: 600; }

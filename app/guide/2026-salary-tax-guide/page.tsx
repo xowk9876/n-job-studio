@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { calcSalary } from '@/lib/salary'
 import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
@@ -9,6 +10,9 @@ const description =
 const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '세금' })
+
+const example = calcSalary({ annualSalary: 50_000_000, dependents: 1, children: 0, overtimeHours: 0, nightHours: 0, holidayHours: 0, mealAllowance: 200_000, transportAllowance: 0 })
+const won = (value: number) => value.toLocaleString('ko-KR') + '원'
 
 export default function Page() {
   return (
@@ -29,8 +33,7 @@ export default function Page() {
         <h2>왜 같은 연봉인데 실수령액이 다른가</h2>
         <p>
           5,000만 원짜리 연봉 계약을 해도 통장에 꽂히는 금액은 사람마다 다릅니다. 부양가족 수,
-          비과세 식대(월 20만 원 한도), 건강보험 피부양자 유무에 따라 월 실수령액이 최대 15만 원까지
-          벌어집니다. 이 글은 2026년 기준으로 공제 항목 하나하나의 계산 근거를 짚고, 직접 엑셀에 옮겨
+          비과세 식대(월 20만 원 한도), 원천징수 선택비율에 따라 달라집니다. 직장 건강보험료는 피부양자 수에 따라 늘어나지 않습니다. 이 글은 2026년 기준으로 공제 항목 하나하나의 계산 근거를 짚고, 직접 엑셀에 옮겨
           쓸 수 있는 공식을 제공합니다.
         </p>
       </section>
@@ -54,7 +57,7 @@ export default function Page() {
           <tbody>
             <tr><td>국민연금</td><td>9.5%</td><td>4.75%</td><td>국민연금법 제88조 (2026.1 시행). 기준소득월액 상한 659만원(2026.7~2027.6) → 월 공제 상한 313,025원</td></tr>
             <tr><td>건강보험</td><td>7.19%</td><td>3.595%</td><td>2026년 보건복지부 고시</td></tr>
-            <tr><td>장기요양</td><td>건보료의 13.14%</td><td>건보료의 13.14% × 50%</td><td>노인장기요양보험법 (2026 고시)</td></tr>
+            <tr><td>장기요양</td><td>건보료의 13.14%</td><td>본인 건강보험료의 약 13.14%</td><td>노인장기요양보험법 (2026 고시)</td></tr>
             <tr><td>고용보험</td><td>1.8%(실업급여)</td><td>0.9%</td><td>고용보험법 시행령</td></tr>
           </tbody>
         </table>
@@ -80,9 +83,9 @@ export default function Page() {
           </p>
         </blockquote>
         <p>
-          자녀세액공제는 첫째 25만 원, 둘째 30만 원, 셋째부터 1인당 40만 원입니다. 2026년 4월 21일 소득세법
-          제59조의2 개정으로 대상 연령이 단계적으로 올라가며, 2026년 귀속분은 9세 이상(2017년생 제외) 기본공제
-          대상 자녀입니다.
+          월 간이세액표는 8~20세 자녀 1명 20,830원, 2명 45,830원, 3명부터 추가 1명당 33,330원을
+          표 세액에서 차감합니다(시행령 별표 2, 2026.2.27 개정). 연말정산 자녀공제는 해당 귀속연도의
+          연령·소득 요건에 따라 별도로 정산합니다.
         </p>
       </section>
 
@@ -90,21 +93,21 @@ export default function Page() {
         <h2>연봉 5,000만 원 실전 계산 (2026년 요율 기준)</h2>
         <p>
           독신·부양가족 1명(본인) 기준, 비과세 식대 240만 원/년 반영 시입니다. 금액은 머니핏 계산기 산출값이며,
-          회사의 실제 원천징수는 국세청 간이세액표를 따르므로 소득세는 달라질 수 있습니다.
+          월 간이세액표 100% 선택 기준입니다. 실제 보험료는 신고 보수·가입 조건과 정산에 따라 달라질 수 있습니다.
         </p>
         <ul>
           <li>과세 급여 총액: 50,000,000 − 2,400,000 = 47,600,000원</li>
           <li>월 과세 급여: 3,966,667원</li>
-          <li>국민연금: 3,966,667 × 4.75% = 188,417원</li>
-          <li>건강보험: 3,966,667 × 3.595% = 142,602원</li>
-          <li>장기요양: 142,602 × 13.14% = 18,738원</li>
-          <li>고용보험: 3,966,667 × 0.9% = 35,700원</li>
-          <li>근로소득세(계산기 산출): 206,806원</li>
-          <li>지방소득세: 20,681원</li>
+          <li>국민연금(기준소득월액 천 원 미만 절사): {won(example.pension)}</li>
+          <li>건강보험: {won(example.health)}</li>
+          <li>장기요양: {won(example.care)}</li>
+          <li>고용보험: {won(example.employment)}</li>
+          <li>근로소득세(공식 간이세액표): {won(example.incomeTax)}</li>
+          <li>지방소득세: {won(example.localTax)}</li>
         </ul>
         <p>
-          총 공제액 612,944원. 세전 월급 4,166,667원(식대 20만 원 포함)에서 공제를 뺀 월 실수령액은{' '}
-          <strong>3,553,723원</strong>입니다. 부양가족 수·세액공제 선택비율(80/100/120%)·
+          총 공제액 {won(example.totalDeduction)}. 세전 월급 4,166,667원(식대 20만 원 포함)에서 공제를 뺀 월 실수령액은{' '}
+          <strong>{won(example.monthlyNet)}</strong>입니다. 부양가족 수·세액공제 선택비율(80/100/120%)·
           식대 이외 비과세 항목에 따라 달라지니, 정확한 금액은 머니핏{' '}
           <a href="/salary">연봉 실수령액 계산기</a>에서 본인 값을 넣고 확인하세요.
         </p>
@@ -115,7 +118,7 @@ export default function Page() {
         <ol>
           <li>
             <strong>비과세 항목 최대 활용</strong> 식대(월 20만 원), 자가운전보조금(월 20만 원, 본인
-            차량 업무 사용 시), 출산·보육수당(월 20만 원 한도) 등을 급여 구조에 반영.
+            차량 업무 사용 등 법정 요건 충족 시) 적용 여부를 급여 담당자에게 확인.
           </li>
           <li>
             <strong>연금저축·IRP</strong> 합산 연 900만 원까지 세액공제 15%(총급여 5,500만 원 이하)
@@ -137,7 +140,7 @@ export default function Page() {
         <h2>자주 묻는 질문</h2>
         <h3>상여금은 어떻게 계산되나요?</h3>
         <p>
-          상여금은 지급 월에 일시금으로 간이세액표에 따라 원천징수됩니다. 연 단위 합산 소득으로
+          상여금 원천징수는 지급대상기간 등을 반영한 별도 계산 규칙을 적용합니다. 이 계산기는 정기 월 급여를 기준으로 합니다. 연 단위 합산 소득으로
           연말정산 때 정산되므로 월별 체감 공제율과 연간 실효세율은 다릅니다.
         </p>
         <h3>건강보험 피부양자 요건은?</h3>

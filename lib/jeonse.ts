@@ -5,6 +5,8 @@
 // ────────────────────────────────────────────────────────────────────────────
 
 // 한국은행 기준금리 3.00% (2026.8.27 금통위 0.25%p 인상, 10.22 동결)
+import { inRange, MAX_RATE } from './input-validation'
+
 export const DEFAULT_BASE_RATE = 3.0
 // 주택임대차보호법 §7의2 법정 가산
 export const LEGAL_PREMIUM = 2.0
@@ -40,6 +42,7 @@ export interface JeonseRisk {
 }
 
 export interface JeonseResult {
+  error?: string
   // 전세→월세
   monthlyRent?: number        // 전환 후 월세 (원)
   // 월세→전세
@@ -74,8 +77,8 @@ function buildRisk(deposit: number, marketPrice?: number): JeonseRisk | undefine
   return {
     ratio,
     level: 'safe',
-    label: '안전 구간',
-    message: '전세가율이 80% 미만으로 비교적 안전한 구간입니다. 그래도 등기부등본·임대인 세금 체납·HUG 보증 가입은 점검하세요.',
+    label: '전세가율 80% 미만',
+    message: '전세가율만으로 보증금 회수를 보장할 수 없습니다. 선순위 채권·임대인 세금 체납·주택가격 산정과 반환보증 가입 가능 여부를 함께 확인하세요.',
   }
 }
 
@@ -84,8 +87,10 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
   const rate = conversionRate / 100
 
   // 0 또는 음수 전환율 가드 (Division by Zero 방지)
-  if (rate <= 0) {
+  if (!inRange(conversionRate, 0.001, MAX_RATE) || !['jeonse-to-wolse', 'wolse-to-jeonse'].includes(direction) ||
+      ![input.jeonsDeposit ?? 0, input.wolseDeposit ?? 0, input.currentWolse ?? 0, input.currentWolseDeposit ?? 0, marketPrice ?? 0].every(v => inRange(v))) {
     return {
+      error: '금액은 0~1조원, 전환율은 0.001~100% 범위로 입력해주세요.',
       monthlyRent: direction === 'jeonse-to-wolse' ? 0 : undefined,
       jeonseDeposit: direction === 'wolse-to-jeonse' ? 0 : undefined,
       annualCost: 0,
@@ -125,6 +130,9 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
   // 전세 보증금 = 월세 보증금 + (월세 × 12 / 전환율)
   const additionalDeposit = Math.round((currentWolse * 12) / rate)
   const jeonseDeposit = currentWolseDeposit + additionalDeposit
+  if (!Number.isSafeInteger(jeonseDeposit)) {
+    return { error: '계산 결과가 지원 범위를 넘습니다. 금액·전환율을 확인해주세요.', jeonseDeposit: 0, annualCost: 0, breakEvenRate: OPPORTUNITY_RATE, suggestion: '입력을 확인해주세요.' }
+  }
   const annualCost = currentWolse * 12
 
   const opportunityCostAnnual = additionalDeposit * (OPPORTUNITY_RATE / 100)

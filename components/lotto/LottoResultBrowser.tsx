@@ -45,6 +45,7 @@ type Status = 'loading' | 'ready' | 'error'
 
 export default function LottoResultBrowser() {
   const [latestRound, setLatestRound] = useState<number | null>(null)
+  const [latestVerified, setLatestVerified] = useState(false)
   const [result, setResult] = useState<LottoRoundResult | null>(null)
   const [status, setStatus] = useState<Status>('loading')
   const [error, setError] = useState<string | null>(null)
@@ -77,6 +78,10 @@ export default function LottoResultBrowser() {
           return
         }
 
+        if (url === '/api/lotto/latest') {
+          setLatestRound(payload.round)
+          setLatestVerified(payload.origin === 'live')
+        }
         applyResult(payload)
       } catch {
         if (requestId !== requestIdRef.current) return
@@ -109,6 +114,7 @@ export default function LottoResultBrowser() {
 
         // 회차 상한은 조회 순서와 무관한 메타데이터이므로 항상 반영한다
         setLatestRound(payload.round)
+        setLatestVerified(payload.origin === 'live')
         if (requestId !== requestIdRef.current) return
         applyResult(payload)
       } catch {
@@ -126,7 +132,7 @@ export default function LottoResultBrowser() {
 
   const currentRound = result?.round ?? null
   const canGoPrev = currentRound !== null && currentRound > 1
-  const canGoNext = currentRound !== null && latestRound !== null && currentRound < latestRound
+  const canGoNext = currentRound !== null && (!latestVerified || (latestRound !== null && currentRound < latestRound))
   const isLatest = currentRound !== null && currentRound === latestRound
 
   const handleRoundSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -138,7 +144,7 @@ export default function LottoResultBrowser() {
       setError('1 이상의 회차 번호를 입력해 주세요.')
       return
     }
-    if (latestRound !== null && parsed > latestRound) {
+    if (latestVerified && latestRound !== null && parsed > latestRound) {
       setError(`아직 추첨되지 않은 회차입니다. 조회 가능한 최신 회차는 ${latestRound}회입니다.`)
       return
     }
@@ -163,7 +169,7 @@ export default function LottoResultBrowser() {
         </div>
         <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
           <Trophy className="h-3.5 w-3.5 text-[color:var(--warn)]" aria-hidden />
-          {isLatest ? '최신 회차' : '지난 회차'}
+          {isLatest ? (latestVerified ? '최신 확인 회차' : '저장된 최근 회차') : '조회 회차'}
         </span>
       </div>
 
@@ -307,11 +313,11 @@ export default function LottoResultBrowser() {
         <div className="mt-3 flex flex-col items-center gap-3">
           <button
             type="button"
-            onClick={() => latestRound && loadRound(latestRound)}
-            disabled={latestRound === null || isLatest || status === 'loading'}
+            onClick={() => void load('/api/lotto/latest')}
+            disabled={status === 'loading'}
             className="h-10 rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            최신 회차로 이동
+            최신 회차 다시 확인
           </button>
           <p className="text-center text-[10.5px] leading-relaxed text-[color:var(--muted)]">
             로또 6/45는 제1회({FIRST_DRAW_DATE})부터 매주 토요일 추첨됩니다. 조회하려는 회차 번호를 입력하거나 화살표로

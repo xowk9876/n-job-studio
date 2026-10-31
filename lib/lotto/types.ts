@@ -42,6 +42,8 @@ export type LottoNumberStat = {
 
 /** `/api/lotto/stats` 응답 */
 export type LottoStats = {
+  updateIncomplete?: boolean
+  latestKnownRound?: number
   /** 통계에 반영된 마지막 회차 */
   dataThrough: number
   /** dataThrough 회차의 추첨일 (YYYY-MM-DD) */

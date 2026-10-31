@@ -4,6 +4,8 @@
 //      조세특례제한법 §91의18 (ISA 비과세 일반형 200만원/서민형 400만원 + 초과분 9.9% 분리과세)
 // ────────────────────────────────────────────────────────────────────────────
 
+import { inRange, MAX_RATE } from './input-validation'
+
 const TAX_RATE = 0.154            // 일반 이자소득세 15.4% (소득세14% + 지방세1.4%)
 // ISA 일반형 비과세 한도 (조특법 §91의18 현행)
 // 일반형 200만원 / 서민형·농어민형 400만원 — 여기서는 일반형 기준
@@ -33,6 +35,7 @@ export interface IsaComparison {
 }
 
 export interface SavingsResult {
+  error?: string
   principal: number       // 원금 합계
   grossInterest: number   // 세전 이자
   taxAmount: number       // 이자소득세 (일반계좌 기준)
@@ -44,6 +47,9 @@ export interface SavingsResult {
 
 export function calcSavings(input: SavingsInput): SavingsResult {
   const { type, amount, annualRate, months, interestType } = input
+  if (!inRange(amount) || !inRange(annualRate, 0, MAX_RATE) || !inRange(months, 1, 600) || !Number.isInteger(months) || !['deposit', 'savings'].includes(type) || !['simple', 'compound'].includes(interestType)) {
+    return emptySavings('금액·금리(0~100%)·기간(1~600개월)을 확인해주세요.')
+  }
   const r = annualRate / 100
 
   let principal = 0
@@ -57,7 +63,7 @@ export function calcSavings(input: SavingsInput): SavingsResult {
     } else {
       // 복리 (월 복리)
       const monthlyRate = r / 12
-      grossInterest = amount * (Math.pow(1 + monthlyRate, months) - 1)
+      grossInterest = amount * Math.expm1(months * Math.log1p(monthlyRate))
     }
   } else {
     // 정기적금 (매월 납입)
@@ -80,6 +86,7 @@ export function calcSavings(input: SavingsInput): SavingsResult {
     }
   }
 
+  if (!Number.isSafeInteger(Math.round(principal + grossInterest))) return emptySavings('계산 결과가 지원 범위를 넘습니다. 금액·금리·기간을 줄여주세요.')
   grossInterest = Math.round(grossInterest)
   const taxAmount = Math.round(grossInterest * TAX_RATE)
   const netInterest = grossInterest - taxAmount
@@ -106,4 +113,9 @@ export function calcSavings(input: SavingsInput): SavingsResult {
   }
 
   return { principal, grossInterest, taxAmount, netInterest, maturityAmount, effectiveRate, isa }
+}
+
+function emptySavings(error: string): SavingsResult {
+  return { error, principal: 0, grossInterest: 0, taxAmount: 0, netInterest: 0, maturityAmount: 0, effectiveRate: 0,
+    isa: { normalTax: 0, normalNet: 0, normalMaturity: 0, isaTax: 0, isaNet: 0, isaMaturity: 0, savedAmount: 0 } }
 }

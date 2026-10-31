@@ -4,7 +4,7 @@ import { fetchLatestRound, fetchRoundsAfter } from '@/lib/lotto/dhlottery'
 import { SNAPSHOT_DRAWS, SNAPSHOT_LATEST_ROUND } from '@/lib/lotto/history'
 import { checkRateLimit, getClientKey } from '@/lib/lotto/rate-limit'
 import { buildLottoStats, DEFAULT_RECENT_WINDOW } from '@/lib/lotto/stats'
-import type { LottoRoundResult } from '@/lib/lotto/types'
+import { mergeCompleteHistory } from '@/lib/lotto/merge-history'
 
 /**
  * 역대 당첨번호 출현 통계 — 번호 생성기의 핫/콜드/장기 미출현 가중치 및
@@ -46,15 +46,15 @@ export async function GET(request: Request) {
       ? await fetchRoundsAfter(SNAPSHOT_LATEST_ROUND, liveLatest)
       : []
 
-  const draws: LottoRoundResult[] = [...SNAPSHOT_DRAWS, ...newer.slice().reverse()]
+  const merged = mergeCompleteHistory(SNAPSHOT_DRAWS, newer, liveLatest)
 
-  const stats = buildLottoStats(draws, {
+  const stats = buildLottoStats(merged.draws, {
     recentWindow,
     // 'live' = 동행복권 조회로 최신 회차까지 확인됨 · 'snapshot' = 조회 실패로 스냅샷 기준
-    origin: liveLatest ? 'live' : 'snapshot',
+    origin: merged.origin,
   })
 
-  return NextResponse.json(stats, {
+  return NextResponse.json({ ...stats, updateIncomplete: merged.updateIncomplete, latestKnownRound: merged.latestKnownRound }, {
     headers: {
       'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=86400',
     },

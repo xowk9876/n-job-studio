@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const alt = '머니핏 재테크 실전 가이드'
 export const size = { width: 1200, height: 630 }
 
@@ -48,7 +48,7 @@ export default function Image() {
         >
           📘
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, zIndex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
           <span
             style={{
               fontSize: 54,

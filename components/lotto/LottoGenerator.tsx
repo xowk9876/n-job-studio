@@ -125,6 +125,7 @@ export default function LottoGenerator() {
         </p>
       </div>
 
+      {stats?.origin === 'snapshot' && <p className="mb-3 text-xs text-[color:var(--muted)]" role="status">최신 통계 갱신이 완료되지 않아 {stats.dataThrough}회까지 저장된 데이터로 비교합니다. 번호 생성은 계속 사용할 수 있습니다.</p>}
       {/* 1단계 — 게임 수 */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <span className="text-[12px] font-medium text-ink/70">게임 수</span>

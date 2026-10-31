@@ -46,6 +46,7 @@ export default function MortgagePage() {
 
   return (
     <div className="calc-page">
+      {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">MORTGAGE</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">대출 이자 계산기</h1>
@@ -66,7 +67,7 @@ export default function MortgagePage() {
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">대출금액</label>
           <div className="relative">
-            <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={principal} defaultValue={300_000_000} unitMultiplier={10000} onChange={(n) => set({ principal: n })} />
+            <NumericInput ariaLabel="대출금액 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={principal} defaultValue={300_000_000} unitMultiplier={10000} onChange={(n) => set({ principal: n })} />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
           </div>
           <p className="text-[11.5px] text-white/40 mt-1">= {won(principal)} ({manwon(principal)})</p>
@@ -75,11 +76,11 @@ export default function MortgagePage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
-            <NumericInput className="glass-input w-full rounded-lg font-bold" value={annualRate} defaultValue={3.5} allowDecimal onChange={(n) => set({ annualRate: n })} />
+            <NumericInput ariaLabel="연이율 (%)" max={100}  className="glass-input w-full rounded-lg font-bold" value={annualRate} defaultValue={3.5} allowDecimal onChange={(n) => set({ annualRate: n })} />
           </div>
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">대출기간 (년)</label>
-            <select className="glass-select" value={years} onChange={(e) => set({ years: Number(e.target.value) })}>
+            <select aria-label="대출기간 (년)" className="glass-select" value={years} onChange={(e) => set({ years: Number(e.target.value) })}>
               {[5,10,15,20,25,30,35,40].map(y => <option key={y} value={y}>{y}년</option>)}
             </select>
           </div>
@@ -150,14 +151,14 @@ export default function MortgagePage() {
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">연 소득 (세전)</label>
                 <div className="relative">
-                  <NumericInput className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrIncome} defaultValue={60_000_000} unitMultiplier={10000} onChange={setDsrIncome} />
+                  <NumericInput ariaLabel="연 소득 (만원)"  className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrIncome} defaultValue={60_000_000} unitMultiplier={10000} onChange={setDsrIncome} />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
                 </div>
               </div>
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">기존부채 월 상환</label>
                 <div className="relative">
-                  <NumericInput className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrExistingDebt} defaultValue={0} unitMultiplier={10000} onChange={setDsrExistingDebt} />
+                  <NumericInput ariaLabel="기존 부채 월 상환액 (만원)"  className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrExistingDebt} defaultValue={0} unitMultiplier={10000} onChange={setDsrExistingDebt} />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
                 </div>
               </div>
@@ -173,9 +174,10 @@ export default function MortgagePage() {
               </div>
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%)</label>
-                <NumericInput className="glass-input w-full rounded-lg font-bold" value={dsrStress} defaultValue={STRESS_DSR_RATES.metroMortgage} allowDecimal onChange={setDsrStress} />
+                <NumericInput ariaLabel="스트레스 가산금리 (%p)" max={3}  className="glass-input w-full rounded-lg font-bold" value={dsrStress} defaultValue={STRESS_DSR_RATES.metroMortgage} allowDecimal onChange={setDsrStress} />
               </div>
             </div>
+            {dsr.error && <p role="alert" className="text-sm text-[color:var(--danger)]">{dsr.error}</p>}
             <div className="rounded-lg bg-white/[0.05] px-3 py-2.5 grid grid-cols-2 gap-2 text-[11.5px]">
               <div><div className="text-white/50 text-[10.5px]">적용 금리 (스트레스 후)</div><div className="font-bold text-white tabular mt-0.5">{dsr.stressedRate.toFixed(2)}%</div></div>
               <div><div className="text-white/50 text-[10.5px]">월 상환 한도</div><div className="font-bold text-[color:var(--brand)] tabular mt-0.5">{won(dsr.maxMonthlyPmt)}</div></div>

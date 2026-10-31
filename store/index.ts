@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { mergeStoredInputs, migrateSalaryInputs } from '@/lib/input-validation'
 
 // ─── 연봉 계산기 ───────────────────────────────────────────────────────────
 interface SalaryStore {
@@ -9,6 +10,8 @@ interface SalaryStore {
   overtimeHours: number
   nightHours: number
   holidayHours: number
+  holidayOver8Hours: number
+  holidayReviewRequired: boolean
   mealAllowance: number
   transportAllowance: number
   set: (v: Partial<Omit<SalaryStore, 'set'>>) => void
@@ -22,6 +25,8 @@ export const useSalaryStore = create<SalaryStore>()(
       overtimeHours: 0,
       nightHours: 0,
       holidayHours: 0,
+      holidayOver8Hours: 0,
+      holidayReviewRequired: false,
       mealAllowance: 200_000,
       transportAllowance: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
@@ -29,8 +34,9 @@ export const useSalaryStore = create<SalaryStore>()(
     {
       name: 'mf-salary',
       skipHydration: true,
-      // NumericInput 만원 단위 회귀 복구 — 원 단위로 잘못 저장된 재방문자 입력값을 초기화
-      version: 1,
+      version: 2,
+      migrate: migrateSalaryInputs,
+      merge: mergeStoredInputs,
     }
   )
 )
@@ -55,6 +61,7 @@ export const useMortgageStore = create<MortgageStore>()(
     }),
     {
       name: 'mf-mortgage',
+      merge: mergeStoredInputs,
       skipHydration: true,
       version: 1,
     }
@@ -76,13 +83,14 @@ export const useSeveranceStore = create<SeveranceStore>()(
       avgMonthly3: 3_500_000,
       annualBonus: 0,
       startDate: '2020-01-01',
-      // SSR hydration 안정성: 고정 초기값, 클라이언트 마운트 시 오늘 날짜로 덮어씀
-      endDate: '2026-05-22',
+      // 저장값 복원이 끝난 뒤 빈 값에만 오늘 날짜를 채운다.
+      endDate: '',
       regularHourlyWage: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
     {
       name: 'mf-severance',
+      merge: mergeStoredInputs,
       skipHydration: true,
       version: 1,
     }
@@ -111,6 +119,7 @@ export const useSavingsStore = create<SavingsStore>()(
     }),
     {
       name: 'mf-savings',
+      merge: mergeStoredInputs,
       skipHydration: true,
       version: 1,
     }
@@ -144,6 +153,7 @@ export const useJeonseStore = create<JeonseStore>()(
     }),
     {
       name: 'mf-jeonse',
+      merge: mergeStoredInputs,
       skipHydration: true,
       // 기준금리 인상(2026.8.27, 2.75%→3.00%)으로 법정 전환율 상한이 4.75%→5.00%로 변경됐다.
       // 버전을 올려 이전 값을 저장한 재방문자에게도 갱신된 법정 상한이 적용되도록 한다.

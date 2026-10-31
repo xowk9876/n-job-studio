@@ -291,8 +291,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://tpc.googlesyndication.com" />
-        <link rel="alternate" hrefLang="ko-KR" href={SITE_URL} />
-        <link rel="alternate" hrefLang="x-default" href={SITE_URL} />
         <link rel="alternate" type="application/rss+xml" title="네이버 서치어드바이저 RSS" href={RSS_FEED_URL} />
         <link rel="alternate" type="application/rss+xml" title="Google Discover·RSS 리더" href={RSS_FEED_URL} />
         <link

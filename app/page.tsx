@@ -151,6 +151,7 @@ export default function HomePage() {
                 <span>연봉 실수령액 계산하기</span>
                 <ArrowRight size={18} />
               </Link>
+              <a href="#install-app" className="home-app__hero-link">Android · iPhone 홈 화면에 추가</a>
             </div>
           </div>
 

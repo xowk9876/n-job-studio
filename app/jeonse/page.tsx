@@ -31,6 +31,7 @@ export default function JeonsePage() {
 
   return (
     <div className="calc-page">
+      {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">JEONSE</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">전월세 전환 계산기</h1>
@@ -77,7 +78,7 @@ export default function JeonsePage() {
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 전세 보증금</label>
               <div className="relative">
-                <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={jeonsDeposit} defaultValue={300_000_000} unitMultiplier={10000} onChange={(n) => set({ jeonsDeposit: n })} />
+                <NumericInput ariaLabel="전세 보증금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={jeonsDeposit} defaultValue={300_000_000} unitMultiplier={10000} onChange={(n) => set({ jeonsDeposit: n })} />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
               </div>
               <p className="text-[11.5px] text-white/40 mt-1">= {manwon(jeonsDeposit)}</p>
@@ -85,7 +86,7 @@ export default function JeonsePage() {
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">목표 월세 보증금</label>
               <div className="relative">
-                <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={wolseDeposit} defaultValue={50_000_000} unitMultiplier={10000} onChange={(n) => set({ wolseDeposit: n })} />
+                <NumericInput ariaLabel="전환 후 월세 보증금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={wolseDeposit} defaultValue={50_000_000} unitMultiplier={10000} onChange={(n) => set({ wolseDeposit: n })} />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
               </div>
               <p className="text-[11.5px] text-white/40 mt-1">= {manwon(wolseDeposit)}</p>
@@ -96,7 +97,7 @@ export default function JeonsePage() {
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세</label>
               <div className="relative">
-                <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={currentWolse} defaultValue={700_000} unitMultiplier={10000} onChange={(n) => set({ currentWolse: n })} />
+                <NumericInput ariaLabel="현재 월세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={currentWolse} defaultValue={700_000} unitMultiplier={10000} onChange={(n) => set({ currentWolse: n })} />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
               </div>
               <p className="text-[11.5px] text-white/40 mt-1">= {won(currentWolse)}</p>
@@ -104,7 +105,7 @@ export default function JeonsePage() {
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세 보증금</label>
               <div className="relative">
-                <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={currentWolseDeposit} defaultValue={50_000_000} unitMultiplier={10000} onChange={(n) => set({ currentWolseDeposit: n })} />
+                <NumericInput ariaLabel="현재 월세 보증금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={currentWolseDeposit} defaultValue={50_000_000} unitMultiplier={10000} onChange={(n) => set({ currentWolseDeposit: n })} />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
               </div>
               <p className="text-[11.5px] text-white/40 mt-1">= {manwon(currentWolseDeposit)}</p>
@@ -117,14 +118,14 @@ export default function JeonsePage() {
             전월세 전환율 (%)
             <span className="ml-2 text-[10.5px] font-normal text-white/40">법정 상한 {DEFAULT_CONVERSION_RATE.toFixed(2)}% (기준금리 {DEFAULT_BASE_RATE.toFixed(2)}%+2%)</span>
           </label>
-          <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={DEFAULT_CONVERSION_RATE} allowDecimal onChange={(n) => set({ conversionRate: n })} />
+          <NumericInput ariaLabel="전월세 전환율 (%)" max={100} min={0.001}  className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={DEFAULT_CONVERSION_RATE} allowDecimal onChange={(n) => set({ conversionRate: n })} />
         </div>
 
         {isToWolse && (
           <div>
             <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 깡통전세 위험 분석)</span></label>
             <div className="relative">
-              <NumericInput className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
+              <NumericInput ariaLabel="매매 시세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
             </div>
             <p className="text-[11.5px] text-white/40 mt-1">국토부 실거래가 또는 KB 시세 입력 → 전세가율(보증금÷시세) 기준 위험도 산출</p>

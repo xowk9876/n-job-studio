@@ -21,6 +21,7 @@ export default function SavingsPage() {
 
   return (
     <div className="calc-page">
+      {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">SAVINGS</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">적금 · 예금 계산기</h1>
@@ -60,7 +61,7 @@ export default function SavingsPage() {
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">{type === 'savings' ? '월 납입액' : '예치 원금'}</label>
           <div className="relative">
-            <NumericInput className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={amount} defaultValue={1_000_000} unitMultiplier={10000} onChange={(n) => set({ amount: n })} />
+            <NumericInput ariaLabel="예금 원금 또는 적금 월 납입액 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={amount} defaultValue={1_000_000} unitMultiplier={10000} onChange={(n) => set({ amount: n })} />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
           </div>
           <p className="text-[11.5px] text-white/40 mt-1">= {won(amount)}</p>
@@ -69,11 +70,11 @@ export default function SavingsPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
-            <NumericInput className="glass-input w-full rounded-lg font-bold" value={annualRate} defaultValue={3.5} allowDecimal onChange={(n) => set({ annualRate: n })} />
+            <NumericInput ariaLabel="연이율 (%)" max={100}  className="glass-input w-full rounded-lg font-bold" value={annualRate} defaultValue={3.5} allowDecimal onChange={(n) => set({ annualRate: n })} />
           </div>
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">기간 (개월)</label>
-            <select className="glass-select" value={months} onChange={(e) => set({ months: Number(e.target.value) })}>
+            <select aria-label="저축기간 (개월)" className="glass-select" value={months} onChange={(e) => set({ months: Number(e.target.value) })}>
               {[3,6,12,18,24,36,48,60].map(m => <option key={m} value={m}>{m}개월 ({m >= 12 ? `${m/12}년` : `${m}달`})</option>)}
             </select>
           </div>
@@ -148,14 +149,14 @@ export default function SavingsPage() {
           { q: '적금 vs 예금, 실수령 이자 차이는?', a: '목돈이 있다면 정기예금이 유리합니다. 정기적금은 첫 달 납입금은 12개월 전체 이자를 받지만, 마지막 달 납입금은 1개월치 이자만 받아 실효이율이 명목금리의 약 54%(12개월 기준)입니다. 예: 월 50만원 × 12개월 연 5% 적금의 세전이자는 원금 600만원 × 5% × 6.5/12 ≈ 162,500원.' },
           { q: 'ISA 계좌 비과세 한도는?', a: '일반형은 이자·배당 순수익 200만원까지 비과세(초과분 9.9% 분리과세), 서민형(총급여 5,000만원 이하·종합소득 3,800만원 이하)·농어민형은 400만원까지 비과세입니다. 납입한도는 연 2,000만원·총 1억원, 의무가입 3년. 한도를 500만/1,000만원으로 늘리는 개정안은 국회에서 부결되어 시행되지 않았습니다(2026.7 기준). 근거: 조세특례제한법 제91조의18.' },
           { q: '파킹통장 vs 정기예금, 언제 무엇을?', a: '파킹통장은 수시입출금이 자유로우면서 일복리로 이자를 받는 상품입니다. 3~6개월 내 사용 예정 자금은 파킹통장, 1년 이상 묶어둘 수 있으면 정기예금이 유리합니다. 비상금은 생활비 3~6개월치를 파킹통장에 보관하는 것을 권장합니다. 은행별 금리는 변동이 크므로 금융감독원 금리비교공시 finlife.fss.or.kr에서 실시간 확인하세요.' },
-          { q: '청년도약계좌·청년희망적금 남아있나요?', a: '청년희망적금(2022~2024 만기분)은 종료되었습니다. 청년도약계좌(2023.6 출시)는 만 19~34세, 개인소득 7,500만원 이하·가구소득 중위 180% 이하 대상, 월 최대 70만원 5년 납입 상품입니다. 소득 구간별 정부기여금과 이자소득 비과세가 결합됩니다. 자격·기여금 한도는 서민금융진흥원(kinfa.or.kr) 안내 참고. 근거: 조세특례제한법 제91조의22.' },
+          { q: '청년도약계좌·청년희망적금 남아있나요?', a: '청년도약계좌의 신규 가입 신청은 2025년 12월 31일 종료되었습니다. 기존 가입자는 계약과 유지심사 조건에 따라 이용합니다. 기존 가입요건의 가구소득 기준은 중위소득 250% 이하였으며, 신규 정책상품과 기존 가입자의 지원 내용은 서민금융진흥원에서 확인하세요.' },
           { q: '저축은행 예금은 안전한가요?', a: '예금자보호법에 따라 원금+이자 합산 1인당 금융기관별로 예금보험공사가 보장합니다. 2025.9.1부터 보호한도가 1억원으로 상향 시행되었습니다(예금자보호법 개정). 저축은행 금리는 시중은행 대비 높은 편이지만 1개 저축은행당 보호한도 이내로 분산 예치하세요. 실시간 금리는 저축은행중앙회 SB톡톡플러스에서 확인 가능합니다.' },
         ]} />
         <TipsSection title="이자 극대화 전략" items={[
           { title: 'ISA 계좌 먼저 채우기', desc: '연 2,000만원 한도 내에서 예적금·ETF·리츠 편입 가능. 일반형 200만원·서민형 400만원까지 비과세, 초과분도 9.9% 저율 분리과세라 일반 계좌 15.4% 대비 세금 차이가 복리로 누적. 총급여 5,000만원 이하라면 서민형으로 개설.' },
           { title: '인터넷은행·저축은행 우대 활용', desc: '인터넷은행·저축은행은 첫 거래·급여이체·체크카드 사용 등 조건으로 우대금리를 제공합니다. 우대 폭과 조건은 은행별로 상이하므로 금감원 금리비교공시 finlife.fss.or.kr 또는 저축은행중앙회 SB톡톡플러스에서 비교 후 가입하세요. 예금자보호 한도(2025.9 시행 1억원) 이내로 분산 예치.' },
           { title: '풍차돌리기 적금', desc: '매월 1년 만기 적금을 새로 가입해 12개 적금을 운용하면 1년차부터 매월 만기금 수령 가능. 유동성과 복리 효과를 동시에 확보. 인뱅 + 시중은행 조합으로 금리별 분산.' },
-          { title: '청년도약계좌 자격되면 필수', desc: '만 19~34세 + 개인소득 7,500만원 이하·가구소득 중위 180% 이하라면 월 최대 70만원 5년 납입 시 정부기여금(소득구간별 차등)과 이자소득 비과세가 결합됩니다. 병역이행기간 최대 6년 나이 연장. 자세한 자격·기여금 한도는 서민금융진흥원(kinfa.or.kr) 안내 참고.' },
+          { title: '청년도약계좌 기존 가입자 확인', desc: '청년도약계좌 신규 가입 신청은 2025년 12월 31일 종료되었습니다. 기존 계좌는 유지심사·중도해지 조건을 확인하고 신규 청년 금융상품은 서민금융진흥원 공지를 확인하세요.' },
           { title: '만기 알림 설정·자동재예치 금지', desc: '자동재예치는 당시 기준금리로 재계약되어 기존 대비 0.5~1.0%p 낮은 경우가 많습니다. 만기 7~14일 전 알림 설정 후 금리비교사이트(금감원 금융상품통합비교공시 finlife.fss.or.kr)에서 최상위 상품 확인 후 직접 갈아타기.' },
           { title: '세금우대·노인비과세 저축', desc: '만 65세 이상·장애인·기초생활수급자·독립유공자 등은 1인당 5,000만원 한도 비과세종합저축 가능(농어촌특별세 미부과). 근거: 조세특례제한법 제88조의2.' },
         ]} />

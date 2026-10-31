@@ -1,6 +1,9 @@
 'use client'
 
-import { forwardRef, useState, useEffect, InputHTMLAttributes } from 'react'
+import { forwardRef, useState, useEffect, useId, InputHTMLAttributes } from 'react'
+
+import { parseNumericInput } from '@/lib/numeric-input'
+import { MAX_MONEY } from '@/lib/input-validation'
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 'type'> & {
   value: number | ''
@@ -43,6 +46,8 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
     defaultValue: _dv,
     unitMultiplier = 1,
     allowDecimal = false,
+    min = 0,
+    max = MAX_MONEY,
     ...rest
   },
   ref
@@ -50,11 +55,8 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
   const multiplier = unitMultiplier > 0 ? unitMultiplier : 1
 
   const toDisplayNum = (raw: number) => raw / multiplier
-  const toStoreNum = (displayNum: number) => {
-    const product = displayNum * multiplier
-    if (allowDecimal && multiplier === 1) return product
-    return Math.round(product)
-  }
+  const errorId = useId()
+  const [error, setError] = useState<string | null>(null)
 
   // 호출자 className을 그대로 존중. className이 비어 있으면 기본 glass-input 스타일 적용
   const baseClass = className.trim()
@@ -79,24 +81,22 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawInput = e.target.value
-    const cleanPattern = allowDecimal ? /[^\d.]/g : /[^\d]/g
-    let raw = rawInput.replace(cleanPattern, '')
-    if (allowDecimal) {
-      const firstDot = raw.indexOf('.')
-      if (firstDot !== -1) {
-        raw = raw.slice(0, firstDot + 1) + raw.slice(firstDot + 1).replace(/\./g, '')
-      }
+    const next = parseNumericInput(rawInput, multiplier, allowDecimal, Number(min), Number(max))
+    if (next === null) {
+      setDisplay(rawInput)
+      setError(`${Number(min) / multiplier}~${(Number(max) / multiplier).toLocaleString('ko-KR')} 범위의 숫자를 입력해주세요. 이전 정상 입력값으로 계산 중입니다.`)
+      return
     }
-    const n = raw === '' || raw === '.' ? 0 : parseFloat(raw)
-    const dot = allowDecimal ? raw.indexOf('.') : -1
-    if (raw === '') setDisplay('')
-    else if (dot !== -1) setDisplay(`${formatDisplay(parseInt(raw.slice(0, dot), 10) || 0, false)}.${raw.slice(dot + 1)}`)
-    else setDisplay(formatDisplay(n, allowDecimal))
-    onChange(Number.isFinite(n) ? toStoreNum(n) : 0)
+    setError(null)
+    const raw = rawInput.replace(/,/g, '')
+    const [integer, fraction] = raw.split('.')
+    setDisplay(raw === '' ? '' : `${formatDisplay(Number(integer || 0), false)}${fraction !== undefined ? `.${fraction}` : ''}`)
+    onChange(next)
   }
 
   return (
-    <div className="relative">
+    <div>
+      <div className="relative">
       <input
         ref={ref}
         type="text"
@@ -106,8 +106,12 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
         value={display}
         onChange={handleChange}
         aria-label={ariaLabel}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : rest['aria-describedby']}
         className={mergedClass}
         {...rest}
+        min={min}
+        max={max}
       />
       {suffix && (
         <span
@@ -117,6 +121,8 @@ const NumericInput = forwardRef<HTMLInputElement, Props>(function NumericInput(
           {suffix}
         </span>
       )}
+      </div>
+      {error && <p id={errorId} role="alert" className="mt-1.5 text-xs text-[color:var(--danger)]">{error}</p>}
     </div>
   )
 })

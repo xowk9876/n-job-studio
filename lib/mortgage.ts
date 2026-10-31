@@ -2,6 +2,8 @@
 // 주택담보대출 이자 계산기
 // ────────────────────────────────────────────────────────────────────────────
 
+import { annuityFactor, inRange, MAX_RATE } from './input-validation'
+
 export type RepaymentType = 'equal-payment' | 'equal-principal' | 'bullet'
 
 export interface MortgageInput {
@@ -20,6 +22,7 @@ export interface MonthlySchedule {
 }
 
 export interface MortgageResult {
+  error?: string
   monthlyPayment: number       // 월 납입액 (원리금균등 기준, 또는 첫 달)
   totalPayment: number         // 총 납입액
   totalInterest: number        // 총 이자
@@ -34,7 +37,10 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
   const schedule: MonthlySchedule[] = []
 
   // 입력 가드: 대출금·기간이 0 이하이면 빈 결과 반환 (NaN/Infinity 방지)
-  if (principal <= 0 || totalMonths <= 0) {
+  if (!inRange(principal) || !inRange(annualRate, 0, MAX_RATE) || !inRange(years, 1, 50) || !Number.isInteger(years) || !['equal-payment', 'equal-principal', 'bullet'].includes(type)) {
+    return { error: '금액·금리(0~100%)·기간(1~50년)을 확인해주세요.', monthlyPayment: 0, totalPayment: 0, totalInterest: 0, interestRatio: 0, schedule }
+  }
+  if (principal === 0) {
     return { monthlyPayment: 0, totalPayment: 0, totalInterest: 0, interestRatio: 0, schedule }
   }
 
@@ -69,16 +75,13 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
     if (monthlyRate === 0) {
       monthlyPayment = Math.round(principal / totalMonths)
     } else {
-      monthlyPayment = Math.round(
-        principal * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) /
-        (Math.pow(1 + monthlyRate, totalMonths) - 1)
-      )
+      monthlyPayment = Math.round(principal / annuityFactor(monthlyRate, totalMonths))
     }
     let remaining = principal
     let totalInterest = 0
     for (let m = 1; m <= totalMonths; m++) {
       const interest = Math.round(remaining * monthlyRate)
-      const principalPmt = m === totalMonths ? remaining : monthlyPayment - interest
+      const principalPmt = m === totalMonths ? remaining : Math.min(remaining, Math.max(0, monthlyPayment - interest))
       const payment = principalPmt + interest
       remaining -= principalPmt
       totalInterest += interest
@@ -100,7 +103,7 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
   let totalInterest = 0
   for (let m = 1; m <= totalMonths; m++) {
     const interest = Math.round(remaining * monthlyRate)
-    const principalPmt = m === totalMonths ? remaining : monthlyPrincipal
+    const principalPmt = m === totalMonths ? remaining : Math.min(remaining, monthlyPrincipal)
     const payment = principalPmt + interest
     remaining -= principalPmt
     totalInterest += interest
@@ -126,8 +129,8 @@ export function calcMortgage(input: MortgageInput): MortgageResult {
 /**
  * 스트레스 DSR 가산금리 (%p) — 2026년 하반기(2026.7.1~12.31) 적용분
  *
- * 근거: 은행연합회 「2026년 하반기 스트레스 DSR 운영방안」(2026.6.30 발표,
- *      금융위원회 스트레스 DSR 행정지도 변경 시행). 스트레스 DSR 3단계는
+ * 근거: 금융위원회 「스트레스 DSR 제도」 금융행정지도(제2024-002호, 2026.7.1 연장),
+ *      변경 예고 공고 제2026-362호(2026.6.18). 스트레스 DSR 3단계는
  *      2025.7.1부터 시행 중이며, 지방 비규제지역 주담대만 2단계가 유예 연장됨.
  *
  * 산정식: 최종 가산금리 = 스트레스 금리 × 기본 적용비율 × 대출유형별 적용비율
@@ -158,6 +161,7 @@ export interface DsrInput {
 }
 
 export interface DsrResult {
+  error?: string
   stressedRate: number        // 가산 적용 금리 (%)
   maxMonthlyPmt: number       // 신규 대출 월 한도 (= 소득 × cap/12 − 기존부채)
   maxPrincipal: number        // 신규 대출 원금 한도 (원)
@@ -169,9 +173,10 @@ export function calcDsrLimit(input: DsrInput): DsrResult {
   const { annualIncome, existingDebtMonthlyPmt, annualRate, years, stressBps, dsrCap } = input
 
   // 가드: 입력 음수·0 방어
-  if (annualIncome <= 0 || years <= 0 || dsrCap <= 0) {
+  if (!inRange(annualIncome, 1) || !inRange(existingDebtMonthlyPmt) || !inRange(annualRate, 0, MAX_RATE) || !inRange(stressBps, 0, 3) || !inRange(years, 1, 50) || !Number.isInteger(years) || !inRange(dsrCap, 1, 100)) {
     return {
-      stressedRate: annualRate + stressBps,
+      error: '소득·기존 상환액·금리·대출기간 입력을 확인해주세요.',
+      stressedRate: 0,
       maxMonthlyPmt: 0,
       maxPrincipal: 0,
       monthlyIncome: 0,
@@ -194,7 +199,7 @@ export function calcDsrLimit(input: DsrInput): DsrResult {
       maxPrincipal = maxMonthlyPmt * n
     } else {
       // 원리금균등 공식 역산: P = PMT × [(1+r)^n − 1] / [r × (1+r)^n]
-      const factor = (Math.pow(1 + monthlyRate, n) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, n))
+      const factor = annuityFactor(monthlyRate, n)
       maxPrincipal = Math.floor(maxMonthlyPmt * factor)
     }
   }

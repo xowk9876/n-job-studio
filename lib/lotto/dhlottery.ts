@@ -12,6 +12,7 @@
  */
 
 import type { LottoRoundResult } from './types'
+import { inRange, parseCalendarDate } from '../input-validation'
 
 const ORIGIN = 'https://www.dhlottery.co.kr'
 const LATEST_URL = `${ORIGIN}/lt645/selectPstLt645Info.do`
@@ -51,7 +52,8 @@ type DhlotteryResponse = {
 function toDrawDate(rawDate: unknown): string | null {
   const value = String(rawDate ?? '')
   if (!/^\d{8}$/.test(value)) return null
-  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
+  const iso = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
+  return parseCalendarDate(iso) ? iso : null
 }
 
 /** 외부 응답을 신뢰하지 않고 회차·번호 범위·중복까지 전부 검증한 뒤 변환한다 */
@@ -68,6 +70,9 @@ function toRoundResult(item: DhlotteryItem | undefined): LottoRoundResult | null
 
   if (new Set(all).size !== 7) return null
   if (!all.every(num => Number.isInteger(num) && num >= 1 && num <= 45)) return null
+
+  const amounts = [item.rnk1WnNope, item.rnk1WnAmt, item.wholEpsdSumNtslAmt].map(value => Number(value ?? 0))
+  if (!amounts.every(value => inRange(value) && Number.isSafeInteger(value))) return null
 
   return {
     round,
@@ -136,11 +141,11 @@ export async function fetchRoundsAfter(
 ): Promise<LottoRoundResult[]> {
   if (latest.round <= after) return []
 
-  const collected: LottoRoundResult[] = [latest]
+  const collected = new Map<number, LottoRoundResult>([[latest.round, latest]])
 
   // 공식 API는 요청당 10건이므로, 누락 구간이 넓으면 여러 번 나눠 가져온다 (최대 8회 = 80회차)
   let cursor = latest.round
-  for (let request = 0; request < 8 && cursor - 1 > after && collected.length < limit; request++) {
+  for (let request = 0; request < 8 && cursor - 1 > after && collected.size < limit; request++) {
     let list: DhlotteryItem[]
     try {
       list = await fetchList(`${ROUND_URL}?srchDir=older&srchCursorLtEpsd=${cursor}`, revalidate)
@@ -151,8 +156,8 @@ export async function fetchRoundsAfter(
     let lowest = cursor
     for (const item of list) {
       const result = toRoundResult(item)
-      if (!result || result.round <= after) continue
-      collected.push(result)
+      if (!result || result.round <= after || result.round >= cursor) continue
+      collected.set(result.round, result)
       lowest = Math.min(lowest, result.round)
     }
 
@@ -160,5 +165,5 @@ export async function fetchRoundsAfter(
     cursor = lowest
   }
 
-  return collected.sort((a, b) => b.round - a.round).slice(0, limit)
+  return [...collected.values()].sort((a, b) => b.round - a.round).slice(0, limit)
 }

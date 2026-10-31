@@ -7,14 +7,16 @@
 
 메인 페이지 `components/home/HomeAppShortcut.tsx`
 
-- Chrome·Edge가 설치 이벤트를 주면 **홈 화면에 추가** 버튼이 나온다.
-- 버튼이 없어도 iPhone(Safari)과 Android(Chrome) 순서는 항상 보인다.
-- 이미 앱으로 열린 화면(`display-mode: standalone`)이면 그 사실을 알린다.
-- 홈 화면 아이콘을 길게 누르면 연봉·대출·퇴직금·적금으로 간다. 이 목록은 `app/manifest.ts` `shortcuts`다.
+- 메인 상단의 **Android · iPhone 홈 화면에 추가** 링크에서 설치 영역으로 이동한다.
+- **Android 홈 화면에 추가**, **iPhone 홈 화면 추가 안내**, **PC에 앱 설치** 버튼은 항상 표시한다.
+- Android/PC의 지원 브라우저에서 설치 이벤트가 준비되면 해당 버튼이 네이티브 설치 창을 연다.
+- iPhone 버튼은 Safari 공유 → 홈 화면에 추가 → 웹 앱으로 열기 → 추가 안내를 펼친다. 사이트 주소 복사도 제공한다. 웹사이트가 iPhone 아이콘을 자동으로 추가할 수는 없다.
+- 설치 이벤트는 수락·취소·실패와 관계없이 한 번만 소비한다. 설치 완료는 `appinstalled` 또는 standalone 상태로 확인한다.
+- 아이콘 길게 누르기 계산기 바로가기는 manifest shortcuts를 지원하는 기기에서 제공한다.
 
 ## 설치가 되려면
 
-브라우저(Chrome)는 아래가 모두 있어야 설치 버튼·배너를 준다. iPhone Safari는 이 버튼을 주지 않고, 공유 메뉴만 된다.
+설치 동작은 브라우저의 설치 가능 판단과 사용자 설정에 따라 달라진다. 프로젝트에서 확인할 리소스는 아래와 같다. iPhone Safari는 이 버튼을 주지 않고, 공유 메뉴만 된다.
 
 | 조건 | 위치 |
 |------|------|
@@ -53,7 +55,7 @@ foreach ($p in '/icon-192.png','/icon-512.png','/icon-maskable-512.png','/apple-
 ```
 
 - Expected Output: 매니페스트에 192·512 PNG. 아이콘은 `image/png`, `sw.js`는 200이고 본문에 `fetch`가 있다.
-- 브라우저: 메인에 "홈 화면에서 바로 열기"가 보이고, iPhone·Android 순서가 읽힌다. 모바일 너비에서도 카드가 잘리지 않는다.
+- 브라우저: 메인 3개 버튼과 기기별 안내·주소 복사·설치 취소 후 재안내를 확인한다. 모바일 너비에서도 카드가 잘리지 않아야 한다.
 - Chrome 설치 오류: DevTools `Page.getInstallabilityErrors`가 비어 있다. 설치 버튼은 사이트 방문 횟수 조건 때문에 바로 안 나올 수 있다. 버튼이 없어도 안내 순서가 보이면 된다.
 
 ## 고치면 안 되는 것
