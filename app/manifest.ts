@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: '머니핏 계산기 — 2026 한국 재테크 계산기',
     short_name: '머니핏 계산기',
     description:
-      '2026년 최신 세율·4대보험 요율·법령 기준 한국 재테크 계산기. 연봉 실수령액, 대출 이자, 퇴직금, 적금, 전월세, 로또까지 무료.',
+      '예상 금액과 적용 기준을 확인하는 한국 재테크 계산기. 연봉 실수령액, 대출 이자, 퇴직금, 적금, 전월세, 로또까지 무료.',
     start_url: '/',
     scope: '/',
     display: 'standalone',

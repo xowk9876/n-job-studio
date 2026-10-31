@@ -5,7 +5,7 @@ import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/se
 
 const pageTitle = '개인정보처리방침'
 const description =
-  '머니핏 계산기의 개인정보처리방침. 수집 항목, 쿠키, Google AdSense·Analytics 사용, 제3자 제공, 이용자 권리에 대한 안내입니다.'
+  '머니핏 계산기의 개인정보처리방침. 브라우저 저장, 광고·호스팅 서비스, 문의 정보 처리와 이용자 권리에 대한 안내입니다.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   openGraph: {
     title: formatPageTitle(pageTitle),
-    description: '계산 입력값 처리 원칙, 개인정보 수집 여부, 광고·분석 도구 사용 안내.',
+    description: '브라우저 저장, 광고·호스팅 및 문의 정보 처리 안내.',
     url: `${SITE_URL}/privacy-policy`,
     siteName: SITE_NAME,
     locale: 'ko_KR',
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="font-display text-[28px] md:text-[34px] font-bold text-white tracking-tight">
           개인정보처리방침
         </h1>
-        <p className="mt-3 text-[13px] text-[color:var(--muted)]">시행일: 2026년 1월 1일 · 최종 개정: 2026년 5월 30일</p>
+        <p className="mt-3 text-[13px] text-[color:var(--muted)]">시행일: 2026년 1월 1일 · 최종 수정: 2026년 10월 31일 (실제 기능·저장 방식 설명 정정)</p>
       </header>
 
       <div className="space-y-8 text-[14.5px] text-[color:var(--sub)] leading-[1.85]">
@@ -53,134 +53,47 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">2. 수집하는 개인정보 항목</h2>
-          <p>
-            서비스는 <strong className="text-white">회원가입·로그인 기능을 제공하지 않으며, 이용자의
-            이름·연락처·주민등록번호 등 어떠한 개인 식별 정보도 직접 수집하지 않습니다.</strong>{' '}
-            연봉·대출금·저축액 등 계산기에 입력한 모든 값은 이용자의 브라우저 내에서만 처리되며 서버로
-            전송·저장되지 않습니다.
-          </p>
-          <p className="mt-3">
-            다만 서비스 품질 개선과 광고 제공을 위해 다음 항목이 자동 수집될 수 있습니다.
-          </p>
-          <ul className="list-disc pl-6 mt-2 space-y-1">
-            <li>접속 IP 주소, 브라우저 종류 및 버전, 운영체제</li>
-            <li>방문 일시, 체류 시간, 참조 URL</li>
-            <li>쿠키(Cookie) 및 유사 기술에 의한 식별자</li>
-          </ul>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">2. 계산 입력값과 브라우저 저장</h2>
+          <p>회원가입·로그인 없이 이용할 수 있습니다. 연봉·대출금·저축액 등 금융 계산 입력값은 브라우저에서 처리하며 계산을 위해 서버로 전송하지 않습니다.</p>
+          <p className="mt-3">다섯 금융 계산기의 입력값은 같은 브라우저에서 다시 사용할 수 있도록 로컬 저장소(localStorage)에 저장됩니다. 새로고침하거나 브라우저를 닫아도 남을 수 있으며, 기기·브라우저 간에 동기화하지 않습니다.</p>
+          <p className="mt-3">공용 기기에서는 사용 후 브라우저 설정에서 이 사이트의 저장 데이터를 삭제하세요. 삭제하면 저장된 입력값이 초기화됩니다.</p>
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">3. 광고 및 제3자 쿠키 (Google AdSense)</h2>
-          <p>
-            서비스는 무료 운영을 유지하기 위해 <strong className="text-white">Google AdSense</strong>를 포함한
-            제3자 광고 사업자의 광고를 게재합니다. 이 과정에서 Google 등 제3자 공급업체는 쿠키(Cookie)를
-            사용하여 이용자가 본 사이트 및 다른 웹사이트를 방문한 기록을 바탕으로 광고를 제공할 수 있습니다.
-          </p>
-          <ul className="list-disc pl-6 mt-3 space-y-1.5">
-            <li>
-              Google은 광고 쿠키(DART 쿠키 포함)를 사용하여 이용자의 관심사에 기반한 맞춤형 광고를 게재합니다.
-            </li>
-            <li>
-              제3자 광고 네트워크가 수집하는 정보에는 IP 주소, 브라우저 정보, 방문 페이지, 광고 노출·클릭
-              기록 등이 포함될 수 있습니다. 이 정보는 해당 광고 사업자의 정책에 따라 처리됩니다.
-            </li>
-            <li>
-              이용자는{' '}
-              <a
-                href="https://www.google.com/settings/ads"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-[color:var(--brand)] underline"
-              >
-                Google 광고 설정
-              </a>
-              에서 개인 맞춤 광고를 비활성화할 수 있습니다.
-            </li>
-            <li>
-              제3자 공급업체의 쿠키 사용은{' '}
-              <a
-                href="https://www.aboutads.info"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-[color:var(--brand)] underline"
-              >
-                www.aboutads.info
-              </a>
-              에서 일괄 거부(opt-out)할 수 있으며, 브라우저 설정에서 쿠키 자체를 차단할 수도 있습니다.
-            </li>
-            <li>
-              Google의 광고 쿠키 및 데이터 처리에 관한 자세한 내용은{' '}
-              <a
-                href="https://policies.google.com/technologies/ads"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="text-[color:var(--brand)] underline"
-              >
-                Google 광고 정책
-              </a>
-              에서 확인할 수 있습니다.
-            </li>
-          </ul>
-          <p className="mt-3">
-            서비스는 방문 통계 분석을 위해 Google Analytics 등 분석 도구를 사용할 수 있으며, 이때 수집되는
-            정보는 개인을 식별하지 않는 익명·집계 형태로 처리됩니다. 쿠키를 차단하더라도 계산기 기능은 정상
-            이용할 수 있으나 일부 광고·통계 기능이 제한될 수 있습니다.
-          </p>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">3. 광고와 외부 콘텐츠</h2>
+          <p>서비스에는 Google AdSense 광고 스크립트가 포함되어 있습니다. Google 등 광고 사업자는 쿠키·기기 정보·IP 주소·방문 및 광고 반응 정보 등을 자체 정책과 이용자 설정에 따라 처리할 수 있습니다.</p>
+          <p className="mt-3">글꼴 등 외부 콘텐츠를 불러올 때도 해당 제공자에게 접속 정보가 전달될 수 있습니다.</p>
+          <p className="mt-3">광고 설정과 쿠키 처리는 <a href="https://policies.google.com/technologies/ads" className="text-[color:var(--brand)] underline">Google 광고 정책</a>과 브라우저 설정에서 확인할 수 있습니다. 광고·쿠키 차단과 사이트 저장 데이터 삭제는 별개입니다.</p>
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">4. 계산 입력값 처리 원칙</h2>
-          <p>
-            머니핏 계산기는 연봉, 대출금, 보증금, 저축액처럼 민감할 수 있는 금액 정보를 다룹니다.
-            따라서 입력값은 이용자의 브라우저 안에서 계산에만 사용되며, 운영자가 별도로 확인할 수 있는
-            서버 데이터베이스에 저장하지 않습니다.
-          </p>
-          <ul className="list-disc pl-6 mt-2 space-y-1.5">
-            <li>계산기 입력값은 결과 산출을 위한 임시 값으로만 사용됩니다.</li>
-            <li>회원가입, 로그인, 주민등록번호, 계좌번호 입력을 요구하지 않습니다.</li>
-            <li>페이지를 새로고침하거나 브라우저 저장 데이터를 삭제하면 입력값도 함께 초기화될 수 있습니다.</li>
-            <li>정확한 세무·법률 판단이 필요한 경우에는 공식 기관 또는 전문가 상담을 권장합니다.</li>
-          </ul>
-          <p className="mt-3">
-            서비스는 사용자가 계산 결과를 빠르게 확인할 수 있도록 설계되었으며, 입력값을 기반으로 개인을
-            식별하거나 개별 상담·영업 목적으로 활용하지 않습니다.
-          </p>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">4. 접속·조회 정보</h2>
+          <p>사이트는 Vercel을 통해 제공됩니다. 페이지와 로또 데이터 조회 시 IP 주소·요청 경로·시각·브라우저 정보 등이 호스팅·보안 서비스에서 처리될 수 있습니다. 로또 API는 과도한 요청을 제한하기 위해 IP 기반 식별자를 서버 메모리에서 사용합니다.</p>
+          <p className="mt-3">로또 회차 조회에는 입력한 회차 번호가 서버로 전송됩니다. 금융 계산 입력값이나 생성한 번호를 운영자 데이터베이스에 저장하는 기능은 없습니다.</p>
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">5. 개인정보의 보유 및 파기</h2>
-          <p>
-            자동 수집되는 접속 로그는 통신비밀보호법에 따라 3개월간 보관 후 파기됩니다. 계산 입력값은
-            브라우저 세션 종료 시 함께 소멸합니다.
-          </p>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">5. 문의 정보와 보관</h2>
+          <p>이메일이나 인스타그램으로 문의하면 이용자가 보낸 연락처·메시지·첨부자료가 해당 서비스와 운영자에게 전달됩니다. 문의 확인과 답변에 필요한 범위에서 이용하며, 주민등록번호·계좌 비밀번호·복권 원본 번호 등 불필요한 민감정보를 보내지 마세요.</p>
+          <p className="mt-3">브라우저 저장값은 이용자가 사이트 데이터를 삭제할 때까지 남을 수 있습니다. 광고·호스팅·메일 등 외부 서비스의 기록은 각 서비스 정책과 설정에 따라 보관됩니다.</p>
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">6. 제3자 제공</h2>
-          <p>
-            서비스는 이용자의 개인정보를 외부에 제공하지 않습니다. 다만 법령에 의거하거나 수사기관의
-            적법한 요청이 있을 때에는 관련 법령 절차에 따라 제공할 수 있습니다.
-          </p>
-          <p className="mt-3">
-            계산기에 입력한 연봉, 대출금, 보증금, 저축액 등은 브라우저 안에서만 처리되며 운영자가 별도로
-            열람하거나 제3자에게 제공할 수 있는 형태로 저장하지 않습니다.
-          </p>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">6. 외부 서비스 확인</h2>
+          <p>금융 계산 기능은 입력값을 외부로 전송하지 않지만, 사이트 접속·광고·문의 과정에서는 위 외부 서비스가 정보를 처리할 수 있습니다. 외부 링크를 열면 해당 사이트의 개인정보 처리방침이 적용됩니다.</p>
+          <p className="mt-3">운영자는 문의 목적으로 받은 정보를 별도의 마케팅·판매 목적으로 이용하지 않는 것을 원칙으로 합니다. 법령에 따른 적법한 요청은 관련 절차에 따릅니다.</p>
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">7. 이용자의 권리</h2>
-          <p>
-            이용자는 「개인정보 보호법」 제35조~제39조에 따라 자신의 개인정보에 대한 열람·정정·삭제·처리정지를
-            요구할 권리가 있습니다. 다만 본 서비스는 회원정보를 보유하지 않으므로 일반적으로 해당되는
-            정보가 존재하지 않습니다.
-          </p>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">7. 저장값 삭제와 개인정보 문의</h2>
+          <p>계산 입력값을 지우려면 사용 중인 브라우저의 사이트 설정에서 머니핏 계산기의 저장 데이터를 삭제하세요. 다른 브라우저에 저장된 값은 각각 삭제해야 합니다.</p>
+          <p className="mt-3">운영자가 받은 문의 정보에 대한 열람·정정·삭제 등 요청은 아래 이메일로 연락해주세요. 처리 대상과 법령상 요건을 확인해 안내합니다. 외부 사업자가 처리하는 정보는 해당 사업자에게도 요청해야 할 수 있습니다.</p>
         </section>
 
         <section>
           <h2 className="font-display text-[18px] font-semibold text-white mb-3">8. 연락처</h2>
           <p>
-            개인정보 관련 문의는 아래 이메일로 보내주시면 영업일 기준 7일 이내 답변드립니다.
+            개인정보 관련 문의와 처리 요청은 아래 이메일로 보내주세요.
           </p>
           <p className="mt-2">
             이메일:{' '}
@@ -192,10 +105,7 @@ export default function PrivacyPolicyPage() {
 
         <section>
           <h2 className="font-display text-[18px] font-semibold text-white mb-3">9. 방침의 변경</h2>
-          <p>
-            본 방침이 변경될 경우, 시행일 최소 7일 전에 본 페이지에 공지합니다. 중대한 변경 사항은 30일
-            전에 공지합니다.
-          </p>
+          <p>수집·이용 방식이 바뀌면 변경 내용과 적용일을 이 페이지에 안내합니다. 법령상 별도 고지나 동의가 필요한 변경은 해당 절차를 따릅니다.</p>
         </section>
 
         <div className="pt-6 border-t border-[color:var(--line)]">

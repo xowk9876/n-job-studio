@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
 
-const pageTitle = '소개 — 2026년 최신 세율·공식 기반 재테크 계산기'
+const pageTitle = '머니핏 계산기 소개'
 const description =
   '머니핏 계산기는 근로기준법·소득세법·주택임대차보호법 등 실제 법령을 기반으로 한 무료 재테크 계산기입니다. 제작 의도, 계산 근거, 데이터 업데이트 원칙을 소개합니다.'
 
@@ -40,24 +40,16 @@ export default function AboutPage() {
           머니핏 계산기는 어떻게 만들어졌나
         </h1>
         <p className="mt-4 text-[14.5px] text-[color:var(--sub)] leading-relaxed">
-          복잡한 세금과 이자 계산을, 법령 그대로 정확하게. 광고 팝업이나 회원가입 없이 결과부터 보여주는
-          것이 머니핏 계산기의 원칙입니다.
+          연봉·퇴직금·대출·저축·전월세의 예상 금액을 비교할 수 있는 무료 계산기입니다.
+          각 페이지에서 계산 기준과 적용 범위를 함께 확인할 수 있습니다.
         </p>
       </header>
 
       <div className="space-y-10 text-[14.5px] text-[color:var(--sub)] leading-[1.85]">
         <section>
-          <h2 className="font-display text-[19px] font-semibold text-white mb-3">왜 만들었나</h2>
-          <p>
-            네이버·구글에 &quot;연봉 실수령액&quot;을 검색하면 수많은 계산기가 나오지만, 대부분 광고 팝업으로
-            결과를 가리거나 이전 연도 세율·요율을 그대로 쓰는 경우가 많습니다. 2026년 1월부터 달라진
-            국민연금 요율(9.5%), 건강보험료율(7.19%), 스트레스 DSR 3단계, 개정된 근로소득 간이세액표를
-            반영한 깔끔한 계산기가 없어서 직접 만들었습니다.
-          </p>
-          <p className="mt-3">
-            머니핏 계산기는 <strong className="text-white">회원가입 없음·광고 팝업 없음·입력값 서버 전송
-            없음</strong>을 원칙으로 운영합니다. 모든 계산은 브라우저 안에서 끝납니다.
-          </p>
+          <h2 className="font-display text-[19px] font-semibold text-white mb-3">서비스 이용 안내</h2>
+          <p>금융 계산에 필요한 입력값과 결과를 한 화면에서 확인할 수 있도록 만들었습니다. 회원가입 없이 이용할 수 있으며, 금융 계산은 브라우저 안에서 처리합니다. 입력값은 같은 브라우저에 저장되며 사이트 데이터를 삭제하면 지울 수 있습니다.</p>
+          <p className="mt-3">로또 당첨번호 조회에는 조회할 회차가 서버로 전달됩니다. 광고·접속 기록과 외부 서비스의 정보 처리에 대해서는 <Link href="/privacy-policy" className="text-[color:var(--brand)] underline">개인정보처리방침</Link>을 확인해주세요.</p>
         </section>
 
         <section>
@@ -67,16 +59,14 @@ export default function AboutPage() {
             <li>
               <strong className="text-white">연봉 실수령액</strong> — 소득세법 제134조 근로소득 간이세액표,
               국민연금법 제88조(근로자 4.75%), 국민건강보험법(근로자 부담 건보료율의 50%),
-              노인장기요양보험법(건강보험료 대비 법정 비율), 고용보험법(근로자 0.9%). 요율은 매년 초
-              보건복지부·고용노동부 고시에 따라 갱신됩니다.
+              노인장기요양보험법(건강보험료 대비 법정 비율), 고용보험법(근로자 0.9%). 적용 기준일은 계산기에서 확인할 수 있습니다.
             </li>
             <li>
               <strong className="text-white">퇴직금</strong> — 근로기준법 제34조, 근로자퇴직급여 보장법
               제8조(계속근로 1년에 대해 30일분 이상의 평균임금).
             </li>
             <li>
-              <strong className="text-white">대출 이자</strong> — 금융감독원 표준 상환 공식(원리금균등·원금
-              균등·만기일시). 2026년 적용되는 스트레스 DSR 3단계 가산금리 반영.
+              <strong className="text-white">대출 이자</strong> — 원리금균등·원금균등·만기일시 상환 공식. DSR 한도는 입력한 소득·금리·기존 상환액에 따른 참고 계산입니다.
             </li>
             <li>
               <strong className="text-white">적금·예금</strong> — 소득세법 제129조 이자소득 원천징수세율
@@ -84,46 +74,26 @@ export default function AboutPage() {
             </li>
             <li>
               <strong className="text-white">전월세 전환</strong> — 주택임대차보호법 제7조의2, 시행령
-              제9조(법정 전환율 한도 = 한국은행 기준금리 + 2%).
+              제9조. 보증금의 월차임 전환 시 연 10%와 한국은행 기준금리 + 2%p 중 낮은 비율이 상한입니다.
             </li>
             <li>
-              <strong className="text-white">로또</strong> — 복권및복권기금법 제5조, 소득세법 제14조(기타
-              소득). 200만 원 이하는 비과세, 200만 원 초과 ~ 3억 원 이하 22%, 3억 원 초과분 33% 원천징수.
+              <strong className="text-white">로또</strong> — 소득세법 제21조·제84조·제129조와 지방소득세 기준. 200만 원 이하는 비과세, 200만 원 초과 ~ 3억 원 이하 22%, 3억 원 초과분 33% 원천징수.
             </li>
           </ul>
         </section>
 
         <section>
-          <h2 className="font-display text-[19px] font-semibold text-white mb-3">데이터 업데이트 원칙</h2>
+          <h2 className="font-display text-[19px] font-semibold text-white mb-3">자료와 적용 기준</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li>
-              보건복지부·국세청·고용노동부 고시는 시행 시점에 반영합니다. 건강보험·장기요양은 통상 1월,
-              국민연금 기준소득월액 상·하한은 7월입니다.
-            </li>
-            <li>
-              법령 개정은 관보 공포일과 시행일을 확인한 뒤 계산 로직과 안내 문구를 함께 고칩니다.
-            </li>
-            <li>
-              한국은행 기준금리가 바뀌면 법정 전월세 전환율 상한(기준금리 + 2%p)을 계산기와 안내 문구에 반영합니다.
-            </li>
-            <li>
-              각 계산기 페이지에는 공식 근거와 한계를 함께 표시해 사용자가 계산 결과를 검증할 수 있게 합니다.
-            </li>
+            <li>계산기와 가이드에 확인 기준일, 공식 출처, 주요 가정을 표시합니다. 고시·금리 변경이 자동으로 실시간 반영되는 것은 아닙니다.</li>
+            <li>실제 적용 요율과 가입·심사 조건은 기관의 최신 원문을 함께 확인해주세요.</li>
+            <li>로또 당첨번호는 동행복권 조회 결과를 사용하며, 조회에 실패하면 기준 회차가 표시된 보관 데이터를 안내합니다.</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="font-display text-[19px] font-semibold text-white mb-3">광고와 콘텐츠 운영 원칙</h2>
-          <p>
-            머니핏 계산기는 광고 수익으로 무료 운영을 유지하지만, 광고가 계산 결과나 버튼과 혼동되지 않도록
-            배치합니다. 광고 여부와 관계없이 계산 공식, 공식 출처, 주의사항을 먼저 제공하는 것을 원칙으로
-            하며, 사용자의 클릭을 유도하기 위해 과장된 문구나 오해를 부르는 디자인을 사용하지 않습니다.
-          </p>
-          <p className="mt-3">
-            모든 콘텐츠는 자체 작성한 설명과 계산 예시를 바탕으로 구성되며, 법령·고시·기관 공지에서 확인한
-            수치를 계산 로직으로 옮겨 구현합니다. 외부 자료를 그대로 복사하지 않고 사용자가 실제 의사결정에
-            참고할 수 있도록 계산 맥락을 함께 설명합니다.
-          </p>
+          <h2 className="font-display text-[19px] font-semibold text-white mb-3">광고와 콘텐츠</h2>
+          <p>페이지에 광고가 표시될 수 있습니다. 계산 결과와 가이드의 공식 근거는 각 페이지에서 확인할 수 있으며, 내용에 오류가 있으면 문의 채널로 알려주세요.</p>
         </section>
 
         <section>

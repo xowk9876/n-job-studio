@@ -3,9 +3,9 @@ import GuideArticle from '@/components/guide/GuideArticle'
 import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'lotto-tax-guide'
-const title = '로또 당첨금 세금·수령 완전 가이드'
+const title = '로또 당첨금 세금과 수령 절차'
 const description =
-  '로또 1등 당첨 시 실제 수령액은? 소득세법상 기타소득 원천징수 22% · 33% 구간과 신고 의무, 익명 수령 절차까지 정확히 정리합니다.'
+  '200만원 과세최저한, 22%·33% 원천징수 구간, 구매 방식별 지급처와 수령 기한을 확인합니다.'
 const updatedAt = CONTENT_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '복권' })
@@ -21,13 +21,12 @@ export default function Page() {
       updatedAt={updatedAt}
       related={[
         { href: '/lotto', label: '로또 번호 생성기' },
-        { href: '/guide/isa-vs-regular-savings', label: '당첨금 운용 ISA 가이드' },
       ]}
     >
       <section>
         <h2>로또 당첨금은 어떤 소득으로 과세되나</h2>
         <p>
-          <strong>복권및복권기금법 제5조</strong>와 <strong>소득세법 제21조 제1항 제2호</strong>에 따라
+          <strong>소득세법 제21조 제1항 제2호</strong>에 따라
           복권 당첨금은 <strong>기타소득</strong>으로 분류됩니다. 일반적인 기타소득 원천징수율이 22%
           (소득세 20% + 지방소득세 2%)인데, 복권은 <strong>당첨금 규모에 따라 분리과세율이 달라진다</strong>
           는 점이 특징입니다.
@@ -76,7 +75,7 @@ export default function Page() {
             (인터넷 구매분 200만 원 이하는 동행복권 예치금으로 자동 입금).
           </li>
           <li>
-            필요 서류: 당첨 복권 원본, 신분증, 본인 명의 통장, 도장(또는 서명).
+            판매점 구매분은 당첨 복권 원본을, 인터넷 구매분은 당첨 복권 번호를 준비하세요. 신분증 등 준비물은 당첨금과 구매 방식에 따라 공식 지급 안내에서 확인하세요.
           </li>
           <li>
             세금은 지급 시점에 <strong>원천징수 후 입금</strong>됩니다. 별도 신고·납부 절차 없음.
@@ -89,12 +88,11 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>익명·안전 수령 팁</h2>
+        <h2>수령 전 확인할 점</h2>
         <ul>
-          <li>당첨 복권 뒷면에 본인 서명을 즉시 해두면 분실·도난 시 소유권 입증 용이</li>
-          <li>고액 당첨금의 지급 장소와 필요 서류는 방문 전 동행복권 공식 수령 안내로 확인</li>
-          <li>SNS·주변 언급 자제. 사기·협박 범죄 표적이 될 수 있음</li>
-          <li>대리 수령은 원칙적으로 위임장+인감증명서+대리인 신분증 필요</li>
+          <li>실물 복권 원본을 안전하게 보관하세요. 사진·서명만으로 분실 복권의 지급이 보장되지는 않습니다.</li>
+          <li>은행에서 필요한 본인 확인과 당첨 사실의 대외 공개는 별개입니다. 복권번호·신분증·계좌 정보를 공개하지 마세요.</li>
+          <li>대리 수령 등 예외적인 상황은 지급기관에 먼저 문의하세요.</li>
         </ul>
       </section>
 
@@ -108,18 +106,8 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>당첨 후 자산 관리 3원칙</h2>
-        <ol>
-          <li>수령 직후 최소 1개월은 큰 의사결정(부동산 매입·창업) 보류</li>
-          <li>
-            예금자보호 한도(2025.9.1 시행, 금융기관·보험사·증권사 등 <strong>1인당 1억 원</strong>)를 감안해{' '}
-            <strong>여러 금융기관에 분산</strong>. 상품별 예금자보호 여부와 원금 손실 가능성을 별도로 확인.
-          </li>
-          <li>
-            세무사·변호사·PB(Private Banker) 등 전문가 자문 1회 이상. 증여·상속 설계까지 함께 검토하면
-            추가 절세 가능.
-          </li>
-        </ol>
+        <h2>수령 후 세금·보호 범위 확인</h2>
+        <p>당첨금 원천징수와 이후 발생하는 이자·배당·증여의 과세는 별개입니다. 예금 등 보호 대상 상품은 원금과 소정의 이자를 합해 금융회사별 1인당 1억원까지 보호되며, 펀드 등 투자상품 전체가 보호되는 것은 아닙니다.</p>
       </section>
 
       <section>
@@ -131,8 +119,7 @@ export default function Page() {
         </p>
         <h3>당첨금을 가족에게 나눠주면 증여세가 발생하나요?</h3>
         <p>
-          네. 10년 합산 배우자 6억, 성인 자녀 5,000만 원, 미성년 자녀 2,000만 원을 초과하는 금액은 증여세
-          부과 대상입니다(상속세 및 증여세법 제53조).
+          증여세 검토가 필요합니다. 거주자의 일반적인 증여재산공제는 10년 합산 배우자 6억원, 직계존속으로부터 받는 성인 5,000만원·미성년자 2,000만원 등입니다. 기존 증여, 가족관계, 별도 공제 요건에 따라 달라지므로 나누어 주기 전에 확인하세요.
         </p>
       </section>
     </GuideArticle>

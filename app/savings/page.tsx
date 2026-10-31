@@ -7,6 +7,7 @@ import { calcSavings, SavingsType, InterestType } from '@/lib/savings'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 import { getCalculatorLinks } from '@/lib/seo'
+import { officialSources } from '@/lib/content-sources'
 
 const CALC_PATH = '/savings'
 const calcSeo = getCalculatorLinks(CALC_PATH)
@@ -29,7 +30,7 @@ export default function SavingsPage() {
       </div>
 
       <div className="result-card">
-        <p className="result-label">만기 수령액 (세후)</p>
+        <p className="result-label">예상 만기 수령액 (세후)</p>
         <p className="result-value">{won(r.maturityAmount)}</p>
         <div className="grid grid-cols-2 gap-2 mt-4 text-[11.5px]">
           <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">납입 원금</div><div className="font-semibold tabular mt-0.5">{won(r.principal)}</div></div>
@@ -83,7 +84,7 @@ export default function SavingsPage() {
         <div>
           <label className="block text-[12px] font-semibold text-white/75 mb-1.5">이자 방식</label>
           <div className="grid grid-cols-2 gap-2">
-            {([['simple','단리','원금에만 이자'], ['compound','복리','이자에도 이자']] as [InterestType, string, string][]).map(([v, label, desc]) => (
+            {([['simple','단리','원금에만 이자'], ['compound','월복리','매월 이자 재투자']] as [InterestType, string, string][]).map(([v, label, desc]) => (
               <button
                 key={v}
                 onClick={() => set({ interestType: v })}
@@ -108,15 +109,15 @@ export default function SavingsPage() {
           <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세전 이자</span><span className="font-semibold text-white tabular">{won(r.grossInterest)}</span></div>
           <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">이자소득세 (15.4%)</span><span className="font-semibold text-rose-300 tabular">−{won(r.taxAmount)}</span></div>
           <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세후 이자</span><span className="font-semibold text-emerald-300 tabular">{won(r.netInterest)}</span></div>
-          <div className="flex justify-between py-1.5"><span className="text-white/60">실효 연이율</span><span className="font-semibold text-[color:var(--brand)] tabular">{r.effectiveRate.toFixed(2)}%</span></div>
+          <div className="flex justify-between py-1.5"><span className="text-white/60">원금 합계 대비 세후 연환산 수익률</span><span className="font-semibold text-[color:var(--brand)] tabular">{r.effectiveRate.toFixed(2)}%</span></div>
         </div>
       </div>
 
       {/* ISA 절세 비교 */}
       <div className="glass-card">
         <div className="flex items-baseline justify-between mb-3">
-          <h2 className="font-semibold text-white text-[13.5px]">일반계좌 vs ISA 절세 비교</h2>
-          <span className="text-[10.5px] text-white/40">조특법 §91의18 (최근 고시 기준)</span>
+          <h2 className="font-semibold text-white text-[13.5px]">일반계좌 vs ISA 세금 가정 비교</h2>
+          <span className="text-[10.5px] text-white/40">일반형 · 단순 비교</span>
         </div>
         <div className="grid grid-cols-2 gap-2 text-[11.5px]">
           <div className="rounded-lg bg-white/[0.05] p-3">
@@ -131,40 +132,30 @@ export default function SavingsPage() {
           </div>
         </div>
         <div className="mt-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 flex items-center justify-between">
-          <span className="text-[12px] text-emerald-200">ISA 절세 효과</span>
+          <span className="text-[12px] text-emerald-200">같은 이자의 세금 차이</span>
           <span className="font-bold text-emerald-300 tabular text-[14px]">+{won(r.isa.savedAmount)}</span>
         </div>
-        <p className="text-[10.5px] text-white/40 mt-2 leading-relaxed">일반형: 비과세 한도 200만원, 초과분 9.9% 분리과세. 서민형(총급여 5,000만 이하)·농어민형은 한도 400만원. 의무가입 3년, 납입한도 연 2,000만·총 1억원. 근거: 조세특례제한법 제91조의18.</p>
+        <p className="text-[10.5px] text-white/40 mt-2 leading-relaxed">동일 이자를 만기에 과세하고 ISA 일반형 비과세 한도 200만원이 남아 있다고 가정합니다. 가입 자격·의무기간 3년·납입한도(연 2,000만원·총 1억원)·기존 손익은 계산에 반영하지 않습니다. 3년 미만 또는 한도 초과 입력도 실제 가입 가능액이나 세후 수령액을 뜻하지 않습니다.</p>
       </div>
 
       <div className="mt-2 flex flex-col gap-8">
         <ExamplesSection title="적금 · 예금 계산 예시" items={[
-          { label: '월 30만 · 연 3.5% · 12개월 (적금)', input: '납입 원금 360만원', result: '세후 3,657,739원', note: '단리 · 세후 이자 57,739원' },
-          { label: '1,000만 · 연 3.8% · 12개월 (예금)', input: '예치 원금 1,000만원', result: '세후 10,321,480원', note: '단리 · 세후 이자 321,480원' },
-          { label: '월 50만 · 연 4.0% · 24개월 (적금)', input: '납입 원금 1,200만원', result: '세후 12,434,011원', note: '월복리 · 세후 이자 434,011원' },
+          { label: '월 30만원 · 연 3.5% · 12개월 적금', input: '납입 원금 360만원 · 단리', result: '세후 3,657,739원', note: '매월 초 납입·만기 과세·원 단위 반올림 가정' },
+          { label: '1,000만원 · 연 3.8% · 12개월 예금', input: '예치 원금 1,000만원 · 단리', result: '세후 10,321,480원', note: '세후 이자 321,480원 · 중도해지 제외' },
         ]} />
         <FAQSection pagePath={CALC_PATH} items={[
-          { q: '단리와 복리의 차이는?', a: '단리는 원금에만 이자가 붙는 계산방식이고, 복리는 발생한 이자를 원금에 더해 다음 이자 계산의 기준으로 삼습니다. 기간이 길수록 복리 효과가 극대화됩니다. 1,000만원 연 4% 10년 운용 시 단리 이자 400만원, 월복리 약 490만원(세전). 장기 적립일수록 복리 상품을 선택하세요. 근거: 금융소비자보호법 제19조 설명의무.' },
-          { q: '이자소득세 15.4%는 어떻게 계산되나요?', a: '소득세법 제129조에 따라 이자소득 원천징수세율은 14%(소득세) + 1.4%(지방소득세) = 15.4%입니다. 만기 시 은행이 자동 원천징수 후 지급합니다. 세전이자 100만원 → 세후 846,000원. 금융소득(이자+배당) 연 2,000만원 초과 시 종합과세 대상으로 누진세율(6~45%) 적용.' },
-          { q: '적금 vs 예금, 실수령 이자 차이는?', a: '목돈이 있다면 정기예금이 유리합니다. 정기적금은 첫 달 납입금은 12개월 전체 이자를 받지만, 마지막 달 납입금은 1개월치 이자만 받아 실효이율이 명목금리의 약 54%(12개월 기준)입니다. 예: 월 50만원 × 12개월 연 5% 적금의 세전이자는 원금 600만원 × 5% × 6.5/12 ≈ 162,500원.' },
-          { q: 'ISA 계좌 비과세 한도는?', a: '일반형은 이자·배당 순수익 200만원까지 비과세(초과분 9.9% 분리과세), 서민형(총급여 5,000만원 이하·종합소득 3,800만원 이하)·농어민형은 400만원까지 비과세입니다. 납입한도는 연 2,000만원·총 1억원, 의무가입 3년. 한도를 500만/1,000만원으로 늘리는 개정안은 국회에서 부결되어 시행되지 않았습니다(2026.7 기준). 근거: 조세특례제한법 제91조의18.' },
-          { q: '파킹통장 vs 정기예금, 언제 무엇을?', a: '파킹통장은 수시입출금이 자유로우면서 일복리로 이자를 받는 상품입니다. 3~6개월 내 사용 예정 자금은 파킹통장, 1년 이상 묶어둘 수 있으면 정기예금이 유리합니다. 비상금은 생활비 3~6개월치를 파킹통장에 보관하는 것을 권장합니다. 은행별 금리는 변동이 크므로 금융감독원 금리비교공시 finlife.fss.or.kr에서 실시간 확인하세요.' },
-          { q: '청년도약계좌·청년희망적금 남아있나요?', a: '청년도약계좌의 신규 가입 신청은 2025년 12월 31일 종료되었습니다. 기존 가입자는 계약과 유지심사 조건에 따라 이용합니다. 기존 가입요건의 가구소득 기준은 중위소득 250% 이하였으며, 신규 정책상품과 기존 가입자의 지원 내용은 서민금융진흥원에서 확인하세요.' },
-          { q: '저축은행 예금은 안전한가요?', a: '예금자보호법에 따라 원금+이자 합산 1인당 금융기관별로 예금보험공사가 보장합니다. 2025.9.1부터 보호한도가 1억원으로 상향 시행되었습니다(예금자보호법 개정). 저축은행 금리는 시중은행 대비 높은 편이지만 1개 저축은행당 보호한도 이내로 분산 예치하세요. 실시간 금리는 저축은행중앙회 SB톡톡플러스에서 확인 가능합니다.' },
+          { q: '단리와 월복리는 어떻게 다른가요?', a: '단리는 원금에만, 월복리는 매월 발생한 이자를 원금에 더해 이자를 계산합니다. 이 계산기는 일정 금리·매월 정상 납입·만기 과세를 가정하며 실제 일수, 중도해지, 은행별 절사 방식은 반영하지 않습니다.' },
+          { q: '이자소득세 15.4%는 무엇인가요?', a: '일반적인 이자소득 원천징수 소득세 14%와 지방소득세 1.4%의 합계입니다. 세전 이자 100만원이면 15만 4,000원을 차감합니다. 비과세·세금우대 상품이나 금융소득 종합과세 대상은 실제 세금이 달라집니다.' },
+          { q: '같은 금리인데 적금 이자가 적은 이유는?', a: '적금은 매달 납입하므로 뒤에 넣은 돈일수록 이자가 붙는 기간이 짧습니다. 월 50만원·12개월·연 5% 단리라면 총 원금은 600만원, 세전 이자는 16만 2,500원입니다.' },
+          { q: 'ISA 비교 결과는 실제 수령액인가요?', a: '아닙니다. 동일한 이자에 일반계좌와 ISA 일반형 세금만 적용한 가정입니다. ISA는 일반형 200만원, 요건을 충족한 서민형·농어민형 400만원까지 비과세이고 초과분은 9.9% 분리과세입니다. 화면은 서민형, 기존 계좌 손익, 가입·납입 가능 여부를 계산하지 않습니다.' },
+          { q: '예금자보호는 어디까지 되나요?', a: '2025년 9월 1일부터 보호 대상 상품은 원금과 소정의 이자를 합쳐 금융회사별 1인당 1억원까지 보호됩니다. 같은 회사의 여러 지점·계좌를 합산합니다. 펀드 등 모든 금융상품이 보호되는 것은 아니므로 상품 설명을 확인하세요.' },
         ]} />
-        <TipsSection title="이자 극대화 전략" items={[
-          { title: 'ISA 계좌 먼저 채우기', desc: '연 2,000만원 한도 내에서 예적금·ETF·리츠 편입 가능. 일반형 200만원·서민형 400만원까지 비과세, 초과분도 9.9% 저율 분리과세라 일반 계좌 15.4% 대비 세금 차이가 복리로 누적. 총급여 5,000만원 이하라면 서민형으로 개설.' },
-          { title: '인터넷은행·저축은행 우대 활용', desc: '인터넷은행·저축은행은 첫 거래·급여이체·체크카드 사용 등 조건으로 우대금리를 제공합니다. 우대 폭과 조건은 은행별로 상이하므로 금감원 금리비교공시 finlife.fss.or.kr 또는 저축은행중앙회 SB톡톡플러스에서 비교 후 가입하세요. 예금자보호 한도(2025.9 시행 1억원) 이내로 분산 예치.' },
-          { title: '풍차돌리기 적금', desc: '매월 1년 만기 적금을 새로 가입해 12개 적금을 운용하면 1년차부터 매월 만기금 수령 가능. 유동성과 복리 효과를 동시에 확보. 인뱅 + 시중은행 조합으로 금리별 분산.' },
-          { title: '청년도약계좌 기존 가입자 확인', desc: '청년도약계좌 신규 가입 신청은 2025년 12월 31일 종료되었습니다. 기존 계좌는 유지심사·중도해지 조건을 확인하고 신규 청년 금융상품은 서민금융진흥원 공지를 확인하세요.' },
-          { title: '만기 알림 설정·자동재예치 금지', desc: '자동재예치는 당시 기준금리로 재계약되어 기존 대비 0.5~1.0%p 낮은 경우가 많습니다. 만기 7~14일 전 알림 설정 후 금리비교사이트(금감원 금융상품통합비교공시 finlife.fss.or.kr)에서 최상위 상품 확인 후 직접 갈아타기.' },
-          { title: '세금우대·노인비과세 저축', desc: '만 65세 이상·장애인·기초생활수급자·독립유공자 등은 1인당 5,000만원 한도 비과세종합저축 가능(농어촌특별세 미부과). 근거: 조세특례제한법 제88조의2.' },
+        <TipsSection title="저축상품 비교 체크리스트" items={[
+          { title: '우대조건과 적용 한도 확인', desc: '최고금리 적용에 필요한 급여이체·카드 사용 등의 조건과 우대금리를 받는 금액 한도를 확인하세요.' },
+          { title: '사용할 시점에 맞춰 비교', desc: '만기 전에 돈이 필요할 수 있다면 중도해지 이율과 인출 조건을 함께 확인하세요. 파킹통장도 이자 지급 주기와 금액별 금리가 상품마다 다릅니다.' },
+          { title: '만기 후 조건 다시 확인', desc: '자동재예치 여부와 재예치 금리를 확인하고, 수수료·세금·예금자보호를 포함한 실제 조건으로 비교하세요.' },
         ]} />
-        <OfficialSourcesSection sources={[
-          '소득세법 제129조 이자소득 원천징수세율 15.4%',
-          '조세특례제한법 제91조의18 ISA 비과세·분리과세 기준',
-          '금융감독원 금융상품통합비교공시 및 예금자보호법 기준',
-        ]} />
+        <OfficialSourcesSection sources={officialSources[CALC_PATH]} />
         <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>

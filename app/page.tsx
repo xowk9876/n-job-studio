@@ -22,7 +22,7 @@ const heroPreview = calcSalary({
 const fmtWon = (n: number) => n.toLocaleString('ko-KR')
 
 const homeDescription =
-  '2026년 최신 세율·4대보험 요율·법령 기준으로 정확하게 계산합니다. 연봉 실수령액, 주택담보대출, 퇴직금, 적금·ISA, 전월세, 로또까지 무료.'
+  '예상 금액을 계산하고 적용 기준을 확인하세요. 연봉 실수령액, 주택담보대출, 퇴직금, 적금·ISA, 전월세, 로또까지 무료.'
 
 export const metadata: Metadata = {
   alternates: buildGoogleAlternates(SITE_URL),
@@ -52,7 +52,7 @@ const calculators = [
     href: '/salary',
     label: '연봉 실수령액',
     desc: '4대보험·근로소득세 공제 후 매월 실수령액',
-    tag: '인기',
+    tag: '급여',
     color: '#6bafff',
     Icon: Wallet,
   },
@@ -83,7 +83,7 @@ const calculators = [
   {
     href: '/jeonse',
     label: '전월세 전환',
-    desc: '법정 전환율 양방향 환산',
+    desc: '보증금·월세 환산과 상한 안내',
     tag: '부동산',
     color: '#fcc73e',
     Icon: KeyRound,
@@ -101,20 +101,20 @@ const calculators = [
 const trustItems = [
   {
     Icon: Shield,
-    title: '정부 공식 기준',
+    title: '계산 근거 안내',
     desc: '2026년 4대보험 요율·간이세액표·근로기준법을 반영합니다.',
     accent: '#6bafff',
   },
   {
     Icon: Scale,
-    title: '법정 공식 구현',
-    desc: '금융권 표준 상환·전월세 전환율 등 검증 가능한 공식을 사용합니다.',
+    title: '조건별 금액 비교',
+    desc: '대출 상환 방식·저축 조건·전월세 전환율을 바꿔 비교할 수 있습니다.',
     accent: '#929cf8',
   },
   {
     Icon: Lock,
     title: '브라우저 안에서 계산',
-    desc: '가입 없이, 입력값은 서버로 전송하지 않습니다.',
+    desc: '금융 입력값은 이 브라우저에서 계산·저장됩니다.',
     accent: '#3ee0a5',
   },
 ]
@@ -137,12 +137,12 @@ export default function HomePage() {
             <h1 className="home-hero__title font-display">
               <span className="home-hero__title-line">복잡한 금융 계산</span>
               <span className="home-hero__title-line home-hero__title-line--accent">
-                1분이면 끝
+                바로 계산하세요
               </span>
             </h1>
 
             <p className="home-hero__lead">
-              <span className="home-hero__lead-part">정부 고시·법정 공식 기준으로 정확하게.</span>
+              <span className="home-hero__lead-part">예상 금액과 계산 기준을 한눈에.</span>
               <span className="home-hero__lead-part">가입 없이, 브라우저에서 바로 계산하세요.</span>
             </p>
 
@@ -158,7 +158,7 @@ export default function HomePage() {
           <aside className="home-hero__col-preview" aria-label="연봉 5,000만원 기준 월 실수령액 미리보기">
             <div className="home-hero__preview-card">
               <p className="home-hero__preview-header">
-                월 실수령액 · 연봉 5,000만원 기준
+                월 실수령액 예시 · 연봉 5,000만원
               </p>
               <p className="home-hero__preview-amount tabular">
                 {fmtWon(heroPreview.monthlyNet)}
@@ -202,10 +202,8 @@ export default function HomePage() {
                   </span>
                 </div>
                 <div className="home-hero__preview-chip">
-                  <span className="home-hero__preview-chip-label">총 공제</span>
-                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#ef7e7e' }}>
-                    {fmtWon(heroPreview.totalDeduction)}원
-                  </span>
+                  <span className="home-hero__preview-chip-label">예시 조건</span>
+                  <span className="home-hero__preview-chip-value" style={{ color: '#c4cbff' }}>본인 1인 · 수당 없음</span>
                 </div>
               </div>
             </div>
@@ -271,7 +269,7 @@ export default function HomePage() {
       <section className="home-section" aria-label="서비스 신뢰">
         <header className="section-header">
           <p className="section-label">WHY MONEYFIT</p>
-          <h2 className="section-title">믿고 쓰는 계산기</h2>
+          <h2 className="section-title">계산 전에 확인하세요</h2>
         </header>
         <div className="home-trust-grid">
           {trustItems.map((item) => (

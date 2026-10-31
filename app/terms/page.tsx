@@ -37,7 +37,7 @@ export default function TermsPage() {
       <header className="mb-10">
         <p className="font-mono text-[11px] tracking-[0.28em] text-[color:var(--muted)] mb-3">LEGAL</p>
         <h1 className="font-display text-[28px] md:text-[34px] font-bold text-white tracking-tight">이용약관</h1>
-        <p className="mt-3 text-[13px] text-[color:var(--muted)]">시행일: 2026년 1월 1일</p>
+        <p className="mt-3 text-[13px] text-[color:var(--muted)]">시행일: 2026년 1월 1일 · 설명 정정: 2026년 10월 31일</p>
       </header>
 
       <div className="space-y-8 text-[14.5px] text-[color:var(--sub)] leading-[1.85]">
@@ -61,38 +61,17 @@ export default function TermsPage() {
 
         <section>
           <h2 className="font-display text-[18px] font-semibold text-white mb-3">제3조 (이용 요금)</h2>
-          <p>
-            서비스는 무료로 제공됩니다. 회원가입이나 결제 절차가 없으며, 서비스 운영은 페이지 내 광고
-            수익으로 유지됩니다.
-          </p>
+          <p>서비스는 회원가입과 결제 없이 무료로 이용할 수 있으며, 페이지에 광고가 표시될 수 있습니다.</p>
         </section>
 
         <section>
-          <h2 className="font-display text-[18px] font-semibold text-white mb-3">제4조 (면책)</h2>
-          <ol className="list-decimal pl-6 space-y-2">
-            <li>
-              서비스 계산 결과는 입력값과 게시 시점의 공식·세율을 기반으로 산출됩니다. 정확성과 완전성을
-              보장하기 위해 최선을 다하나, 결과의 실제 적용에 따른 손해에 대해 서비스는 어떠한 법적
-              책임도 지지 않습니다.
-            </li>
-            <li>
-              이용자는 중요한 재무 의사결정(대출 실행, 세무 신고, 계약 체결 등) 전에 반드시 공인된 전문가
-              (세무사·변호사·공인중개사·금융기관) 또는 공식 기관의 확인을 거쳐야 합니다.
-            </li>
-            <li>
-              서비스는 천재지변, 통신 장애, 제3자 서비스(Vercel·Google 등) 장애로 인한 서비스 중단에 대해
-              책임지지 않습니다.
-            </li>
-          </ol>
+          <h2 className="font-display text-[18px] font-semibold text-white mb-3">제4조 (계산 결과와 서비스 이용)</h2>
+          <p>계산 결과는 입력값과 페이지에 표시한 기준에 따른 예상치입니다. 실제 급여·세금·대출·계약 조건은 관련 기관의 확인이 필요합니다. 통신 장애나 외부 서비스 장애로 이용이 일시적으로 제한될 수 있습니다. 이 안내는 관계 법령에 따른 운영자의 책임을 배제하지 않습니다.</p>
         </section>
 
         <section>
           <h2 className="font-display text-[18px] font-semibold text-white mb-3">제5조 (지식재산권)</h2>
-          <p>
-            서비스의 UI 디자인·소스코드·문서·이미지·브랜드명은 운영자에게 귀속됩니다. 이용자는 개인적·비상업적
-            용도로 서비스를 이용할 수 있으며, 복제·배포·2차 가공·상업적 이용을 위해서는 사전 서면 동의가
-            필요합니다.
-          </p>
+          <p>서비스에서 직접 제작한 콘텐츠의 권리는 운영자에게 있습니다. 외부 자료·글꼴·아이콘·오픈소스 등은 각 권리자의 권리와 해당 이용 조건을 따릅니다.</p>
         </section>
 
         <section>
