@@ -1,6 +1,8 @@
 /** Web Crypto CSPRNG + rejection sampling (모듈러 바이어스 제거) */
 export function secureRandomInt(maxExclusive: number): number {
-  if (maxExclusive <= 0) throw new RangeError('maxExclusive must be positive')
+  if (!Number.isInteger(maxExclusive) || maxExclusive <= 0 || maxExclusive > 0x100000000) {
+    throw new RangeError('maxExclusive must be an integer from 1 to 2^32')
+  }
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     const arr = new Uint32Array(1)
     const limit = Math.floor(0x100000000 / maxExclusive) * maxExclusive

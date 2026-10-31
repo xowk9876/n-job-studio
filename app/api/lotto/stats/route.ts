@@ -33,17 +33,20 @@ export async function GET(request: Request) {
     )
   }
 
-  const windowParam = new URL(request.url).searchParams.get('window')
+  const searchParams = new URL(request.url).searchParams
+  const windowParam = searchParams.get('window')
+  // 사용자가 새로고침하면 공식 데이터 캐시까지 재조회한다. 자동 갱신은 5분 캐시를 공유한다.
+  const revalidate = searchParams.get('refresh') === '1' ? 0 : 300
   const recentWindow =
     windowParam && /^\d{1,3}$/.test(windowParam)
       ? Math.min(Math.max(Number(windowParam), 10), MAX_RECENT_WINDOW)
       : DEFAULT_RECENT_WINDOW
 
   // 라이브 최신 회차를 먼저 확인해 스냅샷이 최신인지 검증하고, 뒤처진 구간만 병합한다
-  const liveLatest = await fetchLatestRound()
+  const liveLatest = await fetchLatestRound(revalidate)
   const newer =
     liveLatest && liveLatest.round > SNAPSHOT_LATEST_ROUND
-      ? await fetchRoundsAfter(SNAPSHOT_LATEST_ROUND, liveLatest)
+      ? await fetchRoundsAfter(SNAPSHOT_LATEST_ROUND, liveLatest, 60, revalidate)
       : []
 
   const merged = mergeCompleteHistory(SNAPSHOT_DRAWS, newer, liveLatest)
@@ -56,7 +59,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ ...stats, updateIncomplete: merged.updateIncomplete, latestKnownRound: merged.latestKnownRound }, {
     headers: {
-      'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=86400',
+      'Cache-Control': 'no-store',
     },
   })
 }

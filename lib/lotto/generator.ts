@@ -4,12 +4,12 @@
  * ⚠️ 확률에 대한 정직한 고지
  * 로또 6/45는 매 회차 독립 추첨이며 모든 조합의 1등 확률은 1/8,145,060로 **동일**하다.
  * 통계 가중치·밸런스 필터는 당첨 확률을 높이지 못한다. 이 모듈이 하는 일은
- *   ① 역대 1등 조합에서 드물게 관측된 극단적 분포(예: 1·2·3·4·5·6, 합계 30)를 피하고
+ *   ① 선택한 균형 모드에서 극단적 분포(예: 1·2·3·4·5·6, 합계 21)를 피하고
  *   ② 사용자가 정한 조건(고정·제외·홀짝·합계 등)을 만족하는 조합을 찾아 주는 것
  * 까지이며, 당첨을 보장하지 않는다.
  *
- * 알고리즘: 가중 비복원 추출(weighted sampling without replacement) → 하드 필터 →
- *          패턴 점수 최댓값 선택 → 조건 미충족 시 스왑 기반 복구(hill-climbing)
+ * 기본 모드는 정수 난수로 비복원 추출하고 첫 유효 조합을 사용한다.
+ * 균형 모드에만 패턴 점수 선택과 조건 복구를 적용한다.
  */
 
 import { analyzeCombination, scorePattern, type CombinationMetrics } from './pattern'
@@ -67,22 +67,29 @@ export const SUM_MAX_POSSIBLE = 255
 /** 연속 번호 제한 옵션에서 "제한 없음"을 뜻하는 값 */
 export const CONSECUTIVE_UNLIMITED = 6
 
-/**
- * UI는 전략 선택을 노출하지 않고 항상 이 기본값(균형)을 사용한다.
- * 균형 전략은 45개 번호를 동일 가중치로 뽑으므로 출현 빈도 통계에 의존하지 않는다.
- */
+/** 기본: 모든 6개 조합을 같은 확률로 추출하며 과거 당첨 조합도 포함한다. */
 export const DEFAULT_GENERATOR_OPTIONS: GeneratorOptions = {
   games: 5,
-  strategy: 'balanced',
+  strategy: 'uniform',
   include: [],
   exclude: [],
   oddEven: 'any',
   highLow: 'any',
+  sumMin: SUM_MIN_POSSIBLE,
+  sumMax: SUM_MAX_POSSIBLE,
+  maxConsecutive: CONSECUTIVE_UNLIMITED,
+  minZones: 1,
+  avoidPastWinning: false,
+}
+
+/** 선택 기능: 기존 분포 필터. 과거 조합 제외는 별도로 선택한다. */
+export const BALANCED_GENERATOR_OPTIONS: GeneratorOptions = {
+  ...DEFAULT_GENERATOR_OPTIONS,
+  strategy: 'balanced',
   sumMin: 100,
   sumMax: 175,
   maxConsecutive: 2,
   minZones: 3,
-  avoidPastWinning: true,
 }
 
 const ODD_TARGET: Record<RatioPreset, number | null> = { any: null, '3:3': 3, '4:2': 4, '2:4': 2 }
@@ -237,6 +244,19 @@ function sampleCombination(fixed: number[], candidates: number[], weights: numbe
   return picked.sort((a, b) => a - b)
 }
 
+/** 부분 Fisher–Yates: 정수 구간을 균등 추출해 부동소수점 가중치·패턴 선별을 배제한다. */
+function sampleUniformCombination(fixed: number[], candidates: number[]): number[] {
+  const pool = [...candidates]
+  const picked = [...fixed]
+  for (let i = fixed.length; i < LOTTO_PICK; i++) {
+    const index = secureRandomInt(pool.length)
+    picked.push(pool[index]!)
+    pool[index] = pool[pool.length - 1]!
+    pool.pop()
+  }
+  return picked.sort((a, b) => a - b)
+}
+
 /** 조건 위반 개수 — 0이면 모든 필터 통과 */
 function countViolations(
   numbers: number[],
@@ -351,7 +371,9 @@ export function generateGames(options: GeneratorOptions, context: GeneratorConte
     let validCount = 0
 
     for (let attempt = 0; attempt < MAX_SAMPLES_PER_GAME; attempt++) {
-      const numbers = sampleCombination(fixed, candidates, weights)
+      const numbers = opts.strategy === 'uniform'
+        ? sampleUniformCombination(fixed, candidates)
+        : sampleCombination(fixed, candidates, weights)
       const violations = countViolations(numbers, opts, pastRanks)
 
       if (violations > 0) {
@@ -364,6 +386,13 @@ export function generateGames(options: GeneratorOptions, context: GeneratorConte
 
       lastValid = numbers
       if (usedKeys.has(numbers.join(','))) continue
+
+      // 유효 후보 중 첫 조합을 사용해야 균등성이 유지된다. 점수와 게임 간 번호 겹침은 평가하지 않는다.
+      if (opts.strategy === 'uniform') {
+        best = numbers
+        bestScore = 0
+        break
+      }
 
       // 무작위 지터를 섞어 같은 점수대 조합이 매번 똑같이 뽑히지 않게 한다
       const score =
@@ -381,6 +410,9 @@ export function generateGames(options: GeneratorOptions, context: GeneratorConte
       games.push(toGame(best, bestScore, false))
       continue
     }
+
+    // 균등 모드에서는 중복 허용·조건 완화·점수 복구로 분포를 바꾸지 않는다.
+    if (opts.strategy === 'uniform') break
 
     // 유효 조합을 찾았지만 앞선 게임과 중복뿐인 경우 (고정 번호 6개 등) — 중복을 허용한다
     if (lastValid) {
