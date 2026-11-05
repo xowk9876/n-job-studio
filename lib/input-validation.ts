@@ -18,7 +18,7 @@ export function mergeStoredInputs<T extends object>(persisted: unknown, current:
   const saved = persisted as Record<string, unknown>
   const result = { ...current }
   const ranges: Record<string, [number, number]> = {
-    annualRate: [0, MAX_RATE], conversionRate: [0, MAX_RATE],
+    annualRate: [0, MAX_RATE], conversionRate: [0.001, MAX_RATE],
     years: [1, 50], months: [1, 600], dependents: [1, 11], children: [0, 10],
     overtimeHours: [0, 80], nightHours: [0, 40], holidayHours: [0, 248], holidayOver8Hours: [0, 248],
   }

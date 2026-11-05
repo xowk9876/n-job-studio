@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { calcSalary } from '@/lib/salary'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
+import { buildGuideMetadata, SALARY_GUIDE_UPDATED_AT } from '@/lib/seo'
 
 const slug = '2026-salary-tax-guide'
 const title = '2026년 연봉 실수령액 계산 기준'
 const description =
   '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.'
-const updatedAt = CONTENT_UPDATED_AT
+const updatedAt = SALARY_GUIDE_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '세금' })
 
@@ -52,8 +52,8 @@ export default function Page() {
             </tr>
           </thead>
           <tbody>
-            <tr><td>국민연금</td><td>9.5%</td><td>4.75%</td><td>국민연금법 제88조 (2026.1 시행). 기준소득월액 상한 659만원(2026.7~2027.6) → 월 공제 상한 313,025원</td></tr>
-            <tr><td>건강보험</td><td>7.19%</td><td>3.595%</td><td>2026년 보건복지부 고시</td></tr>
+            <tr><td>국민연금</td><td>9.5%</td><td>4.75%</td><td>국민연금법 제88조 (2026.1 시행). 기준소득월액 상한 659만원(2026.7~2027.6) → 10원 미만 절사 후 월 공제 상한 313,020원</td></tr>
+            <tr><td>건강보험</td><td>7.19%</td><td>3.595%</td><td>2026년 일반 직장가입자 본인 부담 하한 10,080원 · 상한 4,591,740원</td></tr>
             <tr><td>장기요양</td><td>건보료의 13.14%</td><td>본인 건강보험료의 약 13.14%</td><td>노인장기요양보험법 (2026 고시)</td></tr>
             <tr><td>고용보험</td><td>1.8%(실업급여)</td><td>0.9%</td><td>고용보험법 시행령</td></tr>
           </tbody>

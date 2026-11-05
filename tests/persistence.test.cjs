@@ -29,3 +29,35 @@ test('Zustand migrates version 1 salary and persists validated new holiday field
   assert.equal(state.holidayOver8Hours, 0)
   assert.equal(JSON.parse(values.get('mf-salary')).version, 2)
 })
+
+test('a blocked write keeps new inputs on navigation and resumes saving when space is available', async t => {
+  const { useSavingsStore } = require('../store/index.ts')
+  values.set('mf-savings', JSON.stringify({ version: 1, state: { amount: 120_000 } }))
+  await useSavingsStore.persist.rehydrate()
+  const blocked = t.mock.method(global.localStorage, 'setItem', () => { throw new Error('QuotaExceededError') })
+  useSavingsStore.getState().set({ amount: 200_000 })
+  await useSavingsStore.persist.rehydrate()
+  assert.equal(useSavingsStore.getState().amount, 200_000)
+  blocked.mock.restore()
+  useSavingsStore.getState().set({ amount: 250_000 })
+  assert.equal(JSON.parse(values.get('mf-savings')).state.amount, 250_000)
+})
+
+test('a restored decimal rate below 0.000001 displays at its true value', () => {
+  const React = require('react')
+  const { renderToStaticMarkup } = require('react-dom/server')
+  const NumericInput = require('../components/ui/NumericInput.tsx').default
+  const html = renderToStaticMarkup(React.createElement(NumericInput, { value: 0.0000001, allowDecimal: true, onChange() {} }))
+  assert.match(html, /value="0\.0000001"/)
+})
+
+test('legacy rent inputs migrate only the former default and reject invalid saved rates', async () => {
+  const { useJeonseStore } = require('../store/index.ts')
+  const defaultRate = useJeonseStore.getInitialState().conversionRate
+  for (const [value, expected] of [[4.75, defaultRate], [0, defaultRate], [4.2, 4.2]]) {
+    useJeonseStore.setState(useJeonseStore.getInitialState())
+    values.set('mf-jeonse', JSON.stringify({ version: 1, state: { conversionRate: value } }))
+    await useJeonseStore.persist.rehydrate()
+    assert.equal(useJeonseStore.getState().conversionRate, expected)
+  }
+})

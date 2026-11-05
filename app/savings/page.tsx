@@ -9,6 +9,7 @@ import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, Relat
 import { getCalculatorLinks } from '@/lib/seo'
 import { officialSources } from '@/lib/content-sources'
 
+const TERM_MONTHS = [3, 6, 12, 18, 24, 36, 48, 60]
 const CALC_PATH = '/savings'
 const calcSeo = getCalculatorLinks(CALC_PATH)
 
@@ -76,7 +77,8 @@ export default function SavingsPage() {
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">기간 (개월)</label>
             <select aria-label="저축기간 (개월)" className="glass-select" value={months} onChange={(e) => set({ months: Number(e.target.value) })}>
-              {[3,6,12,18,24,36,48,60].map(m => <option key={m} value={m}>{m}개월 ({m >= 12 ? `${m/12}년` : `${m}달`})</option>)}
+              {!TERM_MONTHS.includes(months) && <option value={months}>{months}개월</option>}
+              {TERM_MONTHS.map(m => <option key={m} value={m}>{m}개월</option>)}
             </select>
           </div>
         </div>

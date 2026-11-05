@@ -151,6 +151,48 @@ test('manual API refresh bypasses upstream cache and response is never served st
   assert.deepEqual(calls, [0, 300])
 })
 
+test('the latest draw never falls behind the snapshot and manual refresh bypasses caches', async t => {
+  const { GET } = require('../app/api/lotto/latest/route.ts')
+  const latest = SNAPSHOT_DRAWS.at(-1)
+  let upstream = SNAPSHOT_DRAWS.at(-2)
+  const revalidations = []
+  t.mock.method(globalThis, 'fetch', async (_url, options) => {
+    revalidations.push(options.next.revalidate)
+    const item = {
+      ltEpsd: upstream.round, ltRflYmd: upstream.drawDate.replaceAll('-', ''),
+      ...Object.fromEntries(upstream.numbers.map((n, i) => [`tm${i + 1}WnNo`, n])),
+      bnsWnNo: upstream.bonusNumber, rnk1WnNope: upstream.firstWinnerCount,
+      rnk1WnAmt: upstream.firstPrizeAmount, wholEpsdSumNtslAmt: upstream.totalSalesAmount,
+    }
+    return Response.json({ data: { list: [item] } })
+  })
+  const url = 'https://moneyfit.example/api/lotto/latest'
+  const fallback = await (await GET(new Request(url))).json()
+  assert.equal(fallback.round, latest.round)
+  assert.equal(fallback.origin, 'snapshot')
+  upstream = latest
+  const refreshed = await GET(new Request(url + '?refresh=1'))
+  assert.equal(refreshed.headers.get('cache-control'), 'no-store')
+  const result = await refreshed.json()
+  assert.equal(result.origin, 'live')
+  assert.deepEqual(result.numbers, latest.numbers)
+  assert.deepEqual(revalidations, [300, 0])
+})
+
+test('an unpublished round cannot cache an empty upstream result for the whole next day', async t => {
+  const { GET } = require('../app/api/lotto/round/route.ts')
+  const latest = SNAPSHOT_DRAWS.at(-1)
+  const revalidations = []
+  t.mock.method(globalThis, 'fetch', async (_url, options) => {
+    revalidations.push(options.next.revalidate)
+    return Response.json({ data: { list: [] } })
+  })
+  const url = 'https://moneyfit.example/api/lotto/round?round='
+  assert.equal((await GET(new Request(url + latest.round))).status, 200)
+  assert.equal((await GET(new Request(url + (latest.round + 1)))).status, 404)
+  assert.deepEqual(revalidations, [86400, 300])
+})
+
 test('generator renders uniform default, opt-in exclusion, data status and refresh controls', () => {
   const React = require('react')
   const { renderToStaticMarkup } = require('react-dom/server')

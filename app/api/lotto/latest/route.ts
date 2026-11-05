@@ -29,11 +29,12 @@ export async function GET(request: Request) {
     )
   }
 
-  const live = await fetchLatestRound()
+  const refresh = new URL(request.url).searchParams.get('refresh') === '1'
+  const live = await fetchLatestRound(refresh ? 0 : 300)
 
-  if (live) {
+  if (live && live.round >= SNAPSHOT_LATEST_ROUND) {
     return NextResponse.json(live, {
-      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600' },
+      headers: { 'Cache-Control': refresh ? 'no-store' : 'public, s-maxage=300, stale-while-revalidate=3600' },
     })
   }
 
@@ -41,7 +42,7 @@ export async function GET(request: Request) {
   if (snapshot) {
     return NextResponse.json(snapshot, {
       // 폴백 응답은 짧게만 캐시해 외부 API 복구 시 빠르게 최신 데이터로 전환한다
-      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+      headers: { 'Cache-Control': refresh ? 'no-store' : 'public, s-maxage=60, stale-while-revalidate=300' },
     })
   }
 

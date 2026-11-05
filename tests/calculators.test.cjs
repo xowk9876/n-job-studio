@@ -57,6 +57,25 @@ test('salary uses monthly table, non-taxable pay, and whole-thousand pension bas
   assert.equal(result.pension, 142_500)
   assert.equal(result.monthlyNet + result.totalDeduction, result.monthlyGross)
 })
+test('social insurance matches the official simulator for a monthly salary of 3,001,000 won', () => {
+  const r = calcSalary({ ...salary, annualSalary: 36_012_000 })
+  assert.deepEqual([r.pension, r.health, r.care, r.employment], [142_540, 107_880, 14_170, 27_000])
+})
+test('employee health premium stays within 2026 limits, including long-term care basis', () => {
+  const low = calcSalary({ ...salary, annualSalary: 2_400_000 })
+  const high = calcSalary({ ...salary, annualSalary: 2_400_000_000 })
+  assert.equal(low.health, 10_080)
+  assert.equal(low.pension, 19_470)
+  assert.equal(high.pension, 313_020)
+  assert.equal(high.health, 4_591_740)
+  assert.equal(high.care, 603_370)
+  const sample = calcSalary({ ...salary, annualSalary: 24_000_000 })
+  assert.equal(sample.health, 71_900)
+  assert.equal(sample.care, 9_440)
+  const truncated = calcSalary({ ...salary, annualSalary: 25_200_000 })
+  assert.equal(truncated.health, 75_490)
+  assert.equal(truncated.care, 9_910)
+})
 test('two 8-hour holidays do not become one 16-hour holiday', () => {
   const base = { ...salary, annualSalary: 50_160_000 }
   assert.equal(calcSalary({ ...base, holidayHours: 16 }).holidayPay, 480_000)
@@ -76,6 +95,15 @@ test('severance: calendar anniversary, leap year, invalid date, ordinary wage fl
   assert.equal(parseCalendarDate('2026-02-29'), null)
   assert.ok(parseCalendarDate('2024-02-29'))
 })
+test('severance average wage matches the labour ministry calculator at month ends', () => {
+  // 입력은 마지막 근무일. 3개월 산정기간은 그 다음 날(법적 퇴직일) 기준.
+  for (const [endDate, days] of [
+    ['2026-05-27', 89], ['2026-05-28', 89], ['2026-05-29', 90], ['2026-05-30', 91],
+    ['2024-05-28', 90], ['2024-05-29', 90], ['2026-07-30', 92], ['2026-12-30', 92],
+  ]) {
+    assert.equal(calcSeverance({ ...retirement, endDate }).averageDailyWage, 10_500_000 / days)
+  }
+})
 for (const type of ['equal-payment', 'equal-principal', 'bullet']) {
   test(`mortgage ${type}: pays principal exactly, zero final balance`, () => {
     for (const annualRate of [0, 1e-14, 3.5, 100]) {
@@ -94,6 +122,9 @@ test('DSR tiny interest behaves like zero interest and existing debt reduces ava
   assert.equal(calcDsrLimit(input).maxPrincipal, 720_000_000)
   assert.ok(Math.abs(calcDsrLimit({ ...input, annualRate: 1e-14 }).maxPrincipal - 720_000_000) <= 1)
   assert.equal(calcDsrLimit({ ...input, existingDebtMonthlyPmt: 2_000_001 }).maxPrincipal, 0)
+  const overIncome = calcDsrLimit({ ...input, existingDebtMonthlyPmt: 6_000_000 })
+  assert.equal(overIncome.utilization, 120)
+  assert.equal(overIncome.maxPrincipal, 0)
 })
 test('savings: independent 12-month simple-interest example and ISA tax', () => {
   const r = calcSavings(savings)
@@ -103,11 +134,22 @@ test('savings: independent 12-month simple-interest example and ISA tax', () => 
   assert.equal(r.maturityAmount, 6_137_475)
   assert.equal(r.isa.isaTax, 0)
 })
+test('compound savings preserve won precision for small rates and long terms', () => {
+  // Independently evaluated at 80 decimal places using the annuity-due formula.
+  const input = { ...savings, amount: 1_000_000_000_000, months: 600, interestType: 'compound' }
+  assert.equal(calcSavings({ ...input, annualRate: 1e-10 }).grossInterest, 15_025)
+  assert.equal(calcSavings({ ...input, annualRate: 3.125 }).grossInterest, 848_005_694_191_265)
+})
 test('jeonse conversion and low ratio never promises safety', () => {
   const r = calcJeonse({ direction: 'jeonse-to-wolse', jeonsDeposit: 300_000_000, wolseDeposit: 50_000_000, conversionRate: 5, marketPrice: 500_000_000 })
   assert.equal(r.monthlyRent, 1_041_667)
   assert.doesNotMatch(r.risk.label, /안전/)
   assert.ok(calcJeonse({ direction: 'wolse-to-jeonse', currentWolse: 1_000_000, conversionRate: 0 }).error)
+})
+test('jeonse rejects an increased deposit in a conversion to monthly rent', () => {
+  const input = { direction: 'jeonse-to-wolse', jeonsDeposit: 100_000_000, conversionRate: 5 }
+  assert.ok(calcJeonse({ ...input, wolseDeposit: 100_010_000 }).error)
+  assert.equal(calcJeonse({ ...input, wolseDeposit: 100_000_000 }).monthlyRent, 0)
 })
 test('all calculators reject invalid and non-finite values without NaN or unbounded loops', () => {
   for (const bad of [NaN, Infinity, -1, 1e100]) {

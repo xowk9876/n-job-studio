@@ -8,21 +8,18 @@
 // 국민연금: 2026.1.1 시행 연금개혁법(2025 통과)에 따라 9%→9.5% 인상
 //          총 9.5%(노사 각 4.75%), 매년 0.5%p씩 단계 인상 → 2033년 13%
 //          출처: 국민연금공단·보건복지부 보도자료
-const PENSION_RATE = 0.0475
-// 기준소득월액 상한액 (2026.7~2027.6: 6,590,000원 — 보건복지부 고시, A값 변동률 3.4% 반영)
-// 월 보험료 상한(근로자 부담) = 6,590,000 × 4.75% = 313,025원
-const PENSION_MONTHLY_CAP = 313_025
-// 기준소득월액 하한액 (2026.7~2027.6: 410,000원 — 동일 고시)
-// 월 보험료 하한(근로자 부담) = 410,000 × 4.75% = 19,475원
-const PENSION_MONTHLY_MIN = 19_475
+const PENSION_INCOME_CAP = 6_590_000 // 2026.7~2027.6 기준소득월액 상한
+const PENSION_INCOME_MIN = 410_000   // 같은 기간 기준소득월액 하한
 // 건강보험: 2026년 7.19%(노사 각 3.595%) — 건강보험정책심의위원회 결정
 //          출처: 국민건강보험공단 고시
-const HEALTH_RATE = 0.03595
-// 장기요양보험: 2026년 소득 대비 직접요율 0.9448% (건강보험료 대비 약 13.14%)
-//             13.14% = 0.9448% ÷ 7.19% — 보건복지부 고시
-const CARE_RATE = 0.9448 / 7.19
-// 고용보험: 실업급여 분 0.9% (근로자 부담) — 고용보험법 시행령
-const EMPLOYMENT_RATE = 0.009
+// 보건복지부고시 제2025-222호. 직장 보수월액보험료 상·하한 중 일반 근로자 본인 부담 50%.
+const HEALTH_MONTHLY_MIN = 20_160 / 2
+const HEALTH_MONTHLY_CAP = 9_183_480 / 2
+
+// 근로자 부담분의 10원 미만 절사. 요율을 정수비로 적용해 경계값에서의 이진 소수 오차를 피한다.
+function premiumInTens(base: number, numerator: number, denominator: number): number {
+  return Math.floor(base * numerator / (denominator * 10)) * 10
+}
 
 // 수당 관련 상수
 const MONTHLY_WORK_HOURS = 209      // 월 소정근로시간 (주40h + 주휴 포함)
@@ -136,12 +133,14 @@ export function calcSalary(input: SalaryInput): SalaryResult {
   const taxableMonthly = monthlyGross - taxExempt
 
   // ── 4대보험 (과세 월급여 기준) ──
-  const pension = taxableMonthly > 0
-    ? Math.min(Math.max(Math.round(Math.floor(taxableMonthly / 1000) * 1000 * PENSION_RATE), PENSION_MONTHLY_MIN), PENSION_MONTHLY_CAP)
+  const pensionBase = Math.min(PENSION_INCOME_CAP, Math.max(PENSION_INCOME_MIN, Math.floor(taxableMonthly / 1000) * 1000))
+  const pension = taxableMonthly > 0 ? premiumInTens(pensionBase, 475, 10_000) : 0
+  const health = taxableMonthly > 0
+    ? Math.min(HEALTH_MONTHLY_CAP, Math.max(HEALTH_MONTHLY_MIN, premiumInTens(taxableMonthly, 719, 20_000)))
     : 0
-  const health = Math.round(taxableMonthly * HEALTH_RATE)
-  const care = Math.round(health * CARE_RATE)
-  const employment = Math.round(taxableMonthly * EMPLOYMENT_RATE)
+  // 장기요양은 절사·상하한을 반영한 건강보험료에 0.9448 / 7.19를 적용한다.
+  const care = premiumInTens(health, 9448, 71_900)
+  const employment = premiumInTens(taxableMonthly, 9, 1000)
 
   // 월 원천징수는 연말정산 추정식이 아닌 공식 급여 구간표를 조회한다.
   const incomeTax = monthlyWithholding(taxableMonthly, dependents, children)
@@ -149,7 +148,7 @@ export function calcSalary(input: SalaryInput): SalaryResult {
 
   // ── 합산 ──
   const totalDeduction = pension + health + care + employment + incomeTax + localTax
-  // 국민연금 하한(19,475원)이 과세월급보다 큰 초저소득에서 실수령이 음수가 되지 않게 한다.
+  // 보험료 하한이 급여보다 큰 경우 실수령액 표시의 하한은 0원이다.
   const monthlyNet = Math.max(0, monthlyGross - totalDeduction)
   const annualNet = monthlyNet * 12
 

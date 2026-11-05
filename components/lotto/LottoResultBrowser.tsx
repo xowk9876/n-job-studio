@@ -53,6 +53,7 @@ export default function LottoResultBrowser() {
 
   // 빠른 연속 클릭 시 늦게 도착한 이전 응답이 화면을 덮어쓰지 않도록 요청 순번을 비교한다
   const requestIdRef = useRef(0)
+  const newestResultRef = useRef<LottoRoundResult | null>(null)
 
   const applyResult = useCallback((data: LottoRoundResult) => {
     setResult(data)
@@ -62,13 +63,13 @@ export default function LottoResultBrowser() {
   }, [])
 
   const load = useCallback(
-    async (url: string) => {
+    async (url: string, refreshLatest = false) => {
       const requestId = ++requestIdRef.current
       setStatus('loading')
       setError(null)
 
       try {
-        const response = await fetch(url)
+        const response = await fetch(url, refreshLatest ? { cache: 'no-store' } : undefined)
         const payload = (await response.json()) as LottoRoundResult & { error?: string }
         if (requestId !== requestIdRef.current) return
 
@@ -78,9 +79,21 @@ export default function LottoResultBrowser() {
           return
         }
 
-        if (url === '/api/lotto/latest') {
+        if (refreshLatest) {
+          const known = newestResultRef.current
+          if (known && payload.round < known.round) {
+            applyResult(known)
+            setLatestVerified(false)
+            setError(`최신 조회가 지연되어 마지막으로 확인한 ${known.round}회를 표시합니다.`)
+            return
+          }
+          newestResultRef.current = payload
           setLatestRound(payload.round)
           setLatestVerified(payload.origin === 'live')
+        } else if (!newestResultRef.current || payload.round > newestResultRef.current.round) {
+          newestResultRef.current = payload
+          setLatestRound(payload.round)
+          setLatestVerified(false)
         }
         applyResult(payload)
       } catch {
@@ -113,8 +126,11 @@ export default function LottoResultBrowser() {
         if (cancelled) return
 
         // 회차 상한은 조회 순서와 무관한 메타데이터이므로 항상 반영한다
-        setLatestRound(payload.round)
-        setLatestVerified(payload.origin === 'live')
+        if (!newestResultRef.current || payload.round >= newestResultRef.current.round) {
+          newestResultRef.current = payload
+          setLatestRound(payload.round)
+          setLatestVerified(payload.origin === 'live')
+        }
         if (requestId !== requestIdRef.current) return
         applyResult(payload)
       } catch {
@@ -169,7 +185,7 @@ export default function LottoResultBrowser() {
         </div>
         <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
           <Trophy className="h-3.5 w-3.5 text-[color:var(--warn)]" aria-hidden />
-          {isLatest ? (latestVerified ? '최신 확인 회차' : '저장된 최근 회차') : '조회 회차'}
+          {isLatest ? (latestVerified ? '최신 확인 회차' : '최근 확인 회차') : '조회 회차'}
         </span>
       </div>
 
@@ -313,7 +329,7 @@ export default function LottoResultBrowser() {
         <div className="mt-3 flex flex-col items-center gap-3">
           <button
             type="button"
-            onClick={() => void load('/api/lotto/latest')}
+            onClick={() => void load('/api/lotto/latest?refresh=1', true)}
             disabled={status === 'loading'}
             className="h-10 rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40"
           >

@@ -204,9 +204,7 @@ export function calcDsrLimit(input: DsrInput): DsrResult {
     }
   }
 
-  const utilization = monthlyIncome > 0
-    ? Math.min(100, (existingDebtMonthlyPmt / monthlyIncome) * 100)
-    : 0
+  const utilization = (existingDebtMonthlyPmt / monthlyIncome) * 100
 
   return {
     stressedRate,

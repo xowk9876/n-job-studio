@@ -42,8 +42,6 @@ export default function SeverancePage() {
     [avgMonthly3, annualBonus, startDate, endDate, regularHourlyWage]
   )
 
-  const workYearsLabel = `${Math.floor(r.workYears)}년 ${Math.floor((r.workYears % 1) * 12)}개월`
-
   return (
     <div className="calc-page">
       {hydrated && r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
@@ -59,15 +57,14 @@ export default function SeverancePage() {
           <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-amber-200 text-[13px]">계속근로 1년 미만</p>
-            <p className="text-[12px] text-amber-300/80 mt-0.5">재직 {r.workDays}일({workYearsLabel}) — 1년 이상 근무 시 지급됩니다.</p>
+            <p className="text-[12px] text-amber-300/80 mt-0.5">재직 {r.workDays}일 — 1년 이상 근무 시 지급됩니다.</p>
           </div>
         </div>
       ) : (
         <div className="result-card">
           <p className="result-label">세전 퇴직금 (예상) {r.basis === 'regular' && <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold">통상임금 적용</span>}</p>
           <p className="result-value">{won(r.severancePay)}</p>
-          <div className="grid grid-cols-3 gap-2 mt-4 text-[11.5px]">
-            <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">재직 기간</div><div className="font-semibold mt-0.5">{workYearsLabel}</div></div>
+          <div className="grid grid-cols-2 gap-2 mt-4 text-[11.5px]">
             <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">재직일수</div><div className="font-semibold tabular mt-0.5">{r.workDays.toLocaleString()}일</div></div>
             <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">1일 {r.basis === 'regular' ? '통상' : '평균'}임금</div><div className="font-semibold tabular mt-0.5">{won(r.dailyWage)}</div></div>
           </div>
@@ -109,14 +106,14 @@ export default function SeverancePage() {
           <p className="text-[11.5px] text-white/40 mt-1">입력 시 평균임금 1일분과 통상임금 1일분(시급×8)을 비교하여 큰 값으로 산정</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="relative grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">입사일</label>
             <DatePicker ariaLabel="입사일 선택" value={fromISO(startDate)} onChange={(d) => set({ startDate: toISO(d) })} />
           </div>
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">마지막 근무일</label>
-            <DatePicker ariaLabel="마지막 근무일 선택" value={fromISO(endDate)} onChange={(d) => set({ endDate: toISO(d) })} />
+            <DatePicker align="right" ariaLabel="마지막 근무일 선택" value={fromISO(endDate)} onChange={(d) => set({ endDate: toISO(d) })} />
           </div>
         </div>
       </div>

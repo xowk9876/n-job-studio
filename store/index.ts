@@ -1,6 +1,28 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { mergeStoredInputs, migrateSalaryInputs } from '@/lib/input-validation'
+
+function calculatorStorage<T>() {
+  return createJSONStorage<T>(() => {
+    const storage = window.localStorage
+    // 할당량 초과 등으로 저장되지 않은 입력은 현재 탭에서만 보존한다.
+    const unsaved = new Map<string, string | null>()
+    function write(name: string, value: string | null) {
+      try {
+        if (value === null) storage.removeItem(name)
+        else storage.setItem(name, value)
+        unsaved.delete(name)
+      } catch {
+        unsaved.set(name, value)
+      }
+    }
+    return {
+      getItem: (name) => unsaved.has(name) ? unsaved.get(name) ?? null : storage.getItem(name),
+      setItem: write,
+      removeItem: (name) => write(name, null),
+    }
+  })
+}
 
 // ─── 연봉 계산기 ───────────────────────────────────────────────────────────
 interface SalaryStore {
@@ -33,6 +55,7 @@ export const useSalaryStore = create<SalaryStore>()(
     }),
     {
       name: 'mf-salary',
+      storage: calculatorStorage(),
       skipHydration: true,
       version: 2,
       migrate: migrateSalaryInputs,
@@ -61,6 +84,7 @@ export const useMortgageStore = create<MortgageStore>()(
     }),
     {
       name: 'mf-mortgage',
+      storage: calculatorStorage(),
       merge: mergeStoredInputs,
       skipHydration: true,
       version: 1,
@@ -90,6 +114,7 @@ export const useSeveranceStore = create<SeveranceStore>()(
     }),
     {
       name: 'mf-severance',
+      storage: calculatorStorage(),
       merge: mergeStoredInputs,
       skipHydration: true,
       version: 1,
@@ -119,6 +144,7 @@ export const useSavingsStore = create<SavingsStore>()(
     }),
     {
       name: 'mf-savings',
+      storage: calculatorStorage(),
       merge: mergeStoredInputs,
       skipHydration: true,
       version: 1,
@@ -153,15 +179,16 @@ export const useJeonseStore = create<JeonseStore>()(
     }),
     {
       name: 'mf-jeonse',
+      storage: calculatorStorage(),
       merge: mergeStoredInputs,
       skipHydration: true,
-      // 기준금리 인상(2026.8.27, 2.75%→3.00%)으로 법정 전환율 상한이 4.75%→5.00%로 변경됐다.
-      // 버전을 올려 이전 값을 저장한 재방문자에게도 갱신된 법정 상한이 적용되도록 한다.
+      // 구 기본값(4.75%)만 갱신하고 직접 입력한 전환율은 보존한다.
       version: 2,
-      migrate: (persisted) => ({
-        ...(persisted as JeonseStore),
-        conversionRate: DEFAULT_CONVERSION_RATE,
-      }),
+      migrate: (persisted) => {
+        if (!persisted || typeof persisted !== 'object') return {}
+        const saved = persisted as Partial<JeonseStore>
+        return saved.conversionRate === 4.75 ? { ...saved, conversionRate: DEFAULT_CONVERSION_RATE } : saved
+      },
     }
   )
 )

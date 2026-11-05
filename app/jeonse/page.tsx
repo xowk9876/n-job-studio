@@ -39,7 +39,7 @@ export default function JeonsePage() {
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">보증금·월세 환산 · 적용 범위 확인</p>
       </div>
 
-      <div className="result-card">
+      {!r.error && <div className="result-card">
         {isToWolse ? (
           <>
             <p className="result-label">전환 후 월세</p>
@@ -49,11 +49,11 @@ export default function JeonsePage() {
         ) : (
           <>
             <p className="result-label">필요 전세 보증금</p>
-            <p className="result-value">{manwon(r.jeonseDeposit ?? 0)}</p>
+            <p className="result-value">{won(r.jeonseDeposit ?? 0)}</p>
             <p className="text-[12px] opacity-70 mt-2">현재 연간 월세 {manwon(r.annualCost)}</p>
           </>
         )}
-      </div>
+      </div>}
 
       {/* 방향 */}
       <div className="grid grid-cols-2 gap-2">
@@ -122,16 +122,14 @@ export default function JeonsePage() {
           <NumericInput ariaLabel="전월세 전환율 (%)" max={100} min={0.001}  className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={DEFAULT_CONVERSION_RATE} allowDecimal onChange={(n) => set({ conversionRate: n })} />
         </div>
 
-        {isToWolse && (
-          <div>
-            <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 전세가율 참고)</span></label>
-            <div className="relative">
-              <NumericInput ariaLabel="매매 시세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-            </div>
-            <p className="text-[11.5px] text-white/40 mt-1">입력한 시세 대비 보증금 비율입니다. 선순위 채권·체납·반환보증 가입 여부는 판단하지 않습니다.</p>
+        <div>
+          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 전세가율 참고)</span></label>
+          <div className="relative">
+            <NumericInput ariaLabel="매매 시세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
           </div>
-        )}
+          <p className="text-[11.5px] text-white/40 mt-1">입력한 시세 대비 보증금 비율입니다. 선순위 채권·체납·반환보증 가입 여부는 판단하지 않습니다.</p>
+        </div>
       </div>
 
       {/* 깡통전세 위험도 */}
@@ -165,14 +163,14 @@ export default function JeonsePage() {
       )}
 
       {/* 손익 */}
-      <div className="glass-card">
+      {!r.error && <div className="glass-card">
         <h2 className="font-semibold text-white mb-2.5 text-[13.5px] flex items-center gap-1.5"><Info className="w-3.5 h-3.5 text-white/40" />비용 비교 가정</h2>
         <div className="rounded-lg px-3 py-2.5 text-[12.5px] text-white/70 mb-2.5 bg-white/[0.05]">{r.suggestion}</div>
         <div className="flex justify-between text-[12.5px]">
           <span className="text-white/50">비교 가정 금리</span>
           <span className="font-bold text-[color:var(--brand)] tabular">{r.breakEvenRate.toFixed(2)}%</span>
         </div>
-      </div>
+      </div>}
 
       <div className="glass-card text-[12.5px] text-white/65">
         <h2 className="font-semibold text-white mb-2 text-[13.5px]">전월세 전환율이란?</h2>

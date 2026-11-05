@@ -6,7 +6,8 @@ import {
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
 export const CONTENT_UPDATED_AT = '2026-10-31' as const
-export const SEO_UPDATED_AT = CONTENT_UPDATED_AT
+export const SEO_UPDATED_AT = '2026-11-05' as const
+export const SALARY_GUIDE_UPDATED_AT = '2026-11-05' as const
 export const SITE_NAME = '머니핏 계산기'
 
 /** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
@@ -27,7 +28,7 @@ export const guideItems = [
     description: '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.',
     tag: '세금',
     calculatorPath: '/salary',
-    updatedAt: CONTENT_UPDATED_AT,
+    updatedAt: SALARY_GUIDE_UPDATED_AT,
   },
   {
     slug: 'dsr-stress-test-2026',

@@ -28,19 +28,15 @@ export interface SeveranceResult {
   isEligible: boolean       // 퇴직금 수급 자격 (1년 이상)
 }
 
-// n개월 전 같은 날짜(UTC 기준). Date.setMonth()는 말일에서 다음 달로 넘치므로
-// (예: 5/31 → 2/31 → 3/3) 대상 월의 말일로 clamp 한다. 넘침을 방치하면
-// 평균임금 산정기간이 89일로 짧아져 1일 평균임금이 과대 계상된다.
-function subtractMonthsUtc(date: Date, months: number): Date {
-  const day = date.getUTCDate()
-  const result = new Date(date.getTime())
-  result.setUTCDate(1)
-  result.setUTCMonth(result.getUTCMonth() - months)
-  const lastDayOfMonth = new Date(
-    Date.UTC(result.getUTCFullYear(), result.getUTCMonth() + 1, 0)
-  ).getUTCDate()
-  result.setUTCDate(Math.min(day, lastDayOfMonth))
-  return result
+// 고용노동부 퇴직금 계산기의 평균임금 기간과 맞춘다. 5월의 퇴직일과 같은
+// 날짜가 2월에 없으면 3월 1일부터, 그 밖에는 3개월 전 같은 날 또는 말일부터 센다.
+function averageWagePeriodStart(retirement: Date): Date {
+  const year = retirement.getUTCFullYear()
+  const targetMonth = retirement.getUTCMonth() - 3
+  const day = retirement.getUTCDate()
+  const lastDay = new Date(Date.UTC(year, targetMonth + 1, 0)).getUTCDate()
+  const startDay = targetMonth === 1 && day > lastDay ? lastDay + 1 : Math.min(day, lastDay)
+  return new Date(Date.UTC(year, targetMonth, startDay))
 }
 
 export function calcSeverance(input: SeveranceInput): SeveranceResult {
@@ -92,7 +88,7 @@ export function calcSeverance(input: SeveranceInput): SeveranceResult {
   // ── 평균임금 (근기법 §2①) ──
   // 최근 3개월 임금총액 ÷ 3개월 실제 일수(89~92일) + 연간 상여금의 3/12
   const threeMonthWage = avgMonthly3 * 3 + (annualBonus * 3 / 12)
-  const threeMonthStart = subtractMonthsUtc(retirementDate, 3)
+  const threeMonthStart = averageWagePeriodStart(retirementDate)
   const threeMonthDays = Math.max(
     1,
     Math.round((retirementDate.getTime() - threeMonthStart.getTime()) / (1000 * 60 * 60 * 24))

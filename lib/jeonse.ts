@@ -10,8 +10,8 @@ import { inRange, MAX_RATE } from './input-validation'
 export const DEFAULT_BASE_RATE = 3.0
 // 주택임대차보호법 §7의2 법정 가산
 export const LEGAL_PREMIUM = 2.0
-// 법정 전월세 전환율 상한 (기준금리 + 2%)
-export const DEFAULT_CONVERSION_RATE = DEFAULT_BASE_RATE + LEGAL_PREMIUM
+// 주택임대차보호법 시행령 제9조: 연 10%와 기준금리 + 2%p 중 낮은 값.
+export const DEFAULT_CONVERSION_RATE = Math.min(10, DEFAULT_BASE_RATE + LEGAL_PREMIUM)
 
 // 기회비용 비교용 고정 가정. 시장 평균 또는 사용자 실제 조달금리가 아니다.
 const OPPORTUNITY_RATE = 3.0  // %
@@ -102,8 +102,10 @@ export function calcJeonse(input: JeonseInput): JeonseResult {
   if (direction === 'jeonse-to-wolse') {
     const jeonseDeposit = input.jeonsDeposit ?? 0
     const wolseDeposit = input.wolseDeposit ?? 0
-    // 월세 보증금이 전세 보증금보다 큰 비정상 입력 가드 (음수 월세 차단)
-    const diff = Math.max(0, jeonseDeposit - wolseDeposit)
+    if (wolseDeposit > jeonseDeposit) {
+      return { error: '전환 후 월세 보증금은 현재 전세 보증금 이하여야 합니다.', annualCost: 0, breakEvenRate: OPPORTUNITY_RATE, suggestion: '' }
+    }
+    const diff = jeonseDeposit - wolseDeposit
 
     // 월세 = (전세 보증금 - 월세 보증금) × 전환율 / 12
     const monthlyRent = Math.round((diff * rate) / 12)

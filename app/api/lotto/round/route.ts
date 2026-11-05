@@ -59,7 +59,8 @@ export async function GET(request: Request) {
   const snapshot = getSnapshotRound(round)
 
   // 스냅샷 범위 안이면 확실히 추첨이 끝난 회차 → 라이브 실패 시에도 응답할 수 있다
-  const live = await fetchRound(round)
+  // 스냅샷에 없는 회차는 미추첨 상태의 응답을 하루 동안 재사용하지 않는다.
+  const live = await fetchRound(round, snapshot ? 86400 : 300)
   const result = live ?? snapshot
 
   if (!result) {

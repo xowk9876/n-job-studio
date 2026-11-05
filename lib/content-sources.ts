@@ -19,6 +19,8 @@ export const officialSources: Record<string, readonly OfficialSource[]> = {
     { label: '국가법령정보센터 · 2026.2.27 개정 근로소득 간이세액표 (PDF)', href: 'https://www.law.go.kr/LSW/flDownload.do?bylClsCd=110201&flSeq=161861245&gubun=' },
     { label: '국민연금공단 · 보험료율·기준소득월액 상하한', href: 'https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0038M0.do?menuId=MN24001113' },
     { label: '보건복지부 · 2026년 건강보험료율', href: 'https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1487279&tag=&nPage=1' },
+    { label: '4대사회보험 정보연계센터 · 직장가입자 보험료 모의계산', href: 'https://m.4insure.or.kr/pbiz/ntcn/inscSmlCalcMobView.do' },
+    { label: '국민건강보험공단 · 월별 건강보험료액의 상한과 하한에 관한 고시', href: 'https://www.nhis.or.kr/lm/lmxsrv/law/lawFullContent.do?SEQ=39&SEQ_HISTORY=595294' },
     { label: '보건복지부 · 2026년 장기요양보험료율', href: 'https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1487817&tag&nPage=1' },
     { label: '고용노동부 · 2026년 적용 최저임금', href: 'https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=18144&pageUnit=10' },
     pensionTax,

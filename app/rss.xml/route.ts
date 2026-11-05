@@ -1,7 +1,7 @@
 import {
   calculatorFeedItems,
   calculatorRssBodies,
-  CONTENT_UPDATED_AT,
+  SEO_UPDATED_AT,
   guideItems,
   guideRssBodies,
   RSS_FEED_URL,
@@ -28,7 +28,7 @@ function buildContentEncoded(body: string, url: string) {
 }
 
 export function GET() {
-  const pubBase = new Date(`${CONTENT_UPDATED_AT}T00:00:00+09:00`).toUTCString()
+  const pubBase = new Date(`${SEO_UPDATED_AT}T00:00:00+09:00`).toUTCString()
 
   const guideXml = guideItems
     .map((guide) => {

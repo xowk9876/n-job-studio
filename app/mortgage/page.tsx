@@ -10,6 +10,7 @@ import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, Relat
 import { getCalculatorLinks } from '@/lib/seo'
 import { officialSources } from '@/lib/content-sources'
 
+const TERM_YEARS = [5, 10, 15, 20, 25, 30, 35, 40]
 const CALC_PATH = '/mortgage'
 const calcSeo = getCalculatorLinks(CALC_PATH)
 
@@ -82,7 +83,8 @@ export default function MortgagePage() {
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">대출기간 (년)</label>
             <select aria-label="대출기간 (년)" className="glass-select" value={years} onChange={(e) => set({ years: Number(e.target.value) })}>
-              {[5,10,15,20,25,30,35,40].map(y => <option key={y} value={y}>{y}년</option>)}
+              {!TERM_YEARS.includes(years) && <option value={years}>{years}년</option>}
+              {TERM_YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
             </select>
           </div>
         </div>

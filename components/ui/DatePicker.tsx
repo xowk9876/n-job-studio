@@ -8,6 +8,7 @@ type Props = {
   onChange: (d: Date | null) => void
   ariaLabel?: string
   placeholder?: string
+  align?: 'left' | 'right'
   minYear?: number
   maxYear?: number
 }
@@ -28,6 +29,7 @@ export default function DatePicker({
   onChange,
   ariaLabel = '날짜 선택',
   placeholder = 'YYYY-MM-DD',
+  align = 'left',
   minYear = 1970,
   maxYear = new Date().getFullYear() + 10,
 }: Props) {
@@ -36,6 +38,7 @@ export default function DatePicker({
   const [cursor, setCursor] = useState<Date>(() => value ?? today)
   const [view, setView] = useState<'day' | 'month' | 'year'>('day')
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   // 외부 value 변경 시 cursor 동기화 (렌더 중 prev 비교 — React 19 권장 패턴)
   const [prevValue, setPrevValue] = useState<Date | null | undefined>(value)
@@ -50,7 +53,7 @@ export default function DatePicker({
       if (!rootRef.current?.contains(e.target as Node)) { setOpen(false); setView('day') }
     }
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setOpen(false); setView('day') }
+      if (e.key === 'Escape') { setOpen(false); setView('day'); triggerRef.current?.focus() }
     }
     document.addEventListener('mousedown', onDoc)
     document.addEventListener('keydown', onKey)
@@ -95,15 +98,17 @@ export default function DatePicker({
 
   const shiftMonth = (delta: number) => setCursor(new Date(year, month + delta, 1))
 
-  const pick = (d: Date) => {
+  const pick = (d: Date | null) => {
     onChange(d)
     setOpen(false)
     setView('day')
+    triggerRef.current?.focus()
   }
 
   return (
-    <div ref={rootRef} className="relative w-full">
+    <div ref={rootRef} className="w-full">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(v => !v)}
         aria-label={ariaLabel}
@@ -124,7 +129,7 @@ export default function DatePicker({
         <div
           role="dialog"
           aria-label={ariaLabel}
-          className="absolute z-40 mt-2 w-[320px] rounded-2xl border border-white/[0.08] bg-[#0c1119]/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] p-4 select-none"
+          className={`absolute top-full z-40 mt-2 w-full max-w-80 rounded-2xl border border-white/[0.08] bg-[#0c1119]/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] p-4 select-none ${align === 'right' ? 'right-0' : 'left-0'}`}
           style={{ fontFeatureSettings: '"tnum"' }}
         >
           {/* Header */}
@@ -200,7 +205,7 @@ export default function DatePicker({
                         aria-label={fmt(date)}
                         aria-pressed={selected}
                         className={[
-                          'relative w-9 h-9 flex items-center justify-center rounded-full text-[13.5px] transition-all duration-150',
+                          'relative w-full max-w-9 h-9 flex items-center justify-center rounded-full text-[13.5px] transition-all duration-150',
                           selected
                             ? 'bg-[color:var(--brand)] text-white font-semibold shadow-[0_4px_14px_rgba(110,168,255,0.4)]'
                             : outside
@@ -275,7 +280,7 @@ export default function DatePicker({
           <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
             <button
               type="button"
-              onClick={() => { onChange(null); setOpen(false); setView('day') }}
+              onClick={() => pick(null)}
               className="px-2.5 py-1 text-[12.5px] text-white/45 hover:text-[#ef7e7e] transition-colors"
             >
               삭제

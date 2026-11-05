@@ -69,20 +69,18 @@ export function calcSavings(input: SavingsInput): SavingsResult {
     // 정기적금 (매월 납입)
     principal = amount * months
     if (interestType === 'simple') {
-      // 단리 적금: 각 납입월의 이자를 합산
-      let interest = 0
-      for (let m = 1; m <= months; m++) {
-        interest += amount * r * ((months - m + 1) / 12)
-      }
-      grossInterest = interest
+      // 매월 초에 넣으므로 납입액별 이자 기간은 1개월부터 months개월까지다.
+      grossInterest = amount * (r / 12) * (months * (months + 1) / 2)
     } else {
-      // 복리 적금 (월 복리)
       const monthlyRate = r / 12
-      let total = 0
+      let roundingLoss = 0
       for (let m = 1; m <= months; m++) {
-        total += amount * Math.pow(1 + monthlyRate, months - m + 1)
+        // 납입 원금과 누적 이자에 이번 달 이자를 붙이고 합산 중 잃은 끝자리를 보정한다.
+        const monthlyInterest = (amount * m + grossInterest) * monthlyRate - roundingLoss
+        const nextInterest = grossInterest + monthlyInterest
+        roundingLoss = (nextInterest - grossInterest) - monthlyInterest
+        grossInterest = nextInterest
       }
-      grossInterest = total - principal
     }
   }
 
