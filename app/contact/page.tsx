@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
-import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { buildGoogleAlternates, formatPageTitle } from '@/lib/seo-platform'
 
 const pageTitle = '문의하기'
 const description = '머니핏 계산기 운영자 연락처. 이메일 bhd03014@gmail.com · 인스타그램 @tae_system.'
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     description: '오류 제보와 새 계산기 제안을 받습니다.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 문의하기' }],
   },
-  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 function GmailIcon({ className = 'w-5 h-5' }: { className?: string }) {

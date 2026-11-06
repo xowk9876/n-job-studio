@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight, Shield, Scale, Lock } from 'lucide-react'
 import HomeGuideHub from '@/components/home/HomeGuideHub'
 import HomeAppShortcut from '@/components/home/HomeAppShortcut'
-import { DEFAULT_OG_IMAGE, SEO_UPDATED_AT, SITE_NAME, SITE_URL } from '@/lib/seo'
-import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
+import { buildGoogleAlternates } from '@/lib/seo-platform'
 import { calcSalary } from '@/lib/salary'
 
 // 히어로 우측 미리보기 — 연봉 5,000만원·본인 1인·수당 0 기준 실제 calcSalary 결과(SSR 산출, Zero Hallucination)
@@ -21,82 +21,97 @@ const heroPreview = calcSalary({
 })
 const fmtWon = (n: number) => n.toLocaleString('ko-KR')
 
-const homeDescription =
-  '예상 금액을 계산하고 적용 기준을 확인하세요. 연봉 실수령액, 주택담보대출, 퇴직금, 적금·ISA, 전월세, 로또까지 무료.'
+const homeTitle = '머니핏 계산기 | 연봉 실수령액·퇴직금·대출 이자'
+const homeDescription = '연봉으로 세후 월급을, 대출 조건으로 월 상환액을 확인하세요. 퇴직금, 예금·적금 만기액, 전세·월세 전환 계산기와 로또 번호 생성기도 가입 없이 이용할 수 있어요.'
+const homeUrl = `${SITE_URL}/`
 
 export const metadata: Metadata = {
-  alternates: buildGoogleAlternates(SITE_URL),
+  title: { absolute: homeTitle },
+  description: homeDescription,
+  alternates: buildGoogleAlternates(homeUrl),
   openGraph: {
-    url: SITE_URL,
-    siteName: SITE_NAME,
-    type: 'website',
-    locale: 'ko_KR',
-    title: '머니핏 계산기 — 2026년 한국 재테크 필수 계산기 6종',
-    description: homeDescription,
-    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: '머니핏 계산기 메인' }],
+    type: 'website', locale: 'ko_KR', url: homeUrl, siteName: SITE_NAME,
+    title: homeTitle, description: homeDescription,
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME }],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: '머니핏 계산기 — 2026년 재테크 필수 계산기 6종',
-    description: '연봉·대출·퇴직금·적금·전월세·로또 — 무료 계산기.',
-    images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기' }],
-  },
-  other: {
-    'article:modified_time': SEO_UPDATED_AT,
-    ...buildNaverMeta(formatPageTitle('2026년 연봉·대출·퇴직금·적금·전월세·로또 계산기'), homeDescription),
+    card: 'summary_large_image', title: homeTitle, description: homeDescription,
+    images: [{ url: DEFAULT_OG_IMAGE, alt: SITE_NAME }],
   },
 }
 
 const calculators = [
   {
     href: '/salary',
-    label: '연봉 실수령액',
-    desc: '4대보험·근로소득세 공제 후 매월 실수령액',
+    label: '연봉 실수령액 계산기',
+    desc: '연봉과 비과세 수당으로 세후 월급 확인',
     tag: '급여',
     color: '#6bafff',
     Icon: Wallet,
   },
   {
     href: '/severance',
-    label: '퇴직금',
-    desc: '근로기준법 평균임금 기준 산출',
+    label: '퇴직금 계산기',
+    desc: '근속기간과 임금으로 예상 세전 퇴직금 확인',
     tag: '법정',
     color: '#b8a4fa',
     Icon: Briefcase,
   },
   {
     href: '/mortgage',
-    label: '대출 이자',
-    desc: '3가지 상환 방식·DSR 비교',
+    label: '대출 이자 계산기',
+    desc: '상환 방식별 월 상환액과 총이자 비교',
     tag: '대출',
     color: '#5eead4',
     Icon: Landmark,
   },
   {
     href: '/savings',
-    label: '적금 · 예금',
-    desc: '세후 이자·ISA 비교',
+    label: '예금·적금 이자 계산기',
+    desc: '단리·월복리와 세후 만기 수령액 비교',
     tag: '절세',
     color: '#3ee0a5',
     Icon: PiggyBank,
   },
   {
     href: '/jeonse',
-    label: '전월세 전환',
-    desc: '보증금·월세 환산과 상한 안내',
+    label: '전월세 전환 계산기',
+    desc: '보증금을 바꿨을 때의 월세 차이 확인',
     tag: '부동산',
     color: '#fcc73e',
     Icon: KeyRound,
   },
   {
     href: '/lotto',
-    label: '로또 번호',
-    desc: '번호 생성·당첨 정보',
+    label: '로또 번호 생성기',
+    desc: '6/45 번호 생성과 회차별 당첨번호 조회',
     tag: '오락',
     color: '#f590c0',
     Icon: Ticket,
   },
 ]
+
+const homeStructuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite', '@id': `${homeUrl}#website`, url: homeUrl, name: SITE_NAME,
+      alternateName: ['머니핏', 'Moneyfit', 'Moneyfit Calculator', new URL(homeUrl).hostname],
+      inLanguage: 'ko-KR', description: homeDescription,
+      publisher: { '@id': `${homeUrl}#organization` },
+    },
+    {
+      '@type': 'CollectionPage', '@id': `${homeUrl}#home`, url: homeUrl, name: homeTitle,
+      isPartOf: { '@id': `${homeUrl}#website` },
+      mainEntity: {
+        '@type': 'ItemList', name: '머니핏 계산기 목록',
+        itemListElement: calculators.map((calc, index) => ({
+          '@type': 'ListItem', position: index + 1, name: calc.label, url: SITE_URL + calc.href,
+        })),
+      },
+    },
+  ],
+}
 
 const trustItems = [
   {
@@ -122,6 +137,7 @@ const trustItems = [
 export default function HomePage() {
   return (
     <div className="home-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(homeStructuredData) }} />
       {/* HERO */}
       <section className="home-hero mf-rise" aria-label="소개">
         <div className="home-hero__bg" aria-hidden>
@@ -135,14 +151,14 @@ export default function HomePage() {
         <div className="home-hero__panel home-hero__panel--split">
           <div className="home-hero__col-text">
             <h1 className="home-hero__title font-display">
-              <span className="home-hero__title-line">복잡한 금융 계산</span>
+              <span className="home-hero__title-line">월급부터 대출까지,</span>{' '}
               <span className="home-hero__title-line home-hero__title-line--accent">
-                바로 계산하세요
+                머니핏 계산기
               </span>
             </h1>
 
             <p className="home-hero__lead">
-              <span className="home-hero__lead-part">예상 금액과 계산 기준을 한눈에.</span>
+              <span className="home-hero__lead-part">세후 월급과 월 대출 상환액을 확인하세요.</span>{' '}
               <span className="home-hero__lead-part">가입 없이, 브라우저에서 바로 계산하세요.</span>
             </p>
 
@@ -255,7 +271,7 @@ export default function HomePage() {
               <h3 className="home-calc-card__label">{c.label}</h3>
               <p className="home-calc-card__desc">{c.desc}</p>
               <span className="home-calc-card__link">
-                계산하기
+                {c.href === '/lotto' ? '번호 생성하기' : '계산하기'}
                 <ArrowRight size={14} />
               </span>
             </Link>

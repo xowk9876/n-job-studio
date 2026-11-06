@@ -836,9 +836,12 @@ input[type="range"]::-moz-range-thumb {
   color: var(--ink-2);
 }
 .guide-body table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 13.5px; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.guide-body thead, .guide-body tbody, .guide-body tr { display: table; width: 100%; table-layout: fixed; min-width: 480px; }
+.guide-body table:not(.salary-table) :is(thead, tbody, tr) { display: table; width: 100%; table-layout: fixed; min-width: 480px; }
 .guide-body th, .guide-body td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; }
 .guide-body th { background: rgba(255,255,255,0.02); color: var(--ink); font-weight: 650; }
+.guide-body .salary-table { display: table; table-layout: fixed; font-variant-numeric: tabular-nums; }
+.guide-body .salary-table :is(th, td) { padding: 8px clamp(4px, 1vw, 10px); }
+.guide-body .salary-table :is(th, td):not(:first-child) { text-align: right; }
 
 /* =========================================================
    Home page — refined layout

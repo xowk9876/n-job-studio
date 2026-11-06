@@ -29,6 +29,9 @@ function buildContentEncoded(body: string, url: string) {
 
 export function GET() {
   const pubBase = new Date(`${SEO_UPDATED_AT}T00:00:00+09:00`).toUTCString()
+  const lastUpdated = guideItems.reduce<string>(
+    (latest, guide) => guide.updatedAt > latest ? guide.updatedAt : latest, SEO_UPDATED_AT,
+  )
 
   const guideXml = guideItems
     .map((guide) => {
@@ -75,7 +78,7 @@ export function GET() {
         <link>${SITE_URL}</link>
         <description>금융 계산의 예상 금액·적용 기준과 가이드</description>
         <language>ko-KR</language>
-        <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+        <lastBuildDate>${new Date(`${lastUpdated}T00:00:00+09:00`).toUTCString()}</lastBuildDate>
         <atom:link href="${RSS_FEED_URL}" rel="self" type="application/rss+xml" />
         ${items}
       </channel>

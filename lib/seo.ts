@@ -1,14 +1,10 @@
 import type { Metadata } from 'next'
-import {
-  buildGoogleAlternates,
-  buildNaverMeta,
-} from '@/lib/seo-platform'
+import { buildGoogleAlternates, formatPageTitle, SITE_NAME, SITE_URL } from '@/lib/seo-platform'
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
+export { SITE_NAME, SITE_URL }
 export const CONTENT_UPDATED_AT = '2026-10-31' as const
-export const SEO_UPDATED_AT = '2026-11-05' as const
-export const SALARY_GUIDE_UPDATED_AT = '2026-11-05' as const
-export const SITE_NAME = '머니핏 계산기'
+export const SEO_UPDATED_AT = '2026-11-06' as const
+export const SALARY_GUIDE_UPDATED_AT = '2026-11-06' as const
 
 /** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
 export const guideTagColors: Record<string, string> = {
@@ -21,15 +17,17 @@ export const guideTagColors: Record<string, string> = {
 }
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/opengraph-image`
 
+export const salaryGuide = {
+  slug: '2026-salary-tax-guide',
+  title: '2026년 연봉 실수령액표와 세후 월급 계산 기준',
+  description: '연봉 3천만~1억 원의 예상 세후 월급을 같은 조건으로 비교하세요. 4대보험과 근로소득세가 어떻게 공제되는지 연봉 5천만 원 사례로 설명합니다.',
+  tag: '세금',
+  calculatorPath: '/salary',
+  updatedAt: SALARY_GUIDE_UPDATED_AT,
+} as const
+
 export const guideItems = [
-  {
-    slug: '2026-salary-tax-guide',
-    title: '2026년 연봉 실수령액 계산 기준',
-    description: '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.',
-    tag: '세금',
-    calculatorPath: '/salary',
-    updatedAt: SALARY_GUIDE_UPDATED_AT,
-  },
+  salaryGuide,
   {
     slug: 'dsr-stress-test-2026',
     title: '2026 스트레스 DSR 적용 기준과 계산 예시',
@@ -171,6 +169,8 @@ export function buildWebApplicationJsonLd(input: {
       priceCurrency: 'KRW',
     },
     author: { '@id': `${SITE_URL}/#organization` },
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    isAccessibleForFree: true,
     inLanguage: 'ko-KR',
     dateModified: SEO_UPDATED_AT,
     ...(input.guidePath
@@ -224,43 +224,36 @@ export function buildCalculatorMetadata(input: {
   path: string
   title: string
   description: string
-  keywords: string[]
   ogImagePath: string
-  ogTitle?: string
-  ogDescription?: string
   category?: string
 }): Metadata {
   const url = `${SITE_URL}${input.path}`
   const ogImage = `${SITE_URL}${input.ogImagePath}`
-  const ogTitle = input.ogTitle ?? input.title
-  const ogDescription = input.ogDescription ?? input.description
-  const fullTitle = `${input.title} | ${SITE_NAME}`
+  const fullTitle = formatPageTitle(input.title)
 
   return {
     metadataBase: new URL(SITE_URL),
     title: input.title,
     description: input.description,
-    keywords: input.keywords,
     authors: [{ name: SITE_NAME }],
     category: input.category ?? 'finance',
     openGraph: {
-      title: ogTitle,
-      description: ogDescription,
+      title: fullTitle,
+      description: input.description,
       url,
       siteName: SITE_NAME,
       locale: 'ko_KR',
       type: 'website',
-      images: [{ url: ogImage, width: 1200, height: 630, alt: `${SITE_NAME} — ${ogTitle}` }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: fullTitle }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: ogTitle,
-      description: ogDescription,
-      images: [{ url: ogImage, alt: ogTitle }],
+      title: fullTitle,
+      description: input.description,
+      images: [{ url: ogImage, alt: fullTitle }],
     },
     alternates: buildGoogleAlternates(url),
     robots: googleBotRobots,
-    other: buildNaverMeta(fullTitle, input.description),
   }
 }
 
@@ -286,27 +279,19 @@ export function buildGuideMetadata(params: {
 }): Metadata {
   const url = `${SITE_URL}/guide/${params.slug}`
   const image = `${SITE_URL}/guide/opengraph-image`
-  const fullTitle = `${params.title} | ${SITE_NAME}`
+  const fullTitle = formatPageTitle(params.title)
 
   return {
     metadataBase: new URL(SITE_URL),
     title: params.title,
     description: params.description,
-    keywords: [
-      params.title,
-      params.section || '재테크 가이드',
-      '머니핏 계산기',
-      '2026 재테크',
-      '무료 계산기',
-      '공식 기준',
-    ],
     authors: [{ name: SITE_NAME, url: SITE_URL }],
     publisher: SITE_NAME,
     category: 'finance',
     alternates: buildGoogleAlternates(url),
     robots: googleBotRobots,
     openGraph: {
-      title: params.title,
+      title: fullTitle,
       description: params.description,
       url,
       siteName: SITE_NAME,
@@ -319,10 +304,9 @@ export function buildGuideMetadata(params: {
     },
     twitter: {
       card: 'summary_large_image',
-      title: params.title,
+      title: fullTitle,
       description: params.description,
       images: [{ url: image, alt: `${SITE_NAME} ${params.title}` }],
     },
-    other: buildNaverMeta(fullTitle, params.description),
   }
 }

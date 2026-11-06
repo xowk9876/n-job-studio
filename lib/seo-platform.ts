@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
-const SITE_NAME = '머니핏 계산기'
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://n-job-studio.vercel.app').replace(/\/$/, '')
+export const SITE_NAME = '머니핏 계산기'
 
 /** Google Search Console 소유 확인 */
 export const GOOGLE_SITE_VERIFICATION = 'nCoNcuMFFK-0Pu8G3aVSRSeEH4jXNT6ZjRAFURfpmfY'
@@ -23,32 +23,6 @@ export function buildGoogleAlternates(canonical: string) {
       'x-default': canonical,
     },
   }
-}
-
-/**
- * 네이버 검색로봇(Yeti)은 `<title>` 외에 `meta name="title"`, `meta name="subject"`,
- * `meta name="keywords"`, `meta name="author"`를 함께 참고합니다.
- * (서치어드바이저 「검색엔진 최적화 가이드」 — 페이지 메타 명확화 권고)
- *
- * 모든 값은 head 영역에만 출력되며 JS·body 내 마크업은 검증에서 제외되므로 Next Metadata API로 주입.
- */
-export function buildNaverMeta(
-  fullTitle: string,
-  description: string,
-  options?: {
-    keywords?: string[]
-    subject?: string
-    author?: string
-  },
-): NonNullable<Metadata['other']> {
-  const out: NonNullable<Metadata['other']> = {
-    title: fullTitle,
-    description,
-  }
-  if (options?.subject) out.subject = options.subject
-  if (options?.keywords?.length) out.keywords = options.keywords.join(', ')
-  if (options?.author) out.author = options.author
-  return out
 }
 
 /** Google · 네이버 공통 verification 메타 */

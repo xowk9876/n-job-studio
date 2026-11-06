@@ -3,7 +3,7 @@ import { CONTENT_UPDATED_AT, SEO_UPDATED_AT, SITE_URL, guideItems } from '@/lib/
 
 // 변경빈도(changeFrequency)는 봇 크롤링 우선순위 힌트 — 실제 갱신 주기에 정직하게 매핑
 const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[number]['changeFrequency']; modified?: string }[] = [
-  { path: '',           priority: 1.0,  freq: 'weekly',  modified: SEO_UPDATED_AT },
+  { path: '/',          priority: 1.0,  freq: 'weekly',  modified: SEO_UPDATED_AT },
   // 계산기 — 데이터·UX 개선 시 빈번 갱신 → weekly
   { path: '/salary',    priority: 0.95, freq: 'weekly',  modified: SEO_UPDATED_AT },
   { path: '/mortgage',  priority: 0.95, freq: 'weekly',  modified: SEO_UPDATED_AT },

@@ -26,8 +26,8 @@ export default function SavingsPage() {
       {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">SAVINGS</p>
-        <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">적금 · 예금 계산기</h1>
-        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">이자소득세 15.4% 차감 후 세후 수익</p>
+        <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">예금·적금 이자 계산기</h1>
+        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">단리와 월복리로 계산한 세후 이자와 만기 수령액을 비교하세요.</p>
       </div>
 
       <div className="result-card">

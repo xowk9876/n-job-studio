@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
-import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { buildGoogleAlternates, formatPageTitle } from '@/lib/seo-platform'
 
 const pageTitle = '이용약관'
 const description =
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     description: '머니핏 계산기 서비스 이용 조건 안내.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 이용약관' }],
   },
-  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 export default function TermsPage() {

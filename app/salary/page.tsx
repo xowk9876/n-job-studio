@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { useSalaryStore } from '@/store'
 import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcSalary, MIN_HOURLY_WAGE_2026 } from '@/lib/salary'
@@ -43,7 +44,12 @@ export default function SalaryPage() {
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">SALARY</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">연봉 실수령액 계산기</h1>
-        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">2026년 4대보험·소득세 기준</p>
+        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">
+          2026년 세후 월급과 항목별 공제액을 확인하세요.{' '}
+          <Link href="/guide/2026-salary-tax-guide#take-home-table" className="underline underline-offset-2 text-[color:var(--brand)]">
+            연봉별 실수령액표
+          </Link>
+        </p>
       </div>
 
       {/* 결과 카드 — 항상 최상단 */}

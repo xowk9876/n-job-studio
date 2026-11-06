@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
-import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { buildGoogleAlternates } from '@/lib/seo-platform'
 
 const pageTitle = '머니핏 계산기 소개'
 const description =
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     description: '공식 기준 기반 무료 재테크 계산기 운영 원칙.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 소개' }],
   },
-  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 export default function AboutPage() {

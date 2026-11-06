@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import GuideCardList from '@/components/guide/GuideCardList'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, guideItems, jsonLd } from '@/lib/seo'
-import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { buildGoogleAlternates } from '@/lib/seo-platform'
 
 const pageTitle = '재테크 실전 가이드'
 const description =
@@ -12,7 +11,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: pageTitle,
   description,
-  keywords: ['재테크 가이드', '2026 세금 가이드', 'DSR 가이드', '퇴직금 계산 방법', 'ISA 절세', '전세사기 예방', '로또 세금'],
   alternates: buildGoogleAlternates(`${SITE_URL}/guide`),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   openGraph: {
@@ -30,7 +28,6 @@ export const metadata: Metadata = {
     description: '공식 법령·고시 기반 재테크 가이드 모음.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 재테크 실전 가이드' }],
   },
-  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 function GuideIndexStructuredData() {
@@ -44,11 +41,13 @@ function GuideIndexStructuredData() {
         description: '연봉·대출·퇴직·ISA·전세·로또의 계산 기준과 적용 조건 안내',
         url: `${SITE_URL}/guide`,
         inLanguage: 'ko-KR',
+        mainEntity: { '@id': `${SITE_URL}/guide#list` },
         isPartOf: { '@id': `${SITE_URL}/#website` },
         publisher: { '@id': `${SITE_URL}/#organization` },
       },
       {
         '@type': 'ItemList',
+        '@id': `${SITE_URL}/guide#list`,
         name: '머니핏 재테크 가이드 목록',
         numberOfItems: guideItems.length,
         itemListElement: guideItems.map((guide, index) => ({
@@ -70,7 +69,7 @@ function GuideIndexStructuredData() {
   }
 
   return (
-    <Script
+    <script
       id="guide-index-jsonld"
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: jsonLd(ld) }}

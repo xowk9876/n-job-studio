@@ -1,17 +1,19 @@
 import type { Metadata } from 'next'
 import { calcSalary } from '@/lib/salary'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata, SALARY_GUIDE_UPDATED_AT } from '@/lib/seo'
+import { buildGuideMetadata, salaryGuide } from '@/lib/seo'
 
-const slug = '2026-salary-tax-guide'
-const title = '2026년 연봉 실수령액 계산 기준'
-const description =
-  '2026년 개정된 건강보험료율(7.19%)과 국민연금·고용보험·근로소득 간이세액표를 반영해 연봉별 실수령액 공식과 예시를 정리합니다.'
-const updatedAt = SALARY_GUIDE_UPDATED_AT
+const { slug, title, description, updatedAt } = salaryGuide
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '세금' })
 
-const example = calcSalary({ annualSalary: 50_000_000, dependents: 1, children: 0, overtimeHours: 0, nightHours: 0, holidayHours: 0, mealAllowance: 200_000, transportAllowance: 0 })
+function estimateSalary(annualSalary: number) {
+  return calcSalary({
+    annualSalary, dependents: 1, children: 0, mealAllowance: 200_000,
+    transportAllowance: 0, overtimeHours: 0, nightHours: 0, holidayHours: 0,
+  })
+}
+const example = estimateSalary(50_000_000)
 const won = (value: number) => value.toLocaleString('ko-KR') + '원'
 
 export default function Page() {
@@ -29,6 +31,28 @@ export default function Page() {
         { href: '/guide/severance-calculation-guide', label: '퇴직금 계산 가이드' },
       ]}
     >
+      <section aria-labelledby="take-home-table">
+        <h2 id="take-home-table">연봉별 예상 월 실수령액표</h2>
+        <p>본인 1명, 자녀 0명, 근로소득세 원천징수 100% 기준입니다. 연봉에 비과세 식대 월 20만 원이 포함되며, 추가 수당은 없다고 가정했습니다.</p>
+        <table className="salary-table" aria-labelledby="take-home-table">
+          <thead>
+            <tr><th scope="col">세전 연봉</th><th scope="col">월 공제 합계</th><th scope="col">예상 세후 월급</th></tr>
+          </thead>
+          <tbody>
+            {[3000, 4000, 5000, 6000, 8000, 10000].map((annualManWon) => {
+              const result = estimateSalary(annualManWon * 10_000)
+              return (
+                <tr key={annualManWon}>
+                  <th scope="row">{annualManWon === 10000 ? '1억 원' : `${annualManWon.toLocaleString('ko-KR')}만 원`}</th>
+                  <td>{won(result.totalDeduction)}</td>
+                  <td>{won(result.monthlyNet)}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </section>
+
       <section>
         <h2>왜 같은 연봉인데 실수령액이 다른가</h2>
         <p>

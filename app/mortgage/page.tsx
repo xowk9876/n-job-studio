@@ -51,7 +51,7 @@ export default function MortgagePage() {
       {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">MORTGAGE</p>
-        <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">대출 이자 계산기</h1>
+        <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">주택담보대출 이자 계산기</h1>
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">원리금균등 · 원금균등 · 만기일시</p>
       </div>
 

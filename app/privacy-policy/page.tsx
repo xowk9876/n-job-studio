@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
-import { buildGoogleAlternates, buildNaverMeta, formatPageTitle } from '@/lib/seo-platform'
+import { buildGoogleAlternates, formatPageTitle } from '@/lib/seo-platform'
 
 const pageTitle = '개인정보처리방침'
 const description =
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     description: '계산 입력값은 브라우저 안에서 처리됩니다.',
     images: [{ url: DEFAULT_OG_IMAGE, alt: '머니핏 계산기 개인정보처리방침' }],
   },
-  other: buildNaverMeta(formatPageTitle(pageTitle), description),
 }
 
 export default function PrivacyPolicyPage() {
