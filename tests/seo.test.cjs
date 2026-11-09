@@ -36,3 +36,37 @@ test('가이드의 검색 설명과 대표 주소가 공유 정보와 일치한�
     assert.equal(metadata.alternates.canonical, SITE_URL + '/guide/' + guide.slug)
   }
 })
+
+test('주담대 비교표는 첫 HTML에 같은 조건의 세 상환 방식을 보여준다', () => {
+  const { MortgageExamples } = require('../components/ui/CalculatorExamples')
+  const html = renderToStaticMarkup(createElement(MortgageExamples))
+  assert.match(html, /대출금 3억원 · 연 4% 고정 가정 · 360개월/)
+  const rows = [...html.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].slice(1).map(match => match[1].replace(/<[^>]*>/g, ' ').trim())
+  assert.equal(rows.length, 3)
+  assert.match(rows[0], /원리금균등\s+1,432,246원\s+215,608,483원/)
+  assert.match(rows[1], /원금균등\s+1,833,333원\s+180,500,071원/)
+  assert.match(rows[2], /만기일시\s+1,000,000원\s+360,000,000원/)
+  assert.match(html, /마지막 달에는 원금 3억원도 함께 갚습니다/)
+})
+
+test('전월세 예시는 남기는 보증금과 전환하는 차액을 구분한다', () => {
+  const { JeonseExamples } = require('../components/ui/CalculatorExamples')
+  const html = renderToStaticMarkup(createElement(JeonseExamples))
+  assert.match(html, /보증금 5,000만원·월세 90만원/)
+  assert.match(html, /전세 환산액 266,000,000원/)
+  assert.match(html, /남겨 두는 보증금이 아니라 줄어드는 보증금의 차액/)
+  assert.match(html, /41,667원/)
+  assert.match(html, /125,000원/)
+  assert.match(html, /208,333원/)
+  assert.match(html, /법정 보증금이나 시세를 뜻하지 않습니다/)
+})
+
+test('변경한 계산기의 날짜만 사이트맵과 구조화 데이터에 함께 반영한다', () => {
+  const { default: sitemap } = require('../app/sitemap')
+  const { buildWebApplicationJsonLd, SEO_UPDATED_AT, CALCULATOR_EXAMPLES_UPDATED_AT } = require('../lib/seo')
+  for (const path of ['/mortgage', '/jeonse', '/salary']) {
+    const expected = path === '/salary' ? SEO_UPDATED_AT : CALCULATOR_EXAMPLES_UPDATED_AT
+    assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, expected)
+    assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, expected)
+  }
+})

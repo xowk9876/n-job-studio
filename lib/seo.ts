@@ -4,6 +4,11 @@ import { buildGoogleAlternates, formatPageTitle, SITE_NAME, SITE_URL } from '@/l
 export { SITE_NAME, SITE_URL }
 export const CONTENT_UPDATED_AT = '2026-10-31' as const
 export const SEO_UPDATED_AT = '2026-11-06' as const
+export const CALCULATOR_EXAMPLES_UPDATED_AT = '2026-11-09' as const
+export const calculatorUpdatedAt: Record<string, string> = {
+  '/mortgage': CALCULATOR_EXAMPLES_UPDATED_AT,
+  '/jeonse': CALCULATOR_EXAMPLES_UPDATED_AT,
+}
 export const SALARY_GUIDE_UPDATED_AT = '2026-11-06' as const
 
 /** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
@@ -172,7 +177,7 @@ export function buildWebApplicationJsonLd(input: {
     isPartOf: { '@id': `${SITE_URL}/#website` },
     isAccessibleForFree: true,
     inLanguage: 'ko-KR',
-    dateModified: SEO_UPDATED_AT,
+    dateModified: calculatorUpdatedAt[input.path] ?? SEO_UPDATED_AT,
     ...(input.guidePath
       ? {
           subjectOf: {

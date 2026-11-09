@@ -6,7 +6,8 @@ import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcJeonse, DEFAULT_BASE_RATE, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
 import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
-import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { JeonseExamples } from '@/components/ui/CalculatorExamples'
 import { getCalculatorLinks } from '@/lib/seo'
 import { officialSources } from '@/lib/content-sources'
 
@@ -184,10 +185,7 @@ export default function JeonsePage() {
       </div>
 
       <div className="mt-2 flex flex-col gap-8">
-        <ExamplesSection title="전월세 전환 계산 예시" items={[
-          { label: '전세 3억원 → 월세 · 연 5% 가정', input: '월세 보증금 5,000만원 유지', result: '월세 약 1,041,667원', note: '(3억원 − 5,000만원) × 5% ÷ 12' },
-          { label: '월세 70만원 → 전세 · 연 5% 가정', input: '기존 월세 보증금 1,000만원', result: '전세 환산액 1억 7,800만원', note: '월세 × 12 ÷ 5% + 보증금 · 협의용 참고값' },
-        ]} />
+        <JeonseExamples />
         <FAQSection pagePath={CALC_PATH} items={[
           { q: '법정 전환율은 양방향 모두 적용되나요?', a: '법정 상한은 보증금을 월차임으로 전환하는 경우의 기준으로, 기준금리 + 2%p와 연 10% 중 낮은 값입니다. 월세를 전세로 역산한 금액을 법정 보증금으로 볼 수는 없습니다. 신규 계약·갱신·조건 변경 여부에 따라 적용 범위를 확인하세요.' },
           { q: '표시된 상한은 언제 기준인가요?', a: '2026년 10월 22일 한국은행 기준금리 3.00% 기준 법정 상한은 연 5.00%입니다. 이후 기준금리가 바뀌면 상한도 달라집니다. 사용자가 입력한 전환율과 법정 상한은 구분해 비교하세요.' },

@@ -6,7 +6,8 @@ import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
 import { calcMortgage, calcDsrLimit, STRESS_DSR_RATES, RepaymentType } from '@/lib/mortgage'
 import { ChevronDown, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
-import { FAQSection, ExamplesSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { MortgageExamples } from '@/components/ui/CalculatorExamples'
 import { getCalculatorLinks } from '@/lib/seo'
 import { officialSources } from '@/lib/content-sources'
 
@@ -193,10 +194,7 @@ export default function MortgagePage() {
       </div>
 
       <div className="mt-2 flex flex-col gap-8">
-        <ExamplesSection title="주담대 계산 예시" items={[
-          { label: '3억 · 3.5% · 30년 (원리금균등)', input: '월 납입액', result: '1,347,134원', note: '총 이자 약 1억 8,497만원' },
-          { label: '5억 · 4.0% · 20년 (원리금균등)', input: '월 납입액', result: '3,029,902원', note: '총 이자 약 2억 2,718만원' },
-        ]} />
+        <MortgageExamples />
         <FAQSection pagePath={CALC_PATH} items={[
           { q: '원리금균등과 원금균등의 차이는?', a: '원리금균등은 원금과 이자를 합친 월 납입액이 일정합니다. 원금균등은 매달 같은 원금과 남은 잔액의 이자를 내므로 초기 부담이 크고 이후 줄어듭니다. 같은 금리·기간이면 원금균등의 총이자가 더 적습니다.' },
           { q: 'DSR 결과가 은행 승인 한도인가요?', a: '아닙니다. 입력 소득·기존 월 상환액·금리·만기로 원리금균등 한도를 역산한 참고값입니다. 은행의 인정 소득, 대출별 DSR 산식, LTV, 지역별 총액 제한과 상품 조건에 따라 승인 한도가 달라집니다.' },

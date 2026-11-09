@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { CONTENT_UPDATED_AT, SEO_UPDATED_AT, SITE_URL, guideItems } from '@/lib/seo'
+import { CONTENT_UPDATED_AT, SEO_UPDATED_AT, calculatorUpdatedAt, SITE_URL, guideItems } from '@/lib/seo'
 
 // 변경빈도(changeFrequency)는 봇 크롤링 우선순위 힌트 — 실제 갱신 주기에 정직하게 매핑
 const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[number]['changeFrequency']; modified?: string }[] = [
@@ -30,7 +30,7 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map(({ path, priority, freq, modified }) => ({
     url: `${SITE_URL}${path}`,
-    lastModified: modified || SEO_UPDATED_AT,
+    lastModified: calculatorUpdatedAt[path] ?? modified ?? SEO_UPDATED_AT,
     changeFrequency: freq,
     priority,
   }))
