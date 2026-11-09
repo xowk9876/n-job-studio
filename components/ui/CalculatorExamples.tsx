@@ -18,15 +18,16 @@ const mortgageExamples = repaymentMethods.map(({ type, label }) => ({
 export function MortgageExamples() {
   return (
     <section aria-labelledby="mortgage-examples-heading">
-      <h2 id="mortgage-examples-heading" className="font-display text-[22px] md:text-[28px] font-bold tracking-tight text-white mb-3">
+      <h2 id="mortgage-examples-heading" className="scroll-mt-36 font-display text-[22px] md:text-[28px] font-bold tracking-tight text-white mb-3">
         3억 주담대, 상환 방식별 월 납입액 비교
       </h2>
       <p className="text-[14px] leading-relaxed text-[color:var(--sub)] mb-5">
         대출 3억원을 연 4%로 30년 동안 빌린다고 가정한 예시입니다. 아래 표의 조건은 위 계산기에 입력한 값과 별개로 고정되어 있습니다.
       </p>
       <div className="card p-3 sm:p-5">
-        <table className="w-full table-fixed text-[12px] sm:text-[14px] tabular-nums">
-          <caption className="text-left text-[color:var(--sub)] pb-3">대출금 3억원 · 연 4% 고정 가정 · 360개월</caption>
+        <table className="w-full table-fixed text-[11px] sm:text-[14px] tabular-nums">
+          <caption className="text-left text-[color:var(--sub)] pb-3">대출금 3억원 · 연 4% 고정 가정 · 360개월 (단위: 원)</caption>
+          <colgroup><col className="w-[28%]" /><col className="w-[32%]" /><col className="w-[40%]" /></colgroup>
           <thead className="text-[color:var(--ink-2)]">
             <tr><th scope="col" className={cell}>상환 방식</th><th scope="col" className={cell}>첫 달 납입액</th><th scope="col" className={cell}>30년 총이자</th></tr>
           </thead>
@@ -34,8 +35,8 @@ export function MortgageExamples() {
             {mortgageExamples.map(({ label, result }) => (
               <tr key={label}>
                 <th scope="row" className={`${cell} font-medium`}>{label}</th>
-                <td className={cell}>{won(result.monthlyPayment)}</td>
-                <td className={cell}>{won(result.totalInterest)}</td>
+                <td className={`${cell} whitespace-nowrap`}>{result.monthlyPayment.toLocaleString('ko-KR')}</td>
+                <td className={`${cell} whitespace-nowrap`}>{result.totalInterest.toLocaleString('ko-KR')}</td>
               </tr>
             ))}
           </tbody>

@@ -43,9 +43,10 @@ test('주담대 비교표는 첫 HTML에 같은 조건의 세 상환 방식을 �
   assert.match(html, /대출금 3억원 · 연 4% 고정 가정 · 360개월/)
   const rows = [...html.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].slice(1).map(match => match[1].replace(/<[^>]*>/g, ' ').trim())
   assert.equal(rows.length, 3)
-  assert.match(rows[0], /원리금균등\s+1,432,246원\s+215,608,483원/)
-  assert.match(rows[1], /원금균등\s+1,833,333원\s+180,500,071원/)
-  assert.match(rows[2], /만기일시\s+1,000,000원\s+360,000,000원/)
+  assert.match(html, /단위: 원/)
+  assert.match(rows[0], /원리금균등\s+1,432,246\s+215,608,483/)
+  assert.match(rows[1], /원금균등\s+1,833,333\s+180,500,071/)
+  assert.match(rows[2], /만기일시\s+1,000,000\s+360,000,000/)
   assert.match(html, /마지막 달에는 원금 3억원도 함께 갚습니다/)
 })
 
