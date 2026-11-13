@@ -5,6 +5,39 @@ const { createElement } = require('react')
 const { renderToStaticMarkup } = require('react-dom/server')
 const { SITE_URL, buildGuideMetadata, guideItems } = require('../lib/seo')
 
+test('RSS의 계산기·가이드 수정일이 사이트맵과 일치한다', async () => {
+  const { GET } = require('../app/rss.xml/route')
+  const { default: sitemap } = require('../app/sitemap')
+  const response = GET()
+  assert.match(response.headers.get('Content-Type'), /application\/rss\+xml/)
+  const xml = await response.text()
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(match => match[1])
+  assert.equal(items.length, 12)
+  const dates = []
+  for (const item of items) {
+    const url = item.match(/<link>([^<]+)<\/link>/)[1]
+    const pubDate = item.match(/<pubDate>([^<]+)<\/pubDate>/)[1]
+    const page = sitemap().find(entry => entry.url === url)
+    assert.ok(page, url)
+    assert.equal(Date.parse(pubDate), Date.parse(page.lastModified + 'T00:00:00+09:00'), url)
+    dates.push(Date.parse(pubDate))
+  }
+  assert.equal(Date.parse(xml.match(/<lastBuildDate>([^<]+)<\/lastBuildDate>/)[1]), Math.max(...dates))
+})
+
+test('가이드 변경 없이 계산기만 갱신해도 RSS 채널 갱신일이 바뀐다', async () => {
+  const { calculatorUpdatedAt } = require('../lib/seo')
+  const { GET } = require('../app/rss.xml/route')
+  const previous = calculatorUpdatedAt['/salary']
+  try {
+    calculatorUpdatedAt['/salary'] = '2027-01-01'
+    const xml = await GET().text()
+    assert.equal(Date.parse(xml.match(/<lastBuildDate>([^<]+)<\/lastBuildDate>/)[1]), Date.parse('2027-01-01T00:00:00+09:00'))
+  } finally {
+    calculatorUpdatedAt['/salary'] = previous
+  }
+})
+
 test('계산기마다 첫 HTML에 해당 계산기와 탐색 경로가 한 번씩 들어간다', () => {
   for (const { calculatorPath } of guideItems) {
     const { default: Layout, metadata } = require(`../app${calculatorPath}/layout`)

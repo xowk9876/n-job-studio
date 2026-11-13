@@ -18,10 +18,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/'],
       },
       { userAgent: ['Bingbot', 'Slurp', 'DuckDuckBot'], allow: '/', disallow: ['/api/'] },
-      // AI 검색 요약·인용 수집 허용 (2026 AI 검색 엔진 인용률 ↑)
-      // - GPTBot: ChatGPT 학습 / OAI-SearchBot: SearchGPT 실시간 검색 / ChatGPT-User: 사용자 요청 fetch
-      // - Google-Extended: Gemini · AI Overviews / ClaudeBot: Claude / PerplexityBot: Perplexity
-      // - Applebot-Extended: Apple Intelligence / CCBot: Common Crawl (다수 LLM 학습 데이터)
+      // 기존 크롤러 접근 정책. 수집 허용이 검색 노출이나 AI 인용을 보장하지는 않는다.
       {
         userAgent: [
           'GPTBot',

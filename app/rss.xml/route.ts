@@ -1,6 +1,7 @@
 import {
   calculatorFeedItems,
   calculatorRssBodies,
+  calculatorUpdatedAt,
   SEO_UPDATED_AT,
   guideItems,
   guideRssBodies,
@@ -28,10 +29,10 @@ function buildContentEncoded(body: string, url: string) {
 }
 
 export function GET() {
-  const pubBase = new Date(`${SEO_UPDATED_AT}T00:00:00+09:00`).toUTCString()
-  const lastUpdated = guideItems.reduce<string>(
-    (latest, guide) => guide.updatedAt > latest ? guide.updatedAt : latest, SEO_UPDATED_AT,
-  )
+  const lastUpdated = [
+    ...guideItems.map(guide => guide.updatedAt),
+    ...calculatorFeedItems.map(calc => calculatorUpdatedAt[calc.path] ?? SEO_UPDATED_AT),
+  ].sort().at(-1) ?? SEO_UPDATED_AT
 
   const guideXml = guideItems
     .map((guide) => {
@@ -56,6 +57,8 @@ export function GET() {
     .map((calc) => {
       const url = `${SITE_URL}${calc.path}`
       const body = calculatorRssBodies[calc.path] ?? calc.description
+      const updatedAt = calculatorUpdatedAt[calc.path] ?? SEO_UPDATED_AT
+      const pubDate = new Date(`${updatedAt}T00:00:00+09:00`).toUTCString()
       return `
         <item>
           <title>${escapeXml(calc.title)}</title>
@@ -64,7 +67,7 @@ export function GET() {
           <description>${escapeXml(calc.description)}</description>
           <content:encoded>${buildContentEncoded(body, url)}</content:encoded>
           <category>계산기</category>
-          <pubDate>${pubBase}</pubDate>
+          <pubDate>${pubDate}</pubDate>
         </item>`
     })
     .join('')

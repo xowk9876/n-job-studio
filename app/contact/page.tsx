@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Instagram } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
 import { buildGoogleAlternates, formatPageTitle } from '@/lib/seo-platform'
 
@@ -79,7 +79,7 @@ export default function ContactPage() {
                 'linear-gradient(135deg, #f09433 0%, #dc2743 50%, #bc1888 100%)',
             }}
           >
-            <Instagram className="w-4 h-4" strokeWidth={2.2} />
+            <MessageCircle className="w-4 h-4" strokeWidth={2.2} aria-hidden />
           </span>
           <div>
             <p className="text-[11px] font-mono tracking-[0.18em] text-[color:var(--muted)]">INSTAGRAM</p>

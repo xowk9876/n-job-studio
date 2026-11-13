@@ -54,7 +54,7 @@ npm.cmd view next@16 version
 
 검토한 버전만 지정해 설치하고 package.json·잠금 파일의 diff를 함께 검토한다. Next와 eslint-config-next, Tailwind와 @tailwindcss/postcss는 버전을 맞춘다. 직접 의존성이 최신이어도 하위 패키지의 호환 업데이트가 남을 수 있으므로 `npm.cmd outdated --all`도 확인한다. `npm.cmd update` 후 변경된 버전·플랫폼별 잠금 항목을 검토하고 5절의 검사를 다시 실행한다.
 
-2026-11-13 확인: eslint-plugin-react 7.37.5와 eslint-plugin-jsx-a11y 6.10.2의 peer 범위는 ESLint 9까지이며, @typescript-eslint/parser 8.72.2는 TypeScript `<6.1.0`을 요구한다. ESLint 10·TypeScript 7을 강제로 설치하지 않는다. ESLint 9 지원 종료 경고는 남아 있으므로 해당 플러그인의 지원이 추가되면 전환을 검토한다. lucide 1은 아이콘/API 호환 검토 대상이며 Node 타입은 운영 Node 24에 맞춰 24를 유지한다. `npm audit fix --force`와 `--legacy-peer-deps`로 제약을 우회하지 않는다.
+2026-11-13 확인: eslint-plugin-react 7.37.5와 eslint-plugin-jsx-a11y 6.10.2의 peer 범위는 ESLint 9까지이며, @typescript-eslint/parser 8.72.2는 TypeScript `<6.1.0`을 요구한다. ESLint 10·TypeScript 7을 강제로 설치하지 않는다. ESLint 9 지원 종료 경고는 남아 있으므로 해당 플러그인의 지원이 추가되면 전환을 검토한다. lucide-react 1.72.0은 빌드·화면 검증을 마쳤으며 제거된 Instagram 아이콘을 문의용 MessageCircle로 교체했다. Node 타입은 운영 Node 24에 맞춰 24를 유지한다. `npm audit fix --force`와 `--legacy-peer-deps`로 제약을 우회하지 않는다.
 
 `outdated --all`의 각 소비자별 wanted는 전체 프로젝트의 호환성을 보장하지 않는다. 또한 Tailwind oxide WASM 패키지 안의 wasm-runtime·wasm-util·tslib는 `inBundle` 항목으로 배포자가 함께 묶은 파일이다. 루트 tslib와 별개이며, 묶인 파일을 직접 덮어쓰지 않고 Tailwind의 후속 릴리스로 갱신한다.
 
@@ -97,7 +97,7 @@ git diff --stat
 git diff
 ```
 
-**정상 결과:** 테스트 58개(추후 증가 가능), Next 프로덕션 빌드·TypeScript 검사 통과, ESLint 오류 0, audit 취약점 0. build의 prebuild에서 테스트를 자동 실행하므로 Vercel 기본 `npm run build`도 테스트 실패 시 중단된다.
+**정상 결과:** 테스트 60개(추후 증가 가능), Next 프로덕션 빌드·TypeScript 검사 통과, ESLint 오류 0, audit 취약점 0. build의 prebuild에서 테스트를 자동 실행하므로 Vercel 기본 `npm run build`도 테스트 실패 시 중단된다.
 
 `npm.cmd start -- --hostname 127.0.0.1 --port 4174`로 로컬 프로덕션 빌드를 연다. 여섯 계산기의 입력·결과, 새로고침 후 저장 복원, 소수 금리, 날짜, 오류 문구, 로또 생성/조회·폴백을 확인한다. 외부 API는 운영 환경에서도 별도로 확인한다.
 
