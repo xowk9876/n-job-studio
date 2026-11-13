@@ -11,7 +11,8 @@ UI 스타일·레이아웃 변경은 범위 밖이다.
 | 매년 6월 · 12월 | 1. 스트레스 DSR 단계·유예 기한 |
 | 한국은행 금통위 직후 (연 8회) | 1. 기준금리 → 전월세 전환율 |
 | 매월 | 5. `npm audit` (critical·high는 즉시) |
-| 분기 1회 | 4. 로또 정적 스냅샷 갱신, 전체 체크리스트 |
+| 추첨 발표 이후 | 4. 로또 API와 정적 스냅샷의 최신 회차 비교·필요 시 갱신 |
+| 분기 1회 | 전체 체크리스트 |
 
 ## 1. 시점 민감 수치
 
@@ -41,7 +42,7 @@ UI 스타일·레이아웃 변경은 범위 밖이다.
 | 계산기 | 확인 기준 |
 |--------|-----------|
 | 연봉 (`lib/salary.ts`) | 실수령액이 음수가 되지 않는다. 국민연금은 상·하한 안에서 계산된다. 비과세 수당은 과세표준에서만 빠진다. |
-| 퇴직금 (`lib/severance.ts`) | 재직일수는 입사일·퇴직일 양끝 포함 (+1). 365일 미만이면 미지급. 3개월 일수는 말일 보정. 날짜는 UTC로 파싱해 시간대 영향이 없다. |
+| 퇴직금 (`lib/severance.ts`) | 입력은 입사일·마지막 근무일이며 양끝 포함 (+1). 법적 퇴직일은 다음 날. 자격은 입사일의 1년 뒤 날짜와 비교하며 윤년을 단순 365일로 판정하지 않는다. 평균임금 3개월은 법적 퇴직일에서 역산·말일 보정. 날짜는 UTC 파싱. |
 | 대출 (`lib/mortgage.ts`) | 마지막 회차에서 잔액이 정확히 0. 금리 0%에서 0으로 나누지 않는다. DSR 한도는 스트레스 가산 후 금리로 계산한다. |
 | 적금·예금 (`lib/savings.ts`) | 세율 15.4% · ISA 200만 원 초과분 9.9%. 기간·금액 0이면 결과 0 (NaN·Infinity 없음). |
 | 전월세 (`lib/jeonse.ts`) | 전환율 0 이하 방어. 전세가율 80%·90% 경고 경계값. |
@@ -55,7 +56,7 @@ UI 스타일·레이아웃 변경은 범위 밖이다.
 | `components/ui/NumericInput.tsx` | 소수 입력 `3.05`, `4.50`을 한 글자씩 쳐도 값이 그대로 들어간다. 만원 단위 필드는 표시 ÷ 10,000, 저장 × 10,000. 빈 칸은 0. |
 | `components/ui/DatePicker.tsx` | 로컬 날짜 기준 (UTC로 하루 밀리지 않음). "오늘" 버튼이 오늘 날짜를 고른다. |
 | `store/index.ts` | 모든 store `skipHydration: true` + 페이지의 `usePersistRehydrate` 호출 (하이드레이션 경고 없음). |
-| 퇴직금 페이지 | 예전 기본 퇴직일(`2026-01-01`, `2026-05-22`, `2026-05-24`)은 오늘로 교체된다. |
+| 퇴직금 페이지 | 저장된 정상 마지막 근무일은 그대로 보존한다. 복원 완료 뒤 빈 값에만 오늘 날짜를 채운다. |
 
 ## 4. 로또·외부 API
 
@@ -69,7 +70,7 @@ UI 스타일·레이아웃 변경은 범위 밖이다.
 **스냅샷 갱신**
 
 ```powershell
-Set-Location "d:\개발\부업\머니핏 계산기"
+Set-Location -LiteralPath 'D:\개발\n-job-studio'
 node scripts/fetch-lotto-history.mjs
 ```
 
@@ -79,7 +80,7 @@ node scripts/fetch-lotto-history.mjs
 ## 5. 의존성·보안
 
 ```powershell
-Set-Location "d:\개발\부업\머니핏 계산기"
+Set-Location -LiteralPath 'D:\개발\n-job-studio'
 npm.cmd audit
 npm.cmd outdated
 ```
@@ -89,7 +90,7 @@ npm.cmd outdated
 
 **규칙**
 
-- 같은 메이저 안의 patch·minor는 적용한다 (`npm.cmd update`, 보안 수정이 필요한 패키지는 `package.json` 최소 버전도 올린다).
+- 같은 메이저의 patch·minor는 공식 릴리스와 호환성을 확인하고 버전을 지정해 적용한다. 고정 버전은 `npm.cmd outdated`만으로 패치를 찾을 수 없으므로 `npm.cmd view <패키지>@<메이저> version`도 확인한다.
 - 메이저 업그레이드 (`eslint` 10, `typescript` 7, `lucide-react` 1.x, `@types/node` 26)는 별도 작업으로 호환성 확인 후 진행한다.
 - 새 패키지 추가 금지 (`AGENTS.md`).
 - 시크릿은 `.env.local`에만 둔다. `git diff`에 키·토큰이 없는지 확인한다.
@@ -102,15 +103,14 @@ npm.cmd outdated
 ## 7. 배포 게이트
 
 ```powershell
-Set-Location "d:\개발\부업\머니핏 계산기"
-npx.cmd tsc --noEmit
-npm.cmd run lint
-npm.cmd run build
+Set-Location -LiteralPath 'D:\개발\n-job-studio'
+npm.cmd run check
+if ($LASTEXITCODE -ne 0) { throw '검증 실패: 배포 중단' }
 git status
 git diff
 ```
 
 - Why: 타입·린트·빌드 실패 상태로 Vercel 프로덕션에 올라가는 것을 막는다.
-- Expected Output: 세 명령 모두 오류 없음, `git diff`에는 의도한 파일만 있음.
+- Expected Output: 테스트 → 빌드(TypeScript 포함) → lint → audit 모두 통과, `git diff`에는 의도한 파일만 있음.
 
 통과 후 커밋·푸시하고 커밋 해시와 빌드·린트 결과를 기록한다 (`AGENTS.md` 배포 전 점검).

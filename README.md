@@ -12,8 +12,8 @@
 ## 로컬 실행
 
 ```powershell
-Set-Location -LiteralPath 'd:\개발\부업\머니핏 계산기'
-npm.cmd install
+Set-Location -LiteralPath 'D:\개발\n-job-studio'
+npm.cmd ci
 npm.cmd run dev
 ```
 
@@ -21,7 +21,7 @@ npm.cmd run dev
 
 ## 환경 변수
 
-`.env.local` 예시는 `.env.example` 참고.
+선택적인 변수는 프로젝트 루트의 `.env.local` 또는 Vercel 환경 변수에 설정합니다. 아래 두 변수 없이도 기본 운영 주소와 공개 광고 ID로 실행됩니다.
 
 | 변수 | 설명 |
 |------|------|
@@ -30,14 +30,23 @@ npm.cmd run dev
 
 ## 배포
 
-Vercel 프로젝트에 연결되어 있습니다.
+Vercel `n-job-studio` 프로젝트는 GitHub `main`에 연결되어 있습니다. Node.js 24에서 검증 후 push하면 자동 배포됩니다.
 
 ```powershell
-npm.cmd run build
-npx.cmd vercel deploy --prod --yes
+npm.cmd run check
+git status --short
+git diff --check
+git diff
+# 의도한 변경만 커밋한 뒤:
+git push origin main
 ```
 
 프로덕션: https://n-job-studio.vercel.app
+
+`build`는 `prebuild`에서 회귀 테스트를 먼저 실행합니다. `check`는 테스트 → 프로덕션 빌드(TypeScript 포함) → ESLint → 의존성 보안 검사 순서입니다. 배포 후에는 Vercel의 **Production / READY / 커밋 SHA**와 실제 페이지를 확인해야 완료입니다.
+
+- [운영·업데이트 매뉴얼](docs/MAINTENANCE.md): 사용법, 점검, Windows 명령, 배포 확인, 복구
+- [2026-11-13 점검·업데이트 기록](docs/UPDATE_2026-11-13.md)
 
 ## 라우트
 
