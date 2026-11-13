@@ -24,7 +24,7 @@
 1. 웹마스터 도구에서 기존 등록 사이트를 선택한다.
 2. 요청 → 사이트맵 제출: `sitemap.xml`. 이미 등록된 피드는 자동 재방문하므로 재등록을 위해 삭제하지 않는다.
 3. 요청 → RSS 제출: `https://n-job-studio.vercel.app/rss.xml`. 계산기·가이드 12개 항목과 올바른 날짜를 확인한다.
-4. 요청 → 웹 페이지 수집: 홈, 갱신한 계산기, 주요 가이드의 최종 경로를 요청한다. 처리 결과에서 요청 접수·수집 성공·검색 반영을 구분한다.
+4. 요청 → 웹 페이지 수집: 홈, 갱신한 계산기, 주요 가이드의 전체 HTTPS URL을 요청한다. 처리 결과에서 요청 접수·수집 성공·검색 반영을 구분한다.
 5. 로그인이나 보안문자가 나오면 계정 소유자가 해당 단계만 처리한다.
 
 ## 도메인 변경
@@ -36,3 +36,11 @@ Vercel 연결 → `NEXT_PUBLIC_SITE_URL` 변경 → 메타데이터·사이트�
 - [Google 재수집 요청](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)
 - [Google 사이트맵과 수정일](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
 - [네이버 RSS·사이트맵 제출](https://searchadvisor.naver.com/guide/request-feed)
+
+## 2026-11-13 실제 처리 기록
+
+- Google 사이트맵 재제출 접수, 상태 성공·발견된 페이지 18개. 마지막 읽기 11월 12일은 이전 처리 시점이다.
+- 홈 URL은 기존 색인 상태를 확인한 뒤 재색인 요청을 접수했다. DSR 가이드는 기존 색인이 있지만 추가 요청 시 일일 할당량 초과로 거절돼 중단했다. 나머지 URL도 오늘 개별 요청을 완료한 것으로 기록하지 않는다.
+- 네이버 기존 사이트맵과 RSS 등록을 확인했다. 재등록을 위해 삭제하지 않았다.
+- 네이버 10개 URL 수집 요청 접수(19:57~20:00 KST): `/`, `/salary`, `/mortgage`, `/severance`, `/savings`, `/jeonse`, `/lotto`, `/guide/dsr-stress-test-2026`, `/about`, `/contact`. 화면의 신규 등록일을 확인했다. 실제 수집·색인 완료를 의미하지 않는다.
+- 할당량 해제 후 필요하면 주요 미색인 URL을 다시 요청한다. 자동 예약은 설정하지 않았다.
