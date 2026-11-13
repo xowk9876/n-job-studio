@@ -152,14 +152,14 @@ export default function SalaryPage() {
         {showExempt && (
           <div className="px-4 pb-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
             <div>
-              <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">식대 <span className="text-[10px] text-white/40 font-normal">(월 20만원)</span></label>
+              <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">식대 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
               <div className="relative">
                 <NumericInput ariaLabel="월 식대 (만원)"  className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.mealAllowance} defaultValue={200_000} unitMultiplier={10000} onChange={(n) => s.set({ mealAllowance: n })} />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
               </div>
             </div>
             <div>
-              <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">차량유지비 <span className="text-[10px] text-white/40 font-normal">(월 20만원)</span></label>
+              <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">차량유지비 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
               <div className="relative">
                 <NumericInput ariaLabel="월 차량유지비 (만원)"  className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.transportAllowance} defaultValue={0} unitMultiplier={10000} onChange={(n) => s.set({ transportAllowance: n })} />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
@@ -176,7 +176,7 @@ export default function SalaryPage() {
           {[
             ['국민연금 4.75%', r.pension],
             ['건강보험 3.595%', r.health],
-            ['장기요양 13.14%', r.care],
+            ['장기요양 (건강보험료의 약 13.14%)', r.care],
             ['고용보험 0.9%', r.employment],
             ['근로소득세', r.incomeTax],
             ['지방소득세', r.localTax],

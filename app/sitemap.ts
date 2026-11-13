@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { CONTENT_UPDATED_AT, SEO_UPDATED_AT, calculatorUpdatedAt, SITE_URL, guideItems } from '@/lib/seo'
+import { CONTENT_UPDATED_AT, SEO_UPDATED_AT, COPY_UPDATED_AT, calculatorUpdatedAt, SITE_URL, guideItems } from '@/lib/seo'
 
 // 변경빈도(changeFrequency)는 봇 크롤링 우선순위 힌트 — 실제 갱신 주기에 정직하게 매핑
 const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[number]['changeFrequency']; modified?: string }[] = [
@@ -21,7 +21,7 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
     modified: guide.updatedAt,
   })),
   // 정보 페이지 — 약관·정책 변경 시만 갱신, lastmod 명시
-  { path: '/about',           priority: 0.6, freq: 'yearly', modified: CONTENT_UPDATED_AT },
+  { path: '/about',           priority: 0.6, freq: 'yearly', modified: COPY_UPDATED_AT },
   { path: '/contact',         priority: 0.6, freq: 'yearly', modified: CONTENT_UPDATED_AT },
   { path: '/privacy-policy',  priority: 0.4, freq: 'yearly', modified: CONTENT_UPDATED_AT },
   { path: '/terms',           priority: 0.4, freq: 'yearly', modified: CONTENT_UPDATED_AT },

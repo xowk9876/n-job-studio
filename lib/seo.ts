@@ -4,10 +4,14 @@ import { buildGoogleAlternates, formatPageTitle, SITE_NAME, SITE_URL } from '@/l
 export { SITE_NAME, SITE_URL }
 export const CONTENT_UPDATED_AT = '2026-10-31' as const
 export const SEO_UPDATED_AT = '2026-11-06' as const
-export const CALCULATOR_EXAMPLES_UPDATED_AT = '2026-11-09' as const
+export const COPY_UPDATED_AT = '2026-11-13' as const
 export const calculatorUpdatedAt: Record<string, string> = {
-  '/mortgage': CALCULATOR_EXAMPLES_UPDATED_AT,
-  '/jeonse': CALCULATOR_EXAMPLES_UPDATED_AT,
+  '/salary': COPY_UPDATED_AT,
+  '/mortgage': COPY_UPDATED_AT,
+  '/severance': COPY_UPDATED_AT,
+  '/savings': COPY_UPDATED_AT,
+  '/jeonse': COPY_UPDATED_AT,
+  '/lotto': COPY_UPDATED_AT,
 }
 export const SALARY_GUIDE_UPDATED_AT = '2026-11-06' as const
 
@@ -39,7 +43,7 @@ export const guideItems = [
     description: '스트레스 금리가 실제 이자와 다른 이유, 지역·금리 유형별 적용 조건과 원리금균등 기준 한도 예시를 설명합니다.',
     tag: '대출',
     calculatorPath: '/mortgage',
-    updatedAt: CONTENT_UPDATED_AT,
+    updatedAt: COPY_UPDATED_AT,
   },
   {
     slug: 'severance-calculation-guide',

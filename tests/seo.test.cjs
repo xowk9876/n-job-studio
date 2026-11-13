@@ -64,10 +64,12 @@ test('전월세 예시는 남기는 보증금과 전환하는 차액을 구분�
 
 test('변경한 계산기의 날짜만 사이트맵과 구조화 데이터에 함께 반영한다', () => {
   const { default: sitemap } = require('../app/sitemap')
-  const { buildWebApplicationJsonLd, SEO_UPDATED_AT, CALCULATOR_EXAMPLES_UPDATED_AT } = require('../lib/seo')
-  for (const path of ['/mortgage', '/jeonse', '/salary']) {
-    const expected = path === '/salary' ? SEO_UPDATED_AT : CALCULATOR_EXAMPLES_UPDATED_AT
-    assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, expected)
-    assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, expected)
+  const { buildWebApplicationJsonLd, CONTENT_UPDATED_AT, COPY_UPDATED_AT, SALARY_GUIDE_UPDATED_AT } = require('../lib/seo')
+  for (const path of ['/mortgage', '/jeonse', '/salary', '/savings', '/severance', '/lotto']) {
+    assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, COPY_UPDATED_AT)
+    assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, COPY_UPDATED_AT)
   }
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide/dsr-stress-test-2026').lastModified, COPY_UPDATED_AT)
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide/2026-salary-tax-guide').lastModified, SALARY_GUIDE_UPDATED_AT)
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/privacy-policy').lastModified, CONTENT_UPDATED_AT)
 })

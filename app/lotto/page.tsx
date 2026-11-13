@@ -82,7 +82,7 @@ export default function LottoPage() {
       {/* 오락용 고지는 생성기 바로 아래에 둔다 — 공식 당첨번호 조회 결과에 걸리면 오해를 준다 */}
       <p className="lotto-disclaimer">
         생성된 번호는 참고·오락용이며, 실제 추첨 결과·당첨을 보장하지 않습니다.
-        <span className="lotto-disclaimer__age">복권 이용은 만 19세 이상입니다.</span>
+        <span className="lotto-disclaimer__age">19세 미만은 복권을 구매할 수 없습니다.</span>
       </p>
 
       {/* 당첨 등위 안내 — 동행복권 공식 공 색상 매핑 */}

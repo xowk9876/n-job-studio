@@ -62,7 +62,7 @@ export default function MortgagePage() {
         <div className="grid grid-cols-3 gap-2 mt-4 text-[11.5px]">
           <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">총 납입</div><div className="font-semibold tabular mt-0.5">{manwon(r.totalPayment)}</div></div>
           <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">총 이자</div><div className="font-semibold tabular mt-0.5">{manwon(r.totalInterest)}</div></div>
-          <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">이자 비율</div><div className="font-semibold tabular mt-0.5">{r.interestRatio.toFixed(1)}%</div></div>
+          <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">원금 대비 총이자</div><div className="font-semibold tabular mt-0.5">{r.interestRatio.toFixed(1)}%</div></div>
         </div>
       </div>
 
@@ -188,7 +188,7 @@ export default function MortgagePage() {
               <div><div className="text-white/50 text-[10.5px]">신규 원금 한도 (가정)</div><div className="font-bold text-emerald-300 tabular mt-0.5">{manwon(dsr.maxPrincipal)}원</div></div>
               <div><div className="text-white/50 text-[10.5px]">기존부채 DSR 점유</div><div className="font-bold text-white/80 tabular mt-0.5">{dsr.utilization.toFixed(1)}%</div></div>
             </div>
-            <p className="text-[10.5px] text-white/40 leading-relaxed">원리금균등 상환을 가정한 역산입니다. 위 상환 방식 선택과 별개이며, 스트레스 금리는 실제 이자에 더해지지 않습니다. 변동형 기준 수도권·규제지역 주담대 3.0%p, 지방 비규제지역 0.75%p(2026.12.31까지), 그 외 기본 1.5%p입니다. 금리 유형별 적용비율·LTV·지역별 한도·심사 인정 만기는 별도 확인하세요.</p>
+            <p className="text-[10.5px] text-white/40 leading-relaxed">원리금균등 상환을 가정한 역산입니다. 위 상환 방식 선택과 별개이며, 스트레스 금리는 실제 이자에 더해지지 않습니다. 2026년 하반기 변동형 주담대 기준 수도권·규제지역 3.0%p, 지방 비규제지역 0.75%p입니다. 신용·기타 대출은 기본 1.5%p에 금리 유형·만기별 예외가 있으며 오피스텔 담보대출은 주담대 방식을 따릅니다. <a href="/guide/dsr-stress-test-2026" className="underline underline-offset-2">DSR 적용 조건</a>과 LTV·지역별 한도·심사 인정 만기를 함께 확인하세요.</p>
           </div>
         )}
       </div>

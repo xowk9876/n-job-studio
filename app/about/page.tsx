@@ -53,7 +53,7 @@ export default function AboutPage() {
 
         <section>
           <h2 className="font-display text-[19px] font-semibold text-white mb-3">계산 근거 법령·고시</h2>
-          <p>모든 계산기는 아래 공식 법령과 고시에 기반합니다.</p>
+          <p>계산기별 주요 근거와 적용 범위는 다음과 같습니다.</p>
           <ul className="list-disc pl-6 mt-3 space-y-2">
             <li>
               <strong className="text-white">연봉 실수령액</strong> — 소득세법 제134조 근로소득 간이세액표,

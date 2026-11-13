@@ -109,7 +109,7 @@ export default function SavingsPage() {
         <h2 className="font-semibold text-white mb-3 text-[13.5px]">이자 세금 상세</h2>
         <div className="flex flex-col gap-1.5 text-[12.5px]">
           <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세전 이자</span><span className="font-semibold text-white tabular">{won(r.grossInterest)}</span></div>
-          <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">이자소득세 (15.4%)</span><span className="font-semibold text-rose-300 tabular">−{won(r.taxAmount)}</span></div>
+          <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세금 (지방세 포함 15.4%)</span><span className="font-semibold text-rose-300 tabular">−{won(r.taxAmount)}</span></div>
           <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세후 이자</span><span className="font-semibold text-emerald-300 tabular">{won(r.netInterest)}</span></div>
           <div className="flex justify-between py-1.5"><span className="text-white/60">원금 합계 대비 세후 연환산 수익률</span><span className="font-semibold text-[color:var(--brand)] tabular">{r.effectiveRate.toFixed(2)}%</span></div>
         </div>

@@ -52,7 +52,11 @@ npm.cmd view next@16 version
 
 **정상 결과:** 작업 트리 깨끗함, audit 취약점 0건. `outdated`의 종료 코드 1은 후보가 있다는 뜻이다. 고정 버전의 패치는 `npm view`와 공식 릴리스도 확인한다.
 
-검토한 버전만 지정해 설치하고 package.json·잠금 파일의 diff를 함께 검토한다. Next와 eslint-config-next, Tailwind와 @tailwindcss/postcss는 버전을 맞춘다. React/TypeScript/ESLint/lucide 메이저 전환은 별도 호환성 작업이다. ESLint 9는 지원 종료 경고가 있으므로 ESLint 10 전환을 후속 검토한다. 이번 audit에서는 취약점이 발견되지 않았다. `npm audit fix --force`를 정기 점검에 사용하지 않는다.
+검토한 버전만 지정해 설치하고 package.json·잠금 파일의 diff를 함께 검토한다. Next와 eslint-config-next, Tailwind와 @tailwindcss/postcss는 버전을 맞춘다. 직접 의존성이 최신이어도 하위 패키지의 호환 업데이트가 남을 수 있으므로 `npm.cmd outdated --all`도 확인한다. `npm.cmd update` 후 변경된 버전·플랫폼별 잠금 항목을 검토하고 5절의 검사를 다시 실행한다.
+
+2026-11-13 확인: eslint-plugin-react 7.37.5와 eslint-plugin-jsx-a11y 6.10.2의 peer 범위는 ESLint 9까지이며, @typescript-eslint/parser 8.72.2는 TypeScript `<6.1.0`을 요구한다. ESLint 10·TypeScript 7을 강제로 설치하지 않는다. ESLint 9 지원 종료 경고는 남아 있으므로 해당 플러그인의 지원이 추가되면 전환을 검토한다. lucide 1은 아이콘/API 호환 검토 대상이며 Node 타입은 운영 Node 24에 맞춰 24를 유지한다. `npm audit fix --force`와 `--legacy-peer-deps`로 제약을 우회하지 않는다.
+
+`outdated --all`의 각 소비자별 wanted는 전체 프로젝트의 호환성을 보장하지 않는다. 또한 Tailwind oxide WASM 패키지 안의 wasm-runtime·wasm-util·tslib는 `inBundle` 항목으로 배포자가 함께 묶은 파일이다. 루트 tslib와 별개이며, 묶인 파일을 직접 덮어쓰지 않고 Tailwind의 후속 릴리스로 갱신한다.
 
 ## 4. 금융 기준·로또 데이터
 

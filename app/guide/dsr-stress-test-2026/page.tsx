@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
 import { calcDsrLimit } from '@/lib/mortgage'
-import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
+import { buildGuideMetadata, COPY_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'dsr-stress-test-2026'
 const title = '2026 스트레스 DSR 적용 기준과 계산 예시'
 const description =
   '스트레스 금리가 실제 이자와 다른 이유, 지역·금리 유형별 적용 조건과 원리금균등 기준 한도 예시를 설명합니다.'
-const updatedAt = CONTENT_UPDATED_AT
+const updatedAt = COPY_UPDATED_AT
 const exampleRates = [0, 0.75, 1.5, 3].map(stressBps => ({
   stressBps,
   ...calcDsrLimit({ annualIncome: 60_000_000, existingDebtMonthlyPmt: 0, annualRate: 4, years: 30, stressBps, dsrCap: 40 }),
@@ -43,10 +43,11 @@ export default function Page() {
           <tbody>
             <tr><td>수도권·규제지역 주담대</td><td>3.0%p</td><td>금리 유형·경과규정</td></tr>
             <tr><td>지방 비규제지역 주담대</td><td>0.75%p</td><td>2단계 적용 유예: 2026.12.31까지</td></tr>
-            <tr><td>신용·기타 대출</td><td>기본 1.5%p</td><td>신용대출은 총잔액 1억원 초과 시</td></tr>
+            <tr><td>신용·기타 대출</td><td>기본 1.5%p</td><td>신용대출 총잔액·고정금리 만기 확인, 오피스텔은 주담대 방식</td></tr>
           </tbody>
         </table>
-        <p>지역 구분, 상품별 적용비율, 계약·신청 시점에 따른 경과규정은 금융위원회 하반기 행정지도와 금융기관 안내를 함께 확인하세요.</p>
+        <p>신용대출은 기존 대출과 신규 신청액을 합한 총잔액이 1억원을 초과할 때 스트레스 금리를 적용합니다. 신용·기타 대출 중 고정금리이면서 만기가 5년 이상이면 미적용, 3년 이상 5년 미만이면 기본 금리의 60%(0.90%p)를 적용합니다. 오피스텔 담보대출은 주택담보대출의 금리 적용 방식을 따릅니다.</p>
+        <p><a href="https://portal.kfb.or.kr/compare/stress_loan.php" target="_blank" rel="noopener noreferrer">은행연합회 스트레스금리 공시</a>(2026.6.30 공시, 2026.7.1~12.31 적용)를 2026.11.13에 확인했습니다. 지역 구분, 상품별 적용비율, 계약·신청 시점에 따른 경과규정은 <a href="https://better.fsc.go.kr/fsc_new/status/adminMap/OpertnDetail.do?muNo=145&postNo=4215&stNo=11" target="_blank" rel="noopener noreferrer">금융위원회 하반기 행정지도</a>와 금융기관 안내를 함께 확인하세요.</p>
       </section>
 
       <section>

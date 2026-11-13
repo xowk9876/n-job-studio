@@ -57,7 +57,7 @@ export default function SeverancePage() {
           <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-amber-200 text-[13px]">계속근로 1년 미만</p>
-            <p className="text-[12px] text-amber-300/80 mt-0.5">재직 {r.workDays}일 — 1년 이상 근무 시 지급됩니다.</p>
+            <p className="text-[12px] text-amber-300/80 mt-0.5">재직 {r.workDays}일 · 계속근로 1년 요건을 충족하지 않았습니다.</p>
           </div>
         </div>
       ) : (
@@ -127,7 +127,7 @@ export default function SeverancePage() {
         <ul className="list-disc list-inside space-y-1 text-white/50 text-[11.5px]">
           <li>1일 평균임금 = 최근 3개월 총 임금 ÷ 실제 일수(89~92일)</li>
           <li>연간 상여금의 3개월분(÷4)을 합산합니다</li>
-          <li>1년 미만 근무 시 퇴직금 없음</li>
+          <li>계속근로 1년 미만은 법정 퇴직금 지급 대상에서 제외됩니다</li>
           <li>입력 날짜는 마지막 근무일입니다. 그 다음 날을 법적 퇴직일로 삼아 재직일수와 직전 3개월을 계산합니다. 고용노동부 계산기에는 마지막 근무일 다음 날을 입력하면 같은 기간입니다.</li>
           <li>퇴직소득세는 국세청 홈택스에서 확인</li>
         </ul>

@@ -49,7 +49,7 @@ export default function JeonsePage() {
           </>
         ) : (
           <>
-            <p className="result-label">필요 전세 보증금</p>
+            <p className="result-label">환산 전세 보증금 (협의용)</p>
             <p className="result-value">{won(r.jeonseDeposit ?? 0)}</p>
             <p className="text-[12px] opacity-70 mt-2">현재 연간 월세 {manwon(r.annualCost)}</p>
           </>
@@ -118,7 +118,7 @@ export default function JeonsePage() {
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">
             전월세 전환율 (%)
-            <span className="ml-2 text-[10.5px] font-normal text-white/40">법정 상한 {DEFAULT_CONVERSION_RATE.toFixed(2)}% (기준금리 {DEFAULT_BASE_RATE.toFixed(2)}%+2%)</span>
+            <span className="ml-2 text-[10.5px] font-normal text-white/40">보증금→월세 상한 {DEFAULT_CONVERSION_RATE.toFixed(2)}% (기준금리 {DEFAULT_BASE_RATE.toFixed(2)}% + 2%p)</span>
           </label>
           <NumericInput ariaLabel="전월세 전환율 (%)" max={100} min={0.001}  className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={DEFAULT_CONVERSION_RATE} allowDecimal onChange={(n) => set({ conversionRate: n })} />
         </div>
