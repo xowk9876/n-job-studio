@@ -1814,3 +1814,6 @@ input[type="range"]::-moz-range-thumb {
 .home-app__action:focus-visible, .home-app__hero-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
 .home-app__action:disabled { cursor: default; opacity: 0.6; }
 .home-app__hero-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; color: var(--brand); font-size: 13px; font-weight: 600; }
+@media (min-width: 768px) {
+  .home-app__hero-link { display: none; }
+}
