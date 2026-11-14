@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Monitor, Share, Smartphone } from 'lucide-react'
-import { getInstallContext, installFromPrompt, type InstallPlatform, type InstallPrompt } from '@/lib/pwa-install'
+import { getInstallContext, getNaverShortcutUrl, installFromPrompt, type InstallPlatform, type InstallPrompt } from '@/lib/pwa-install'
 import { SITE_URL } from '@/lib/seo-platform'
 
 type Platform = InstallPlatform
@@ -34,10 +34,14 @@ export default function HomeAppShortcut() {
   const [guide, setGuide] = useState<Platform | null>(null)
   const [status, setStatus] = useState('')
   const [inApp, setInApp] = useState(false)
+  const [naverShortcutUrl, setNaverShortcutUrl] = useState<string | null>(null)
 
   useEffect(() => {
     const media = window.matchMedia('(display-mode: standalone)')
-    const sync = () => setInstalled(isStandalone())
+    const sync = () => {
+      setInstalled(isStandalone())
+      setNaverShortcutUrl(getNaverShortcutUrl(navigator.userAgent, navigator.platform, navigator.maxTouchPoints))
+    }
     sync()
     media.addEventListener('change', sync)
     const onPrompt = (event: Event) => {
@@ -61,7 +65,7 @@ export default function HomeAppShortcut() {
 
   useEffect(() => { if (guide) guideRef.current?.focus() }, [guide])
 
-  async function addShortcut(platform: Platform) {
+  async function addShortcut(platform: Platform, naverShortcut = false) {
     if (installed || busyRef.current) return
     const context = getInstallContext(navigator.userAgent, navigator.platform, navigator.maxTouchPoints)
     setInApp(context.inApp)
@@ -72,7 +76,9 @@ export default function HomeAppShortcut() {
     if (guide === platform) guideRef.current?.focus()
     const event = promptRef.current
     if (!matchesDevice || !event) {
-      setStatus('설치 창이 표시되지 않으면 아래 안내에 따라 브라우저에서 직접 추가해주세요.')
+      setStatus(naverShortcut
+        ? '네이버 앱에 홈 화면 바로가기 추가를 요청했습니다. 확인 창이 나오면 추가를 눌러주세요. 창이 나오지 않으면 아래 주소 복사와 Chrome 안내를 이용해주세요.'
+        : '설치 창이 표시되지 않으면 아래 안내에 따라 브라우저에서 직접 추가해주세요.')
       return
     }
     // 브라우저 설치 이벤트는 취소한 경우에도 한 번만 사용할 수 있다.
@@ -114,19 +120,39 @@ export default function HomeAppShortcut() {
           <article className="home-trust-card home-app__card" key={platform}>
             <Icon size={22} className="text-[color:var(--brand)]" aria-hidden />
             <h3 className="home-trust-card__title mt-3">{title}</h3>
-            <p className="home-app__note !mt-1 !mb-4">{description}</p>
-            <button type="button" className="home-app__action" disabled={installed || installing}
-              aria-expanded={guide === platform} aria-controls={`install-guide-${platform}`} onClick={() => void addShortcut(platform)}>
-              {installed ? '앱으로 사용 중' : label}
-            </button>
+            <p className="home-app__note !mt-1 !mb-4">{platform === 'android' && naverShortcutUrl ? '네이버 앱에서 홈 화면 바로가기' : description}</p>
+            {platform === 'android' && naverShortcutUrl && !installed ? (
+              <a href={naverShortcutUrl} className="home-app__action" aria-disabled={installing}
+                aria-expanded={guide === platform} aria-controls={`install-guide-${platform}`} onClick={event => {
+                  if (busyRef.current) { event.preventDefault(); return }
+                  // 새 이벤트가 도착한 직후에도 native prompt가 scheme보다 우선한다.
+                  if (promptRef.current) {
+                    event.preventDefault()
+                    void addShortcut(platform)
+                    return
+                  }
+                  // 기본 링크 동작으로 같은 창에서 호출한다. 성공을 추정하지 않고 안내는 유지한다.
+                  void addShortcut(platform, true)
+                }}>{label}</a>
+            ) : (
+              <button type="button" className="home-app__action" disabled={installed || installing}
+                aria-expanded={guide === platform} aria-controls={`install-guide-${platform}`} onClick={() => void addShortcut(platform)}>
+                {installed ? '앱으로 사용 중' : label}
+              </button>
+            )}
+            {platform === 'android' && naverShortcutUrl && !installed && (
+              <p className="home-app__note">네이버 앱의 홈 화면 바로가기 추가를 요청합니다. Chrome의 독립 실행형 앱(PWA) 설치와는 다릅니다. 최종 추가는 기기에서 확인해주세요.</p>
+            )}
             {guide === platform && (
               <div id={`install-guide-${platform}`} className="home-app__guide mt-4" role="region" aria-labelledby={`install-guide-title-${platform}`}>
                 <h4 id={`install-guide-title-${platform}`} ref={guideRef} tabIndex={-1} className="home-trust-card__title scroll-mt-24">{guides[platform].title}</h4>
                 <p className="home-app__status !mt-3" role="status">{installed ? '머니핏 앱이 설치되어 있습니다.' : status}</p>
-                <p className="home-app__note">{inApp ? '현재 앱 안의 브라우저에서는 설치 창이 지원되지 않을 수 있습니다. ' : ''}네이버·Instagram·카카오톡 등 앱 안에서 보고 있다면 먼저 외부 브라우저로 열어주세요.</p>
+                <p className="home-app__note">{platform === 'android' && naverShortcutUrl
+                  ? '네이버 확인 창이 나오지 않거나 Chrome 앱으로 설치하려면 아래 방법을 이용해주세요.'
+                  : `${inApp ? '현재 앱 안의 브라우저에서는 설치 창이 지원되지 않을 수 있습니다. ' : ''}네이버·Instagram·카카오톡 등 앱 안에서 보고 있다면 먼저 외부 브라우저로 열어주세요.`}</p>
                 <ol className="home-app__steps">
                   <li>앱의 더 보기(⋮·⋯) 또는 공유 메뉴에서 ‘외부 브라우저로 열기’나 ‘브라우저에서 열기’를 찾아 선택하세요. 메뉴 이름과 위치는 앱 버전에 따라 다릅니다.</li>
-                  <li>메뉴가 없거나 계속 앱 안에서 열린다면 아래 주소를 복사한 뒤 {platform === 'ios' ? 'Safari' : platform === 'android' ? 'Chrome' : 'Chrome 또는 Edge'}를 직접 실행해 주소창에 붙여넣으세요.</li>
+                  <li>메뉴가 없거나 계속 앱 안에서 열린다면 아래 주소를 복사한 뒤 {platform === 'ios' ? 'Safari' : platform === 'android' ? 'Chrome' : 'Chrome 또는 Edge'} 앱을 직접 실행해 주소창에 붙여넣으세요.</li>
                 </ol>
                 <div className="mt-3 flex flex-col gap-3">
                   <button type="button" className="home-app__action" onClick={() => void copyAddress()}>사이트 주소 복사</button>
@@ -137,7 +163,7 @@ export default function HomeAppShortcut() {
                 <ol className="home-app__steps">{guides[platform].steps.map(step => <li key={step}>{step}</li>)}</ol>
                 <p className="home-app__note">입력값은 브라우저마다 따로 저장되어 다른 브라우저로 자동 이동하지 않습니다.</p>
                 <button type="button" className="home-app__action mt-3" onClick={event => {
-                  const trigger = event.currentTarget.closest('article')?.querySelector<HTMLButtonElement>('button[aria-expanded]')
+                  const trigger = event.currentTarget.closest('article')?.querySelector<HTMLElement>('[aria-expanded]')
                   setGuide(null)
                   setStatus('')
                   trigger?.focus()

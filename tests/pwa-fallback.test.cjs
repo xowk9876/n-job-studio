@@ -3,7 +3,7 @@ const { test } = require('node:test')
 const assert = require('node:assert/strict')
 const React = require('react')
 const { renderToStaticMarkup } = require('react-dom/server')
-const { getInstallContext } = require('../lib/pwa-install.ts')
+const { getInstallContext, getNaverShortcutUrl } = require('../lib/pwa-install.ts')
 const { SITE_URL } = require('../lib/seo-platform.ts')
 const HomeAppShortcut = require('../components/home/HomeAppShortcut.tsx').default
 
@@ -22,7 +22,7 @@ for (const [ua, platform, touch, device, inApp] of [
 
 // Exercise event handlers with a small hook harness using the existing React dependency.
 // Browser layout and native installation still need device/browser verification.
-function harness(t, ua = 'Mozilla/5.0 (Linux; Android 15) NAVER') {
+function harness(t, ua = 'Mozilla/5.0 (Linux; Android 15) NAVER(inapp; search; 2100; 12.0)') {
   const slots = [], effects = [], listeners = new Map()
   let cursor = 0, tree
   t.mock.method(React, 'useState', initial => {
@@ -48,11 +48,14 @@ function harness(t, ua = 'Mozilla/5.0 (Linux; Android 15) NAVER') {
   const api = {
     render() { cursor = 0; tree = HomeAppShortcut(); return tree },
     html() { return renderToStaticMarkup(api.render()) },
+    action(label) { return nodes(api.render()).find(node => ['button', 'a'].includes(node.type) && node.props.children === label) },
     async click(label, event) {
-      const button = nodes(api.render()).find(node => node.type === 'button' && node.props.children === label)
+      const button = api.action(label)
       assert.ok(button, `button exists: ${label}`)
-      button.props.onClick(event)
+      let prevented = false
+      button.props.onClick(event || { preventDefault() { prevented = true } })
       await new Promise(resolve => setImmediate(resolve))
+      return { prevented }
     },
     dispatch(name, event) { listeners.get(name)?.(event) },
     copied: null,
@@ -62,7 +65,7 @@ function harness(t, ua = 'Mozilla/5.0 (Linux; Android 15) NAVER') {
 }
 
 test('no install event opens inline Android guide and copies canonical URL, not a preview URL', async t => {
-  const ui = harness(t)
+  const ui = harness(t, 'Mozilla/5.0 (Linux; Android 15) Instagram')
   await ui.click('Android 홈 화면에 추가')
   const html = ui.html()
   assert.ok(html.includes('현재 앱 안의 브라우저'))
@@ -111,4 +114,57 @@ test('closing and switching guides clear stale status and restore trigger focus'
   await ui.click('안내 닫기', { currentTarget: { closest: () => ({ querySelector: () => ({ focus() { focused = true } }) }) } })
   assert.ok(focused)
   assert.ok(!ui.html().includes('role="region"'))
+})
+
+
+test('NAVER shortcut scheme is limited to Android NAVER and uses encoded trusted parameters', () => {
+  const href = getNaverShortcutUrl('Mozilla/5.0 (Linux; Android 15) NAVER(inapp; search; 2100; 12.0)', 'Linux', 5)
+  for (const token of ['NAVER (inapp; search; 2100; 12.0)', 'NAVER (higgs; search; 2100; 12.0)']) {
+    assert.equal(getNaverShortcutUrl(`Android ${token}`, 'Linux', 5), href)
+  }
+  const url = new URL(href)
+  assert.equal(url.protocol, 'naversearchapp:')
+  assert.equal(url.hostname, 'addshortcut')
+  assert.equal(url.searchParams.get('url'), SITE_URL)
+  assert.equal(url.searchParams.get('icon'), `${SITE_URL}/icon-192.png`)
+  assert.equal(url.searchParams.get('title'), '머니핏 계산기')
+  assert.equal(url.searchParams.get('serviceCode'), 'moneyfit')
+  assert.equal(url.searchParams.get('version'), '7')
+  assert.ok(href.includes(`title=${encodeURIComponent('머니핏 계산기')}`))
+  for (const ua of ['Android Instagram', 'Android Chrome/130', 'iPhone NAVER', 'Macintosh NAVER', 'Android notnaver', 'Android NAVER', 'Android NAVER (inapp; other; 1)']) {
+    assert.equal(getNaverShortcutUrl(ua, '', 1), null)
+  }
+})
+
+test('Android NAVER tap follows same-window shortcut link and keeps fallback without claiming completion', async t => {
+  const ui = harness(t)
+  const link = ui.action('Android 홈 화면에 추가')
+  assert.equal(link.type, 'a')
+  assert.equal(link.props.target, undefined)
+  assert.ok(link.props.href.startsWith('naversearchapp://addshortcut?'))
+  assert.ok(!ui.html().includes('추가를 요청했습니다'))
+  assert.equal((await ui.click('Android 홈 화면에 추가')).prevented, false)
+  assert.ok(ui.html().includes('추가를 요청했습니다'))
+  assert.ok(ui.html().includes('Chrome의 독립 실행형 앱(PWA) 설치와는 다릅니다'))
+  assert.ok(!ui.html().includes('앱이 설치되어 있습니다'))
+  await ui.click('사이트 주소 복사')
+  assert.equal(ui.copied, SITE_URL)
+  assert.equal((await ui.click('Android 홈 화면에 추가')).prevented, false)
+})
+
+test('native event wins over NAVER anchor navigation at click time', async t => {
+  const ui = harness(t)
+  let prompted = 0
+  ui.dispatch('beforeinstallprompt', { preventDefault() {}, async prompt() { prompted++ }, userChoice: Promise.resolve({ outcome: 'dismissed' }) })
+  assert.equal((await ui.click('Android 홈 화면에 추가')).prevented, true)
+  assert.equal(prompted, 1)
+  assert.ok(ui.html().includes('설치를 취소했습니다'))
+})
+
+test('Instagram remains on fallback and never receives NAVER scheme', async t => {
+  const ui = harness(t, 'Mozilla/5.0 (Linux; Android 15) Instagram')
+  assert.equal(ui.action('Android 홈 화면에 추가').type, 'button')
+  await ui.click('Android 홈 화면에 추가')
+  assert.ok(!ui.html().includes('naversearchapp:'))
+  assert.ok(ui.html().includes('사이트 주소 복사'))
 })
