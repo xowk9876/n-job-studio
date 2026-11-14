@@ -12,3 +12,13 @@ export async function installFromPrompt(event: InstallPrompt): Promise<'accepted
     return 'failed'
   }
 }
+
+export type InstallPlatform = 'android' | 'ios' | 'desktop'
+
+/** UA는 안내 문구에만 사용하며 실제 설치 가능 여부는 브라우저 이벤트로 판단한다. */
+export function getInstallContext(userAgent: string, platform: string, maxTouchPoints: number) {
+  const ios = /iPhone|iPad|iPod/i.test(userAgent) || (platform === 'MacIntel' && maxTouchPoints > 1)
+  const device: InstallPlatform = ios ? 'ios' : /Android/i.test(userAgent) ? 'android' : 'desktop'
+  const inApp = /NAVER|Instagram|KAKAOTALK|FBAN|FBAV|; wv\)/i.test(userAgent)
+  return { device, inApp }
+}
