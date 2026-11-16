@@ -3,6 +3,21 @@ const { test } = require('node:test')
 const assert = require('node:assert/strict')
 const snapshot = require('../data/lotto-history.json')
 
+test('snapshot importer rejects missing or malformed prize data instead of saving zero', async () => {
+  const { toRow } = await import('../scripts/fetch-lotto-history.mjs')
+  const draw = { ltEpsd: 1250, ltRflYmd: '20261114', tm1WnNo: 1, tm2WnNo: 5,
+    tm3WnNo: 18, tm4WnNo: 23, tm5WnNo: 27, tm6WnNo: 28, bnsWnNo: 8,
+    rnk1WnNope: 9, rnk1WnAmt: 3103164459, wholEpsdSumNtslAmt: 116731227000 }
+  assert.deepEqual(toRow(draw), [1250, '20261114', 1, 5, 18, 23, 27, 28, 8, 9, 3103164459, 116731227000])
+  for (const key of ['rnk1WnNope', 'rnk1WnAmt', 'wholEpsdSumNtslAmt']) {
+    for (const value of [undefined, null, '', ' ', 'invalid', false, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
+      assert.throws(() => toRow({ ...draw, [key]: value }), /값 오류/)
+    }
+    assert.doesNotThrow(() => toRow({ ...draw, [key]: 0 }))
+    assert.doesNotThrow(() => toRow({ ...draw, [key]: '0' }))
+  }
+})
+
 test('committed fallback history contains every draw with valid dates, numbers and amounts', () => {
   assert.equal(snapshot.draws.length, snapshot.latestRound)
   assert.ok(snapshot.draws.length > 0)

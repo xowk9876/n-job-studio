@@ -43,7 +43,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 async function fetchJson(url) {
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
-      const res = await fetch(url, { headers: REQUEST_HEADERS })
+      const res = await fetch(url, { headers: REQUEST_HEADERS, signal: AbortSignal.timeout(10_000) })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       return await res.json()
     } catch (error) {
@@ -55,7 +55,7 @@ async function fetchJson(url) {
 }
 
 /** 동행복권 응답 1건 → [회차, 추첨일, n1..n6, 보너스, 1등당첨자수, 1등당첨금, 회차판매금액] */
-function toRow(item) {
+export function toRow(item) {
   const numbers = [item.tm1WnNo, item.tm2WnNo, item.tm3WnNo, item.tm4WnNo, item.tm5WnNo, item.tm6WnNo]
   const all = [...numbers, item.bnsWnNo]
 
@@ -64,6 +64,16 @@ function toRow(item) {
   if (new Set(all).size !== 7) throw new Error(`${item.ltEpsd}회 번호 중복`)
   if (!all.every(n => Number.isInteger(n) && n >= 1 && n <= 45)) throw new Error(`${item.ltEpsd}회 번호 범위 오류`)
 
+  // 누락·오염된 공식 응답을 0으로 바꿔 저장하면 실제 무당첨 회차와 구분할 수 없다.
+  const amounts = ['rnk1WnNope', 'rnk1WnAmt', 'wholEpsdSumNtslAmt'].map(key => {
+    const raw = item[key]
+    if ((typeof raw !== 'number' && (typeof raw !== 'string' || !/^\d+$/.test(raw))) ||
+        !Number.isSafeInteger(Number(raw)) || Number(raw) < 0) {
+      throw new Error(`${item.ltEpsd}회 ${key} 값 오류`)
+    }
+    return Number(raw)
+  })
+
   numbers.sort((a, b) => a - b)
 
   return [
@@ -71,10 +81,8 @@ function toRow(item) {
     String(item.ltRflYmd),
     ...numbers,
     item.bnsWnNo,
-    Number(item.rnk1WnNope) || 0,
-    Number(item.rnk1WnAmt) || 0,
     // 총 판매금액 — rlvtEpsdSumNtslAmt는 261회부터 당첨금 총액(판매액의 절반)이므로 쓰면 안 된다
-    Number(item.wholEpsdSumNtslAmt) || 0,
+    ...amounts,
   ]
 }
 
@@ -178,7 +186,9 @@ ${rows.map(r => `    ${JSON.stringify(r)}`).join(',\n')}
   console.log(`      → ${OUTPUT_PATH} (${(Buffer.byteLength(json) / 1024).toFixed(1)} KB)`)
 }
 
-main().catch(error => {
-  console.error(`[실패] ${error.message}`)
-  process.exit(1)
-})
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(error => {
+    console.error(`[실패] ${error.message}`)
+    process.exitCode = 1
+  })
+}
