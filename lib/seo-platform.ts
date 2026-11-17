@@ -53,7 +53,7 @@ export const calculatorRssBodies: Record<string, string> = {
   '/salary':
     '2026년 4대보험 요율과 근로소득 간이세액표의 100% 원천징수 기준으로 연봉·월급 실수령액을 계산합니다. 비과세 수당, 본인을 포함한 가족 수와 8~20세 자녀 수를 입력할 수 있습니다. 금융 입력값은 브라우저에서 계산·저장됩니다.',
   '/mortgage':
-    '원리금균등·원금균등·만기일시 상환 방식별 월 납입금과 총 이자를 비교합니다. DSR 한도는 입력한 연소득·기존 상환액·가산금리에 따른 원리금균등 가정이며 실제 대출 승인 금액과 다를 수 있습니다.',
+    '주택담보대출 금액·금리·기간을 입력하면 원리금균등·원금균등·만기일시 상환 방식별 첫 달 원금과 이자, 마지막 달 납입액과 총이자를 확인할 수 있습니다. 월별 상환표에는 남은 원금이 표시됩니다. DSR 한도는 입력한 연소득·기존 상환액·가산금리에 따른 원리금균등 가정이며 실제 대출 승인 금액과 다를 수 있습니다.',
   '/severance':
     '입사일·마지막 근무일·월급·상여금을 입력해 평균임금과 통상임금 기준의 세전 퇴직금을 예상합니다. 연차수당과 평균임금 산정 제외 기간은 자동 반영하지 않으며, DC형 적립금이나 퇴직소득세를 계산하지 않습니다.',
   '/savings':
@@ -66,7 +66,7 @@ export const calculatorRssBodies: Record<string, string> = {
 
 export const calculatorFeedItems = [
   { path: '/salary', title: '연봉 실수령액 계산기', description: '2026년 4대보험·근로소득세 기준 세후 월급 계산' },
-  { path: '/mortgage', title: '주택담보대출 이자 계산기', description: '원리금균등·원금균등·만기일시 상환 비교' },
+  { path: '/mortgage', title: '주택담보대출 원리금 계산기', description: '첫 달 원금·이자, 마지막 달 납입액과 총이자 비교' },
   { path: '/severance', title: '퇴직금 계산기', description: '평균임금·통상임금 기준 세전 퇴직금 예상' },
   { path: '/savings', title: '적금·예금 이자 계산기', description: '세후 이자·ISA 비과세 비교' },
   { path: '/jeonse', title: '전월세 전환 계산기', description: '전환율 입력·보증금과 월세 환산' },

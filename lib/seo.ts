@@ -7,7 +7,7 @@ export const SEO_UPDATED_AT = '2026-11-06' as const
 export const COPY_UPDATED_AT = '2026-11-13' as const
 export const calculatorUpdatedAt: Record<string, string> = {
   '/salary': COPY_UPDATED_AT,
-  '/mortgage': COPY_UPDATED_AT,
+  '/mortgage': '2026-11-18',
   '/severance': COPY_UPDATED_AT,
   '/savings': COPY_UPDATED_AT,
   '/jeonse': COPY_UPDATED_AT,

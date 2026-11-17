@@ -12,7 +12,7 @@ const routes: { path: string; priority: number; freq: MetadataRoute.Sitemap[numb
   { path: '/jeonse',    priority: 0.9,  freq: 'weekly',  modified: SEO_UPDATED_AT },
   { path: '/lotto',     priority: 0.85, freq: 'daily',   modified: SEO_UPDATED_AT },
   // 가이드 인덱스 — 새 가이드 추가 시 갱신 → weekly
-  { path: '/guide',     priority: 0.9,  freq: 'weekly',  modified: SEO_UPDATED_AT },
+  { path: '/guide',     priority: 0.9,  freq: 'weekly',  modified: [SEO_UPDATED_AT, ...guideItems.map(g => g.updatedAt)].sort().at(-1) },
   // 개별 가이드 본문 — 법령·세율 변경 시 갱신 → monthly (실제 갱신 주기 반영, 크롤링 효율 ↑)
   ...guideItems.map((guide) => ({
     path: `/guide/${guide.slug}`,

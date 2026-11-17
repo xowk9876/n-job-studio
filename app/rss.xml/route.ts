@@ -29,50 +29,32 @@ function buildContentEncoded(body: string, url: string) {
 }
 
 export function GET() {
-  const lastUpdated = [
-    ...guideItems.map(guide => guide.updatedAt),
-    ...calculatorFeedItems.map(calc => calculatorUpdatedAt[calc.path] ?? SEO_UPDATED_AT),
-  ].sort().at(-1) ?? SEO_UPDATED_AT
-
-  const guideXml = guideItems
-    .map((guide) => {
-      const url = `${SITE_URL}/guide/${guide.slug}`
-      const pubDate = new Date(`${guide.updatedAt}T00:00:00+09:00`).toUTCString()
-      const body = guideRssBodies[guide.slug] ?? guide.description
-
-      return `
-        <item>
-          <title>${escapeXml(guide.title)}</title>
-          <link>${url}</link>
-          <guid isPermaLink="true">${url}</guid>
-          <description>${escapeXml(guide.description)}</description>
-          <content:encoded>${buildContentEncoded(body, url)}</content:encoded>
-          <category>${escapeXml(guide.tag)}</category>
-          <pubDate>${pubDate}</pubDate>
-        </item>`
-    })
-    .join('')
-
-  const calculatorXml = calculatorFeedItems
-    .map((calc) => {
-      const url = `${SITE_URL}${calc.path}`
-      const body = calculatorRssBodies[calc.path] ?? calc.description
-      const updatedAt = calculatorUpdatedAt[calc.path] ?? SEO_UPDATED_AT
+  const entries = [
+    ...guideItems.map(g => ({
+      url: `${SITE_URL}/guide/${g.slug}`, title: g.title, description: g.description,
+      body: guideRssBodies[g.slug] ?? g.description, category: g.tag, updatedAt: g.updatedAt,
+    })),
+    ...calculatorFeedItems.map(c => ({
+      url: `${SITE_URL}${c.path}`, title: c.title, description: c.description,
+      body: calculatorRssBodies[c.path] ?? c.description, category: '계산기', updatedAt: calculatorUpdatedAt[c.path] ?? SEO_UPDATED_AT,
+    })),
+  ].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  const lastUpdated = entries[0]?.updatedAt ?? SEO_UPDATED_AT
+  const items = entries
+    .map(({ url, title, description, body, category, updatedAt }) => {
       const pubDate = new Date(`${updatedAt}T00:00:00+09:00`).toUTCString()
       return `
         <item>
-          <title>${escapeXml(calc.title)}</title>
-          <link>${url}</link>
-          <guid isPermaLink="true">${url}</guid>
-          <description>${escapeXml(calc.description)}</description>
+          <title>${escapeXml(title)}</title>
+          <link>${escapeXml(url)}</link>
+          <guid isPermaLink="true">${escapeXml(url)}</guid>
+          <description>${escapeXml(description)}</description>
           <content:encoded>${buildContentEncoded(body, url)}</content:encoded>
-          <category>계산기</category>
+          <category>${escapeXml(category)}</category>
           <pubDate>${pubDate}</pubDate>
         </item>`
     })
     .join('')
-
-  const items = `${guideXml}${calculatorXml}`
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">

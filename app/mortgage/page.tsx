@@ -38,6 +38,8 @@ export default function MortgagePage() {
   const [dsrCap, setDsrCap] = useState(40)
   const [dsrStress, setDsrStress] = useState<number>(STRESS_DSR_RATES.metroMortgage)
   const r = useMemo(() => calcMortgage({ principal, annualRate, years, type }), [principal, annualRate, years, type])
+  const first = r.schedule[0]
+  const last = r.schedule.at(-1)
   const dsr = useMemo(() => calcDsrLimit({
     annualIncome: dsrIncome,
     existingDebtMonthlyPmt: dsrExistingDebt,
@@ -52,13 +54,19 @@ export default function MortgagePage() {
       {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">MORTGAGE</p>
-        <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">주택담보대출 이자 계산기</h1>
-        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">원리금균등 · 원금균등 · 만기일시</p>
+        <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">주택담보대출 원리금 계산기</h1>
+        <p className="text-[12.5px] text-[color:var(--sub)] mt-1">주담대 금액과 금리, 기간을 입력하면 첫 달에 갚을 원금과 이자, 마지막 달 납입액을 확인할 수 있어요.</p>
       </div>
 
       <div className="result-card">
         <p className="result-label">{type === 'equal-payment' ? '월 납입액' : type === 'equal-principal' ? '첫 달 납입액' : '월 이자 (만기 전)'}</p>
         <p className="result-value">{won(r.monthlyPayment)}</p>
+        {first && last && (
+          <dl className="mt-3 space-y-1 text-[12px] tabular-nums">
+            <div className="flex flex-wrap justify-between gap-x-2"><dt>첫 달 원금 + 이자</dt><dd>{won(first.principal)} + {won(first.interest)}</dd></div>
+            <div className="flex flex-wrap justify-between gap-x-2"><dt>마지막 달 납입액</dt><dd>{won(last.payment)}</dd></div>
+          </dl>
+        )}
         <div className="grid grid-cols-3 gap-2 mt-4 text-[11.5px]">
           <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">총 납입</div><div className="font-semibold tabular mt-0.5">{manwon(r.totalPayment)}</div></div>
           <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">총 이자</div><div className="font-semibold tabular mt-0.5">{manwon(r.totalInterest)}</div></div>
@@ -96,6 +104,7 @@ export default function MortgagePage() {
             {REPAYMENT_TYPES.map(({ value, label, desc }) => (
               <button
                 key={value}
+                aria-pressed={type === value}
                 onClick={() => set({ type: value })}
                 className={`rounded-lg p-2.5 text-left border transition-colors ${
                   type === value
@@ -113,13 +122,14 @@ export default function MortgagePage() {
 
       {/* 스케줄 */}
       <div className="glass-card !p-0 overflow-hidden">
-        <button onClick={() => setShowSchedule(!showSchedule)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
+        <button aria-expanded={showSchedule} onClick={() => setShowSchedule(!showSchedule)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
           <span className="text-[13px] font-semibold text-white/85">월별 상환 스케줄 ({years * 12}개월)</span>
           <ChevronDown className={`w-3.5 h-3.5 text-white/40 transition-transform ${showSchedule ? 'rotate-180' : ''}`} />
         </button>
         {showSchedule && (
           <div className="overflow-x-auto max-h-80 overflow-y-auto border-t border-white/10">
             <table className="w-full text-[11.5px]">
+              <caption className="sr-only">월별 상환 원금·이자와 남은 대출 잔액 (단위: 원)</caption>
               <thead className="sticky top-0 bg-white/[0.06]">
                 <tr>
                   {['회차','납입액','원금','이자','잔여'].map(h => (
@@ -145,7 +155,7 @@ export default function MortgagePage() {
 
       {/* DSR 한도 시뮬레이션 */}
       <div className="glass-card !p-0 overflow-hidden">
-        <button onClick={() => setShowDsr(!showDsr)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
+        <button aria-expanded={showDsr} onClick={() => setShowDsr(!showDsr)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
           <span className="text-[13px] font-semibold text-white/85 flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-[color:var(--brand)]" />DSR 한도 시뮬레이션 <span className="text-[10.5px] font-normal text-white/40">(스트레스 DSR 포함)</span></span>
           <ChevronDown className={`w-3.5 h-3.5 text-white/40 transition-transform ${showDsr ? 'rotate-180' : ''}`} />
         </button>

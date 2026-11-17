@@ -23,6 +23,7 @@ test('RSS의 계산기·가이드 수정일이 사이트맵과 일치한다', as
     dates.push(Date.parse(pubDate))
   }
   assert.equal(Date.parse(xml.match(/<lastBuildDate>([^<]+)<\/lastBuildDate>/)[1]), Math.max(...dates))
+  assert.deepEqual(dates, dates.toSorted((a, b) => b - a))
 })
 
 test('가이드 변경 없이 계산기만 갱신해도 RSS 채널 갱신일이 바뀐다', async () => {
@@ -70,6 +71,18 @@ test('가이드의 검색 설명과 대표 주소가 공유 정보와 일치한�
   }
 })
 
+test('주담대 첫 화면은 입력 조건의 실제 첫 달 원금·이자와 마지막 달 납입액을 보여준다', () => {
+  const { default: Page } = require('../app/mortgage/page')
+  const { calcMortgage } = require('../lib/mortgage')
+  const { useMortgageStore } = require('../store')
+  const { schedule } = calcMortgage(useMortgageStore.getInitialState())
+  const format = n => n.toLocaleString('ko-KR') + '원'
+  const html = renderToStaticMarkup(createElement(Page))
+  assert.match(html, /주택담보대출 원리금 계산기<\/h1>/)
+  assert.ok(html.includes('<dd>' + format(schedule[0].principal) + ' + ' + format(schedule[0].interest) + '</dd>'))
+  assert.ok(html.includes('<dt>마지막 달 납입액</dt><dd>' + format(schedule.at(-1).payment) + '</dd>'))
+})
+
 test('주담대 비교표는 첫 HTML에 같은 조건의 세 상환 방식을 보여준다', () => {
   const { MortgageExamples } = require('../components/ui/CalculatorExamples')
   const html = renderToStaticMarkup(createElement(MortgageExamples))
@@ -98,10 +111,13 @@ test('전월세 예시는 남기는 보증금과 전환하는 차액을 구분�
 test('변경한 계산기의 날짜만 사이트맵과 구조화 데이터에 함께 반영한다', () => {
   const { default: sitemap } = require('../app/sitemap')
   const { buildWebApplicationJsonLd, CONTENT_UPDATED_AT, COPY_UPDATED_AT, SALARY_GUIDE_UPDATED_AT } = require('../lib/seo')
-  for (const path of ['/mortgage', '/jeonse', '/salary', '/savings', '/severance', '/lotto']) {
+  for (const path of ['/jeonse', '/salary', '/savings', '/severance', '/lotto']) {
     assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, COPY_UPDATED_AT)
     assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, COPY_UPDATED_AT)
   }
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/mortgage').lastModified, '2026-11-18')
+  assert.equal(buildWebApplicationJsonLd({ path: '/mortgage', name: '', description: '' }).dateModified, '2026-11-18')
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide').lastModified, COPY_UPDATED_AT)
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide/dsr-stress-test-2026').lastModified, COPY_UPDATED_AT)
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide/2026-salary-tax-guide').lastModified, SALARY_GUIDE_UPDATED_AT)
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/privacy-policy').lastModified, CONTENT_UPDATED_AT)

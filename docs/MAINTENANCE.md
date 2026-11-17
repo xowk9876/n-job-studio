@@ -2,7 +2,7 @@
 
 기준일: 2026-11-13. 저장소 `xowk9876/n-job-studio`, Vercel 팀 `xowk9876s-projects`, 프로젝트 `n-job-studio`, 운영 브랜치 `main`.
 
-[운영 사이트](https://n-job-studio.vercel.app/) · [이번 점검 기록](UPDATE_2026-11-13.md) · [상세 기능 검사](AUDIT_CHECKLIST.md) · [문구 검사](COPY_CHECKLIST.md) · [검색 등록](SEARCH_CONSOLE.md) · [홈 화면 추가](APP_SHORTCUT.md)
+[운영 사이트](https://n-job-studio.vercel.app/) · [이번 점검 기록](UPDATE_2026-11-18.md) · [상세 기능 검사](AUDIT_CHECKLIST.md) · [문구 검사](COPY_CHECKLIST.md) · [검색 등록](SEARCH_CONSOLE.md) · [홈 화면 추가](APP_SHORTCUT.md)
 
 ## 1. 계산기 사용
 
