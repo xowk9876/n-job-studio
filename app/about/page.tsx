@@ -5,7 +5,7 @@ import { buildGoogleAlternates } from '@/lib/seo-platform'
 
 const pageTitle = '머니핏 계산기 소개'
 const description =
-  '머니핏 계산기는 근로기준법·소득세법·주택임대차보호법 등 실제 법령을 기반으로 한 무료 재테크 계산기입니다. 제작 의도, 계산 근거, 데이터 업데이트 원칙을 소개합니다.'
+  '머니핏 계산기가 참고한 법령과 공식 자료, 계산 결과의 적용 범위를 안내합니다. 자료 갱신 원칙과 오류 제보 방법도 확인하세요.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

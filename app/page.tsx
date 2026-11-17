@@ -22,7 +22,7 @@ const heroPreview = calcSalary({
 const fmtWon = (n: number) => n.toLocaleString('ko-KR')
 
 const homeTitle = '머니핏 계산기 | 연봉 실수령액·퇴직금·대출 이자'
-const homeDescription = '연봉으로 세후 월급을, 대출 조건으로 월 상환액을 확인하세요. 퇴직금, 예금·적금 만기액, 전세·월세 전환 계산기와 로또 번호 생성기도 가입 없이 이용할 수 있어요.'
+const homeDescription = '세후 월급과 퇴직금, 주담대 월 상환액, 예금·적금 만기액, 전월세 전환액을 계산하세요. 로또 번호 생성기도 이용할 수 있어요.'
 const homeUrl = `${SITE_URL}/`
 
 export const metadata: Metadata = {

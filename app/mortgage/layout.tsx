@@ -4,7 +4,7 @@ import { buildCalculatorMetadata, getGuideLinkForCalculator } from '@/lib/seo'
 const PATH = '/mortgage'
 const guide = getGuideLinkForCalculator(PATH)
 const name = '주택담보대출 원리금 계산기'
-const description = '주담대 금액과 금리, 기간을 입력해 첫 달 원금·이자와 마지막 달 납입액을 확인하세요. 원리금균등·원금균등·만기일시 상환 방식별 월 상환표와 총이자를 비교할 수 있습니다.'
+const description = '주담대 첫 달 원금과 이자, 마지막 달 납입액을 확인하세요. 원리금균등·원금균등·만기일시 상환표와 총이자를 비교해 보세요.'
 
 export const metadata = buildCalculatorMetadata({
   path: PATH,
