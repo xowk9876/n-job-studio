@@ -42,7 +42,6 @@ export default function SalaryPage() {
       {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       {/* 페이지 헤더 */}
       <div>
-        <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">SALARY</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">연봉 실수령액 계산기</h1>
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">
           2026년 세후 월급과 항목별 공제액을 확인하세요.{' '}

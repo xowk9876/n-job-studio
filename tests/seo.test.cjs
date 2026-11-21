@@ -111,10 +111,12 @@ test('전월세 예시는 남기는 보증금과 전환하는 차액을 구분�
 test('변경한 계산기의 날짜만 사이트맵과 구조화 데이터에 함께 반영한다', () => {
   const { default: sitemap } = require('../app/sitemap')
   const { buildWebApplicationJsonLd, CONTENT_UPDATED_AT, COPY_UPDATED_AT, SALARY_GUIDE_UPDATED_AT } = require('../lib/seo')
-  for (const path of ['/jeonse', '/salary', '/savings', '/severance', '/lotto']) {
+  for (const path of ['/jeonse', '/salary', '/savings', '/severance']) {
     assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, COPY_UPDATED_AT)
     assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, COPY_UPDATED_AT)
   }
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/lotto').lastModified, '2026-11-21')
+  assert.equal(buildWebApplicationJsonLd({ path: '/lotto', name: '', description: '' }).dateModified, '2026-11-21')
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/mortgage').lastModified, '2026-11-18')
   assert.equal(buildWebApplicationJsonLd({ path: '/mortgage', name: '', description: '' }).dateModified, '2026-11-18')
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide').lastModified, COPY_UPDATED_AT)

@@ -2,16 +2,11 @@ import Link from 'next/link'
 import { buildFaqJsonLd, jsonLd, SITE_URL } from '@/lib/seo'
 import type { OfficialSource } from '@/lib/content-sources'
 
-function SectionHeader({ num, title }: { num?: string; title: string }) {
+function SectionHeader({ id, title }: { id: string; title: string }) {
   return (
-    <div className="mb-6">
-      {num && (
-        <p className="font-mono text-[10.5px] text-[color:var(--muted)] tracking-[0.2em] mb-2">{num}</p>
-      )}
-      <h2 className="font-display text-[22px] md:text-[28px] font-bold tracking-tight text-white">
-        {title}
-      </h2>
-    </div>
+    <h2 id={id} className="mb-6 font-display text-[22px] md:text-[28px] font-bold tracking-tight text-white">
+      {title}
+    </h2>
   )
 }
 
@@ -35,9 +30,7 @@ export function FAQSection({
           dangerouslySetInnerHTML={{ __html: jsonLd(faqLd) }}
         />
       )}
-      <div id="faq-heading">
-        <SectionHeader num="FAQ · 자주 묻는 질문" title={title} />
-      </div>
+      <SectionHeader id="faq-heading" title={title} />
       <div className="card divide-y divide-[color:var(--line)] overflow-hidden">
         {items.map(({ q, a }) => (
           <details key={q} className="group p-5 md:p-6 [&[open]]:bg-white/[0.02] transition-colors">
@@ -73,13 +66,10 @@ export function ExamplesSection({
 }) {
   return (
     <section aria-labelledby="examples-heading">
-      <div id="examples-heading">
-        <SectionHeader num="CASE · 예시" title={title} />
-      </div>
+      <SectionHeader id="examples-heading" title={title} />
       <div className="grid md:grid-cols-2 gap-4">
         {items.map(({ label, input, result, note }) => (
           <div key={label} className="card p-5 md:p-6">
-            <span className="chip chip-brand mb-3 text-[10.5px]">CASE</span>
             <h3 className="font-display text-[16.5px] font-semibold text-white mb-3 leading-snug tracking-tight">
               {label}
             </h3>
@@ -117,26 +107,12 @@ export function TipsSection({
 }) {
   return (
     <section aria-labelledby="tips-heading">
-      <div id="tips-heading">
-        <SectionHeader num="TIPS · 체크리스트" title={title} />
-      </div>
+      <SectionHeader id="tips-heading" title={title} />
       <ul className="card p-6 md:p-8 space-y-6">
-        {items.map((t, i) => (
-          <li key={t.title} className="flex gap-4">
-            <span
-              className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-mono text-[12px] font-bold"
-              style={{
-                background: 'linear-gradient(135deg, rgba(110,168,255,0.22) 0%, rgba(167,139,250,0.18) 100%)',
-                color: '#6ea8ff',
-                border: '1px solid rgba(110,168,255,0.28)',
-              }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <div className="flex-1">
-              <p className="font-semibold text-[14.5px] text-white mb-1.5">{t.title}</p>
-              <p className="text-[13.5px] text-[color:var(--sub)] leading-relaxed">{t.desc}</p>
-            </div>
+        {items.map(t => (
+          <li key={t.title}>
+            <p className="font-semibold text-[14.5px] text-white mb-1.5">{t.title}</p>
+            <p className="text-[13.5px] text-[color:var(--sub)] leading-relaxed">{t.desc}</p>
           </li>
         ))}
       </ul>
@@ -153,9 +129,7 @@ export function OfficialSourcesSection({
 }) {
   return (
     <section aria-labelledby="official-sources-heading">
-      <div id="official-sources-heading">
-        <SectionHeader num="SOURCE · 공식 근거" title="계산 기준과 데이터 출처" />
-      </div>
+      <SectionHeader id="official-sources-heading" title="계산 기준과 데이터 출처" />
       <div className="card p-6 md:p-8">
         <ul className="grid gap-2 text-[13.5px] text-[color:var(--ink-2)]">
           {sources.map(source => (
@@ -185,19 +159,19 @@ export function RelatedLinks({
       {guideLink && (
         <div>
           <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-2">
-            GUIDE · 관련 가이드
+            관련 가이드
           </p>
           <Link
             href={guideLink.href}
             className="inline-reset text-[13px] px-3.5 py-2 rounded-md border border-[rgba(146,156,248,0.35)] bg-[rgba(146,156,248,0.08)] text-[#c4cbff] hover:text-white hover:bg-[rgba(146,156,248,0.16)] transition-colors"
           >
-            📘 {guideLink.label}
+            {guideLink.label}
           </Link>
         </div>
       )}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-2">
-          CALC · 관련 계산기
+          관련 계산기
         </p>
         <div className="flex flex-wrap gap-2" role="navigation" aria-label="관련 계산기">
           {links.map(({ href, label }) => (
@@ -206,7 +180,7 @@ export function RelatedLinks({
               href={href}
               className="inline-reset text-[13px] px-3.5 py-2 rounded-md border border-[color:var(--line-strong)] bg-white/[0.03] text-[color:var(--ink-2)] hover:text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)] hover:border-[rgba(110,168,255,0.3)] transition-colors backdrop-blur"
             >
-              → {label} 계산기
+              {label} 계산기
             </Link>
           ))}
         </div>

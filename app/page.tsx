@@ -45,7 +45,6 @@ const calculators = [
     href: '/salary',
     label: '연봉 실수령액 계산기',
     desc: '연봉과 비과세 수당으로 세후 월급 확인',
-    tag: '급여',
     color: '#6bafff',
     Icon: Wallet,
   },
@@ -53,7 +52,6 @@ const calculators = [
     href: '/severance',
     label: '퇴직금 계산기',
     desc: '근속기간과 임금으로 예상 세전 퇴직금 확인',
-    tag: '법정',
     color: '#b8a4fa',
     Icon: Briefcase,
   },
@@ -61,7 +59,6 @@ const calculators = [
     href: '/mortgage',
     label: '대출 이자 계산기',
     desc: '상환 방식별 월 상환액과 총이자 비교',
-    tag: '대출',
     color: '#5eead4',
     Icon: Landmark,
   },
@@ -69,7 +66,6 @@ const calculators = [
     href: '/savings',
     label: '예금·적금 이자 계산기',
     desc: '단리·월복리와 세후 만기 수령액 비교',
-    tag: '절세',
     color: '#3ee0a5',
     Icon: PiggyBank,
   },
@@ -77,7 +73,6 @@ const calculators = [
     href: '/jeonse',
     label: '전월세 전환 계산기',
     desc: '보증금을 바꿨을 때의 월세 차이 확인',
-    tag: '부동산',
     color: '#fcc73e',
     Icon: KeyRound,
   },
@@ -85,7 +80,6 @@ const calculators = [
     href: '/lotto',
     label: '로또 번호 생성기',
     desc: '6/45 번호 생성과 회차별 당첨번호 조회',
-    tag: '오락',
     color: '#f590c0',
     Icon: Ticket,
   },
@@ -158,8 +152,8 @@ export default function HomePage() {
             </h1>
 
             <p className="home-hero__lead">
-              <span className="home-hero__lead-part">세후 월급과 월 대출 상환액을 확인하세요.</span>{' '}
-              <span className="home-hero__lead-part">가입 없이, 브라우저에서 바로 계산하세요.</span>
+              <span className="home-hero__lead-part">세후 월급과 대출 상환액을</span>{' '}
+              <span className="home-hero__lead-part">가입 없이 계산하세요.</span>
             </p>
 
             <div className="home-hero__cta">
@@ -230,7 +224,6 @@ export default function HomePage() {
       {/* CALCULATORS */}
       <section id="calculators" className="home-section" aria-label="계산기 목록">
         <header className="section-header">
-          <p className="section-label">CALCULATORS</p>
           <h2 className="section-title">지금 필요한 계산기</h2>
         </header>
 
@@ -261,19 +254,10 @@ export default function HomePage() {
                 >
                   <c.Icon size={20} strokeWidth={1.7} />
                 </div>
-                <span
-                  className="home-calc-card__tag"
-                  style={{ color: c.color, background: `${c.color}12`, border: `1px solid ${c.color}25` }}
-                >
-                  {c.tag}
-                </span>
+                <ArrowRight size={16} aria-hidden />
               </div>
               <h3 className="home-calc-card__label">{c.label}</h3>
               <p className="home-calc-card__desc">{c.desc}</p>
-              <span className="home-calc-card__link">
-                {c.href === '/lotto' ? '번호 생성하기' : '계산하기'}
-                <ArrowRight size={14} />
-              </span>
             </Link>
           ))}
         </div>
@@ -284,7 +268,6 @@ export default function HomePage() {
       {/* TRUST */}
       <section className="home-section" aria-label="서비스 신뢰">
         <header className="section-header">
-          <p className="section-label">WHY MONEYFIT</p>
           <h2 className="section-title">계산 전에 확인하세요</h2>
         </header>
         <div className="home-trust-grid">

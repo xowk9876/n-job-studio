@@ -111,9 +111,7 @@ export default function GuideArticle({
 
       {related.length > 0 && (
         <section className="mt-12 pt-6 border-t border-[color:var(--line)]">
-          <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-3">
-            RELATED
-          </p>
+          <h2 className="mb-3 text-sm font-semibold">함께 보기</h2>
           <div className="flex flex-wrap gap-2">
             {related.map(r => (
               <Link

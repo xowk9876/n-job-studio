@@ -35,7 +35,6 @@ export default function JeonsePage() {
     <div className="calc-page">
       {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
-        <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">JEONSE</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">전월세 전환 계산기</h1>
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">보증금·월세 환산 · 적용 범위 확인</p>
       </div>

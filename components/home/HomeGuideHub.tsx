@@ -14,11 +14,7 @@ export default function HomeGuideHub() {
   return (
     <section className="home-guide-hub" aria-label="재테크 가이드">
       <header className="home-guide-hub__header">
-        <p className="section-label">GUIDES</p>
         <h2 className="section-title">재테크 실전 가이드</h2>
-        <p className="home-guide-hub__lead">
-          가이드 {count}편에서 계산 기준과 적용 조건을 확인하세요.
-        </p>
       </header>
 
       <Link href="/guide" className="home-guide-hub__card inline-reset group">
@@ -29,14 +25,13 @@ export default function HomeGuideHub() {
               <BookOpen size={20} strokeWidth={1.75} />
             </div>
             <div className="home-guide-hub__copy">
-              <p className="home-guide-hub__count">{count}편</p>
-              <p className="home-guide-hub__title">가이드 모음 보기</p>
-              <p className="home-guide-hub__subtitle">주제별 목록·최신 수정일 확인</p>
+              <p className="home-guide-hub__title">계산 기준과 적용 조건</p>
+              <p className="home-guide-hub__subtitle">주제별 가이드 {count}편</p>
             </div>
           </div>
 
           <span className="home-guide-hub__cta">
-            전체 보기
+            가이드 보기
             <ArrowRight size={16} strokeWidth={2.25} className="home-guide-hub__cta-icon" />
           </span>
 

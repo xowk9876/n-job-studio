@@ -11,7 +11,7 @@ export const calculatorUpdatedAt: Record<string, string> = {
   '/severance': COPY_UPDATED_AT,
   '/savings': COPY_UPDATED_AT,
   '/jeonse': COPY_UPDATED_AT,
-  '/lotto': COPY_UPDATED_AT,
+  '/lotto': '2026-11-21',
 }
 export const SALARY_GUIDE_UPDATED_AT = '2026-11-06' as const
 

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 const guideLinks = [
   { href: '/guide/2026-salary-tax-guide', label: '연봉·세금 가이드', shortLabel: '연봉·세금' },
-  { href: '/guide/dsr-stress-test-2026', label: 'DSR 스트레스', shortLabel: 'DSR' },
+  { href: '/guide/dsr-stress-test-2026', label: '스트레스 DSR', shortLabel: 'DSR' },
   { href: '/guide/severance-calculation-guide', label: '퇴직금 가이드', shortLabel: '퇴직금' },
   { href: '/guide/isa-vs-regular-savings', label: 'ISA 절세', shortLabel: 'ISA' },
   { href: '/guide/jeonse-safety-2026', label: '전세 보증금 확인', shortLabel: '전세 확인' },
@@ -25,28 +25,19 @@ type FooterLink = {
 
 function FooterColumn({
   title,
-  titleShort,
   items,
   aria,
   className = '',
-  listClassName = '',
 }: {
   title: string
-  titleShort?: string
   aria: string
   items: readonly FooterLink[]
   className?: string
-  listClassName?: string
 }) {
   return (
     <nav aria-label={aria} className={`site-footer__nav ${className}`.trim()}>
-      <p className="site-footer__nav-title">
-        <span className="site-footer__nav-title-full">{title}</span>
-        {titleShort ? (
-          <span className="site-footer__nav-title-short">{titleShort}</span>
-        ) : null}
-      </p>
-      <ul className={`site-footer__nav-list ${listClassName}`.trim()}>
+      <p className="site-footer__nav-title">{title}</p>
+      <ul className="site-footer__nav-list">
         {items.map((item) => (
           <li key={item.href}>
             <Link
@@ -85,33 +76,25 @@ export default function Footer() {
             </span>
             <span className="site-footer__brand-title">머니핏 계산기</span>
           </div>
-          <p className="site-footer__desc">
-            예상 금액과 적용 기준을 한곳에서.
-            <br />
-            연봉, 대출, 퇴직금, 적금, 전월세, 로또까지 바로 확인하는 무료 계산기.
-          </p>
           <p className="site-footer__notice">
-            본 서비스는 정보 제공 목적이며, 실제 세액·대출 한도·보증 조건은 기관 심사와 최신 고시에 따라 달라질 수 있습니다.
+            계산 결과는 참고용입니다. 실제 세액·대출 한도·보증 조건은 적용 기준과 기관 심사에 따라 달라질 수 있습니다.
           </p>
         </div>
 
         <div className="site-footer__columns">
           <FooterColumn
-            title="Calculators · 계산기"
-            titleShort="계산기"
+            title="계산기"
             items={calc}
-            aria="사이트 내비게이션"
+            aria="계산기 목록"
           />
           <FooterColumn
-            title="Guides · 가이드"
-            titleShort="가이드"
+            title="가이드"
             items={guideLinks}
             aria="재테크 가이드"
           />
           <FooterColumn
             className="site-footer__nav--info"
-            title="Information · 안내"
-            titleShort="안내"
+            title="안내"
             aria="정보 페이지"
             items={[
               { href: '/about', label: '머니핏 소개', shortLabel: '소개' },

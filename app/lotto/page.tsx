@@ -1,6 +1,4 @@
-'use client'
-
-import { useState, useEffect } from 'react'
+import LottoDrawSchedule from '@/components/lotto/LottoDrawSchedule'
 import { LOTTO_BALL_COLORS } from '@/components/lotto/LottoBall'
 import LottoGenerator from '@/components/lotto/LottoGenerator'
 import LottoResultBrowser from '@/components/lotto/LottoResultBrowser'
@@ -11,66 +9,13 @@ import { officialSources } from '@/lib/content-sources'
 const CALC_PATH = '/lotto'
 const calcSeo = getCalculatorLinks(CALC_PATH)
 
-// ═══ 동행복권 회차 / 추첨시간 계산 ═══
-const FIRST_DRAW = new Date('2002-12-07T20:45:00+09:00')
-
-function getLottoInfo(now = new Date()) {
-  const d = new Date(now)
-  const day = d.getDay()
-  const daysUntilSat = (6 - day + 7) % 7
-  const nextDraw = new Date(d)
-  nextDraw.setDate(d.getDate() + daysUntilSat)
-  nextDraw.setHours(20, 45, 0, 0)
-  if (daysUntilSat === 0 && d.getTime() >= nextDraw.getTime()) {
-    nextDraw.setDate(nextDraw.getDate() + 7)
-  }
-  const salesCloseAt = new Date(nextDraw.getTime() - 45 * 60 * 1000)
-  const round = Math.floor((nextDraw.getTime() - FIRST_DRAW.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1
-  return { round, nextDraw, salesCloseAt }
-}
-
-const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토']
-function formatDrawDate(d: Date) {
-  return `${d.getMonth() + 1}월 ${d.getDate()}일(${WEEKDAY[d.getDay()]}) 20:45`
-}
-function formatCountdown(diffMs: number) {
-  if (diffMs <= 0) return '추첨 중'
-  const sec = Math.floor(diffMs / 1000)
-  const days = Math.floor(sec / 86400)
-  const hours = Math.floor((sec % 86400) / 3600)
-  const mins = Math.floor((sec % 3600) / 60)
-  if (days > 0) return `${days}일 ${hours}시간 남음`
-  if (hours > 0) return `${hours}시간 ${mins}분 남음`
-  return `${mins}분 남음`
-}
-
 export default function LottoPage() {
-  // 회차·추첨일·매출마감 정보는 60초 인터벌로만 갱신 (매 렌더 재계산 시 useEffect deps 무한 재구독 방지)
-  const [info, setInfo] = useState(() => getLottoInfo())
-
-  useEffect(() => {
-    const id = setInterval(() => setInfo(getLottoInfo()), 60_000)
-    return () => clearInterval(id)
-  }, [])
-
-  // 추첨일 카운트다운 — 클라이언트 마운트 후 매초 갱신 (render-purity 보장)
-  const [countdown, setCountdown] = useState<string>('')
-  useEffect(() => {
-    const tick = () => setCountdown(formatCountdown(info.nextDraw.getTime() - Date.now()))
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
-  }, [info.nextDraw])
-
   return (
     <div className="calc-page">
       {/* 헤더 */}
       <div>
-        <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">LOTTO · 6/45</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-ink">로또 번호 생성기</h1>
-        <p className="text-[12.5px] text-[color:var(--sub)] mt-1" suppressHydrationWarning>
-          제 {info.round.toLocaleString()}회차 · {formatDrawDate(info.nextDraw)} · {countdown}
-        </p>
+        <LottoDrawSchedule />
       </div>
 
       {/* 당첨번호 조회 — 히어로 바로 아래 (최신 회차 + 과거 회차) */}
@@ -81,7 +26,7 @@ export default function LottoPage() {
 
       {/* 오락용 고지는 생성기 바로 아래에 둔다 — 공식 당첨번호 조회 결과에 걸리면 오해를 준다 */}
       <p className="lotto-disclaimer">
-        생성된 번호는 참고·오락용이며, 실제 추첨 결과·당첨을 보장하지 않습니다.
+        생성된 번호는 오락용이며 당첨을 보장하지 않습니다.
         <span className="lotto-disclaimer__age">19세 미만은 복권을 구매할 수 없습니다.</span>
       </p>
 

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, Search, Trophy } from 'lucide-react'
 
-import { FIRST_DRAW_DATE, fromIsoDate } from '@/lib/lotto/schedule'
+import { fromIsoDate } from '@/lib/lotto/schedule'
 import type { LottoRoundResult } from '@/lib/lotto/types'
 
 import { BALL_ROW_CLASS, LottoBall } from './LottoBall'
@@ -175,13 +175,9 @@ export default function LottoResultBrowser() {
     <div className="glass-card">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] tracking-[0.22em] text-[color:var(--muted)] mb-1">WINNING NUMBERS</p>
           <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">
             로또 당첨번호 조회
           </h2>
-          <p className="text-[11.5px] text-ink/60 mt-1">
-            동행복권 공식 데이터 · 회차 번호로 과거 당첨번호를 확인할 수 있습니다.
-          </p>
         </div>
         <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
           <Trophy className="h-3.5 w-3.5 text-[color:var(--warn)]" aria-hidden />
@@ -271,7 +267,7 @@ export default function LottoResultBrowser() {
 
       {/* 회차 이동 컨트롤 */}
       <div className="mt-5 border-t border-[color:var(--line)] pt-5">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-[color:var(--muted)] mb-3">BROWSE · 다른 회차 보기</p>
+        <p className="text-xs font-semibold text-[color:var(--muted)] mb-3">다른 회차 보기</p>
 
         <div className="flex items-center gap-2">
           <button
@@ -335,10 +331,6 @@ export default function LottoResultBrowser() {
           >
             최신 회차 다시 확인
           </button>
-          <p className="text-center text-[10.5px] leading-relaxed text-[color:var(--muted)]">
-            로또 6/45는 제1회({FIRST_DRAW_DATE})부터 매주 토요일 추첨됩니다. 조회하려는 회차 번호를 입력하거나 화살표로
-            앞뒤 회차를 이동할 수 있습니다.
-          </p>
         </div>
       </div>
     </div>

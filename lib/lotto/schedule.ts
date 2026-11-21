@@ -10,6 +10,15 @@
 const FIRST_DRAW_UTC = Date.UTC(2002, 11, 7)
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 
+// 정규 방송은 토요일 20:35경(한국 시각). 방송 편성에 따라 달라질 수 있다.
+// https://m.dhlottery.co.kr/lt645/intro
+const FIRST_REGULAR_SLOT = FIRST_DRAW_UTC + (11 * 60 + 35) * 60_000
+
+export function nextRegularDraw(now: number) {
+  const weeks = Math.max(0, Math.floor((now - FIRST_REGULAR_SLOT) / WEEK_MS) + 1)
+  return { round: weeks + 1, startsAt: FIRST_REGULAR_SLOT + weeks * WEEK_MS }
+}
+
 /** 제1회 추첨일 (YYYY-MM-DD) */
 export const FIRST_DRAW_DATE = '2002-12-07'
 

@@ -83,7 +83,6 @@ export default function GuideIndexPage() {
       <GuideIndexStructuredData />
       <div className="max-w-3xl mx-auto px-5 md:px-6 py-12 md:py-16">
         <header className="mb-10">
-          <p className="font-mono text-[11px] tracking-[0.28em] text-[color:var(--muted)] mb-3">GUIDES</p>
           <h1 className="font-display text-[30px] md:text-[38px] font-bold text-white tracking-tight">
             재테크 실전 가이드
           </h1>
@@ -93,7 +92,7 @@ export default function GuideIndexPage() {
           </p>
         </header>
 
-        <GuideCardList variant="full" />
+        <GuideCardList />
       </div>
     </>
   )

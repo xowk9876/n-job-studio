@@ -53,7 +53,6 @@ export default function MortgagePage() {
     <div className="calc-page">
       {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
-        <p className="font-mono text-[10.5px] tracking-[0.22em] text-[color:var(--muted)] mb-1">MORTGAGE</p>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">주택담보대출 원리금 계산기</h1>
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">주담대 금액과 금리, 기간을 입력하면 첫 달에 갚을 원금과 이자, 마지막 달 납입액을 확인할 수 있어요.</p>
       </div>

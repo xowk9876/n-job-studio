@@ -105,11 +105,7 @@ export default function LottoGenerator() {
   return (
     <div className="glass-card">
       <div className="mb-4">
-        <p className="font-mono text-[10px] tracking-[0.22em] text-[color:var(--muted)] mb-1">NUMBER GENERATOR</p>
         <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">번호 생성기</h2>
-        <p className="text-[11.5px] leading-relaxed text-ink/60 mt-1">
-          게임 수를 고르고 <span className="font-semibold text-ink/80">번호 생성</span> 버튼만 누르면 됩니다.
-        </p>
       </div>
 
       <div className="mb-4 rounded-xl border border-ink/10 bg-ink/[0.03] p-3">
@@ -136,13 +132,13 @@ export default function LottoGenerator() {
           </label>)}
         </div>
         <p className="mt-2 text-xs leading-relaxed text-ink/65">
-          {mode === 'uniform' ? (avoidPastWinning ? '표시된 기준 회차의 당첨 조합을 제외하고 같은 확률로 뽑습니다.' : '모든 6개 번호 조합을 같은 확률로 뽑습니다. 연속번호와 과거 당첨 조합도 나올 수 있습니다.') : '합계 100~175 · 최대 2연속 · 3개 이상 구간 분산 조건과 홀짝·고저 등 패턴 점수를 적용합니다.'}
+          {mode === 'uniform' ? (avoidPastWinning ? '기준 회차까지 나온 1등 조합을 제외하고 같은 확률로 뽑습니다.' : '모든 6개 번호 조합을 같은 확률로 뽑습니다. 연속번호와 과거 당첨 조합도 나올 수 있습니다.') : '합계 100~175 · 최대 2연속 · 3개 이상 구간 분산 조건과 홀짝·고저 등 패턴 점수를 적용합니다.'}
         </p>
         <label className="mt-2 flex min-h-11 cursor-pointer items-center gap-2 text-xs text-ink/80">
           <input type="checkbox" checked={avoidPastWinning} onChange={event => setAvoidPastWinning(event.target.checked)} className="h-4 w-4 shrink-0 accent-[color:var(--brand)]" />
           과거 1등 당첨 조합 제외
         </label>
-        <p className="text-[11px] leading-relaxed text-ink/60">같은 회차의 본번호 6개가 모두 일치하는 조합만 제외합니다. 개별 번호는 제외하지 않습니다. 필터는 당첨 확률을 높이지 않습니다.</p>
+        <p className="text-[11px] leading-relaxed text-ink/60">과거 본번호 6개가 모두 같은 조합만 제외합니다. 당첨 확률은 달라지지 않습니다.</p>
       </fieldset>
       {/* 1단계 — 게임 수 */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -198,24 +194,6 @@ export default function LottoGenerator() {
           </div>
         )}
 
-        {!isSpinning && !hasGames && (
-          <div className="flex flex-col items-center gap-2.5">
-            <div className={BALL_ROW_XL_CLASS}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`${BALL_PLACEHOLDER} flex items-center justify-center rounded-full border-2 border-dashed border-ink/20 bg-ink/[0.04]`}
-                >
-                  <span aria-hidden className="text-[clamp(12px,3.1vw,16px)] font-bold text-ink/30">
-                    ?
-                  </span>
-                </div>
-              ))}
-            </div>
-            <p className="text-[11.5px] text-ink/55">위 버튼을 누르면 번호가 표시됩니다.</p>
-          </div>
-        )}
-
         {!isSpinning && hasGames && (
           <ul className="flex flex-col gap-2.5">
             {games.map((game, index) => {
@@ -262,7 +240,7 @@ export default function LottoGenerator() {
           </ul>
         )}
       </div>
-      {hasGames && stats && <p className="mt-2 text-[11px] text-ink/60">공 테두리 표시는 비교 기준 {stats.dataThrough}회 당첨번호와의 일치 표시입니다.</p>}
+      {hasGames && stats && <p className="mt-2 text-[11px] text-ink/60">테두리가 있는 번호는 {stats.dataThrough}회 본번호와 일치한다는 뜻입니다.</p>}
       {copyError && <p role="alert" className="mt-2 text-xs text-ink/80">{copyError}</p>}
     </div>
   )
