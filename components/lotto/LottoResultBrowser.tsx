@@ -26,6 +26,15 @@ function formatExactWon(amount: number): string {
   return `${amount.toLocaleString('ko-KR')}원`
 }
 
+const WON_PER_EOK = 100_000_000
+
+function formatPrizeHeadline(amount: number): string {
+  if (amount < WON_PER_EOK) return formatExactWon(amount)
+  const rounded = Math.round(amount / WON_PER_EOK)
+  const prefix = amount % WON_PER_EOK === 0 ? '' : '약 '
+  return `${prefix}${rounded.toLocaleString('ko-KR')}억 원`
+}
+
 const NAV_BUTTON =
   'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[color:var(--line-strong)] disabled:hover:text-[color:var(--ink-2)]'
 
@@ -217,19 +226,24 @@ export default function LottoResultBrowser() {
 
             <dl className="mt-4 grid gap-x-6 gap-y-3 rounded-2xl border border-ink/10 bg-ink/[0.04] p-3 sm:grid-cols-2 sm:p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 sm:block">
-                <dt className="text-xs text-ink/70">1등 당첨 건수</dt>
+                <dt className="text-xs text-ink/70">1등 당첨자 (중복 포함)</dt>
                 <dd className="text-base font-extrabold tabular text-ink">
-                  {result.firstWinnerCount.toLocaleString('ko-KR')}건
+                  {result.firstWinnerCount.toLocaleString('ko-KR')}명
                 </dd>
               </div>
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 sm:block">
-                <dt className="text-xs text-ink/70">1등 당첨금 (1건당·세전)</dt>
-                <dd className="text-base font-extrabold tabular text-[color:var(--warn)]">
-                  {result.firstWinnerCount > 0 ? formatExactWon(result.firstPrizeAmount) : '당첨 없음'}
+                <dt className="text-xs text-ink/70">1등 당첨금 (한 줄당·세전)</dt>
+                <dd className="tabular text-right sm:text-left">
+                  <span className="block text-base font-extrabold text-[color:var(--warn)]">
+                    {result.firstWinnerCount > 0 ? formatPrizeHeadline(result.firstPrizeAmount) : '당첨 없음'}
+                  </span>
+                  {result.firstWinnerCount > 0 && result.firstPrizeAmount >= WON_PER_EOK && (
+                    <span className="block text-xs text-ink/70">{formatExactWon(result.firstPrizeAmount)}</span>
+                  )}
                 </dd>
               </div>
             </dl>
-            <p className="mt-2 text-xs text-ink/65">같은 사람이 여러 건에 당첨될 수 있어 실제 당첨 인원과 다를 수 있습니다.</p>
+            <p className="mt-2 text-xs text-ink/65">당첨된 번호 한 줄을 1명으로 계산하므로, 같은 사람이 두 줄에 당첨되면 2명으로 표시합니다.</p>
             <p className="mt-3 text-xs text-ink/65">
               회차 총 판매금액 <span className="tabular">{formatExactWon(result.totalSalesAmount)}</span>
             </p>
