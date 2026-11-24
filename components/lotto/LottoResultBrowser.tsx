@@ -26,18 +26,6 @@ function formatExactWon(amount: number): string {
   return `${amount.toLocaleString('ko-KR')}원`
 }
 
-/** 큰 금액을 억/만 단위로 압축 — 상세 금액은 별도로 함께 노출한다 */
-function formatCompactWon(amount: number): string {
-  if (amount >= 100_000_000) {
-    const eok = amount / 100_000_000
-    return `${eok >= 100 ? Math.round(eok).toLocaleString('ko-KR') : eok.toFixed(1)}억원`
-  }
-  if (amount >= 10_000) return `${Math.round(amount / 10_000).toLocaleString('ko-KR')}만원`
-  return formatExactWon(amount)
-}
-
-const CARD_LABEL = 'text-[10.5px] text-ink/60'
-const CARD_BOX = 'rounded-2xl border border-ink/10 bg-ink/[0.04] p-3'
 const NAV_BUTTON =
   'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[color:var(--line-strong)] disabled:hover:text-[color:var(--ink-2)]'
 
@@ -227,28 +215,24 @@ export default function LottoResultBrowser() {
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3">
-              <div className={CARD_BOX}>
-                <p className={CARD_LABEL}>1등 당첨 게임</p>
-                <p className="mt-1 text-[16px] font-extrabold text-ink tabular">
-                  {result.firstWinnerCount.toLocaleString('ko-KR')}게임
-                </p>
+            <dl className="mt-4 grid gap-x-6 gap-y-3 rounded-2xl border border-ink/10 bg-ink/[0.04] p-3 sm:grid-cols-2 sm:p-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 sm:block">
+                <dt className="text-xs text-ink/70">1등 당첨 건수</dt>
+                <dd className="text-base font-extrabold tabular text-ink">
+                  {result.firstWinnerCount.toLocaleString('ko-KR')}건
+                </dd>
               </div>
-              <div className={CARD_BOX}>
-                <p className={CARD_LABEL}>1게임당 1등 당첨금</p>
-                <p className="mt-1 text-[16px] font-extrabold text-[color:var(--warn)] tabular">
-                  {formatCompactWon(result.firstPrizeAmount)}
-                </p>
-                <p className="mt-0.5 text-[10px] text-ink/50 tabular">{formatExactWon(result.firstPrizeAmount)}</p>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 sm:block">
+                <dt className="text-xs text-ink/70">1등 당첨금 (1건당·세전)</dt>
+                <dd className="text-base font-extrabold tabular text-[color:var(--warn)]">
+                  {result.firstWinnerCount > 0 ? formatExactWon(result.firstPrizeAmount) : '당첨 없음'}
+                </dd>
               </div>
-              <div className={`${CARD_BOX} col-span-2 md:col-span-1`}>
-                <p className={CARD_LABEL}>회차 총 판매금액</p>
-                <p className="mt-1 text-[16px] font-extrabold text-ink tabular">
-                  {formatCompactWon(result.totalSalesAmount)}
-                </p>
-                <p className="mt-0.5 text-[10px] text-ink/50 tabular">{formatExactWon(result.totalSalesAmount)}</p>
-              </div>
-            </div>
+            </dl>
+            <p className="mt-2 text-xs text-ink/65">같은 사람이 여러 건에 당첨될 수 있어 실제 당첨 인원과 다를 수 있습니다.</p>
+            <p className="mt-3 text-xs text-ink/65">
+              회차 총 판매금액 <span className="tabular">{formatExactWon(result.totalSalesAmount)}</span>
+            </p>
           </div>
         )}
 
