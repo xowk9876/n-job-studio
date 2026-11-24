@@ -244,9 +244,17 @@ export default function LottoResultBrowser() {
                   <span className={`${RESULT_VALUE} text-[color:var(--warn)]`}>
                     {result.firstWinnerCount > 0 ? formatPrizeHeadline(result.firstPrizeAmount) : '당첨 없음'}
                   </span>
-                  {result.firstWinnerCount > 0 && result.firstPrizeAmount >= WON_PER_EOK && (
-                    <span className={RESULT_DETAIL}>{formatExactWon(result.firstPrizeAmount)}</span>
-                  )}
+                  <a
+                    href={`https://www.dhlottery.co.kr/lt645/result?ltEpsd=${result.round}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${RESULT_DETAIL} rounded-sm underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-[color:var(--brand)]`}
+                  >
+                    {result.firstWinnerCount > 0 && result.firstPrizeAmount >= WON_PER_EOK ? (
+                      <>공식 금액 <span className="whitespace-nowrap tabular">{formatExactWon(result.firstPrizeAmount)}</span></>
+                    ) : '공식 발표 확인'}
+                    <span className="sr-only"> (동행복권 제{result.round}회, 새 창)</span>
+                  </a>
                 </dd>
               </div>
               <div className="col-span-full flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-ink/10 px-4 py-2.5 md:px-5">

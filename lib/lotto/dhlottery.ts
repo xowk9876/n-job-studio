@@ -78,20 +78,24 @@ function toRoundResult(item: DhlotteryItem | undefined): LottoRoundResult | null
   if (new Set(all).size !== 7) return null
   if (!all.every(num => Number.isInteger(num) && num >= 1 && num <= 45)) return null
 
+  // 1게임당 공식 금액은 rnk1WnAmt다. 과거 회차는 총액 필드가 0인 경우도 있다.
   const amounts = [item.rnk1WnNope, item.rnk1WnAmt, item.wholEpsdSumNtslAmt].map(publishedNumber)
   if (!amounts.every(value => inRange(value) && Number.isSafeInteger(value))) return null
+  const [firstWinnerCount, firstPrizeAmount, totalSalesAmount] = amounts
+  // 당첨자가 있는데 한 줄당 금액이 0이거나 그 반대면 해당 응답으로 금액을 확정할 수 없다.
+  if ((firstWinnerCount === 0) !== (firstPrizeAmount === 0)) return null
 
   return {
     round,
     drawDate,
     numbers: numbers.sort((a, b) => a - b),
     bonusNumber,
-    firstWinnerCount: amounts[0],
-    firstPrizeAmount: amounts[1],
+    firstWinnerCount,
+    firstPrizeAmount,
     // 총 판매금액은 wholEpsdSumNtslAmt다. rlvtEpsdSumNtslAmt는 261회부터 당첨금
     // 총액(판매액의 약 50%)이 담기므로 판매금액으로 쓰면 절반 값이 나온다.
     // (1회 3,681,782,000원 = 복권위원회 공식 최저 판매액 기록과 대조 확인)
-    totalSalesAmount: amounts[2],
+    totalSalesAmount,
     origin: 'live',
   }
 }

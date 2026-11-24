@@ -74,6 +74,11 @@ export function toRow(item) {
     return Number(raw)
   })
 
+  const [firstWinnerCount, firstPrizeAmount] = amounts
+  if ((firstWinnerCount === 0) !== (firstPrizeAmount === 0)) {
+    throw new Error(`${item.ltEpsd}회 1등 당첨 수와 한 줄당 금액 불일치`)
+  }
+
   numbers.sort((a, b) => a - b)
 
   return [

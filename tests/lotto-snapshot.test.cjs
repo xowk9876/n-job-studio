@@ -13,8 +13,13 @@ test('snapshot importer rejects missing or malformed prize data instead of savin
     for (const value of [undefined, null, '', ' ', 'invalid', false, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
       assert.throws(() => toRow({ ...draw, [key]: value }), /값 오류/)
     }
-    assert.doesNotThrow(() => toRow({ ...draw, [key]: 0 }))
-    assert.doesNotThrow(() => toRow({ ...draw, [key]: '0' }))
+  }
+  for (const zero of [0, '0']) {
+    const noWinners = { ...draw, rnk1WnNope: zero, rnk1WnAmt: zero }
+    assert.deepEqual(toRow(noWinners).slice(9, 11), [0, 0])
+    assert.doesNotThrow(() => toRow({ ...draw, wholEpsdSumNtslAmt: zero }))
+    assert.throws(() => toRow({ ...draw, rnk1WnNope: zero }), /1등 당첨 수와 한 줄당 금액 불일치/)
+    assert.throws(() => toRow({ ...draw, rnk1WnAmt: zero }), /1등 당첨 수와 한 줄당 금액 불일치/)
   }
 })
 

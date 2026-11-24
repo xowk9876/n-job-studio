@@ -55,6 +55,7 @@ test('external API distinguishes actual zeros from unavailable prizes and reject
   assert.equal(valid.firstPrizeAmount, 0)
   assert.equal(valid.totalSalesAmount, 100_000_000_000)
   for (const invalid of [
+    { rnk1WnNope: 1 }, { rnk1WnAmt: 1 },
     { ltRflYmd: '20260230' }, { ltEpsd: true }, { tm1WnNo: true }, { bnsWnNo: [10] },
     { rnk1WnNope: undefined }, { rnk1WnNope: false }, { rnk1WnAmt: null }, { rnk1WnAmt: '' },
     { rnk1WnAmt: 'Infinity' }, { wholEpsdSumNtslAmt: ' ' }, { wholEpsdSumNtslAmt: -1 },
@@ -63,6 +64,19 @@ test('external API distinguishes actual zeros from unavailable prizes and reject
     assert.equal(await fetchLatestRound(), null)
   }
 })
+
+test('historical payouts use the official per-game field in live and archived results', async t => {
+  const { fetchRound } = require('../lib/lotto/dhlottery.ts')
+  const { toRow } = await import('../scripts/fetch-lotto-history.mjs')
+  // 제19회 원자료는 1게임당 금액이 발표되어 있지만 합계 필드는 0이다.
+  const source = { ltEpsd: 19, ltRflYmd: '20030412', tm1WnNo: 6, tm2WnNo: 30, tm3WnNo: 38,
+    tm4WnNo: 39, tm5WnNo: 40, tm6WnNo: 43, bnsWnNo: 26, rnk1WnNope: 1,
+    rnk1WnAmt: 40_722_959_400, rnk1SumWnAmt: 0, wholEpsdSumNtslAmt: 105_957_818_000 }
+  t.mock.method(global, 'fetch', async () => Response.json({ data: { list: [source] } }))
+  assert.equal((await fetchRound(19)).firstPrizeAmount, 40_722_959_400)
+  assert.equal(toRow(source)[10], 40_722_959_400)
+})
+
 for (const outcome of ['accepted', 'dismissed']) {
   test(`install prompt handles ${outcome} without a false completion state`, async () => {
     let count = 0
