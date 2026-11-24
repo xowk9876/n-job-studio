@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Search } from 'lucide-react'
 
 import { fromIsoDate } from '@/lib/lotto/schedule'
 import type { LottoRoundResult } from '@/lib/lotto/types'
@@ -34,12 +34,6 @@ function formatPrizeHeadline(amount: number): string {
   const prefix = amount % WON_PER_EOK === 0 ? '' : '약 '
   return `${prefix}${rounded.toLocaleString('ko-KR')}억 원`
 }
-
-const RESULT_CELL =
-  'grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-baseline gap-x-3 gap-y-1 px-4 py-3 md:row-span-2 md:grid-cols-1 md:grid-rows-subgrid md:items-start md:px-5 md:py-4 md:text-center'
-const RESULT_LABEL = 'break-keep text-xs leading-5 text-ink/70'
-const RESULT_VALUE = 'block text-lg leading-6 font-extrabold tabular'
-const RESULT_DETAIL = 'mt-1 block break-keep text-xs leading-5 text-ink/70'
 
 const NAV_BUTTON =
   'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[color:var(--line-strong)] disabled:hover:text-[color:var(--ink-2)]'
@@ -102,7 +96,7 @@ export default function LottoResultBrowser() {
       } catch {
         if (requestId !== requestIdRef.current) return
         setStatus('error')
-        setError('네트워크 오류로 당첨번호를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')
+        setError('당첨번호를 불러오지 못했습니다. 다시 시도해 주세요.')
       }
     },
     [applyResult],
@@ -139,7 +133,7 @@ export default function LottoResultBrowser() {
       } catch {
         if (cancelled || requestId !== requestIdRef.current) return
         setStatus('error')
-        setError('최신 당첨번호를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')
+        setError('최신 당첨번호를 불러오지 못했습니다. 다시 시도해 주세요.')
       }
     }
 
@@ -164,7 +158,7 @@ export default function LottoResultBrowser() {
       return
     }
     if (latestVerified && latestRound !== null && parsed > latestRound) {
-      setError(`아직 추첨되지 않은 회차입니다. 조회 가능한 최신 회차는 ${latestRound}회입니다.`)
+      setError(`최신 추첨은 ${latestRound}회입니다.`)
       return
     }
     loadRound(parsed)
@@ -176,13 +170,27 @@ export default function LottoResultBrowser() {
 
   return (
     <div className="glass-card">
-      <div className="mb-5 flex items-start justify-between gap-4">
-        <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">로또 당첨번호 조회</h2>
-        {isLatest && (
-          <span className="shrink-0 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
-            {latestVerified ? '최신 회차' : '최근 확인 회차'}
-          </span>
-        )}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 className="font-display text-lg font-bold tracking-tight text-ink md:text-xl">
+            {result ? `${result.round}회 당첨번호` : '로또 당첨번호'}
+          </h2>
+          {result && (
+            <p className="mt-1 text-sm text-ink/70">
+              <time dateTime={result.drawDate}>{formatDrawDateLabel(result.drawDate)}</time>
+              {result.origin === 'snapshot' && ' · 저장된 결과'}
+            </p>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => void load('/api/lotto/latest?refresh=1', true)}
+          disabled={status === 'loading'}
+          aria-label={isLatest ? '최신 회차 새로고침' : '최신 회차 조회'}
+          className="min-h-10 rounded-lg px-2 text-sm font-medium text-ink/70 hover:text-ink disabled:opacity-50"
+        >
+          {isLatest ? '새로고침' : '최신 회차'}
+        </button>
       </div>
 
       <div aria-live="polite" aria-busy={status === 'loading'}>
@@ -199,24 +207,12 @@ export default function LottoResultBrowser() {
                 />
               ))}
             </div>
-            <p className="text-center text-[11.5px] text-ink/60">당첨번호를 확인하고 있습니다.</p>
+            <p className="text-center text-sm text-ink/70">당첨번호 확인 중…</p>
           </div>
         )}
 
         {result && (
           <div className={status === 'loading' ? 'opacity-50 transition-opacity' : 'transition-opacity'}>
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-              <div>
-                <p className="text-[12px] font-semibold text-ink/65">제 {result.round.toLocaleString('ko-KR')}회</p>
-                <p className="text-[19px] md:text-[23px] font-extrabold text-ink tracking-tight">
-                  {formatDrawDateLabel(result.drawDate)}
-                </p>
-              </div>
-              <span className="rounded-lg bg-ink/[0.05] px-2.5 py-1 text-[10.5px] text-ink/60">
-                {result.origin === 'live' ? '동행복권 실시간 조회' : '저장된 공식 데이터'}
-              </span>
-            </div>
-
             <div className="rounded-2xl border border-ink/10 bg-ink/[0.04] px-2 py-4 sm:px-3 md:rounded-3xl md:p-5">
               <div className={BALL_ROW_CLASS} role="img" aria-label={ballAriaLabel}>
                 {result.numbers.map(num => (
@@ -230,40 +226,49 @@ export default function LottoResultBrowser() {
               </div>
             </div>
 
-            <dl className="mt-4 grid rounded-2xl border border-ink/10 bg-ink/[0.04] md:grid-cols-2">
-              <div className={RESULT_CELL}>
-                <dt className={RESULT_LABEL}>1등 당첨자 (중복 포함)</dt>
-                <dd className="min-w-0 text-right md:text-center">
-                  <span className={RESULT_VALUE}>{result.firstWinnerCount.toLocaleString('ko-KR')}명</span>
-                  <span className={RESULT_DETAIL}>당첨 번호 한 줄을 1명으로 집계합니다.</span>
-                </dd>
-              </div>
-              <div className={`${RESULT_CELL} border-t border-ink/10 md:border-t-0 md:border-l`}>
-                <dt className={RESULT_LABEL}>1등 당첨금 (한 줄당·세전)</dt>
-                <dd className="min-w-0 text-right md:text-center">
-                  <span className={`${RESULT_VALUE} text-[color:var(--warn)]`}>
-                    {result.firstWinnerCount > 0 ? formatPrizeHeadline(result.firstPrizeAmount) : '당첨 없음'}
-                  </span>
-                  <a
-                    href={`https://www.dhlottery.co.kr/lt645/result?ltEpsd=${result.round}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${RESULT_DETAIL} rounded-sm underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-[color:var(--brand)]`}
-                  >
-                    {result.firstWinnerCount > 0 && result.firstPrizeAmount >= WON_PER_EOK ? (
-                      <>공식 금액 <span className="whitespace-nowrap tabular">{formatExactWon(result.firstPrizeAmount)}</span></>
-                    ) : '공식 발표 확인'}
-                    <span className="sr-only"> (동행복권 제{result.round}회, 새 창)</span>
-                  </a>
-                </dd>
-              </div>
-              <div className="col-span-full flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-ink/10 px-4 py-2.5 md:px-5">
-                <dt className={RESULT_LABEL}>회차 총 판매금액</dt>
-                <dd className="ml-auto text-right text-xs leading-5 tabular text-ink/80">
-                  {formatExactWon(result.totalSalesAmount)}
-                </dd>
-              </div>
-            </dl>
+            <div className="mt-3 rounded-xl border border-ink/10">
+              <table className="w-full table-fixed border-collapse text-center">
+                <caption className="sr-only">{result.round}회 1등 당첨 결과</caption>
+                <thead className="text-sm text-ink/70">
+                  <tr>
+                    <th scope="col" className="px-1 pt-3 font-medium">1등 당첨자<span className="sr-only"> (당첨된 줄 수 기준)</span></th>
+                    <th scope="col" className="border-l border-ink/10 px-1 pt-3 font-medium">1등 당첨금 <span className="text-xs">(세전)</span></th>
+                  </tr>
+                </thead>
+                <tbody className="text-lg font-bold tabular">
+                  <tr>
+                    <td className="px-1 pb-3">{result.firstWinnerCount.toLocaleString('ko-KR')}명</td>
+                    <td className="border-l border-ink/10 px-1 pb-3 text-[color:var(--warn)]">
+                      {result.firstWinnerCount > 0 ? formatPrizeHeadline(result.firstPrizeAmount) : '당첨 없음'}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <details className="group border-t border-ink/10">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between px-3 text-sm text-ink/75 [&::-webkit-details-marker]:hidden">
+                  당첨금 상세
+                  <ChevronDown aria-hidden className="h-4 w-4 group-open:rotate-180" />
+                </summary>
+                <dl className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-2 gap-y-1.5 px-3 text-sm text-ink/80">
+                  <dt>한 줄당 세전 금액</dt>
+                  <dd className="text-right">
+                    <a
+                      href={`https://www.dhlottery.co.kr/lt645/result?ltEpsd=${result.round}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 tabular underline underline-offset-2 hover:text-ink"
+                    >
+                      {result.firstWinnerCount > 0 ? formatExactWon(result.firstPrizeAmount) : '당첨 없음'}
+                      <ExternalLink aria-hidden className="h-3 w-3 shrink-0" />
+                      <span className="sr-only"> (동행복권 {result.round}회 발표, 새 창)</span>
+                    </a>
+                  </dd>
+                  <dt>총 판매액</dt>
+                  <dd className="text-right tabular">{formatExactWon(result.totalSalesAmount)}</dd>
+                </dl>
+                <p className="px-3 py-3 text-xs text-ink/65">당첨자 수는 당첨된 줄 수 기준입니다.</p>
+              </details>
+            </div>
           </div>
         )}
 
@@ -278,72 +283,57 @@ export default function LottoResultBrowser() {
       </div>
 
       {/* 회차 이동 컨트롤 */}
-      <div className="mt-5 border-t border-[color:var(--line)] pt-5">
-        <p className="text-xs font-semibold text-[color:var(--muted)] mb-3">다른 회차 보기</p>
+      <div className="mt-4 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => currentRound && loadRound(currentRound - 1)}
+          disabled={!canGoPrev || status === 'loading'}
+          className={NAV_BUTTON}
+          aria-label="이전 회차 보기"
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden />
+        </button>
 
-        <div className="flex items-center gap-2">
+        <form onSubmit={handleRoundSubmit} className="flex min-w-0 flex-1 items-center gap-2">
+          <label className="sr-only" htmlFor="lotto-round-input">
+            조회할 회차 번호
+          </label>
+          <div className="relative min-w-0 flex-1">
+            <input
+              id="lotto-round-input"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              autoComplete="off"
+              maxLength={5}
+              value={roundInput}
+              onChange={event => setRoundInput(event.target.value.replace(/[^\d]/g, ''))}
+              placeholder="회차"
+              className="glass-input h-10 w-full py-0 pr-9 text-[14px]"
+            />
+            <span aria-hidden className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] text-[color:var(--muted)]">
+              회
+            </span>
+          </div>
           <button
-            type="button"
-            onClick={() => currentRound && loadRound(currentRound - 1)}
-            disabled={!canGoPrev || status === 'loading'}
-            className={NAV_BUTTON}
-            aria-label="이전 회차 보기"
-          >
-            <ChevronLeft className="h-4 w-4" aria-hidden />
-          </button>
-
-          <form onSubmit={handleRoundSubmit} className="flex flex-1 items-center gap-2">
-            <label className="sr-only" htmlFor="lotto-round-input">
-              조회할 회차 번호
-            </label>
-            <div className="relative flex-1">
-              <input
-                id="lotto-round-input"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="off"
-                maxLength={5}
-                value={roundInput}
-                onChange={event => setRoundInput(event.target.value.replace(/[^\d]/g, ''))}
-                placeholder="회차"
-                className="glass-input h-10 w-full py-0 pr-9 text-[14px]"
-              />
-              <span aria-hidden className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] text-[color:var(--muted)]">
-                회
-              </span>
-            </div>
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl bg-[color:var(--brand)] px-3.5 text-[13px] font-bold text-white transition-colors hover:bg-[color:var(--brand-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <Search className="h-3.5 w-3.5" aria-hidden />
-              조회
-            </button>
-          </form>
-
-          <button
-            type="button"
-            onClick={() => currentRound && loadRound(currentRound + 1)}
-            disabled={!canGoNext || status === 'loading'}
-            className={NAV_BUTTON}
-            aria-label="다음 회차 보기"
-          >
-            <ChevronRight className="h-4 w-4" aria-hidden />
-          </button>
-        </div>
-
-        <div className="mt-3 flex flex-col items-center gap-3">
-          <button
-            type="button"
-            onClick={() => void load('/api/lotto/latest?refresh=1', true)}
+            type="submit"
             disabled={status === 'loading'}
-            className="h-10 rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3.5 text-[12.5px] font-semibold text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl bg-[color:var(--brand)] px-3.5 text-[13px] font-bold text-white transition-colors hover:bg-[color:var(--brand-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            최신 회차 다시 확인
+            <Search className="h-3.5 w-3.5" aria-hidden />
+            조회
           </button>
-        </div>
+        </form>
+
+        <button
+          type="button"
+          onClick={() => currentRound && loadRound(currentRound + 1)}
+          disabled={!canGoNext || status === 'loading'}
+          className={NAV_BUTTON}
+          aria-label="다음 회차 보기"
+        >
+          <ChevronRight className="h-4 w-4" aria-hidden />
+        </button>
       </div>
     </div>
   )

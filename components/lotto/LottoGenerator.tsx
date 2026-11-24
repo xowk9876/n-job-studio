@@ -111,16 +111,17 @@ export default function LottoGenerator() {
       <div className="mb-4 rounded-xl border border-ink/10 bg-ink/[0.03] p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-xs leading-relaxed text-ink/70" role="status">
-            {stats ? <p>비교 기준 <strong className="text-ink">{stats.dataThrough}회</strong> · {stats.latestDrawDate} 추첨</p> : <p>{isStatsLoading ? '당첨 데이터 확인 중' : '당첨 데이터 미확인'}</p>}
-            {stats && <p>{isStatsLoading ? '갱신 확인 중…' : statsError ? '최신 갱신 확인 필요' : stats.origin === 'live' ? '공식 조회로 최신 회차 확인' : `${stats.dataThrough}회까지 저장된 데이터 사용`}</p>}
+            {stats ? <p>비교 기준 <strong className="text-ink">{stats.dataThrough}회</strong>{stats.origin === 'snapshot' && ' · 저장된 결과'}</p> : <p>{isStatsLoading ? '당첨 데이터 확인 중' : '당첨 데이터 미확인'}</p>}
           </div>
           <button type="button" onClick={refresh} disabled={isStatsLoading} aria-label={statsError ? '당첨 데이터 다시 시도' : '당첨 데이터 새로고침'} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-ink/15 px-3 text-xs font-medium text-ink/80 hover:bg-ink/[0.06] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40">
             <RefreshCw className={`h-3.5 w-3.5 ${isStatsLoading ? 'animate-spin motion-reduce:animate-none' : ''}`} aria-hidden />
             {isStatsLoading ? '확인 중' : statsError ? '다시 시도' : '새로고침'}
           </button>
         </div>
-        {statsError && <p role="alert" className="mt-2 text-xs text-ink/70">{statsError} {stats ? '표시된 기준 회차로 비교합니다.' : '과거 조합 제외 없이 번호 생성은 사용할 수 있습니다.'}</p>}
-        {!statsError && stats?.origin === 'snapshot' && <p className="mt-2 text-xs text-ink/70">최신 갱신이 완료되지 않았습니다.{stats.latestKnownRound && stats.latestKnownRound > stats.dataThrough ? ` ${stats.latestKnownRound}회까지 확인됐지만 중간 회차를 모두 확보하지 못했습니다.` : ''} 새로고침으로 다시 확인할 수 있습니다.</p>}
+        {statsError && <p role="alert" className="mt-2 text-xs text-ink/70">{statsError}</p>}
+        {!statsError && stats?.origin === 'snapshot' && (stats.latestKnownRound ?? 0) > stats.dataThrough && (
+          <p className="mt-2 text-xs text-ink/70">{stats.latestKnownRound}회까지 발표됐지만 일부 회차가 비어 있습니다.</p>
+        )}
       </div>
 
       <fieldset disabled={isSpinning} className="mb-4 min-w-0">
@@ -131,14 +132,11 @@ export default function LottoGenerator() {
             {option.label}
           </label>)}
         </div>
-        <p className="mt-2 text-xs leading-relaxed text-ink/65">
-          {mode === 'uniform' ? (avoidPastWinning ? '기준 회차까지 나온 1등 조합을 제외하고 같은 확률로 뽑습니다.' : '모든 6개 번호 조합을 같은 확률로 뽑습니다. 연속번호와 과거 당첨 조합도 나올 수 있습니다.') : '합계 100~175 · 최대 2연속 · 3개 이상 구간 분산 조건과 홀짝·고저 등 패턴 점수를 적용합니다.'}
-        </p>
+        {mode === 'balanced' && <p className="mt-2 text-xs leading-relaxed text-ink/65">합계 100~175, 최대 2연속, 3개 이상 구간 분산 등으로 조합을 고릅니다.</p>}
         <label className="mt-2 flex min-h-11 cursor-pointer items-center gap-2 text-xs text-ink/80">
           <input type="checkbox" checked={avoidPastWinning} onChange={event => setAvoidPastWinning(event.target.checked)} className="h-4 w-4 shrink-0 accent-[color:var(--brand)]" />
           과거 1등 당첨 조합 제외
         </label>
-        <p className="text-[11px] leading-relaxed text-ink/60">과거 본번호 6개가 모두 같은 조합만 제외합니다. 당첨 확률은 달라지지 않습니다.</p>
       </fieldset>
       {/* 1단계 — 게임 수 */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -179,7 +177,7 @@ export default function LottoGenerator() {
       {/* 3단계 — 결과 번호 (이 화면의 주인공) */}
       <div id="lotto-generated-numbers" className="mt-4" aria-live="polite" aria-busy={isSpinning}>
         {generationError && <p role="alert" className="mb-3 text-xs text-ink/80">{generationError}{hasGames ? ' 이전 생성 결과를 유지합니다.' : ''}</p>}
-        {hasGames && !isSpinning && <p className="mb-2 text-xs text-ink/70">생성 결과: {resultLabel}. 설정 변경은 다음 생성부터 적용됩니다.</p>}
+        {hasGames && !isSpinning && <p className="mb-2 text-xs text-ink/70">{resultLabel}</p>}
         {isSpinning && (
           <div className={BALL_ROW_XL_CLASS}>
             {Array.from({ length: 6 }).map((_, i) => (
@@ -240,7 +238,7 @@ export default function LottoGenerator() {
           </ul>
         )}
       </div>
-      {hasGames && stats && <p className="mt-2 text-[11px] text-ink/60">테두리가 있는 번호는 {stats.dataThrough}회 본번호와 일치한다는 뜻입니다.</p>}
+      {hasGames && stats && <p className="mt-2 text-xs text-ink/65">테두리는 {stats.dataThrough}회 당첨번호와 겹치는 번호입니다.</p>}
       {copyError && <p role="alert" className="mt-2 text-xs text-ink/80">{copyError}</p>}
     </div>
   )

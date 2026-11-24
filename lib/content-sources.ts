@@ -13,6 +13,11 @@ const depositProtection = {
   label: '금융위원회 · 예금보호한도와 보호상품 안내',
   href: 'https://www.fsc.go.kr/no040000?cnId=2817&curPage=1',
 }
+export const lottoResultSources: readonly OfficialSource[] = [
+  { label: '동행복권 · 회차별 당첨번호와 당첨금', href: 'https://www.dhlottery.co.kr/lt645/result' },
+  { label: '동행복권 · 당첨금 지급처·준비물·지급기한', href: 'https://m.dhlottery.co.kr/guide/wnrGuide' },
+  { label: '국가법령정보센터 · 소득세법', href: 'https://www.law.go.kr/LSW/lsInfoP.do?ancYnChk=0&chrClsCd=010202&efYd=20260421&joNo=009702&lsiSeq=285523&urlMode=lsInfoP' },
+]
 
 export const officialSources: Record<string, readonly OfficialSource[]> = {
   '/salary': [
@@ -42,10 +47,8 @@ export const officialSources: Record<string, readonly OfficialSource[]> = {
     { label: '한국은행 · 통화정책 결정 자료와 기준금리', href: 'https://www.bok.or.kr/portal/main/contents.do?menuNo=200755' },
   ],
   '/lotto': [
-    { label: '동행복권 · 회차별 당첨번호와 당첨금', href: 'https://www.dhlottery.co.kr/lt645/result' },
-    { label: '동행복권 · 당첨금 지급처·준비물·지급기한', href: 'https://m.dhlottery.co.kr/guide/wnrGuide' },
+    ...lottoResultSources,
     { label: '동행복권 · 복권지갑 등록과 미수령 당첨금 지급', href: 'https://m.dhlottery.co.kr/userGuide' },
-    { label: '국가법령정보센터 · 소득세법', href: 'https://www.law.go.kr/LSW/lsInfoP.do?ancYnChk=0&chrClsCd=010202&efYd=20260421&joNo=009702&lsiSeq=285523&urlMode=lsInfoP' },
     depositProtection,
   ],
 }

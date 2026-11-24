@@ -125,7 +125,7 @@ export function OfficialSourcesSection({
   note = '확인 기준일: 2026-10-31. 실제 적용 조건과 이후 변경 사항은 해당 기관의 원문에서 확인하세요.',
 }: {
   sources: readonly OfficialSource[]
-  note?: string
+  note?: string | null
 }) {
   return (
     <section aria-labelledby="official-sources-heading">
@@ -139,9 +139,11 @@ export function OfficialSourcesSection({
             </li>
           ))}
         </ul>
-        <p className="mt-5 border-t border-[color:var(--line)] pt-4 text-[12.5px] leading-relaxed text-[color:var(--muted)]">
-          {note}
-        </p>
+        {note && (
+          <p className="mt-5 border-t border-[color:var(--line)] pt-4 text-[12.5px] leading-relaxed text-[color:var(--muted)]">
+            {note}
+          </p>
+        )}
       </div>
     </section>
   )
