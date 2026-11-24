@@ -35,6 +35,12 @@ function formatPrizeHeadline(amount: number): string {
   return `${prefix}${rounded.toLocaleString('ko-KR')}억 원`
 }
 
+const RESULT_CELL =
+  'grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-baseline gap-x-3 gap-y-1 px-4 py-3 md:row-span-2 md:grid-cols-1 md:grid-rows-subgrid md:items-start md:px-5 md:py-4 md:text-center'
+const RESULT_LABEL = 'break-keep text-xs leading-5 text-ink/70'
+const RESULT_VALUE = 'block text-lg leading-6 font-extrabold tabular'
+const RESULT_DETAIL = 'mt-1 block break-keep text-xs leading-5 text-ink/70'
+
 const NAV_BUTTON =
   'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--line-strong)] bg-[color:var(--surface)] text-[color:var(--ink-2)] transition-colors hover:border-[color:var(--brand)]/50 hover:text-[color:var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[color:var(--line-strong)] disabled:hover:text-[color:var(--ink-2)]'
 
@@ -224,29 +230,32 @@ export default function LottoResultBrowser() {
               </div>
             </div>
 
-            <dl className="mt-4 grid gap-x-6 gap-y-3 rounded-2xl border border-ink/10 bg-ink/[0.04] p-3 sm:grid-cols-2 sm:p-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-3 sm:block">
-                <dt className="text-xs text-ink/70">1등 당첨자 (중복 포함)</dt>
-                <dd className="text-base font-extrabold tabular text-ink">
-                  {result.firstWinnerCount.toLocaleString('ko-KR')}명
+            <dl className="mt-4 grid rounded-2xl border border-ink/10 bg-ink/[0.04] md:grid-cols-2">
+              <div className={RESULT_CELL}>
+                <dt className={RESULT_LABEL}>1등 당첨자 (중복 포함)</dt>
+                <dd className="min-w-0 text-right md:text-center">
+                  <span className={RESULT_VALUE}>{result.firstWinnerCount.toLocaleString('ko-KR')}명</span>
+                  <span className={RESULT_DETAIL}>당첨 번호 한 줄을 1명으로 집계합니다.</span>
                 </dd>
               </div>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-3 sm:block">
-                <dt className="text-xs text-ink/70">1등 당첨금 (한 줄당·세전)</dt>
-                <dd className="tabular text-right sm:text-left">
-                  <span className="block text-base font-extrabold text-[color:var(--warn)]">
+              <div className={`${RESULT_CELL} border-t border-ink/10 md:border-t-0 md:border-l`}>
+                <dt className={RESULT_LABEL}>1등 당첨금 (한 줄당·세전)</dt>
+                <dd className="min-w-0 text-right md:text-center">
+                  <span className={`${RESULT_VALUE} text-[color:var(--warn)]`}>
                     {result.firstWinnerCount > 0 ? formatPrizeHeadline(result.firstPrizeAmount) : '당첨 없음'}
                   </span>
                   {result.firstWinnerCount > 0 && result.firstPrizeAmount >= WON_PER_EOK && (
-                    <span className="block text-xs text-ink/70">{formatExactWon(result.firstPrizeAmount)}</span>
+                    <span className={RESULT_DETAIL}>{formatExactWon(result.firstPrizeAmount)}</span>
                   )}
                 </dd>
               </div>
+              <div className="col-span-full flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-ink/10 px-4 py-2.5 md:px-5">
+                <dt className={RESULT_LABEL}>회차 총 판매금액</dt>
+                <dd className="ml-auto text-right text-xs leading-5 tabular text-ink/80">
+                  {formatExactWon(result.totalSalesAmount)}
+                </dd>
+              </div>
             </dl>
-            <p className="mt-2 text-xs text-ink/65">당첨된 번호 한 줄을 1명으로 계산하므로, 같은 사람이 두 줄에 당첨되면 2명으로 표시합니다.</p>
-            <p className="mt-3 text-xs text-ink/65">
-              회차 총 판매금액 <span className="tabular">{formatExactWon(result.totalSalesAmount)}</span>
-            </p>
           </div>
         )}
 
