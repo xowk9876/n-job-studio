@@ -76,17 +76,14 @@ export default function MortgagePage() {
       <div className="glass-card flex flex-col gap-4">
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">대출금액</label>
-          <div className="relative">
-            <NumericInput ariaLabel="대출금액 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={principal} defaultValue={300_000_000} unitMultiplier={10000} onChange={(n) => set({ principal: n })} />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-          </div>
+          <NumericInput ariaLabel="대출금액 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={principal} unit="만원" onChange={(n) => set({ principal: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">= {won(principal)} ({manwon(principal)})</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
-            <NumericInput ariaLabel="연이율 (%)" max={100}  className="glass-input w-full rounded-lg font-bold" value={annualRate} defaultValue={3.5} allowDecimal onChange={(n) => set({ annualRate: n })} />
+            <NumericInput ariaLabel="연이율 (%)" max={100} className="glass-input w-full rounded-lg font-bold" value={annualRate} allowDecimal onChange={(n) => set({ annualRate: n })} />
           </div>
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">대출기간 (년)</label>
@@ -120,9 +117,9 @@ export default function MortgagePage() {
       </div>
 
       {/* 스케줄 */}
-      <div className="glass-card !p-0 overflow-hidden">
+      {r.schedule.length > 0 && <div className="glass-card !p-0 overflow-hidden">
         <button aria-expanded={showSchedule} onClick={() => setShowSchedule(!showSchedule)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
-          <span className="text-[13px] font-semibold text-white/85">월별 상환 스케줄 ({years * 12}개월)</span>
+          <span className="text-[13px] font-semibold text-white/85">월별 상환 내역 ({r.schedule.length}개월)</span>
           <ChevronDown className={`w-3.5 h-3.5 text-white/40 transition-transform ${showSchedule ? 'rotate-180' : ''}`} />
         </button>
         {showSchedule && (
@@ -150,7 +147,7 @@ export default function MortgagePage() {
             </table>
           </div>
         )}
-      </div>
+      </div>}
 
       {/* DSR 한도 시뮬레이션 */}
       <div className="glass-card !p-0 overflow-hidden">
@@ -163,17 +160,11 @@ export default function MortgagePage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">연 소득 (세전)</label>
-                <div className="relative">
-                  <NumericInput ariaLabel="연 소득 (만원)"  className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrIncome} defaultValue={60_000_000} unitMultiplier={10000} onChange={setDsrIncome} />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
-                </div>
+                <NumericInput ariaLabel="연 소득 (만원)" className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrIncome} unit="만원" onChange={setDsrIncome} />
               </div>
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">기존부채 월 상환</label>
-                <div className="relative">
-                  <NumericInput ariaLabel="기존 부채 월 상환액 (만원)"  className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrExistingDebt} defaultValue={0} unitMultiplier={10000} onChange={setDsrExistingDebt} />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
-                </div>
+                <NumericInput ariaLabel="기존 부채 월 상환액 (만원)" className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrExistingDebt} unit="만원" onChange={setDsrExistingDebt} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -181,22 +172,23 @@ export default function MortgagePage() {
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">DSR 한도</label>
                 <div className="grid grid-cols-2 gap-1.5">
                   {[40, 50].map(c => (
-                    <button key={c} onClick={() => setDsrCap(c)} className={`rounded-lg py-1.5 text-[12px] font-bold border transition-colors ${dsrCap === c ? 'border-[color:var(--brand)]/60 bg-[color:var(--brand)]/10 text-[color:var(--brand)]' : 'border-white/15 bg-white/5 text-white/55'}`}>{c}% {c === 40 ? '(은행)' : '(2금융)'}</button>
+                    <button key={c} aria-pressed={dsrCap === c} onClick={() => setDsrCap(c)} className={`rounded-lg py-1.5 text-[12px] font-bold border transition-colors ${dsrCap === c ? 'border-[color:var(--brand)]/60 bg-[color:var(--brand)]/10 text-[color:var(--brand)]' : 'border-white/15 bg-white/5 text-white/55'}`}>{c}% {c === 40 ? '(은행)' : '(2금융)'}</button>
                   ))}
                 </div>
               </div>
               <div>
                 <label className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%p)</label>
-                <NumericInput ariaLabel="스트레스 가산금리 (%p)" max={3}  className="glass-input w-full rounded-lg font-bold" value={dsrStress} defaultValue={STRESS_DSR_RATES.metroMortgage} allowDecimal onChange={setDsrStress} />
+                <NumericInput ariaLabel="스트레스 가산금리 (%p)" max={3} className="glass-input w-full rounded-lg font-bold" value={dsrStress} allowDecimal onChange={setDsrStress} />
               </div>
             </div>
-            {dsr.error && <p role="alert" className="text-sm text-[color:var(--danger)]">{dsr.error}</p>}
-            <div className="rounded-lg bg-white/[0.05] px-3 py-2.5 grid grid-cols-2 gap-2 text-[11.5px]">
-              <div><div className="text-white/50 text-[10.5px]">적용 금리 (스트레스 후)</div><div className="font-bold text-white tabular mt-0.5">{dsr.stressedRate.toFixed(2)}%</div></div>
-              <div><div className="text-white/50 text-[10.5px]">월 상환 한도</div><div className="font-bold text-[color:var(--brand)] tabular mt-0.5">{won(dsr.maxMonthlyPmt)}</div></div>
-              <div><div className="text-white/50 text-[10.5px]">신규 원금 한도 (가정)</div><div className="font-bold text-emerald-300 tabular mt-0.5">{manwon(dsr.maxPrincipal)}원</div></div>
-              <div><div className="text-white/50 text-[10.5px]">기존부채 DSR 점유</div><div className="font-bold text-white/80 tabular mt-0.5">{dsr.utilization.toFixed(1)}%</div></div>
-            </div>
+            {dsr.error ? <p role="alert" className="text-sm text-[color:var(--danger)]">{dsrIncome === 0 ? '연 소득을 입력하면 대출 한도를 계산합니다.' : dsr.error}</p> : (
+              <div className="rounded-lg bg-white/[0.05] px-3 py-2.5 grid grid-cols-2 gap-2 text-[11.5px]">
+                <div><div className="text-white/50 text-[10.5px]">적용 금리 (스트레스 후)</div><div className="font-bold text-white tabular mt-0.5">{dsr.stressedRate.toFixed(2)}%</div></div>
+                <div><div className="text-white/50 text-[10.5px]">월 상환 한도</div><div className="font-bold text-[color:var(--brand)] tabular mt-0.5">{won(dsr.maxMonthlyPmt)}</div></div>
+                <div><div className="text-white/50 text-[10.5px]">신규 원금 한도 (가정)</div><div className="font-bold text-emerald-300 tabular mt-0.5">{manwon(dsr.maxPrincipal)}원</div></div>
+                <div><div className="text-white/50 text-[10.5px]">기존부채 DSR 점유</div><div className="font-bold text-white/80 tabular mt-0.5">{dsr.utilization.toFixed(1)}%</div></div>
+              </div>
+            )}
             <p className="text-[10.5px] text-white/40 leading-relaxed">원리금균등 상환을 가정한 역산입니다. 위 상환 방식 선택과 별개이며, 스트레스 금리는 실제 이자에 더해지지 않습니다. 2026년 하반기 변동형 주담대 기준 수도권·규제지역 3.0%p, 지방 비규제지역 0.75%p입니다. 신용·기타 대출은 기본 1.5%p에 금리 유형·만기별 예외가 있으며 오피스텔 담보대출은 주담대 방식을 따릅니다. <a href="/guide/dsr-stress-test-2026" className="underline underline-offset-2">DSR 적용 조건</a>과 LTV·지역별 한도·심사 인정 만기를 함께 확인하세요.</p>
           </div>
         )}

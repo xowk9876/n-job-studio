@@ -1,8 +1,7 @@
 /**
  * 로또 6/45 도메인 타입.
  *
- * 런타임 의존성이 없는 순수 타입 모듈이다. 클라이언트 컴포넌트가 `data/lotto-history.json`
- * (약 81KB)을 번들에 끌어오지 않고 API 응답 타입만 참조할 수 있도록 분리해 둔다.
+ * 클라이언트가 전 회차 데이터를 번들에 포함하지 않고 API 응답 타입만 참조한다.
  */
 
 /** 회차 1건의 추첨 결과 (번호는 오름차순 6개) */
@@ -19,8 +18,9 @@ export type LottoDataOrigin = 'live' | 'snapshot'
 
 /** 당첨금 정보까지 포함한 회차 상세 */
 export type LottoRoundResult = LottoDraw & {
+  /** 1등 당첨 게임 수 */
   firstWinnerCount: number
-  /** 1등 1명당 당첨금 (원) */
+  /** 1등 게임당 당첨금 (원) */
   firstPrizeAmount: number
   /** 해당 회차 총 판매금액 (원) */
   totalSalesAmount: number

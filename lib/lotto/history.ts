@@ -1,7 +1,7 @@
 /**
  * 저장소에 커밋된 동행복권 전 회차 스냅샷 로더 (서버 전용).
  *
- * `data/lotto-history.json`은 약 81KB이므로 클라이언트 컴포넌트에서 import 하면 안 된다.
+ * 전 회차 데이터를 담으므로 클라이언트 컴포넌트에서 import 하면 안 된다.
  * API Route Handler(`app/api/lotto/*`)에서만 사용하고, 브라우저에는 집계된 통계만 내려보낸다.
  *
  * 갱신: `node scripts/fetch-lotto-history.mjs`
@@ -12,15 +12,7 @@ import type { LottoRoundResult } from './types'
 
 type SnapshotRow = (number | string)[]
 
-const snapshot = historyJson as {
-  source: string
-  generatedAt: string
-  latestRound: number
-  latestDrawDate: string
-  draws: SnapshotRow[]
-}
-
-/** [round, YYYYMMDD, n1..n6, bonus, 1등당첨자수, 1등당첨금, 회차판매금액] */
+/** [round, YYYYMMDD, n1..n6, bonus, 1등 당첨게임 수, 게임당 1등 당첨금, 회차판매금액] */
 function toRoundResult(row: SnapshotRow): LottoRoundResult {
   const raw = row.map(Number)
   const ymd = String(row[1])
@@ -38,11 +30,9 @@ function toRoundResult(row: SnapshotRow): LottoRoundResult {
 }
 
 /** 제1회부터 스냅샷 최신 회차까지 오름차순 */
-export const SNAPSHOT_DRAWS: readonly LottoRoundResult[] = snapshot.draws.map(toRoundResult)
+export const SNAPSHOT_DRAWS: readonly LottoRoundResult[] = historyJson.draws.map(toRoundResult)
 
-export const SNAPSHOT_LATEST_ROUND = snapshot.latestRound
-export const SNAPSHOT_GENERATED_AT = snapshot.generatedAt
-export const SNAPSHOT_SOURCE = snapshot.source
+export const SNAPSHOT_LATEST_ROUND = historyJson.latestRound
 
 /** 스냅샷에서 특정 회차 조회 — 범위를 벗어나면 null */
 export function getSnapshotRound(round: number): LottoRoundResult | null {

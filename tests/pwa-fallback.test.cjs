@@ -104,6 +104,17 @@ test('native event is preferred even with an embedded UA, consumed once and a la
   assert.equal(prevented, 2)
 })
 
+test('confirmed installation replaces device instructions with one status and keeps the home link target', async t => {
+  const ui = harness(t)
+  await ui.click('iPhone 홈 화면 추가 안내')
+  ui.dispatch('appinstalled')
+  const html = ui.html()
+  assert.match(html, /id="install-app"/)
+  assert.match(html, /role="status"/)
+  assert.ok(html.includes('이 기기에 머니핏 앱이 설치되어 있습니다'))
+  assert.doesNotMatch(html, /<button|naversearchapp:|install-guide-/)
+})
+
 test('closing and switching guides clear stale status and restore trigger focus', async t => {
   const ui = harness(t)
   await ui.click('Android 홈 화면에 추가')

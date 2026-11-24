@@ -60,6 +60,7 @@ export default function JeonsePage() {
         {([['jeonse-to-wolse','전세 → 월세'],['wolse-to-jeonse','월세 → 전세']] as [ConversionDirection, string][]).map(([v, label]) => (
           <button
             key={v}
+            aria-pressed={direction === v}
             onClick={() => set({ direction: v })}
             className={`rounded-lg py-2.5 px-3 border transition-colors font-semibold text-[13px] ${
               direction === v
@@ -73,43 +74,31 @@ export default function JeonsePage() {
       </div>
 
       {/* 입력 */}
-      <div className="glass-card flex flex-col gap-4">
+      <div key={direction} className="glass-card flex flex-col gap-4">
         {isToWolse ? (
           <>
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 전세 보증금</label>
-              <div className="relative">
-                <NumericInput ariaLabel="전세 보증금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={jeonsDeposit} defaultValue={300_000_000} unitMultiplier={10000} onChange={(n) => set({ jeonsDeposit: n })} />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-              </div>
-              <p className="text-[11.5px] text-white/40 mt-1">= {manwon(jeonsDeposit)}</p>
+              <NumericInput ariaLabel="전세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={jeonsDeposit} unit="만원" onChange={(n) => set({ jeonsDeposit: n })} />
+              <p className="text-[11.5px] text-white/40 mt-1">= {won(jeonsDeposit)}</p>
             </div>
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">목표 월세 보증금</label>
-              <div className="relative">
-                <NumericInput ariaLabel="전환 후 월세 보증금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={wolseDeposit} defaultValue={50_000_000} unitMultiplier={10000} onChange={(n) => set({ wolseDeposit: n })} />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-              </div>
-              <p className="text-[11.5px] text-white/40 mt-1">= {manwon(wolseDeposit)}</p>
+              <NumericInput ariaLabel="전환 후 월세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={wolseDeposit} unit="만원" onChange={(n) => set({ wolseDeposit: n })} />
+              <p className="text-[11.5px] text-white/40 mt-1">= {won(wolseDeposit)}</p>
             </div>
           </>
         ) : (
           <>
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세</label>
-              <div className="relative">
-                <NumericInput ariaLabel="현재 월세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={currentWolse} defaultValue={700_000} unitMultiplier={10000} onChange={(n) => set({ currentWolse: n })} />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-              </div>
+              <NumericInput ariaLabel="현재 월세 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={currentWolse} unit="만원" onChange={(n) => set({ currentWolse: n })} />
               <p className="text-[11.5px] text-white/40 mt-1">= {won(currentWolse)}</p>
             </div>
             <div>
               <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세 보증금</label>
-              <div className="relative">
-                <NumericInput ariaLabel="현재 월세 보증금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={currentWolseDeposit} defaultValue={50_000_000} unitMultiplier={10000} onChange={(n) => set({ currentWolseDeposit: n })} />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-              </div>
-              <p className="text-[11.5px] text-white/40 mt-1">= {manwon(currentWolseDeposit)}</p>
+              <NumericInput ariaLabel="현재 월세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={currentWolseDeposit} unit="만원" onChange={(n) => set({ currentWolseDeposit: n })} />
+              <p className="text-[11.5px] text-white/40 mt-1">= {won(currentWolseDeposit)}</p>
             </div>
           </>
         )}
@@ -119,15 +108,12 @@ export default function JeonsePage() {
             전월세 전환율 (%)
             <span className="ml-2 text-[10.5px] font-normal text-white/40">보증금→월세 상한 {DEFAULT_CONVERSION_RATE.toFixed(2)}% (기준금리 {DEFAULT_BASE_RATE.toFixed(2)}% + 2%p)</span>
           </label>
-          <NumericInput ariaLabel="전월세 전환율 (%)" max={100} min={0.001}  className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} defaultValue={DEFAULT_CONVERSION_RATE} allowDecimal onChange={(n) => set({ conversionRate: n })} />
+          <NumericInput ariaLabel="전월세 전환율 (%)" max={100} min={0.001} className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} allowDecimal onChange={(n) => set({ conversionRate: n })} />
         </div>
 
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 전세가율 참고)</span></label>
-          <div className="relative">
-            <NumericInput ariaLabel="매매 시세 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ marketPrice: n })} />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-          </div>
+          <NumericInput ariaLabel="매매 시세 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} unit="만원" onChange={(n) => set({ marketPrice: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">입력한 시세 대비 보증금 비율입니다. 선순위 채권·체납·반환보증 가입 여부는 판단하지 않습니다.</p>
         </div>
       </div>

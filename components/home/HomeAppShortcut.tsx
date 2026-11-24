@@ -21,10 +21,6 @@ const guides: Record<Platform, { title: string; steps: string[] }> = {
   },
 }
 
-function isStandalone() {
-  return window.matchMedia('(display-mode: standalone)').matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone)
-}
-
 export default function HomeAppShortcut() {
   const promptRef = useRef<InstallPrompt | null>(null)
   const busyRef = useRef(false)
@@ -39,7 +35,7 @@ export default function HomeAppShortcut() {
   useEffect(() => {
     const media = window.matchMedia('(display-mode: standalone)')
     const sync = () => {
-      setInstalled(isStandalone())
+      setInstalled(media.matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone))
       setNaverShortcutUrl(getNaverShortcutUrl(navigator.userAgent, navigator.platform, navigator.maxTouchPoints))
     }
     sync()
@@ -51,7 +47,6 @@ export default function HomeAppShortcut() {
     const onInstalled = () => {
       setInstalled(true)
       promptRef.current = null
-      setStatus('설치가 완료됐습니다. 머니핏 아이콘으로 바로 열어보세요.')
     }
     window.addEventListener('beforeinstallprompt', onPrompt)
     window.addEventListener('appinstalled', onInstalled)
@@ -102,6 +97,14 @@ export default function HomeAppShortcut() {
     }
   }
 
+  if (installed) {
+    return (
+      <p id="install-app" role="status" className="home-app__note scroll-mt-24">
+        이 기기에 머니핏 앱이 설치되어 있습니다.
+      </p>
+    )
+  }
+
   return (
     <section id="install-app" className="home-section home-app scroll-mt-24" aria-labelledby="home-app-title">
       <header className="section-header">
@@ -117,7 +120,7 @@ export default function HomeAppShortcut() {
             <Icon size={22} className="text-[color:var(--brand)]" aria-hidden />
             <h3 className="home-trust-card__title mt-3">{title}</h3>
             <p className="home-app__note !mt-1 !mb-4">{platform === 'android' && naverShortcutUrl ? '네이버 앱에서 홈 화면 바로가기' : description}</p>
-            {platform === 'android' && naverShortcutUrl && !installed ? (
+            {platform === 'android' && naverShortcutUrl ? (
               <a href={naverShortcutUrl} className="home-app__action" aria-disabled={installing}
                 aria-expanded={guide === platform} aria-controls={`install-guide-${platform}`} onClick={event => {
                   if (busyRef.current) { event.preventDefault(); return }
@@ -131,18 +134,18 @@ export default function HomeAppShortcut() {
                   void addShortcut(platform, true)
                 }}>{label}</a>
             ) : (
-              <button type="button" className="home-app__action" disabled={installed || installing}
+              <button type="button" className="home-app__action" disabled={installing}
                 aria-expanded={guide === platform} aria-controls={`install-guide-${platform}`} onClick={() => void addShortcut(platform)}>
-                {installed ? '앱으로 사용 중' : label}
+                {label}
               </button>
             )}
-            {platform === 'android' && naverShortcutUrl && !installed && (
+            {platform === 'android' && naverShortcutUrl && (
               <p className="home-app__note">네이버 앱에 홈 화면 바로가기를 만듭니다. Chrome의 독립 실행형 앱(PWA) 설치와는 다릅니다.</p>
             )}
             {guide === platform && (
               <div id={`install-guide-${platform}`} className="home-app__guide mt-4" role="region" aria-labelledby={`install-guide-title-${platform}`}>
                 <h4 id={`install-guide-title-${platform}`} ref={guideRef} tabIndex={-1} className="home-trust-card__title scroll-mt-24">{guides[platform].title}</h4>
-                <p className="home-app__status !mt-3 empty:hidden" role="status">{installed ? '머니핏 앱이 설치되어 있습니다.' : status}</p>
+                <p className="home-app__status !mt-3 empty:hidden" role="status">{status}</p>
                 <details className="home-app__note" open={inApp} key={platform}>
                   <summary className="cursor-pointer font-semibold">
                     {inApp ? '현재 앱 안의 브라우저에서 외부 브라우저로 열기' : '설치 메뉴가 보이지 않나요?'}

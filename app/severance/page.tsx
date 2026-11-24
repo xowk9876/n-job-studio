@@ -56,7 +56,7 @@ export default function SeverancePage() {
           <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-amber-200 text-[13px]">계속근로 1년 미만</p>
-            <p className="text-[12px] text-amber-300/80 mt-0.5">재직 {r.workDays}일 · 계속근로 1년 요건을 충족하지 않았습니다.</p>
+            <p className="text-[12px] text-amber-300/80 mt-0.5">재직 {r.workDays}일</p>
           </div>
         </div>
       ) : (
@@ -81,28 +81,19 @@ export default function SeverancePage() {
       <div className="glass-card flex flex-col gap-4">
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">최근 3개월 평균 월급 <span className="text-[10.5px] font-normal text-white/40">(세전, 상여 제외)</span></label>
-          <div className="relative">
-            <NumericInput ariaLabel="최근 3개월 평균 월 급여 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={avgMonthly3} defaultValue={3_000_000} unitMultiplier={10000} onChange={(n) => set({ avgMonthly3: n })} />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-          </div>
+          <NumericInput ariaLabel="최근 3개월 평균 월 급여 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={avgMonthly3} unit="만원" onChange={(n) => set({ avgMonthly3: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">= {won(avgMonthly3)}</p>
         </div>
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">직전 1년 연간 상여금 <span className="text-[10.5px] font-normal text-white/40">(없으면 0)</span></label>
-          <div className="relative">
-            <NumericInput ariaLabel="연간 상여금 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={annualBonus} defaultValue={0} unitMultiplier={10000} onChange={(n) => set({ annualBonus: n })} />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-          </div>
+          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">최근 1년 상여금 합계 <span className="text-[10.5px] font-normal text-white/40">(없으면 0)</span></label>
+          <NumericInput ariaLabel="연간 상여금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={annualBonus} unit="만원" onChange={(n) => set({ annualBonus: n })} />
         </div>
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">통상시급 <span className="text-[10.5px] font-normal text-white/40">(선택 · 근기법 §2② 비교용)</span></label>
-          <div className="relative">
-            <NumericInput ariaLabel="통상시급 (원)"  className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10" value={regularHourlyWage} defaultValue={0} onChange={(n) => set({ regularHourlyWage: n })} />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">원</span>
-          </div>
-          <p className="text-[11.5px] text-white/40 mt-1">입력 시 평균임금 1일분과 통상임금 1일분(시급×8)을 비교하여 큰 값으로 산정</p>
+          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">통상시급 <span className="text-[10.5px] font-normal text-white/40">(선택)</span></label>
+          <NumericInput unit="원" ariaLabel="통상시급 (원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10" value={regularHourlyWage} onChange={(n) => set({ regularHourlyWage: n })} />
+          <p className="text-[11.5px] text-white/40 mt-1">하루 8시간 근무 기준입니다. 시급 × 8시간과 1일 평균임금 중 큰 금액을 적용합니다.</p>
         </div>
 
         <div className="relative grid grid-cols-2 gap-3">
@@ -127,7 +118,7 @@ export default function SeverancePage() {
           <li>1일 평균임금 = 최근 3개월 총 임금 ÷ 실제 일수(89~92일)</li>
           <li>연간 상여금의 3개월분(÷4)을 합산합니다</li>
           <li>계속근로 1년 미만은 법정 퇴직금 지급 대상에서 제외됩니다</li>
-          <li>입력 날짜는 마지막 근무일입니다. 그 다음 날을 법적 퇴직일로 삼아 재직일수와 직전 3개월을 계산합니다. 고용노동부 계산기에는 마지막 근무일 다음 날을 입력하면 같은 기간입니다.</li>
+          <li>고용노동부 계산기와 비교할 때는 마지막 근무일 다음 날을 퇴직일로 입력하세요.</li>
           <li>퇴직소득세는 국세청 홈택스에서 확인</li>
         </ul>
       </div>

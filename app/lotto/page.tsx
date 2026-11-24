@@ -2,7 +2,7 @@ import LottoDrawSchedule from '@/components/lotto/LottoDrawSchedule'
 import { LOTTO_BALL_COLORS } from '@/components/lotto/LottoBall'
 import LottoGenerator from '@/components/lotto/LottoGenerator'
 import LottoResultBrowser from '@/components/lotto/LottoResultBrowser'
-import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
+import { FAQSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
 import { getCalculatorLinks } from '@/lib/seo'
 import { officialSources } from '@/lib/content-sources'
 
@@ -77,20 +77,14 @@ export default function LottoPage() {
       <div className="flex flex-col gap-8">
         <FAQSection pagePath={CALC_PATH} items={[
           { q: '로또 당첨금에 세금이 얼마나 붙나요?', a: '건별 당첨금 200만원 이하는 비과세입니다. 이를 넘으면 200만원을 빼는 방식이 아니며, 3억원 이하 구간은 지방소득세 포함 22%, 3억원 초과분은 33%가 적용됩니다. 실제 원천징수액은 복권 구입비 등의 처리에 따라 달라집니다.' },
-          { q: '당첨금은 어디서 수령하나요?', a: '판매점 구매분은 1등 NH농협은행 본점, 2·3등 NH농협은행 전국 지점, 4·5등 로또 판매점에서 수령합니다. 인터넷 구매분 200만원 이하는 동행복권 예치금으로 자동 입금됩니다. 준비물과 예외는 아래 공식 지급 안내를 확인하세요.' },
+          { q: '당첨금은 어디서 수령하나요?', a: '판매점에서 샀다면 당첨 복권 원본을 지참하세요. 1등은 NH농협은행 본점, 2·3등은 NH농협은행 지점, 4·5등은 로또 판매점에서 받습니다. 인터넷 구매분 200만원 이하는 동행복권 예치금으로 자동 입금됩니다. 준비물과 예외는 동행복권 지급 안내에서 확인하세요.' },
           { q: '당첨금 수령 기한은 언제까지인가요?', a: '해당 회차 지급개시일로부터 1년입니다. 마지막 날이 은행 영업일이 아니면 다음 은행 영업일까지입니다. 복권 원본 또는 인터넷 구매내역의 지급기한을 확인하세요.' },
-          { q: '번호 생성기가 당첨 확률을 높여 주나요?', a: '아니요. 로또 6/45의 각 조합의 1등 확률은 1/8,145,060로 같습니다. 기본 균등 무작위는 모든 6개 번호 조합을 같은 확률로 뽑으며, 한 번에 생성하는 게임끼리는 중복하지 않습니다. 균형 필터·과거 당첨 조합 제외는 취향에 따른 선택이며 당첨 확률을 높이지 않습니다.' },
-          { q: '번호 공의 테두리는 무엇인가요?', a: '화면에 표시한 비교 기준 회차의 본번호와 일치하는 번호입니다. 다음 회차의 당첨 가능성이나 추천 점수를 의미하지 않습니다.' },
+          { q: '번호 생성기가 당첨 확률을 높여 주나요?', a: '번호를 어떻게 고르든 한 게임의 1등 확률은 814만 5,060분의 1입니다. 균형 필터와 과거 당첨 조합 제외는 생성할 조합의 범위만 바꿉니다.' },
         ]} />
 
-        <TipsSection title="이용·수령 시 확인사항" items={[
-          { title: '번호 생성 결과의 의미', desc: '생성된 번호는 복권 구매나 당첨 확인을 대신하지 않습니다. 머니핏은 복권 구매·판매 기능을 제공하지 않습니다.' },
-          { title: '실물 복권 보관', desc: '당첨 복권 원본을 안전하게 보관하세요. 사진이나 뒷면 서명만으로 분실한 복권의 당첨금 지급이 보장되지는 않습니다.' },
-          { title: '공식 발표와 지급 안내 확인', desc: '회차별 당첨번호·당첨금과 지급기한은 동행복권에서 확인하세요. 가족에게 이전할 때의 증여세는 당첨금 원천징수와 별도로 검토해야 합니다.' },
-        ]} />
         <OfficialSourcesSection
           sources={officialSources[CALC_PATH]}
-          note="조회 장애 시 저장된 회차를 표시할 수 있으므로 회차와 데이터 상태를 확인하세요. 당첨번호·지급 조건은 동행복권 공식 발표가 우선합니다."
+          note="실시간 조회가 지연되면 마지막으로 저장한 회차를 표시합니다."
         />
 
         <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />

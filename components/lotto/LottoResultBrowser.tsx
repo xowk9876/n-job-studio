@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, Search, Trophy } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 
 import { fromIsoDate } from '@/lib/lotto/schedule'
 import type { LottoRoundResult } from '@/lib/lotto/types'
@@ -174,15 +174,12 @@ export default function LottoResultBrowser() {
   return (
     <div className="glass-card">
       <div className="mb-5 flex items-start justify-between gap-4">
-        <div>
-          <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">
-            로또 당첨번호 조회
-          </h2>
-        </div>
-        <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
-          <Trophy className="h-3.5 w-3.5 text-[color:var(--warn)]" aria-hidden />
-          {isLatest ? (latestVerified ? '최신 확인 회차' : '최근 확인 회차') : '조회 회차'}
-        </span>
+        <h2 className="font-display text-[18px] md:text-[20px] font-bold text-ink tracking-tight">로또 당첨번호 조회</h2>
+        {isLatest && (
+          <span className="shrink-0 rounded-full border border-ink/10 bg-ink/[0.05] px-2.5 py-1 text-[10.5px] font-semibold text-ink/80">
+            {latestVerified ? '최신 회차' : '최근 확인 회차'}
+          </span>
+        )}
       </div>
 
       <div aria-live="polite" aria-busy={status === 'loading'}>
@@ -232,13 +229,13 @@ export default function LottoResultBrowser() {
 
             <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3">
               <div className={CARD_BOX}>
-                <p className={CARD_LABEL}>1등 당첨자</p>
+                <p className={CARD_LABEL}>1등 당첨 게임</p>
                 <p className="mt-1 text-[16px] font-extrabold text-ink tabular">
-                  {result.firstWinnerCount.toLocaleString('ko-KR')}명
+                  {result.firstWinnerCount.toLocaleString('ko-KR')}게임
                 </p>
               </div>
               <div className={CARD_BOX}>
-                <p className={CARD_LABEL}>1등 1명당 당첨금</p>
+                <p className={CARD_LABEL}>1게임당 1등 당첨금</p>
                 <p className="mt-1 text-[16px] font-extrabold text-[color:var(--warn)] tabular">
                   {formatCompactWon(result.firstPrizeAmount)}
                 </p>

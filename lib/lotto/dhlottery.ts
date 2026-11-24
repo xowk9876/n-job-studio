@@ -50,28 +50,35 @@ type DhlotteryResponse = {
 }
 
 function toDrawDate(rawDate: unknown): string | null {
-  const value = String(rawDate ?? '')
+  if (typeof rawDate !== 'number' && typeof rawDate !== 'string') return null
+  const value = String(rawDate)
   if (!/^\d{8}$/.test(value)) return null
   const iso = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
   return parseCalendarDate(iso) ? iso : null
+}
+
+/** 숫자와 십진 정수 문자열만 인정한다. 미발표 값은 0원·0게임과 구분한다. */
+function publishedNumber(value: unknown): number {
+  if (typeof value === 'number') return value
+  return typeof value === 'string' && /^\d+$/.test(value) ? Number(value) : NaN
 }
 
 /** 외부 응답을 신뢰하지 않고 회차·번호 범위·중복까지 전부 검증한 뒤 변환한다 */
 function toRoundResult(item: DhlotteryItem | undefined): LottoRoundResult | null {
   if (!item || typeof item !== 'object') return null
 
-  const round = Number(item.ltEpsd)
+  const round = publishedNumber(item.ltEpsd)
   const drawDate = toDrawDate(item.ltRflYmd)
-  if (!Number.isInteger(round) || round < 1 || !drawDate) return null
+  if (!Number.isSafeInteger(round) || round < 1 || !drawDate) return null
 
-  const numbers = [item.tm1WnNo, item.tm2WnNo, item.tm3WnNo, item.tm4WnNo, item.tm5WnNo, item.tm6WnNo].map(Number)
-  const bonusNumber = Number(item.bnsWnNo)
+  const numbers = [item.tm1WnNo, item.tm2WnNo, item.tm3WnNo, item.tm4WnNo, item.tm5WnNo, item.tm6WnNo].map(publishedNumber)
+  const bonusNumber = publishedNumber(item.bnsWnNo)
   const all = [...numbers, bonusNumber]
 
   if (new Set(all).size !== 7) return null
   if (!all.every(num => Number.isInteger(num) && num >= 1 && num <= 45)) return null
 
-  const amounts = [item.rnk1WnNope, item.rnk1WnAmt, item.wholEpsdSumNtslAmt].map(value => Number(value ?? 0))
+  const amounts = [item.rnk1WnNope, item.rnk1WnAmt, item.wholEpsdSumNtslAmt].map(publishedNumber)
   if (!amounts.every(value => inRange(value) && Number.isSafeInteger(value))) return null
 
   return {
@@ -79,12 +86,12 @@ function toRoundResult(item: DhlotteryItem | undefined): LottoRoundResult | null
     drawDate,
     numbers: numbers.sort((a, b) => a - b),
     bonusNumber,
-    firstWinnerCount: Number(item.rnk1WnNope) || 0,
-    firstPrizeAmount: Number(item.rnk1WnAmt) || 0,
+    firstWinnerCount: amounts[0],
+    firstPrizeAmount: amounts[1],
     // 총 판매금액은 wholEpsdSumNtslAmt다. rlvtEpsdSumNtslAmt는 261회부터 당첨금
     // 총액(판매액의 약 50%)이 담기므로 판매금액으로 쓰면 절반 값이 나온다.
     // (1회 3,681,782,000원 = 복권위원회 공식 최저 판매액 기록과 대조 확인)
-    totalSalesAmount: Number(item.wholEpsdSumNtslAmt) || 0,
+    totalSalesAmount: amounts[2],
     origin: 'live',
   }
 }

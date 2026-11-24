@@ -33,7 +33,8 @@ test('stats route falls back on a missing intermediate API response', async t =>
   let calls = 0
   t.mock.method(global, 'fetch', async () => {
     if (++calls > 1) throw new Error('simulated upstream outage')
-    return Response.json({ data: { list: [{ ltEpsd: latest, ltRflYmd: '20261031', tm1WnNo: 1, tm2WnNo: 8, tm3WnNo: 17, tm4WnNo: 25, tm5WnNo: 33, tm6WnNo: 42, bnsWnNo: 10 }] } })
+    return Response.json({ data: { list: [{ ltEpsd: latest, ltRflYmd: '20261031', tm1WnNo: 1, tm2WnNo: 8, tm3WnNo: 17, tm4WnNo: 25, tm5WnNo: 33, tm6WnNo: 42, bnsWnNo: 10,
+      rnk1WnNope: 10, rnk1WnAmt: 2_000_000_000, wholEpsdSumNtslAmt: 100_000_000_000 }] } })
   })
   const { GET } = require('../app/api/lotto/stats/route.ts')
   const response = await GET(new Request('https://moneyfit.example/api/lotto/stats'))
@@ -43,13 +44,24 @@ test('stats route falls back on a missing intermediate API response', async t =>
   assert.equal(body.latestKnownRound, latest)
   assert.equal(body.updateIncomplete, true)
 })
-test('external API rejects impossible dates and non-finite prize amounts', async t => {
+test('external API distinguishes actual zeros from unavailable prizes and rejects malformed draw fields', async t => {
   const { fetchLatestRound } = require('../lib/lotto/dhlottery.ts')
-  const item = { ltEpsd: 1250, ltRflYmd: '20260230', tm1WnNo: 1, tm2WnNo: 8, tm3WnNo: 17, tm4WnNo: 25, tm5WnNo: 33, tm6WnNo: 42, bnsWnNo: 10 }
+  const draw = { ltEpsd: 1250, ltRflYmd: '20261114', tm1WnNo: 1, tm2WnNo: 8, tm3WnNo: 17, tm4WnNo: 25, tm5WnNo: 33, tm6WnNo: 42, bnsWnNo: 10,
+    rnk1WnNope: '0', rnk1WnAmt: 0, wholEpsdSumNtslAmt: '100000000000' }
+  let item = draw
   t.mock.method(global, 'fetch', async () => Response.json({ data: { list: [item] } }))
-  assert.equal(await fetchLatestRound(), null)
-  item.ltRflYmd = '20261031'; item.rnk1WnAmt = 'Infinity'
-  assert.equal(await fetchLatestRound(), null)
+  const valid = await fetchLatestRound()
+  assert.equal(valid.firstWinnerCount, 0)
+  assert.equal(valid.firstPrizeAmount, 0)
+  assert.equal(valid.totalSalesAmount, 100_000_000_000)
+  for (const invalid of [
+    { ltRflYmd: '20260230' }, { ltEpsd: true }, { tm1WnNo: true }, { bnsWnNo: [10] },
+    { rnk1WnNope: undefined }, { rnk1WnNope: false }, { rnk1WnAmt: null }, { rnk1WnAmt: '' },
+    { rnk1WnAmt: 'Infinity' }, { wholEpsdSumNtslAmt: ' ' }, { wholEpsdSumNtslAmt: -1 },
+  ]) {
+    item = { ...draw, ...invalid }
+    assert.equal(await fetchLatestRound(), null)
+  }
 })
 for (const outcome of ['accepted', 'dismissed']) {
   test(`install prompt handles ${outcome} without a false completion state`, async () => {

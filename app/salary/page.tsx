@@ -77,16 +77,13 @@ export default function SalaryPage() {
       {/* 입력 카드 */}
       <div className="glass-card">
         <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">연봉 (세전)</label>
-        <div className="relative">
-          <NumericInput ariaLabel="연봉 (세전, 만원)"
-            className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14"
-            value={s.annualSalary}
-            defaultValue={48_000_000}
-            unitMultiplier={10000}
-            onChange={(n) => s.set({ annualSalary: n })}
-          />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-        </div>
+        <NumericInput
+          ariaLabel="연봉 (세전, 만원)"
+          className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14"
+          value={s.annualSalary}
+          unit="만원"
+          onChange={(n) => s.set({ annualSalary: n })}
+        />
         <div className="flex justify-between mt-1.5 text-[11.5px]">
           <span className="text-white/40">= {won(s.annualSalary)}</span>
           <span className="text-[color:var(--brand)]">시급 {won(r.hourlyWage)}</span>
@@ -111,7 +108,7 @@ export default function SalaryPage() {
       {s.holidayReviewRequired && <p role="status" className="glass-card text-sm text-[color:var(--warn)]">휴일근로 계산 방식을 개선했습니다. 이전의 월 합계는 하루별 8시간 초과 여부를 알 수 없어 초기화했으니, 추가 수당에서 두 구간을 다시 입력해주세요.</p>}
       {/* 수당 접이식 */}
       <div className="glass-card !p-0 overflow-hidden">
-        <button onClick={() => setShowAllowance(!showAllowance)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
+        <button aria-expanded={showAllowance} onClick={() => setShowAllowance(!showAllowance)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
           <div className="flex items-center gap-2">
             <span className="text-[13px] font-semibold text-white/85">추가 수당</span>
             {hasAllowance && <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-medium">+{won(r.totalAllowance)}</span>}
@@ -141,7 +138,7 @@ export default function SalaryPage() {
 
       {/* 비과세 접이식 */}
       <div className="glass-card !p-0 overflow-hidden">
-        <button onClick={() => setShowExempt(!showExempt)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
+        <button aria-expanded={showExempt} onClick={() => setShowExempt(!showExempt)} className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
           <div className="flex items-center gap-2">
             <span className="text-[13px] font-semibold text-white/85">비과세 (식대·차량유지비)</span>
             {r.taxExempt > 0 && <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium">−{won(r.taxExempt)}</span>}
@@ -152,17 +149,11 @@ export default function SalaryPage() {
           <div className="px-4 pb-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
             <div>
               <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">식대 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
-              <div className="relative">
-                <NumericInput ariaLabel="월 식대 (만원)"  className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.mealAllowance} defaultValue={200_000} unitMultiplier={10000} onChange={(n) => s.set({ mealAllowance: n })} />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
-              </div>
+              <NumericInput ariaLabel="월 식대 (만원)" className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.mealAllowance} unit="만원" onChange={(n) => s.set({ mealAllowance: n })} />
             </div>
             <div>
               <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">차량유지비 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
-              <div className="relative">
-                <NumericInput ariaLabel="월 차량유지비 (만원)"  className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.transportAllowance} defaultValue={0} unitMultiplier={10000} onChange={(n) => s.set({ transportAllowance: n })} />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/40 pointer-events-none">만원</span>
-              </div>
+              <NumericInput ariaLabel="월 차량유지비 (만원)" className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.transportAllowance} unit="만원" onChange={(n) => s.set({ transportAllowance: n })} />
             </div>
           </div>
         )}

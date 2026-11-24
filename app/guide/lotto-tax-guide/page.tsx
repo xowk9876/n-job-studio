@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import GuideArticle from '@/components/guide/GuideArticle'
-import { buildGuideMetadata, CONTENT_UPDATED_AT } from '@/lib/seo'
+import { buildGuideMetadata, LOTTO_GUIDE_UPDATED_AT } from '@/lib/seo'
 
 const slug = 'lotto-tax-guide'
 const title = '로또 당첨금 세금과 수령 절차'
 const description =
   '200만원 과세최저한, 22%·33% 원천징수 구간, 구매 방식별 지급처와 수령 기한을 확인합니다.'
-const updatedAt = CONTENT_UPDATED_AT
+const updatedAt = LOTTO_GUIDE_UPDATED_AT
 
 export const metadata: Metadata = buildGuideMetadata({ slug, title, description, updatedAt, section: '복권' })
 
@@ -70,15 +70,17 @@ export default function Page() {
         <h2>수령 절차</h2>
         <ol>
           <li>
-            <strong>1등:</strong> NH농협은행 본점(서울 중구)에서만 수령. <strong>2등·3등:</strong>{' '}
-            NH농협은행 전국 지점. <strong>4등·5등:</strong> 로또 판매점에서 수령
-            (인터넷 구매분 200만 원 이하는 동행복권 예치금으로 자동 입금).
+            <strong>판매점에서 구입한 복권</strong>을 직접 수령할 때는 당첨 복권 원본이 필요합니다.
+            1등은 NH농협은행 본점, 2·3등은 NH농협은행 지점, 4·5등은 로또 판매점에서 받습니다.
           </li>
           <li>
-            판매점 구매분은 당첨 복권 원본을, 인터넷 구매분은 당첨 복권 번호를 준비하세요. 신분증 등 준비물은 당첨금과 구매 방식에 따라 공식 지급 안내에서 확인하세요.
+            <strong>인터넷 구매분</strong>은 200만 원 이하일 때 동행복권 예치금으로 자동 입금됩니다.
+            그보다 큰 당첨금은 당첨 복권 번호와 신분증을 준비해 등위별 NH농협은행 지급처를 방문하세요.
           </li>
           <li>
-            세금은 지급 시점에 <strong>원천징수 후 입금</strong>됩니다. 별도 신고·납부 절차 없음.
+            <strong>미리 페이코 복권지갑에 등록한 판매점 구매분</strong>은 1238회부터 미수령 당첨금을
+            지급기한 당일에 전자 지급합니다. 200만 원 이하는 페이코 포인트로 받고,
+            초과분은 실명 인증과 계좌 등록을 마친 뒤 본인 명의 계좌로 받습니다.
           </li>
           <li>
             수령 기한은 <strong>지급개시일로부터 1년</strong>(복권및복권기금법 제11조). 기한 경과 시 당첨금은

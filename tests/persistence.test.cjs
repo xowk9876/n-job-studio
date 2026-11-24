@@ -61,3 +61,12 @@ test('legacy rent inputs migrate only the former default and reject invalid save
     assert.equal(useJeonseStore.getState().conversionRate, expected)
   }
 })
+
+test('만원 입력을 복원할 때 1원 자릿수와 소수 입력 키보드를 유지한다', () => {
+  const React = require('react')
+  const { renderToStaticMarkup } = require('react-dom/server')
+  const NumericInput = require('../components/ui/NumericInput.tsx').default
+  const html = renderToStaticMarkup(React.createElement(NumericInput, { unit: '만원', value: 98_765_432, onChange() {} }))
+  assert.match(html, /value="9,876\.5432"/)
+  assert.match(html, /inputMode="decimal"/i)
+})

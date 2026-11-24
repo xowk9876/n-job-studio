@@ -22,15 +22,6 @@ export function nextRegularDraw(now: number) {
 /** 제1회 추첨일 (YYYY-MM-DD) */
 export const FIRST_DRAW_DATE = '2002-12-07'
 
-function pad2(n: number) {
-  return n < 10 ? `0${n}` : `${n}`
-}
-
-/** Date → 로컬 달력 기준 YYYY-MM-DD (UTC 변환으로 날짜가 밀리는 문제 방지) */
-export function toIsoDate(date: Date): string {
-  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
-}
-
 /** YYYY-MM-DD → 로컬 자정 Date. 형식이 잘못되면 null */
 export function fromIsoDate(value: string): Date | null {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
@@ -47,13 +38,6 @@ export function fromIsoDate(value: string): Date | null {
 /** 시각 성분을 버린 달력 기준 UTC 밀리초 */
 function calendarUtc(date: Date): number {
   return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-}
-
-/** 회차 → 추첨일 (YYYY-MM-DD) */
-export function drawDateOfRound(round: number): string {
-  const utc = FIRST_DRAW_UTC + (round - 1) * WEEK_MS
-  const date = new Date(utc)
-  return `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}-${pad2(date.getUTCDate())}`
 }
 
 /**

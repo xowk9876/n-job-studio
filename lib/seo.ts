@@ -6,14 +6,15 @@ export const CONTENT_UPDATED_AT = '2026-10-31' as const
 export const SEO_UPDATED_AT = '2026-11-06' as const
 export const COPY_UPDATED_AT = '2026-11-13' as const
 export const calculatorUpdatedAt: Record<string, string> = {
-  '/salary': COPY_UPDATED_AT,
-  '/mortgage': '2026-11-18',
-  '/severance': COPY_UPDATED_AT,
-  '/savings': COPY_UPDATED_AT,
-  '/jeonse': COPY_UPDATED_AT,
-  '/lotto': '2026-11-21',
+  '/salary': '2026-11-24',
+  '/mortgage': '2026-11-24',
+  '/severance': '2026-11-24',
+  '/savings': '2026-11-24',
+  '/jeonse': '2026-11-24',
+  '/lotto': '2026-11-24',
 }
 export const SALARY_GUIDE_UPDATED_AT = '2026-11-06' as const
+export const LOTTO_GUIDE_UPDATED_AT = '2026-11-24' as const
 
 /** 가이드 태그별 UI·스키마 accent (sitemap/메타와 동기화) */
 export const guideTagColors: Record<string, string> = {
@@ -75,7 +76,7 @@ export const guideItems = [
     description: '200만원 과세최저한, 22%·33% 원천징수 구간, 구매 방식별 지급처와 수령 기한을 확인합니다.',
     tag: '복권',
     calculatorPath: '/lotto',
-    updatedAt: CONTENT_UPDATED_AT,
+    updatedAt: LOTTO_GUIDE_UPDATED_AT,
   },
 ] as const
 

@@ -1,11 +1,16 @@
 import { inRange, MAX_MONEY } from './input-validation'
 
-/** 화면의 문자열을 저장 단위로 변환한 뒤 범위를 검사한다. */
-export function parseNumericInput(text: string, multiplier = 1, decimal = false, min = 0, max = MAX_MONEY): number | null {
+/** 만원 입력은 소수점 넷째 자리(1원)까지 정수로 변환한다. */
+export function parseNumericInput(text: string, multiplier: 1 | 10000 = 1, decimal = false, min = 0, max = MAX_MONEY): number | null {
   const raw = text.replace(/,/g, '')
-  if (!(decimal ? /^\d*(\.\d*)?$/ : /^\d*$/).test(raw)) return null
-  const number = raw === '' || raw === '.' ? 0 : Number(raw)
-  const scaled = number * multiplier
-  const value = decimal && multiplier === 1 ? scaled : Math.round(scaled)
+  let value: number
+  if (multiplier === 10000) {
+    if (!/^\d*(?:\.\d{0,4})?$/.test(raw)) return null
+    const [whole, fraction = ''] = raw.split('.')
+    value = Number(whole) * multiplier + Number(fraction.padEnd(4, '0'))
+  } else {
+    if (!(decimal ? /^\d*(?:\.\d*)?$/ : /^\d*$/).test(raw)) return null
+    value = raw === '.' ? 0 : Number(raw)
+  }
   return inRange(value, min, max) && Number.isSafeInteger(Math.trunc(value)) ? value : null
 }

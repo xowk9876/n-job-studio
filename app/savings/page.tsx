@@ -23,20 +23,21 @@ export default function SavingsPage() {
 
   return (
     <div className="calc-page">
-      {r.error && <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p>}
       <div>
         <h1 className="font-display text-[22px] md:text-[26px] font-bold tracking-tight text-white">예금·적금 이자 계산기</h1>
         <p className="text-[12.5px] text-[color:var(--sub)] mt-1">단리와 월복리로 계산한 세후 이자와 만기 수령액을 비교하세요.</p>
       </div>
 
-      <div className="result-card">
-        <p className="result-label">예상 만기 수령액 (세후)</p>
-        <p className="result-value">{won(r.maturityAmount)}</p>
-        <div className="grid grid-cols-2 gap-2 mt-4 text-[11.5px]">
-          <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">납입 원금</div><div className="font-semibold tabular mt-0.5">{won(r.principal)}</div></div>
-          <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">세후 이자</div><div className="font-semibold tabular mt-0.5">+{won(r.netInterest)}</div></div>
+      {r.error ? <p role="alert" className="glass-card text-[color:var(--danger)]">{r.error}</p> : (
+        <div className="result-card">
+          <p className="result-label">예상 만기 수령액 (세후)</p>
+          <p className="result-value">{won(r.maturityAmount)}</p>
+          <div className="grid grid-cols-2 gap-2 mt-4 text-[11.5px]">
+            <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">납입 원금</div><div className="font-semibold tabular mt-0.5">{won(r.principal)}</div></div>
+            <div className="bg-white/[0.10] rounded-lg px-2.5 py-2"><div className="opacity-70 text-[10.5px]">세후 이자</div><div className="font-semibold tabular mt-0.5">+{won(r.netInterest)}</div></div>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="glass-card flex flex-col gap-4">
         <div>
@@ -45,6 +46,7 @@ export default function SavingsPage() {
             {([['savings','정기적금','매월 납입'], ['deposit','정기예금','일시 예치']] as [SavingsType, string, string][]).map(([v, label, desc]) => (
               <button
                 key={v}
+                aria-pressed={type === v}
                 onClick={() => set({ type: v })}
                 className={`rounded-lg p-2.5 border transition-colors text-left ${
                   type === v
@@ -61,17 +63,14 @@ export default function SavingsPage() {
 
         <div>
           <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">{type === 'savings' ? '월 납입액' : '예치 원금'}</label>
-          <div className="relative">
-            <NumericInput ariaLabel="예금 원금 또는 적금 월 납입액 (만원)"  className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={amount} defaultValue={1_000_000} unitMultiplier={10000} onChange={(n) => set({ amount: n })} />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] text-white/40 pointer-events-none">만원</span>
-          </div>
+          <NumericInput ariaLabel={type === 'savings' ? '월 납입액 (만원)' : '예치 원금 (만원)'} className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={amount} unit="만원" onChange={(n) => set({ amount: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">= {won(amount)}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
-            <NumericInput ariaLabel="연이율 (%)" max={100}  className="glass-input w-full rounded-lg font-bold" value={annualRate} defaultValue={3.5} allowDecimal onChange={(n) => set({ annualRate: n })} />
+            <NumericInput ariaLabel="연이율 (%)" max={100} className="glass-input w-full rounded-lg font-bold" value={annualRate} allowDecimal onChange={(n) => set({ annualRate: n })} />
           </div>
           <div>
             <label className="block text-[12px] font-semibold text-white/75 mb-1.5">기간 (개월)</label>
@@ -88,6 +87,7 @@ export default function SavingsPage() {
             {([['simple','단리','원금에만 이자'], ['compound','월복리','매월 이자 재투자']] as [InterestType, string, string][]).map(([v, label, desc]) => (
               <button
                 key={v}
+                aria-pressed={interestType === v}
                 onClick={() => set({ interestType: v })}
                 className={`rounded-lg p-2.5 border transition-colors text-left ${
                   interestType === v
@@ -103,41 +103,40 @@ export default function SavingsPage() {
         </div>
       </div>
 
-      {/* 세금 상세 */}
-      <div className="glass-card">
-        <h2 className="font-semibold text-white mb-3 text-[13.5px]">이자 세금 상세</h2>
-        <div className="flex flex-col gap-1.5 text-[12.5px]">
-          <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세전 이자</span><span className="font-semibold text-white tabular">{won(r.grossInterest)}</span></div>
-          <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세금 (지방세 포함 15.4%)</span><span className="font-semibold text-rose-300 tabular">−{won(r.taxAmount)}</span></div>
-          <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세후 이자</span><span className="font-semibold text-emerald-300 tabular">{won(r.netInterest)}</span></div>
-          <div className="flex justify-between py-1.5"><span className="text-white/60">원금 합계 대비 세후 연환산 수익률</span><span className="font-semibold text-[color:var(--brand)] tabular">{r.effectiveRate.toFixed(2)}%</span></div>
+      {!r.error && (<>
+        <div className="glass-card">
+          <h2 className="font-semibold text-white mb-3 text-[13.5px]">이자 세금 상세</h2>
+          <div className="flex flex-col gap-1.5 text-[12.5px]">
+            <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세전 이자</span><span className="font-semibold text-white tabular">{won(r.grossInterest)}</span></div>
+            <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세금 (지방세 포함 15.4%)</span><span className="font-semibold text-rose-300 tabular">−{won(r.taxAmount)}</span></div>
+            <div className="flex justify-between py-1.5 border-b border-white/8"><span className="text-white/60">세후 이자</span><span className="font-semibold text-emerald-300 tabular">{won(r.netInterest)}</span></div>
+            <div className="flex justify-between py-1.5"><span className="text-white/60">원금 합계 대비 세후 연환산 수익률</span><span className="font-semibold text-[color:var(--brand)] tabular">{r.effectiveRate.toFixed(2)}%</span></div>
+          </div>
         </div>
-      </div>
 
-      {/* ISA 절세 비교 */}
-      <div className="glass-card">
-        <div className="flex items-baseline justify-between mb-3">
-          <h2 className="font-semibold text-white text-[13.5px]">일반계좌 vs ISA 세금 가정 비교</h2>
-          <span className="text-[10.5px] text-white/40">일반형 · 단순 비교</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2 text-[11.5px]">
-          <div className="rounded-lg bg-white/[0.05] p-3">
-            <div className="text-white/55 text-[10.5px] mb-1">일반계좌 (15.4%)</div>
-            <div className="font-bold text-white tabular">{won(r.isa.normalMaturity)}</div>
-            <div className="text-white/40 mt-1">세금 −{won(r.isa.normalTax)}</div>
+        {/* ISA 절세 비교 */}
+        <div className="glass-card">
+          <h2 className="mb-3 font-semibold text-white text-[13.5px]">일반계좌와 ISA 예상 수령액</h2>
+          <div className="grid grid-cols-2 gap-2 text-[11.5px]">
+            <div className="rounded-lg bg-white/[0.05] p-3">
+              <div className="text-white/55 text-[10.5px] mb-1">일반계좌 (15.4%)</div>
+              <div className="font-bold text-white tabular">{won(r.isa.normalMaturity)}</div>
+              <div className="text-white/40 mt-1">세금 −{won(r.isa.normalTax)}</div>
+            </div>
+            <div className="rounded-lg bg-[color:var(--brand)]/10 border border-[color:var(--brand)]/30 p-3">
+              <div className="text-[color:var(--brand)] text-[10.5px] mb-1 font-semibold">ISA 일반형</div>
+              <div className="font-bold text-[color:var(--brand)] tabular">{won(r.isa.isaMaturity)}</div>
+              <div className="text-white/50 mt-1">세금 −{won(r.isa.isaTax)}</div>
+            </div>
           </div>
-          <div className="rounded-lg bg-[color:var(--brand)]/10 border border-[color:var(--brand)]/30 p-3">
-            <div className="text-[color:var(--brand)] text-[10.5px] mb-1 font-semibold">ISA 일반형</div>
-            <div className="font-bold text-[color:var(--brand)] tabular">{won(r.isa.isaMaturity)}</div>
-            <div className="text-white/50 mt-1">세금 −{won(r.isa.isaTax)}</div>
+          <div className="mt-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 flex items-center justify-between">
+            <span className="text-[12px] text-emerald-200">같은 이자의 세금 차이</span>
+            <span className="font-bold text-emerald-300 tabular text-[14px]">+{won(r.isa.savedAmount)}</span>
           </div>
+          <p className="text-[10.5px] text-white/40 mt-2 leading-relaxed">동일 이자를 만기에 과세하고 ISA 일반형 비과세 한도 200만원이 남아 있다고 가정합니다. 가입 자격·의무기간 3년·납입한도(연 2,000만원·총 1억원)·기존 손익은 계산에 반영하지 않습니다. 3년 미만 또는 한도 초과 입력도 실제 가입 가능액이나 세후 수령액을 뜻하지 않습니다.</p>
         </div>
-        <div className="mt-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 flex items-center justify-between">
-          <span className="text-[12px] text-emerald-200">같은 이자의 세금 차이</span>
-          <span className="font-bold text-emerald-300 tabular text-[14px]">+{won(r.isa.savedAmount)}</span>
-        </div>
-        <p className="text-[10.5px] text-white/40 mt-2 leading-relaxed">동일 이자를 만기에 과세하고 ISA 일반형 비과세 한도 200만원이 남아 있다고 가정합니다. 가입 자격·의무기간 3년·납입한도(연 2,000만원·총 1억원)·기존 손익은 계산에 반영하지 않습니다. 3년 미만 또는 한도 초과 입력도 실제 가입 가능액이나 세후 수령액을 뜻하지 않습니다.</p>
-      </div>
+
+      </>)}
 
       <div className="mt-2 flex flex-col gap-8">
         <ExamplesSection title="적금 · 예금 계산 예시" items={[

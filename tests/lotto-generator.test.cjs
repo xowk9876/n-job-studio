@@ -140,7 +140,13 @@ test('manual API refresh bypasses upstream cache and response is never served st
   const calls = []
   t.mock.method(globalThis, 'fetch', async (_url, options) => {
     calls.push(options.next.revalidate)
-    return Response.json({ data: { list: [{ ltEpsd: latest.round, ltRflYmd: latest.drawDate.replaceAll('-', ''), ...Object.fromEntries(latest.numbers.map((n, i) => [`tm${i + 1}WnNo`, n])), bnsWnNo: latest.bonusNumber }] } })
+    const item = {
+      ltEpsd: latest.round, ltRflYmd: latest.drawDate.replaceAll('-', ''),
+      ...Object.fromEntries(latest.numbers.map((n, i) => [`tm${i + 1}WnNo`, n])),
+      bnsWnNo: latest.bonusNumber, rnk1WnNope: latest.firstWinnerCount,
+      rnk1WnAmt: latest.firstPrizeAmount, wholEpsdSumNtslAmt: latest.totalSalesAmount,
+    }
+    return Response.json({ data: { list: [item] } })
   })
   const { GET } = require('../app/api/lotto/stats/route.ts')
   const fresh = await GET(new Request('https://moneyfit.example/api/lotto/stats?refresh=1'))

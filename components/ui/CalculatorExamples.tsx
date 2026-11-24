@@ -22,7 +22,7 @@ export function MortgageExamples() {
         3억 주담대, 상환 방식별 월 납입액 비교
       </h2>
       <p className="text-[14px] leading-relaxed text-[color:var(--sub)] mb-5">
-        대출 3억원을 연 4%로 30년 동안 빌린다고 가정한 예시입니다. 아래 표의 조건은 위 계산기에 입력한 값과 별개로 고정되어 있습니다.
+        같은 대출 조건에서 상환 방식만 바꾼 예시입니다. 위 계산기의 입력값을 바꿔도 이 표는 그대로입니다.
       </p>
       <div className="card p-3 sm:p-5">
         <table className="w-full table-fixed text-[11px] sm:text-[14px] tabular-nums">

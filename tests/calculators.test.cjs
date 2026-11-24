@@ -185,3 +185,12 @@ test('salary migration preserves valid inputs and explicitly flags ambiguous hol
   assert.equal(migrated.holidayOver8Hours, 0)
   assert.equal(migrated.holidayReviewRequired, true)
 })
+
+test('만원 금액을 1원 단위로 환산하고 원 미만과 상한 초과를 거부한다', () => {
+  for (const [text, won] of [
+    ['.0001', 1], ['2.3', 23_000], ['95.5000', 955_000], ['9,876.5432', 98_765_432],
+    ['99,999,999.9999', 999_999_999_999], ['100,000,000', 1_000_000_000_000],
+  ]) assert.equal(parseNumericInput(text, 10000), won)
+  for (const text of ['0.00001', '100,000,000.0001']) assert.equal(parseNumericInput(text, 10000), null)
+  assert.equal(parseNumericInput('0.1'), null)
+})
