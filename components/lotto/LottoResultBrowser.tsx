@@ -249,9 +249,9 @@ export default function LottoResultBrowser() {
                   당첨금 상세
                   <ChevronDown aria-hidden className="h-4 w-4 group-open:rotate-180" />
                 </summary>
-                <dl className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-2 gap-y-1.5 px-3 text-sm text-ink/80">
-                  <dt>한 줄당 세전 금액</dt>
-                  <dd className="text-right">
+                <dl className="grid grid-cols-[minmax(0,1fr)_max-content] items-baseline gap-x-2 gap-y-1.5 px-3 text-sm text-ink/80">
+                  <dt className="break-keep">한 줄당 금액</dt>
+                  <dd className="whitespace-nowrap text-right">
                     <a
                       href={`https://www.dhlottery.co.kr/lt645/result?ltEpsd=${result.round}`}
                       target="_blank"
@@ -264,7 +264,7 @@ export default function LottoResultBrowser() {
                     </a>
                   </dd>
                   <dt>총 판매액</dt>
-                  <dd className="text-right tabular">{formatExactWon(result.totalSalesAmount)}</dd>
+                  <dd className="whitespace-nowrap text-right tabular">{formatExactWon(result.totalSalesAmount)}</dd>
                 </dl>
                 <p className="px-3 py-3 text-xs text-ink/65">당첨자 수는 당첨된 줄 수 기준입니다.</p>
               </details>
