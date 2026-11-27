@@ -156,7 +156,7 @@ test('Android NAVER tap follows same-window shortcut link and keeps fallback wit
   assert.ok(!ui.html().includes('추가를 요청했습니다'))
   assert.equal((await ui.click('Android 홈 화면에 추가')).prevented, false)
   assert.ok(ui.html().includes('추가를 요청했습니다'))
-  assert.ok(ui.html().includes('Chrome의 독립 실행형 앱(PWA) 설치와는 다릅니다'))
+  assert.ok(ui.html().includes('앱으로 설치하려면 Chrome에서'))
   assert.ok(!ui.html().includes('앱이 설치되어 있습니다'))
   await ui.click('사이트 주소 복사')
   assert.equal(ui.copied, SITE_URL)

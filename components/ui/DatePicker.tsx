@@ -36,21 +36,32 @@ export default function DatePicker({
   maxYear = new Date().getFullYear() + 10,
 }: Props) {
   const [open, setOpen] = useState(false)
-  const today = useMemo(() => new Date(), [])
-  const [cursor, setCursor] = useState<Date>(() => value ?? today)
+  const today = new Date()
+  const [cursor, setCursor] = useState(() => value ?? new Date())
   const [view, setView] = useState<'day' | 'month' | 'year'>('day')
   const rootRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
-  // 외부 value 변경 시 cursor 동기화 (렌더 중 prev 비교 — React 19 권장 패턴)
-  const [prevValue, setPrevValue] = useState<Date | null | undefined>(value)
-  if (value !== prevValue) {
-    setPrevValue(value)
-    if (value) setCursor(value)
+  const calendarRef = useRef<HTMLDivElement>(null)
+  const [yearPageStart, setYearPageStart] = useState(minYear)
+  const lastPageYear = Math.min(yearPageStart + 11, maxYear)
+
+  function toggleCalendar() {
+    if (!open) {
+      const initial = value ?? new Date()
+      const boundedYear = Math.max(minYear, Math.min(maxYear, initial.getFullYear()))
+      setCursor(new Date(boundedYear, initial.getMonth(), 1))
+      setView('day')
+    }
+    setOpen(!open)
   }
 
   useEffect(() => {
     if (!open) return
+    const calendar = calendarRef.current
+    const initialFocus = calendar?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]:enabled')
+      ?? calendar?.querySelector<HTMLButtonElement>('button')
+    initialFocus?.focus({ preventScroll: true })
     const onDoc = (e: MouseEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) { setOpen(false); setView('day') }
     }
@@ -87,20 +98,18 @@ export default function DatePicker({
     return arr
   }, [year, month])
 
-  // Year grid: 12 years per page (view/year 변화 시 렌더 중 prev 비교로 동기화)
-  const [yearPageStart, setYearPageStart] = useState(() => Math.floor(year / 12) * 12)
-  const [prevYearKey, setPrevYearKey] = useState<string>(`${view}|${year}`)
-  const currYearKey = `${view}|${year}`
-  if (view === 'year' && currYearKey !== prevYearKey) {
-    setPrevYearKey(currYearKey)
-    setYearPageStart(Math.floor(year / 12) * 12)
-  } else if (currYearKey !== prevYearKey) {
-    setPrevYearKey(currYearKey)
+  const firstPage = view === 'year' ? yearPageStart === minYear : year === minYear && (view === 'month' || month === 0)
+  const lastPage = view === 'year' ? lastPageYear === maxYear : year === maxYear && (view === 'month' || month === 11)
+  const inRange = (date: Date) => date.getFullYear() >= minYear && date.getFullYear() <= maxYear
+
+  function navigate(step: -1 | 1) {
+    if (view === 'year') setYearPageStart(start => start + step * 12)
+    else if (view === 'month') setCursor(new Date(year + step, month, 1))
+    else setCursor(new Date(year, month + step, 1))
   }
 
-  const shiftMonth = (delta: number) => setCursor(new Date(year, month + delta, 1))
-
   const pick = (d: Date | null) => {
+    if (d && !inRange(d)) return
     onChange(d)
     setOpen(false)
     setView('day')
@@ -113,7 +122,7 @@ export default function DatePicker({
         id={id}
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen(v => !v)}
+        onClick={toggleCalendar}
         aria-label={ariaLabel}
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -130,6 +139,7 @@ export default function DatePicker({
 
       {open && (
         <div
+          ref={calendarRef}
           role="dialog"
           aria-label={ariaLabel}
           className={`absolute top-full z-40 mt-2 w-full max-w-80 rounded-2xl border border-white/[0.08] bg-[#0c1119]/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] p-4 select-none ${align === 'right' ? 'right-0' : 'left-0'}`}
@@ -141,13 +151,15 @@ export default function DatePicker({
               type="button"
               onClick={() => {
                 if (view === 'day') setView('month')
-                else if (view === 'month') setView('year')
-                else setView('day')
+                else if (view === 'month') {
+                  setYearPageStart(minYear + Math.floor((year - minYear) / 12) * 12)
+                  setView('year')
+                } else setView('day')
               }}
               className="px-2.5 py-1.5 rounded-lg text-[14px] font-semibold text-white hover:bg-white/[0.06] transition-colors"
             >
               {view === 'year'
-                ? `${yearPageStart} – ${yearPageStart + 11}`
+                ? `${yearPageStart} – ${lastPageYear}`
                 : view === 'month'
                 ? `${year}`
                 : `${year}년 ${MONTHS_KO[month]}`}
@@ -155,25 +167,19 @@ export default function DatePicker({
             <div className="flex items-center gap-0.5">
               <button
                 type="button"
-                onClick={() => {
-                  if (view === 'day') shiftMonth(-1)
-                  else if (view === 'month') setCursor(new Date(year - 1, month, 1))
-                  else setYearPageStart(s => Math.max(minYear, s - 12))
-                }}
+                disabled={firstPage}
+                onClick={() => navigate(-1)}
                 aria-label="이전"
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-[color:var(--ink-2)] hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="disabled:opacity-25 disabled:cursor-default w-8 h-8 flex items-center justify-center rounded-lg text-[color:var(--ink-2)] hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  if (view === 'day') shiftMonth(1)
-                  else if (view === 'month') setCursor(new Date(year + 1, month, 1))
-                  else setYearPageStart(s => Math.min(maxYear - 11, s + 12))
-                }}
+                disabled={lastPage}
+                onClick={() => navigate(1)}
                 aria-label="다음"
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-[color:var(--ink-2)] hover:bg-white/[0.06] hover:text-white transition-colors"
+                className="disabled:opacity-25 disabled:cursor-default w-8 h-8 flex items-center justify-center rounded-lg text-[color:var(--ink-2)] hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -204,11 +210,12 @@ export default function DatePicker({
                     <div key={idx} className="flex items-center justify-center">
                       <button
                         type="button"
+                        disabled={!inRange(date)}
                         onClick={() => pick(date)}
                         aria-label={fmt(date)}
                         aria-pressed={selected}
                         className={[
-                          'relative w-full max-w-9 h-9 flex items-center justify-center rounded-full text-[13.5px] transition-all duration-150',
+                          'disabled:opacity-25 disabled:cursor-default relative w-full max-w-9 h-9 flex items-center justify-center rounded-full text-[13.5px] transition-all duration-150',
                           selected
                             ? 'bg-[color:var(--brand)] text-white font-semibold shadow-[0_4px_14px_rgba(110,168,255,0.4)]'
                             : outside
@@ -255,19 +262,15 @@ export default function DatePicker({
           {/* YEAR VIEW */}
           {view === 'year' && (
             <div className="grid grid-cols-3 gap-1.5 py-2">
-              {Array.from({ length: 12 }, (_, i) => yearPageStart + i).map(y => {
+              {Array.from({ length: lastPageYear - yearPageStart + 1 }, (_, i) => yearPageStart + i).map(y => {
                 const active = y === year
-                const disabled = y < minYear || y > maxYear
                 return (
                   <button
                     key={y}
                     type="button"
-                    disabled={disabled}
                     onClick={() => { setCursor(new Date(y, month, 1)); setView('month') }}
                     className={`h-11 rounded-lg text-[13px] tabular-nums transition-colors ${
-                      disabled
-                        ? 'text-white/15 cursor-not-allowed'
-                        : active
+                      active
                         ? 'bg-[color:var(--brand)]/15 text-[color:var(--brand)] font-semibold ring-1 ring-[color:var(--brand)]/40'
                         : 'text-white/80 hover:bg-white/[0.06] hover:text-white'
                     }`}
@@ -290,7 +293,8 @@ export default function DatePicker({
             </button>
             <button
               type="button"
-              onClick={() => { const t = new Date(); setCursor(t); pick(t) }}
+              disabled={!inRange(today)}
+              onClick={() => pick(new Date())}
               className="px-2.5 py-1 text-[12.5px] font-medium text-[color:var(--brand)] hover:bg-[color:var(--brand)]/10 rounded-md transition-colors"
             >
               오늘

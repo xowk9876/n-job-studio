@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Monitor, Share, Smartphone } from 'lucide-react'
 import { getInstallContext, getNaverShortcutUrl, installFromPrompt, type InstallPlatform, type InstallPrompt } from '@/lib/pwa-install'
 import { SITE_URL } from '@/lib/seo-platform'
 
@@ -99,27 +98,24 @@ export default function HomeAppShortcut() {
 
   if (installed) {
     return (
-      <p id="install-app" role="status" className="home-app__note scroll-mt-24">
+      <p id="install-app" role="status" className="home-app__note">
         이 기기에 머니핏 앱이 설치되어 있습니다.
       </p>
     )
   }
 
   return (
-    <section id="install-app" className="home-section home-app scroll-mt-24" aria-labelledby="home-app-title">
+    <section id="install-app" className="home-section home-app" aria-labelledby="home-app-title">
       <header className="section-header">
         <h2 id="home-app-title" className="section-title">홈 화면에서 바로 열기</h2>
       </header>
       <div className="home-app-grid">
         {([
-          { platform: 'android', title: 'Android', description: 'Chrome에서 앱처럼 빠르게', label: 'Android 홈 화면에 추가', Icon: Smartphone },
-          { platform: 'ios', title: 'iPhone · iPad', description: 'Safari에서 홈 화면 바로가기', label: 'iPhone 홈 화면 추가 안내', Icon: Share },
-          { platform: 'desktop', title: '데스크톱', description: 'Chrome · Edge에서 별도 창으로', label: 'PC에 앱 설치', Icon: Monitor },
-        ] as const).map(({ platform, title, description, label, Icon }) => (
-          <article className="home-trust-card home-app__card" key={platform}>
-            <Icon size={22} className="text-[color:var(--brand)]" aria-hidden />
-            <h3 className="home-trust-card__title mt-3">{title}</h3>
-            <p className="home-app__note !mt-1 !mb-4">{platform === 'android' && naverShortcutUrl ? '네이버 앱에서 홈 화면 바로가기' : description}</p>
+          { platform: 'android', label: 'Android 홈 화면에 추가' },
+          { platform: 'ios', label: 'iPhone 홈 화면 추가 안내' },
+          { platform: 'desktop', label: 'PC에 앱 설치' },
+        ] as const).map(({ platform, label }) => (
+          <div className="home-app__device" key={platform}>
             {platform === 'android' && naverShortcutUrl ? (
               <a href={naverShortcutUrl} className="home-app__action" aria-disabled={installing}
                 aria-expanded={guide === platform} aria-controls={`install-guide-${platform}`} onClick={event => {
@@ -139,13 +135,14 @@ export default function HomeAppShortcut() {
                 {label}
               </button>
             )}
-            {platform === 'android' && naverShortcutUrl && (
-              <p className="home-app__note">네이버 앱에 홈 화면 바로가기를 만듭니다. Chrome의 독립 실행형 앱(PWA) 설치와는 다릅니다.</p>
-            )}
             {guide === platform && (
-              <div id={`install-guide-${platform}`} className="home-app__guide mt-4" role="region" aria-labelledby={`install-guide-title-${platform}`}>
-                <h4 id={`install-guide-title-${platform}`} ref={guideRef} tabIndex={-1} className="home-trust-card__title scroll-mt-24">{guides[platform].title}</h4>
+              <div id={`install-guide-${platform}`} className="home-app__guide" role="region" aria-labelledby={`install-guide-title-${platform}`}>
+                <h3 id={`install-guide-title-${platform}`} ref={guideRef} tabIndex={-1} className="font-semibold text-white">{guides[platform].title}</h3>
                 <p className="home-app__status !mt-3 empty:hidden" role="status">{status}</p>
+                {platform === 'android' && naverShortcutUrl && (
+                  <p className="home-app__note">네이버 앱은 홈 화면 바로가기를 추가해요. 앱으로 설치하려면 Chrome에서 열어 주세요.</p>
+                )}
+                <ol className="home-app__steps">{guides[platform].steps.map(step => <li key={step}>{step}</li>)}</ol>
                 <details className="home-app__note" open={inApp} key={platform}>
                   <summary className="cursor-pointer font-semibold">
                     {inApp ? '현재 앱 안의 브라우저에서 외부 브라우저로 열기' : '설치 메뉴가 보이지 않나요?'}
@@ -158,19 +155,17 @@ export default function HomeAppShortcut() {
                     <input id={`install-url-${platform}`} className="w-full min-w-0 rounded border border-[color:var(--line)] bg-transparent p-2 text-xs text-[color:var(--ink)]" readOnly value={SITE_URL} onFocus={event => event.currentTarget.select()} />
                   </div>
                 </details>
-                <ol className="home-app__steps">{guides[platform].steps.map(step => <li key={step}>{step}</li>)}</ol>
                 <button type="button" className="home-app__action mt-3" onClick={event => {
-                  const trigger = event.currentTarget.closest('article')?.querySelector<HTMLElement>('[aria-expanded]')
+                  const trigger = event.currentTarget.closest('.home-app__device')?.querySelector<HTMLElement>('[aria-expanded]')
                   setGuide(null)
                   setStatus('')
                   trigger?.focus()
                 }}>안내 닫기</button>
               </div>
             )}
-          </article>
+          </div>
         ))}
       </div>
-      <p className="home-app__note">설치 메뉴는 기기·브라우저에 따라 다릅니다. 계산기와 최신 정보 조회에는 인터넷 연결이 필요합니다.</p>
     </section>
   )
 }

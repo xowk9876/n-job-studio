@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight } from 'lucide-react'
-import HomeGuideHub from '@/components/home/HomeGuideHub'
+import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, BookOpen, ArrowRight } from 'lucide-react'
 import HomeAppShortcut from '@/components/home/HomeAppShortcut'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
 import { buildGoogleAlternates } from '@/lib/seo-platform'
@@ -202,7 +201,13 @@ export default function HomePage() {
 
       <HomeAppShortcut />
 
-      <HomeGuideHub />
+      <nav className="home-section" aria-label="재테크 가이드">
+        <Link href="/guide" className="home-guide-link inline-reset">
+          <BookOpen size={20} aria-hidden />
+          재테크 가이드 보기
+          <ArrowRight size={16} aria-hidden />
+        </Link>
+      </nav>
     </div>
   )
 }

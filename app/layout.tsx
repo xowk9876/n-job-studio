@@ -100,7 +100,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://tpc.googlesyndication.com" />
         <link rel="alternate" type="application/rss+xml" title="머니핏 계산기·가이드 RSS" href={RSS_FEED_URL} />
