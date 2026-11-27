@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight, Shield, Scale, Lock } from 'lucide-react'
+import { Wallet, Briefcase, Landmark, PiggyBank, KeyRound, Ticket, ArrowRight } from 'lucide-react'
 import HomeGuideHub from '@/components/home/HomeGuideHub'
 import HomeAppShortcut from '@/components/home/HomeAppShortcut'
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, jsonLd } from '@/lib/seo'
@@ -107,27 +107,6 @@ const homeStructuredData = {
   ],
 }
 
-const trustItems = [
-  {
-    Icon: Shield,
-    title: '계산 근거 안내',
-    desc: '2026년 4대보험 요율·간이세액표·근로기준법을 반영합니다.',
-    accent: '#6bafff',
-  },
-  {
-    Icon: Scale,
-    title: '조건별 금액 비교',
-    desc: '대출 상환 방식·저축 조건·전월세 전환율을 바꿔 비교할 수 있습니다.',
-    accent: '#929cf8',
-  },
-  {
-    Icon: Lock,
-    title: '브라우저 안에서 계산',
-    desc: '금융 입력값은 이 브라우저에서 계산·저장됩니다.',
-    accent: '#3ee0a5',
-  },
-]
-
 export default function HomePage() {
   return (
     <div className="home-page">
@@ -145,15 +124,13 @@ export default function HomePage() {
         <div className="home-hero__panel home-hero__panel--split">
           <div className="home-hero__col-text">
             <h1 className="home-hero__title font-display">
-              <span className="home-hero__title-line">월급부터 대출까지,</span>{' '}
               <span className="home-hero__title-line home-hero__title-line--accent">
                 머니핏 계산기
               </span>
             </h1>
 
             <p className="home-hero__lead">
-              <span className="home-hero__lead-part">세후 월급과 대출 상환액을</span>{' '}
-              <span className="home-hero__lead-part">가입 없이 계산하세요.</span>
+              월급과 대출, 저축을 가입 없이 계산하세요.
             </p>
 
             <div className="home-hero__cta">
@@ -161,7 +138,7 @@ export default function HomePage() {
                 <span>연봉 실수령액 계산하기</span>
                 <ArrowRight size={18} />
               </Link>
-              <a href="#install-app" className="home-app__hero-link">앱 설치 · 홈 화면에 추가</a>
+              <a href="#install-app" className="home-app__hero-link">홈 화면에 추가</a>
             </div>
           </div>
 
@@ -175,47 +152,7 @@ export default function HomePage() {
                 <span className="home-hero__preview-unit">원</span>
               </p>
 
-              <div className="home-hero__preview-stats">
-                <div className="home-hero__preview-stat">
-                  <span className="home-hero__preview-stat-label">세전 월급</span>
-                  <span className="home-hero__preview-stat-value tabular">{fmtWon(heroPreview.monthlyGross)}원</span>
-                </div>
-                <div className="home-hero__preview-stat">
-                  <span className="home-hero__preview-stat-label">연 실수령</span>
-                  <span className="home-hero__preview-stat-value tabular">{fmtWon(heroPreview.annualNet)}원</span>
-                </div>
-                <div className="home-hero__preview-stat">
-                  <span className="home-hero__preview-stat-label">총 공제</span>
-                  <span className="home-hero__preview-stat-value home-hero__preview-stat-value--negative tabular">
-                    −{fmtWon(heroPreview.totalDeduction)}원
-                  </span>
-                </div>
-              </div>
-
-              <div className="home-hero__preview-chips">
-                <div className="home-hero__preview-chip">
-                  <span className="home-hero__preview-chip-label">국민연금 4.75%</span>
-                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#3ee0a5' }}>
-                    {fmtWon(heroPreview.pension)}원
-                  </span>
-                </div>
-                <div className="home-hero__preview-chip">
-                  <span className="home-hero__preview-chip-label">건강보험 3.595%</span>
-                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#6bafff' }}>
-                    {fmtWon(heroPreview.health)}원
-                  </span>
-                </div>
-                <div className="home-hero__preview-chip">
-                  <span className="home-hero__preview-chip-label">근로소득세</span>
-                  <span className="home-hero__preview-chip-value tabular" style={{ color: '#fcc73e' }}>
-                    {fmtWon(heroPreview.incomeTax)}원
-                  </span>
-                </div>
-                <div className="home-hero__preview-chip">
-                  <span className="home-hero__preview-chip-label">예시 조건</span>
-                  <span className="home-hero__preview-chip-value" style={{ color: '#c4cbff' }}>본인 1인 · 수당 없음</span>
-                </div>
-              </div>
+              <p className="home-hero__preview-note">본인 1인 · 비과세 수당 없음</p>
             </div>
           </aside>
         </div>
@@ -224,7 +161,7 @@ export default function HomePage() {
       {/* CALCULATORS */}
       <section id="calculators" className="home-section" aria-label="계산기 목록">
         <header className="section-header">
-          <h2 className="section-title">지금 필요한 계산기</h2>
+          <h2 className="section-title">계산기 목록</h2>
         </header>
 
         <div className="home-calc-grid">
@@ -264,24 +201,6 @@ export default function HomePage() {
       </section>
 
       <HomeAppShortcut />
-
-      {/* TRUST */}
-      <section className="home-section" aria-label="서비스 신뢰">
-        <header className="section-header">
-          <h2 className="section-title">계산 전에 확인하세요</h2>
-        </header>
-        <div className="home-trust-grid">
-          {trustItems.map((item) => (
-            <div key={item.title} className="home-trust-card">
-              <div className="home-trust-card__icon" style={{ color: item.accent }}>
-                <item.Icon size={20} strokeWidth={1.7} />
-              </div>
-              <h3 className="home-trust-card__title">{item.title}</h3>
-              <p className="home-trust-card__desc">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <HomeGuideHub />
     </div>

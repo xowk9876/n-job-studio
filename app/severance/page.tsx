@@ -80,30 +80,30 @@ export default function SeverancePage() {
       {/* 입력 */}
       <div className="glass-card flex flex-col gap-4">
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">최근 3개월 평균 월급 <span className="text-[10.5px] font-normal text-white/40">(세전, 상여 제외)</span></label>
-          <NumericInput ariaLabel="최근 3개월 평균 월 급여 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={avgMonthly3} unit="만원" onChange={(n) => set({ avgMonthly3: n })} />
+          <label htmlFor="severance-avg-monthly3" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">최근 3개월 평균 월급 <span className="text-[10.5px] font-normal text-white/40">(세전, 상여 제외)</span></label>
+          <NumericInput id="severance-avg-monthly3" ariaLabel="최근 3개월 평균 월 급여 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={avgMonthly3} unit="만원" onChange={(n) => set({ avgMonthly3: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">= {won(avgMonthly3)}</p>
         </div>
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">최근 1년 상여금 합계 <span className="text-[10.5px] font-normal text-white/40">(없으면 0)</span></label>
-          <NumericInput ariaLabel="연간 상여금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={annualBonus} unit="만원" onChange={(n) => set({ annualBonus: n })} />
+          <label htmlFor="severance-annual-bonus" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">최근 1년 상여금 합계 <span className="text-[10.5px] font-normal text-white/40">(없으면 0)</span></label>
+          <NumericInput id="severance-annual-bonus" ariaLabel="연간 상여금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={annualBonus} unit="만원" onChange={(n) => set({ annualBonus: n })} />
         </div>
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">통상시급 <span className="text-[10.5px] font-normal text-white/40">(선택)</span></label>
-          <NumericInput unit="원" ariaLabel="통상시급 (원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10" value={regularHourlyWage} onChange={(n) => set({ regularHourlyWage: n })} />
+          <label htmlFor="severance-regular-hourly-wage" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">통상시급 <span className="text-[10.5px] font-normal text-white/40">(선택)</span></label>
+          <NumericInput id="severance-regular-hourly-wage" unit="원" ariaLabel="통상시급 (원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-10" value={regularHourlyWage} onChange={(n) => set({ regularHourlyWage: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">하루 8시간 근무 기준입니다. 시급 × 8시간과 1일 평균임금 중 큰 금액을 적용합니다.</p>
         </div>
 
         <div className="relative grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">입사일</label>
-            <DatePicker ariaLabel="입사일 선택" value={fromISO(startDate)} onChange={(d) => set({ startDate: toISO(d) })} />
+            <label htmlFor="severance-start-date" className="block text-[12px] font-semibold text-white/75 mb-1.5">입사일</label>
+            <DatePicker id="severance-start-date" ariaLabel="입사일 선택" value={fromISO(startDate)} onChange={(d) => set({ startDate: toISO(d) })} />
           </div>
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">마지막 근무일</label>
-            <DatePicker align="right" ariaLabel="마지막 근무일 선택" value={fromISO(endDate)} onChange={(d) => set({ endDate: toISO(d) })} />
+            <label htmlFor="severance-end-date" className="block text-[12px] font-semibold text-white/75 mb-1.5">마지막 근무일</label>
+            <DatePicker id="severance-end-date" align="right" ariaLabel="마지막 근무일 선택" value={fromISO(endDate)} onChange={(d) => set({ endDate: toISO(d) })} />
           </div>
         </div>
       </div>

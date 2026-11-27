@@ -75,19 +75,19 @@ export default function MortgagePage() {
 
       <div className="glass-card flex flex-col gap-4">
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">대출금액</label>
-          <NumericInput ariaLabel="대출금액 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={principal} unit="만원" onChange={(n) => set({ principal: n })} />
+          <label htmlFor="mortgage-principal" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">대출금액</label>
+          <NumericInput id="mortgage-principal" ariaLabel="대출금액 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={principal} unit="만원" onChange={(n) => set({ principal: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">= {won(principal)} ({manwon(principal)})</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
-            <NumericInput ariaLabel="연이율 (%)" max={100} className="glass-input w-full rounded-lg font-bold" value={annualRate} allowDecimal onChange={(n) => set({ annualRate: n })} />
+            <label htmlFor="mortgage-annual-rate" className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
+            <NumericInput id="mortgage-annual-rate" ariaLabel="연이율 (%)" max={100} className="glass-input w-full rounded-lg font-bold" value={annualRate} allowDecimal onChange={(n) => set({ annualRate: n })} />
           </div>
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">대출기간 (년)</label>
-            <select aria-label="대출기간 (년)" className="glass-select" value={years} onChange={(e) => set({ years: Number(e.target.value) })}>
+            <label htmlFor="mortgage-years" className="block text-[12px] font-semibold text-white/75 mb-1.5">대출기간 (년)</label>
+            <select id="mortgage-years" aria-label="대출기간 (년)" className="glass-select" value={years} onChange={(e) => set({ years: Number(e.target.value) })}>
               {!TERM_YEARS.includes(years) && <option value={years}>{years}년</option>}
               {TERM_YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
             </select>
@@ -95,8 +95,8 @@ export default function MortgagePage() {
         </div>
 
         <div>
-          <label className="block text-[12px] font-semibold text-white/75 mb-1.5">상환 방식</label>
-          <div className="grid grid-cols-3 gap-2">
+          <span id="mortgage-repayment" className="block text-[12px] font-semibold text-white/75 mb-1.5">상환 방식</span>
+          <div role="group" aria-labelledby="mortgage-repayment" className="grid grid-cols-3 gap-2">
             {REPAYMENT_TYPES.map(({ value, label, desc }) => (
               <button
                 key={value}
@@ -159,26 +159,26 @@ export default function MortgagePage() {
           <div className="px-4 pb-4 pt-1 border-t border-white/10 flex flex-col gap-3.5">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11.5px] font-semibold text-white/75 mb-1">연 소득 (세전)</label>
-                <NumericInput ariaLabel="연 소득 (만원)" className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrIncome} unit="만원" onChange={setDsrIncome} />
+                <label htmlFor="mortgage-dsr-income" className="block text-[11.5px] font-semibold text-white/75 mb-1">연 소득 (세전)</label>
+                <NumericInput id="mortgage-dsr-income" ariaLabel="연 소득 (만원)" className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrIncome} unit="만원" onChange={setDsrIncome} />
               </div>
               <div>
-                <label className="block text-[11.5px] font-semibold text-white/75 mb-1">기존부채 월 상환</label>
-                <NumericInput ariaLabel="기존 부채 월 상환액 (만원)" className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrExistingDebt} unit="만원" onChange={setDsrExistingDebt} />
+                <label htmlFor="mortgage-dsr-existing-debt" className="block text-[11.5px] font-semibold text-white/75 mb-1">기존부채 월 상환</label>
+                <NumericInput id="mortgage-dsr-existing-debt" ariaLabel="기존 부채 월 상환액 (만원)" className="glass-input w-full rounded-lg px-3 py-2 font-bold pr-10" value={dsrExistingDebt} unit="만원" onChange={setDsrExistingDebt} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11.5px] font-semibold text-white/75 mb-1">DSR 한도</label>
-                <div className="grid grid-cols-2 gap-1.5">
+                <span id="mortgage-dsr-limit" className="block text-[11.5px] font-semibold text-white/75 mb-1">DSR 한도</span>
+                <div role="group" aria-labelledby="mortgage-dsr-limit" className="grid grid-cols-2 gap-1.5">
                   {[40, 50].map(c => (
                     <button key={c} aria-pressed={dsrCap === c} onClick={() => setDsrCap(c)} className={`rounded-lg py-1.5 text-[12px] font-bold border transition-colors ${dsrCap === c ? 'border-[color:var(--brand)]/60 bg-[color:var(--brand)]/10 text-[color:var(--brand)]' : 'border-white/15 bg-white/5 text-white/55'}`}>{c}% {c === 40 ? '(은행)' : '(2금융)'}</button>
                   ))}
                 </div>
               </div>
               <div>
-                <label className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%p)</label>
-                <NumericInput ariaLabel="스트레스 가산금리 (%p)" max={3} className="glass-input w-full rounded-lg font-bold" value={dsrStress} allowDecimal onChange={setDsrStress} />
+                <label htmlFor="mortgage-dsr-stress" className="block text-[11.5px] font-semibold text-white/75 mb-1">스트레스 가산금리 (%p)</label>
+                <NumericInput id="mortgage-dsr-stress" ariaLabel="스트레스 가산금리 (%p)" max={3} className="glass-input w-full rounded-lg font-bold" value={dsrStress} allowDecimal onChange={setDsrStress} />
               </div>
             </div>
             {dsr.error ? <p role="alert" className="text-sm text-[color:var(--danger)]">{dsrIncome === 0 ? '연 소득을 입력하면 대출 한도를 계산합니다.' : dsr.error}</p> : (

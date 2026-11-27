@@ -6,11 +6,11 @@ export const CONTENT_UPDATED_AT = '2026-10-31' as const
 export const SEO_UPDATED_AT = '2026-11-06' as const
 export const COPY_UPDATED_AT = '2026-11-13' as const
 export const calculatorUpdatedAt: Record<string, string> = {
-  '/salary': '2026-11-24',
-  '/mortgage': '2026-11-24',
-  '/severance': '2026-11-24',
-  '/savings': '2026-11-24',
-  '/jeonse': '2026-11-24',
+  '/salary': '2026-11-27',
+  '/mortgage': '2026-11-27',
+  '/severance': '2026-11-27',
+  '/savings': '2026-11-27',
+  '/jeonse': '2026-11-27',
   '/lotto': '2026-11-24',
 }
 export const SALARY_GUIDE_UPDATED_AT = '2026-11-06' as const

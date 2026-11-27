@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { mergeStoredInputs, migrateSalaryInputs } from '@/lib/input-validation'
+import { inRange, MAX_RATE, mergeStoredInputs, migrateSalaryInputs } from '@/lib/input-validation'
 
 function calculatorStorage<T>() {
   return createJSONStorage<T>(() => {
@@ -162,6 +162,7 @@ interface JeonseStore {
   currentWolse: number
   currentWolseDeposit: number
   conversionRate: number
+  followOfficialRate: boolean
   marketPrice: number  // 매매 시세 (선택, 0이면 깡통전세 분석 미표시)
   set: (v: Partial<Omit<JeonseStore, 'set'>>) => void
 }
@@ -174,20 +175,27 @@ export const useJeonseStore = create<JeonseStore>()(
       currentWolse: 800_000,
       currentWolseDeposit: 50_000_000,
       conversionRate: DEFAULT_CONVERSION_RATE,
+      followOfficialRate: true,
       marketPrice: 0,
       set: (v) => set((s) => ({ ...s, ...v })),
     }),
     {
       name: 'mf-jeonse',
       storage: calculatorStorage(),
-      merge: mergeStoredInputs,
+      merge: (persisted, current) => {
+        const restored = mergeStoredInputs(persisted, current)
+        return restored.followOfficialRate ? { ...restored, conversionRate: DEFAULT_CONVERSION_RATE } : restored
+      },
       skipHydration: true,
-      // 구 기본값(4.75%)만 갱신하고 직접 입력한 전환율은 보존한다.
-      version: 2,
-      migrate: (persisted) => {
+      version: 3,
+      migrate: (persisted, version) => {
         if (!persisted || typeof persisted !== 'object') return {}
         const saved = persisted as Partial<JeonseStore>
-        return saved.conversionRate === 4.75 ? { ...saved, conversionRate: DEFAULT_CONVERSION_RATE } : saved
+        const rate = saved.conversionRate
+        // v2는 직접 입력 여부를 저장하지 않았다. 유효한 저장값은 계약 조건일 수 있다.
+        const followOfficialRate = typeof rate !== 'number' || !inRange(rate, 0.001, MAX_RATE)
+          || (version < 2 && rate === 4.75)
+        return { ...saved, followOfficialRate }
       },
     }
   )

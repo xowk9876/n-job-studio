@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 type Props = {
+  id?: string
   value?: Date | null
   onChange: (d: Date | null) => void
   ariaLabel?: string
@@ -25,6 +26,7 @@ function isSameDay(a: Date, b: Date) {
 }
 
 export default function DatePicker({
+  id,
   value,
   onChange,
   ariaLabel = '날짜 선택',
@@ -108,6 +110,7 @@ export default function DatePicker({
   return (
     <div ref={rootRef} className="w-full">
       <button
+        id={id}
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(v => !v)}

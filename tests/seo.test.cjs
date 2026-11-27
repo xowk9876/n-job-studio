@@ -100,21 +100,22 @@ test('전월세 예시는 남기는 보증금과 전환하는 차액을 구분�
   const { JeonseExamples } = require('../components/ui/CalculatorExamples')
   const html = renderToStaticMarkup(createElement(JeonseExamples))
   assert.match(html, /보증금 5,000만원·월세 90만원/)
-  assert.match(html, /전세 환산액 266,000,000원/)
-  assert.match(html, /남겨 두는 보증금이 아니라 줄어드는 보증금의 차액/)
-  assert.match(html, /41,667원/)
-  assert.match(html, /125,000원/)
-  assert.match(html, /208,333원/)
-  assert.match(html, /법정 보증금이나 시세를 뜻하지 않습니다/)
+  assert.match(html, /전세 환산액 255,714,286원/)
+  assert.match(html, /줄어드는 보증금의 차액/)
+  assert.match(html, /43,750원/)
+  assert.match(html, /131,250원/)
+  assert.match(html, /218,750원/)
+  assert.match(html, /협의용 참고값/)
 })
 
 test('변경한 계산기의 날짜만 사이트맵과 구조화 데이터에 함께 반영한다', () => {
   const { default: sitemap } = require('../app/sitemap')
   const { buildWebApplicationJsonLd, CONTENT_UPDATED_AT, COPY_UPDATED_AT, SALARY_GUIDE_UPDATED_AT } = require('../lib/seo')
-  for (const path of ['/jeonse', '/salary', '/savings', '/severance', '/mortgage', '/lotto']) {
-    assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, '2026-11-24')
-    assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, '2026-11-24')
+  for (const path of ['/jeonse', '/salary', '/savings', '/severance', '/mortgage']) {
+    assert.equal(sitemap().find(item => item.url === SITE_URL + path).lastModified, '2026-11-27')
+    assert.equal(buildWebApplicationJsonLd({ path, name: path, description: path }).dateModified, '2026-11-27')
   }
+  assert.equal(sitemap().find(item => item.url === SITE_URL + '/lotto').lastModified, '2026-11-24')
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide').lastModified, '2026-11-24')
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide/lotto-tax-guide').lastModified, '2026-11-24')
   assert.equal(sitemap().find(item => item.url === SITE_URL + '/guide/dsr-stress-test-2026').lastModified, COPY_UPDATED_AT)

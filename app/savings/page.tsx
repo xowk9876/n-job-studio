@@ -41,8 +41,8 @@ export default function SavingsPage() {
 
       <div className="glass-card flex flex-col gap-4">
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">상품 유형</label>
-          <div className="grid grid-cols-2 gap-2">
+          <span id="savings-product" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">상품 유형</span>
+          <div role="group" aria-labelledby="savings-product" className="grid grid-cols-2 gap-2">
             {([['savings','정기적금','매월 납입'], ['deposit','정기예금','일시 예치']] as [SavingsType, string, string][]).map(([v, label, desc]) => (
               <button
                 key={v}
@@ -62,19 +62,19 @@ export default function SavingsPage() {
         </div>
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">{type === 'savings' ? '월 납입액' : '예치 원금'}</label>
-          <NumericInput ariaLabel={type === 'savings' ? '월 납입액 (만원)' : '예치 원금 (만원)'} className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={amount} unit="만원" onChange={(n) => set({ amount: n })} />
+          <label htmlFor="savings-amount" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">{type === 'savings' ? '월 납입액' : '예치 원금'}</label>
+          <NumericInput id="savings-amount" ariaLabel={type === 'savings' ? '월 납입액 (만원)' : '예치 원금 (만원)'} className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={amount} unit="만원" onChange={(n) => set({ amount: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">= {won(amount)}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
-            <NumericInput ariaLabel="연이율 (%)" max={100} className="glass-input w-full rounded-lg font-bold" value={annualRate} allowDecimal onChange={(n) => set({ annualRate: n })} />
+            <label htmlFor="savings-annual-rate" className="block text-[12px] font-semibold text-white/75 mb-1.5">연이율 (%)</label>
+            <NumericInput id="savings-annual-rate" ariaLabel="연이율 (%)" max={100} className="glass-input w-full rounded-lg font-bold" value={annualRate} allowDecimal onChange={(n) => set({ annualRate: n })} />
           </div>
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">기간 (개월)</label>
-            <select aria-label="저축기간 (개월)" className="glass-select" value={months} onChange={(e) => set({ months: Number(e.target.value) })}>
+            <label htmlFor="savings-months" className="block text-[12px] font-semibold text-white/75 mb-1.5">기간 (개월)</label>
+            <select id="savings-months" aria-label="저축기간 (개월)" className="glass-select" value={months} onChange={(e) => set({ months: Number(e.target.value) })}>
               {!TERM_MONTHS.includes(months) && <option value={months}>{months}개월</option>}
               {TERM_MONTHS.map(m => <option key={m} value={m}>{m}개월</option>)}
             </select>
@@ -82,8 +82,8 @@ export default function SavingsPage() {
         </div>
 
         <div>
-          <label className="block text-[12px] font-semibold text-white/75 mb-1.5">이자 방식</label>
-          <div className="grid grid-cols-2 gap-2">
+          <span id="savings-interest" className="block text-[12px] font-semibold text-white/75 mb-1.5">이자 방식</span>
+          <div role="group" aria-labelledby="savings-interest" className="grid grid-cols-2 gap-2">
             {([['simple','단리','원금에만 이자'], ['compound','월복리','매월 이자 재투자']] as [InterestType, string, string][]).map(([v, label, desc]) => (
               <button
                 key={v}

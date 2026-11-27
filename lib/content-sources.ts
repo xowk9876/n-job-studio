@@ -44,7 +44,8 @@ export const officialSources: Record<string, readonly OfficialSource[]> = {
   '/jeonse': [
     { label: '국가법령정보센터 · 주택임대차보호법', href: 'https://www.law.go.kr/LSW/lsInfoP.do?lsId=001248' },
     { label: 'HUG · 전세보증금반환보증 상품·신청 조건', href: 'https://www.khug.or.kr/hug/web/ig/dr/igdr000001.jsp?tabMenu=Y' },
-    { label: '한국은행 · 통화정책 결정 자료와 기준금리', href: 'https://www.bok.or.kr/portal/main/contents.do?menuNo=200755' },
+    { label: '한국은행 · 기준금리 변경일과 금리', href: 'https://www.bok.or.kr/portal/singl/baseRate/list.do?menuNo=200656' },
+    { label: '주택임대차보호법 시행령 제9조 · 월차임 전환 시 산정률', href: 'https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lspttninfSeq=130111' },
   ],
   '/lotto': [
     ...lottoResultSources,

@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { useJeonseStore } from '@/store'
 import { usePersistRehydrate } from '@/hooks/usePersistRehydrate'
-import { calcJeonse, DEFAULT_BASE_RATE, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
+import { calcJeonse, BASE_RATE_EFFECTIVE_DATE, DEFAULT_BASE_RATE, DEFAULT_CONVERSION_RATE, ConversionDirection } from '@/lib/jeonse'
 import { Info, AlertTriangle, ShieldCheck } from 'lucide-react'
 import NumericInput from '@/components/ui/NumericInput'
 import { FAQSection, TipsSection, OfficialSourcesSection, RelatedLinks } from '@/components/ui/PageContent'
@@ -22,7 +22,7 @@ function manwon(n: number) {
 }
 
 export default function JeonsePage() {
-  const { direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, marketPrice, set } = useJeonseStore()
+  const { direction, jeonsDeposit, wolseDeposit, currentWolse, currentWolseDeposit, conversionRate, followOfficialRate, marketPrice, set } = useJeonseStore()
   usePersistRehydrate(useJeonseStore)
 
   const r = useMemo(() => calcJeonse({
@@ -78,42 +78,43 @@ export default function JeonsePage() {
         {isToWolse ? (
           <>
             <div>
-              <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 전세 보증금</label>
-              <NumericInput ariaLabel="전세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={jeonsDeposit} unit="만원" onChange={(n) => set({ jeonsDeposit: n })} />
+              <label htmlFor="jeonse-jeons-deposit" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 전세 보증금</label>
+              <NumericInput id="jeonse-jeons-deposit" ariaLabel="전세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={jeonsDeposit} unit="만원" onChange={(n) => set({ jeonsDeposit: n })} />
               <p className="text-[11.5px] text-white/40 mt-1">= {won(jeonsDeposit)}</p>
             </div>
             <div>
-              <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">목표 월세 보증금</label>
-              <NumericInput ariaLabel="전환 후 월세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={wolseDeposit} unit="만원" onChange={(n) => set({ wolseDeposit: n })} />
+              <label htmlFor="jeonse-wolse-deposit" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">목표 월세 보증금</label>
+              <NumericInput id="jeonse-wolse-deposit" ariaLabel="전환 후 월세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={wolseDeposit} unit="만원" onChange={(n) => set({ wolseDeposit: n })} />
               <p className="text-[11.5px] text-white/40 mt-1">= {won(wolseDeposit)}</p>
             </div>
           </>
         ) : (
           <>
             <div>
-              <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세</label>
-              <NumericInput ariaLabel="현재 월세 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={currentWolse} unit="만원" onChange={(n) => set({ currentWolse: n })} />
+              <label htmlFor="jeonse-current-wolse" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세</label>
+              <NumericInput id="jeonse-current-wolse" ariaLabel="현재 월세 (만원)" className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14" value={currentWolse} unit="만원" onChange={(n) => set({ currentWolse: n })} />
               <p className="text-[11.5px] text-white/40 mt-1">= {won(currentWolse)}</p>
             </div>
             <div>
-              <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세 보증금</label>
-              <NumericInput ariaLabel="현재 월세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={currentWolseDeposit} unit="만원" onChange={(n) => set({ currentWolseDeposit: n })} />
+              <label htmlFor="jeonse-current-wolse-deposit" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">현재 월세 보증금</label>
+              <NumericInput id="jeonse-current-wolse-deposit" ariaLabel="현재 월세 보증금 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={currentWolseDeposit} unit="만원" onChange={(n) => set({ currentWolseDeposit: n })} />
               <p className="text-[11.5px] text-white/40 mt-1">= {won(currentWolseDeposit)}</p>
             </div>
           </>
         )}
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">
+          <label htmlFor="jeonse-conversion-rate" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">
             전월세 전환율 (%)
             <span className="ml-2 text-[10.5px] font-normal text-white/40">보증금→월세 상한 {DEFAULT_CONVERSION_RATE.toFixed(2)}% (기준금리 {DEFAULT_BASE_RATE.toFixed(2)}% + 2%p)</span>
           </label>
-          <NumericInput ariaLabel="전월세 전환율 (%)" max={100} min={0.001} className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} allowDecimal onChange={(n) => set({ conversionRate: n })} />
+          <NumericInput id="jeonse-conversion-rate" ariaLabel="전월세 전환율 (%)" max={100} min={0.001} className="glass-input w-full rounded-xl px-4 py-3 font-bold" value={conversionRate} allowDecimal onChange={(n) => set({ conversionRate: n, followOfficialRate: false })} />
+          {!followOfficialRate && <button type="button" className="min-h-11 text-sm text-[color:var(--brand)] underline" onClick={() => set({ conversionRate: DEFAULT_CONVERSION_RATE, followOfficialRate: true })}>현재 상한 {DEFAULT_CONVERSION_RATE}% 적용</button>}
         </div>
 
         <div>
-          <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 전세가율 참고)</span></label>
-          <NumericInput ariaLabel="매매 시세 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} unit="만원" onChange={(n) => set({ marketPrice: n })} />
+          <label htmlFor="jeonse-market-price" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">매매 시세 <span className="text-[10.5px] font-normal text-white/40">(선택 · 전세가율 참고)</span></label>
+          <NumericInput id="jeonse-market-price" ariaLabel="매매 시세 (만원)" className="glass-input w-full rounded-xl px-4 py-3 font-bold pr-14" value={marketPrice} unit="만원" onChange={(n) => set({ marketPrice: n })} />
           <p className="text-[11.5px] text-white/40 mt-1">입력한 시세 대비 보증금 비율입니다. 선순위 채권·체납·반환보증 가입 여부는 판단하지 않습니다.</p>
         </div>
       </div>
@@ -158,22 +159,11 @@ export default function JeonsePage() {
         </div>
       </div>}
 
-      <div className="glass-card text-[12.5px] text-white/65">
-        <h2 className="font-semibold text-white mb-2 text-[13.5px]">전월세 전환율이란?</h2>
-        <p className="mb-2">전월세 전환율은 전세 보증금을 월세로 전환할 때 적용하는 이율입니다. 법정 상한은 <strong className="text-white">min(기준금리 + 2%p, 10%)</strong>로, 2026년 10월 기준 <strong className="text-white">{DEFAULT_CONVERSION_RATE.toFixed(2)}%</strong>입니다.</p>
-        <ul className="list-disc list-inside space-y-1 text-white/45 text-[11.5px]">
-          <li>월세 = (전세 보증금 − 월세 보증금) × 전환율 ÷ 12</li>
-          <li>법정 상한은 보증금을 월세로 전환하는 경우의 기준</li>
-          <li>월세→전세 역산은 계약 협의를 위한 참고값</li>
-          <li>한국은행 기준금리 변동 시 법정 상한도 변동</li>
-        </ul>
-      </div>
-
       <div className="mt-2 flex flex-col gap-8">
         <JeonseExamples />
         <FAQSection pagePath={CALC_PATH} items={[
           { q: '법정 전환율은 양방향 모두 적용되나요?', a: '법정 상한은 보증금을 월차임으로 전환하는 경우의 기준으로, 기준금리 + 2%p와 연 10% 중 낮은 값입니다. 월세를 전세로 역산한 금액을 법정 보증금으로 볼 수는 없습니다. 신규 계약·갱신·조건 변경 여부에 따라 적용 범위를 확인하세요.' },
-          { q: '표시된 상한은 언제 기준인가요?', a: '2026년 10월 22일 한국은행 기준금리 3.00% 기준 법정 상한은 연 5.00%입니다. 이후 기준금리가 바뀌면 상한도 달라집니다. 사용자가 입력한 전환율과 법정 상한은 구분해 비교하세요.' },
+          { q: '표시된 상한은 언제 기준인가요?', a: `${BASE_RATE_EFFECTIVE_DATE}부터 한국은행 기준금리는 연 ${DEFAULT_BASE_RATE.toFixed(2)}%이고, 보증금을 월세로 바꾸는 법정 상한은 연 ${DEFAULT_CONVERSION_RATE.toFixed(2)}%입니다.` },
           { q: '전세가율이 낮으면 보증금이 안전한가요?', a: '아닙니다. 이 화면은 보증금÷입력 시세만 계산하며 선순위 채권, 다른 임차보증금, 체납과 경매 낙찰가를 반영하지 않습니다. HUG 보증한도는 인정 주택가격의 90%에서 선순위채권 등을 차감하고 다른 가입 조건도 확인합니다.' },
           { q: '전입신고와 확정일자를 받으면 바로 보호되나요?', a: '대항력은 주택 인도와 주민등록을 모두 갖춘 다음 날 발생합니다. 우선변제권에는 이 요건과 확정일자가 필요합니다. 보증금 회수는 선순위 권리와 배당 재원 등에도 영향을 받습니다.' },
           { q: '계약 변경이나 분쟁이 생기면 어떻게 하나요?', a: '기존 계약서·확정일자·지급 증빙을 보관하고, 변경된 보증금과 권리 순위를 확인하세요. 해결이 어렵다면 주택임대차분쟁조정위원회 또는 법률상담을 이용할 수 있습니다. 수수료·면제 여부와 절차는 접수 기관에서 확인하세요.' },
@@ -183,7 +173,7 @@ export default function JeonsePage() {
           { title: '반환보증을 계약 전에 확인', desc: '보증금과 주택 조건, 선순위 권리, 신청기한을 확인하세요. 보증료와 인정 주택가격은 신청 조건별로 달라집니다.' },
           { title: '입주 후 권리와 증빙 유지', desc: '주택 인도·전입신고·확정일자를 갖추고 계약서와 송금 기록을 보관하세요. 보증금을 받기 전 이사할 때는 임차권등기 완료 등 권리 보전 절차를 확인하세요.' },
         ]} />
-        <OfficialSourcesSection sources={officialSources[CALC_PATH]} />
+        <OfficialSourcesSection sources={officialSources[CALC_PATH]} note={null} />
         <RelatedLinks links={calcSeo.related} guideLink={calcSeo.guide} />
       </div>
     </div>

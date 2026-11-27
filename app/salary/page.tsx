@@ -76,8 +76,8 @@ export default function SalaryPage() {
 
       {/* 입력 카드 */}
       <div className="glass-card">
-        <label className="block text-[12.5px] font-semibold text-white/80 mb-1.5">연봉 (세전)</label>
-        <NumericInput
+        <label htmlFor="salary-annual-salary" className="block text-[12.5px] font-semibold text-white/80 mb-1.5">연봉 (세전)</label>
+        <NumericInput id="salary-annual-salary"
           ariaLabel="연봉 (세전, 만원)"
           className="glass-input w-full rounded-xl px-4 py-3 text-[17px] font-bold pr-14"
           value={s.annualSalary}
@@ -90,14 +90,14 @@ export default function SalaryPage() {
         </div>
         <div className="grid grid-cols-2 gap-3 mt-4">
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">부양가족 <span className="text-[10.5px] font-normal text-white/35">(본인포함)</span></label>
-            <select aria-label="공제대상 가족 수 (본인 포함)" className="glass-select" value={s.dependents} onChange={(e) => s.set({ dependents: Number(e.target.value), children: Math.min(s.children, Number(e.target.value) - 1) })}>
+            <label htmlFor="salary-dependents" className="block text-[12px] font-semibold text-white/75 mb-1.5">부양가족 <span className="text-[10.5px] font-normal text-white/35">(본인포함)</span></label>
+            <select id="salary-dependents" aria-label="공제대상 가족 수 (본인 포함)" className="glass-select" value={s.dependents} onChange={(e) => s.set({ dependents: Number(e.target.value), children: Math.min(s.children, Number(e.target.value) - 1) })}>
               {[1,2,3,4,5,6,7,8,9,10,11].map(n => <option key={n} value={n}>{n}명</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-[12px] font-semibold text-white/75 mb-1.5">자녀 <span className="text-[10.5px] font-normal text-white/35">(간이세액표 8~20세)</span></label>
-            <select aria-label="간이세액표상 8~20세 자녀 수" className="glass-select" value={s.children} onChange={(e) => s.set({ children: Number(e.target.value) })}>
+            <label htmlFor="salary-children" className="block text-[12px] font-semibold text-white/75 mb-1.5">자녀 <span className="text-[10.5px] font-normal text-white/35">(간이세액표 8~20세)</span></label>
+            <select id="salary-children" aria-label="간이세액표상 8~20세 자녀 수" className="glass-select" value={s.children} onChange={(e) => s.set({ children: Number(e.target.value) })}>
               {Array.from({ length: s.dependents }, (_, i) => i).map(n => <option key={n} value={n}>{n}명</option>)}
             </select>
           </div>
@@ -119,17 +119,17 @@ export default function SalaryPage() {
           <div className="px-4 pb-4 flex flex-col gap-4 border-t border-white/10 pt-4">
             <p className="text-xs text-[color:var(--sub)]">예: 서로 다른 휴일에 8시간씩 일했다면 이내 16시간·초과 0시간입니다. 한 휴일에 10시간이면 이내 8시간·초과 2시간입니다.</p>
             {[
-              { label: '연장근로 (×1.5)', val: s.overtimeHours, pay: r.overtimePay, max: 80, onChange: (v:number) => s.set({ overtimeHours: v }) },
-              { label: '야간근로 (22~06시, +0.5)', val: s.nightHours, pay: r.nightPay, max: 40, onChange: (v:number) => s.set({ nightHours: v }) },
-              { label: '휴일별 8시간 이내의 월 합계 (×1.5)', val: s.holidayHours, pay: Math.round(r.hourlyWage * 1.5 * s.holidayHours), max: 248, onChange: (v:number) => s.set({ holidayHours: v, holidayReviewRequired: false }) },
-              { label: '휴일별 8시간 초과분의 월 합계 (×2)', val: s.holidayOver8Hours, pay: Math.round(r.hourlyWage * 2 * s.holidayOver8Hours), max: 248, onChange: (v:number) => s.set({ holidayOver8Hours: v, holidayReviewRequired: false }) },
+              { id: 'salary-overtime', label: '연장근로 (×1.5)', val: s.overtimeHours, pay: r.overtimePay, max: 80, onChange: (v:number) => s.set({ overtimeHours: v }) },
+              { id: 'salary-night', label: '야간근로 (22~06시, +0.5)', val: s.nightHours, pay: r.nightPay, max: 40, onChange: (v:number) => s.set({ nightHours: v }) },
+              { id: 'salary-holiday', label: '휴일별 8시간 이내의 월 합계 (×1.5)', val: s.holidayHours, pay: Math.round(r.hourlyWage * 1.5 * s.holidayHours), max: 248, onChange: (v:number) => s.set({ holidayHours: v, holidayReviewRequired: false }) },
+              { id: 'salary-holiday-extra', label: '휴일별 8시간 초과분의 월 합계 (×2)', val: s.holidayOver8Hours, pay: Math.round(r.hourlyWage * 2 * s.holidayOver8Hours), max: 248, onChange: (v:number) => s.set({ holidayOver8Hours: v, holidayReviewRequired: false }) },
             ].map(row => (
-              <div key={row.label}>
+              <div key={row.id}>
                 <div className="flex justify-between mb-1.5">
-                  <label className="text-[12px] font-semibold text-white/80">{row.label}</label>
+                  <label htmlFor={row.id} className="text-[12px] font-semibold text-white/80">{row.label}</label>
                   <span className="text-[11.5px] text-[color:var(--brand)] tabular">{row.val}h · {won(row.pay)}</span>
                 </div>
-                <input type="range" min={0} max={row.max} step={1} value={row.val} aria-label={`${row.label} 시간`} onChange={(e) => row.onChange(Number(e.target.value))} />
+                <input id={row.id} type="range" min={0} max={row.max} step={1} value={row.val} aria-label={`${row.label} 시간`} onChange={(e) => row.onChange(Number(e.target.value))} />
               </div>
             ))}
           </div>
@@ -148,12 +148,12 @@ export default function SalaryPage() {
         {showExempt && (
           <div className="px-4 pb-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
             <div>
-              <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">식대 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
-              <NumericInput ariaLabel="월 식대 (만원)" className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.mealAllowance} unit="만원" onChange={(n) => s.set({ mealAllowance: n })} />
+              <label htmlFor="salary-meal-allowance" className="block text-[11.5px] font-semibold text-white/75 mb-1.5">식대 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
+              <NumericInput id="salary-meal-allowance" ariaLabel="월 식대 (만원)" className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.mealAllowance} unit="만원" onChange={(n) => s.set({ mealAllowance: n })} />
             </div>
             <div>
-              <label className="block text-[11.5px] font-semibold text-white/75 mb-1.5">차량유지비 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
-              <NumericInput ariaLabel="월 차량유지비 (만원)" className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.transportAllowance} unit="만원" onChange={(n) => s.set({ transportAllowance: n })} />
+              <label htmlFor="salary-transport-allowance" className="block text-[11.5px] font-semibold text-white/75 mb-1.5">차량유지비 <span className="text-[10px] text-white/40 font-normal">(월 20만원 한도)</span></label>
+              <NumericInput id="salary-transport-allowance" ariaLabel="월 차량유지비 (만원)" className="glass-input w-full rounded-lg pr-12 text-[13.5px]" value={s.transportAllowance} unit="만원" onChange={(n) => s.set({ transportAllowance: n })} />
             </div>
           </div>
         )}

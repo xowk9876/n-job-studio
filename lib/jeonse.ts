@@ -4,10 +4,10 @@
 // 모든 수치는 최근 고시 기준이며 한국은행·시장 동향에 따라 변동됩니다.
 // ────────────────────────────────────────────────────────────────────────────
 
-// 한국은행 기준금리 3.00% (2026.8.27 금통위 0.25%p 인상, 10.22 동결)
 import { inRange, MAX_RATE } from './input-validation'
 
-export const DEFAULT_BASE_RATE = 3.0
+export const BASE_RATE_EFFECTIVE_DATE = '2026년 11월 26일'
+export const DEFAULT_BASE_RATE = 3.25
 // 주택임대차보호법 §7의2 법정 가산
 export const LEGAL_PREMIUM = 2.0
 // 주택임대차보호법 시행령 제9조: 연 10%와 기준금리 + 2%p 중 낮은 값.

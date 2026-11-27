@@ -62,6 +62,22 @@ test('legacy rent inputs migrate only the former default and reject invalid save
   }
 })
 
+test('saved contracts retain their rate and the official-rate setting follows the latest cap', async () => {
+  const { useJeonseStore } = require('../store/index.ts')
+  for (const [version, state, expectedRate, follows] of [
+    [2, { conversionRate: 5 }, 5, false],
+    [2, { conversionRate: 4.75 }, 4.75, false],
+    [3, { conversionRate: 5, followOfficialRate: true }, 5.25, true],
+    [3, { conversionRate: 4.2, followOfficialRate: false }, 4.2, false],
+  ]) {
+    useJeonseStore.setState(useJeonseStore.getInitialState())
+    values.set('mf-jeonse', JSON.stringify({ version, state }))
+    await useJeonseStore.persist.rehydrate()
+    assert.equal(useJeonseStore.getState().conversionRate, expectedRate)
+    assert.equal(useJeonseStore.getState().followOfficialRate, follows)
+  }
+})
+
 test('만원 입력을 복원할 때 1원 자릿수와 소수 입력 키보드를 유지한다', () => {
   const React = require('react')
   const { renderToStaticMarkup } = require('react-dom/server')

@@ -817,13 +817,16 @@ input[type="range"]::-moz-range-thumb {
   margin: 0.5rem 0;
   color: var(--ink-2);
 }
-.guide-body table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 13.5px; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.guide-body table:not(.salary-table) :is(thead, tbody, tr) { display: table; width: 100%; table-layout: fixed; min-width: 480px; }
-.guide-body th, .guide-body td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; }
+.guide-body table { width: 100%; border-collapse: collapse; margin: .5rem 0; font-size: .875rem; }
+.guide-body th, .guide-body td { border: 1px solid var(--line); padding: .55rem clamp(.3rem, 1vw, .65rem); text-align: left; word-break: keep-all; overflow-wrap: anywhere; }
 .guide-body th { background: rgba(255,255,255,0.02); color: var(--ink); font-weight: 650; }
 .guide-body .salary-table { display: table; table-layout: fixed; font-variant-numeric: tabular-nums; }
 .guide-body .salary-table :is(th, td) { padding: 8px clamp(4px, 1vw, 10px); }
 .guide-body .salary-table :is(th, td):not(:first-child) { text-align: right; }
+
+@media (max-width: 767px) {
+  .calc-page input.glass-input, .calc-page select.glass-select { font-size: max(1rem, 16px); }
+}
 
 /* =========================================================
    Home page — refined layout
@@ -831,10 +834,10 @@ input[type="range"]::-moz-range-thumb {
 .home-page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 2.5rem 1.25rem 4rem;
+  padding: 1.5rem 1.25rem 4rem;
 }
 @media (min-width: 768px) {
-  .home-page { padding: 3.5rem 1.5rem 5rem; }
+  .home-page { padding: 2rem 1.5rem 5rem; }
 }
 
 .section-header { margin-bottom: 1.25rem; }
@@ -850,9 +853,9 @@ input[type="range"]::-moz-range-thumb {
   .section-title { font-size: 1.5rem; }
 }
 
-.home-section { margin-top: 4.5rem; }
+.home-section { margin-top: 2.5rem; }
 @media (min-width: 768px) {
-  .home-section { margin-top: 5.5rem; }
+  .home-section { margin-top: 3.5rem; }
 }
 
 /* =========================================================
@@ -861,11 +864,11 @@ input[type="range"]::-moz-range-thumb {
 .home-hero {
   position: relative;
   text-align: center;
-  padding: 4rem 0 3rem;
+  padding: 1.25rem 0 0;
   isolation: isolate;
 }
 @media (min-width: 768px) {
-  .home-hero { padding: 5.5rem 0 4rem; }
+  .home-hero { padding: 2rem 0 1rem; }
 }
 .home-hero__panel {
   position: relative;
@@ -957,94 +960,16 @@ input[type="range"]::-moz-range-thumb {
   margin-left: 0.2em;
   color: #3ee0a5;
 }
-.home-hero__preview-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-top: 1.15rem;
-}
-.home-hero__preview-stat {
-  background: rgba(148, 163, 184, 0.06);
-  border: 1px solid rgba(148, 163, 184, 0.08);
-  border-radius: 12px;
-  padding: 0.6rem 0.55rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-  min-width: 0;
+.home-hero__preview-note {
+  margin-top: .5rem;
+  color: var(--sub);
+  font-size: .875rem;
   text-align: center;
 }
-.home-hero__preview-stat-label {
-  font-size: 10.5px;
-  color: var(--muted);
-  font-weight: 500;
-}
-.home-hero__preview-stat-value {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--ink);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-.home-hero__preview-stat-value--negative { color: #ef7e7e; }
-.home-hero__preview-chips {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-top: 0.55rem;
-}
-.home-hero__preview-chip {
-  background: rgba(148, 163, 184, 0.05);
-  border: 1px solid rgba(148, 163, 184, 0.08);
-  border-radius: 12px;
-  padding: 0.55rem 0.7rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  min-width: 0;
-}
-.home-hero__preview-chip-label {
-  font-size: 10.5px;
-  color: var(--muted);
-  font-weight: 500;
-}
-.home-hero__preview-chip-value {
-  font-size: 13px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-@media (max-width: 640px) {
-  .home-hero__preview-card {
-    max-width: 100%;
-    padding: 1.25rem 1.1rem 1.15rem;
-    border-radius: 18px;
-  }
-  .home-hero__preview-stat-label,
-  .home-hero__preview-chip-label { font-size: 10px; }
-  .home-hero__preview-stats { grid-template-columns: 1fr; }
-  .home-hero__preview-stat {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0.75rem;
-    text-align: left;
-  }
-  .home-hero__preview-stat-value { font-size: 11.5px; }
-  .home-hero__preview-chip-value {
-    font-size: 12px;
-    white-space: normal;
-    overflow: visible;
-    overflow-wrap: anywhere;
-    text-overflow: clip;
-  }
+@media (max-width: 959px) {
+  .home-hero__col-preview { display: none; }
 }
 
-/* Background layers */
 .home-hero__bg {
   position: absolute;
   inset: -2rem -1rem 0;
@@ -1162,7 +1087,7 @@ input[type="range"]::-moz-range-thumb {
   justify-content: center;
   align-items: center;
   gap: 0.35rem 0.5rem;
-  margin-top: 1.5rem;
+  margin-top: .75rem;
   width: 100%;
   margin-inline: auto;
   padding-inline: 0.25rem;
@@ -1171,21 +1096,10 @@ input[type="range"]::-moz-range-thumb {
   color: var(--sub);
   text-align: center;
 }
-.home-hero__lead-part {
-  white-space: nowrap;
-  word-break: keep-all;
-}
-@media (min-width: 640px) {
-  .home-hero__lead { flex-wrap: nowrap; gap: 0.5rem; }
-}
-@media (min-width: 768px) {
-  .home-hero__lead { font-size: 1.05rem; line-height: 1.6; }
-}
-
 /* CTA */
 .home-hero__cta {
   position: relative;
-  margin-top: 2.25rem;
+  margin-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -1233,59 +1147,6 @@ input[type="range"]::-moz-range-thumb {
 .btn-hero-primary > * { position: relative; z-index: 1; }
 
 /* Stats */
-.home-hero__stats {
-  position: relative;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.85rem;
-  margin: 3rem auto 0;
-  padding: 0.85rem 1rem;
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.6);
-}
-@media (min-width: 480px) {
-  .home-hero__stats { gap: 2rem; padding: 1.15rem 2rem; }
-}
-.home-stat--divider {
-  width: 1px;
-  height: 32px;
-  background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.3), transparent);
-}
-.home-stat {
-  text-align: center;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-.home-stat__value {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-}
-@media (min-width: 480px) {
-  .home-stat__value { font-size: 1.25rem; }
-}
-@media (min-width: 768px) {
-  .home-stat__value { font-size: 1.5rem; }
-}
-.home-stat__label {
-  margin-top: 0.35rem;
-  font-size: 11px;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-/* Calculator grid */
 .home-calc-grid {
   display: grid;
   gap: 0.75rem;
@@ -1346,6 +1207,19 @@ input[type="range"]::-moz-range-thumb {
   flex: 1;
 }
 
+@media (max-width: 639px) {
+  .home-calc-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: .75rem;
+    align-content: center;
+    padding: .85rem 1rem;
+  }
+  .home-calc-card__top { grid-row: span 2; align-items: center; margin: 0; }
+  .home-calc-card__top > svg { display: none; }
+  .home-calc-card__desc { margin-top: .15rem; }
+}
+
 /* 홈 화면 앱 추가 */
 .home-app__install { margin-bottom: 0.9rem; }
 .home-app .btn-hero-primary:focus-visible {
@@ -1386,42 +1260,17 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Trust */
-.home-trust-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-@media (min-width: 768px) {
-  .home-trust-grid { grid-template-columns: repeat(3, 1fr); }
-}
 .home-trust-card {
   padding: 1.25rem 1.35rem;
   border-radius: var(--r-lg);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.02);
 }
-.home-trust-card__icon {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  margin-bottom: 0.75rem;
-}
 .home-trust-card__title {
   font-size: 14.5px;
   font-weight: 600;
   color: #fff;
   word-break: keep-all;
-}
-.home-trust-card__desc {
-  margin-top: 0.35rem;
-  font-size: 12.5px;
-  color: var(--sub);
-  line-height: 1.55;
-  word-break: keep-all;
-  overflow-wrap: break-word;
 }
 /* Guide cards (가이드 목록 페이지) */
 .guide-card {
@@ -1709,6 +1558,3 @@ input[type="range"]::-moz-range-thumb {
 .home-app__action:focus-visible, .home-app__hero-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
 .home-app__action:disabled { cursor: default; opacity: 0.6; }
 .home-app__hero-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; color: var(--brand); font-size: 13px; font-weight: 600; }
-@media (min-width: 768px) {
-  .home-app__hero-link { display: none; }
-}
